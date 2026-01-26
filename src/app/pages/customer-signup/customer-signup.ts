@@ -1,0 +1,93 @@
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { RouterLink } from "@angular/router";
+import { ReactiveFormsModule } from '@angular/forms';
+import { SignupService } from '../../services/signup/signup.service';
+import { Subscription } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+
+@Component({
+  selector: 'app-customer-signup',
+  imports: [RouterLink, ReactiveFormsModule, AsyncPipe],
+  templateUrl: './customer-signup.html',
+  styleUrl: './customer-signup.css',
+})
+export class CustomerSignup implements OnInit, OnDestroy {
+  public signupService = inject(SignupService);
+  private subscription = new Subscription();
+  public isSubmitting = false;
+
+  get currentStep() {
+    return this.signupService.currentStep;
+  }
+
+  get emailForm() {
+    return this.signupService.emailForm;
+  }
+
+  get personalForm() {
+    return this.signupService.personalForm;
+  }
+
+  get passwordForm() {
+    return this.signupService.passwordForm;
+  }
+
+  ngOnInit() {
+    this.signupService.initialize();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  nextStep() {
+    const result = this.signupService.nextStep();
+
+    if (result) {
+      this.signupService.isSubmitting$.next(true);
+
+      result.subscribe({
+        next: (response) => {
+          this.signupService.isSubmitting$.next(false);
+          console.log('Signup successful:', response);
+          this.signupService.resetAfterSuccess();
+          alert('Signup successful! You can now log in.');
+        },
+        error: (error) => {
+          this.signupService.isSubmitting$.next(false);
+          console.error('Signup failed:', error);
+          if (error.status === 500) {
+            alert(`Signup failed: Email already registered.`);
+          } else if (error.status === 0) {
+            alert('Signup failed. Internet connection error.');
+          } else {
+            alert(`Signup failed: ${error.error.message || 'Unknown error occurred.'}`);
+          }
+        }
+      });
+    }
+  }
+  goToStep(step: number) {
+    this.signupService.goToStep(step);
+  }
+
+  emailErrorMessage() {
+    return this.signupService.emailErrorMessage();
+  }
+
+  phoneErrorMessage() {
+    return this.signupService.phoneErrorMessage();
+  }
+
+  passwordErrorMessage() {
+    return this.signupService.passwordErrorMessage();
+  }
+
+  confirmPasswordErrorMessage() {
+    return this.signupService.confirmPasswordErrorMessage();
+  }
+
+  formatPhoneNumber() {
+    this.signupService.formatPhoneNumber();
+  }
+}
