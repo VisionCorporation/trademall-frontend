@@ -124,6 +124,16 @@ export class CustomerSignup implements OnInit, OnDestroy {
     this.signupService.formatPhoneNumber();
   }
 
+  onPhoneNumberInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+
+    if (!value.startsWith('+233 ')) {
+      input.value = '+233 ';
+      this.signupService.personalForm.get('phoneNumber')?.setValue('+233 ', { emitEvent: false });
+    }
+  }
+
   onOtpInput(event: Event, index: number) {
     const input = event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9]/g, '');

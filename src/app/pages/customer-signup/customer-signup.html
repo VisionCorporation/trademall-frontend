@@ -129,7 +129,10 @@
             <button
               type="button"
               [disabled]="emailForm.invalid || (signupService.isSubmitting$ | async)"
-              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
+              [class.cursor-not-allowed]="
+                emailForm.invalid || (signupService.isSubmitting$ | async)
+              "
               (click)="submitEmailForOtp()"
             >
               {{ (signupService.isSubmitting$ | async) ? 'Sending...' : ' Continue with Email' }}
@@ -219,6 +222,7 @@
             type="button"
             [disabled]="otpForm.invalid || (signupService.isVerifying$ | async)"
             class="max-w-85 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+            [class.cursor-not-allowed]="otpForm.invalid || (signupService.isVerifying$ | async)"
             (click)="logTheValues()"
           >
             {{ (signupService.isVerifying$ | async) ? 'Verifying...' : 'Verify Email' }}
@@ -294,6 +298,7 @@
               type="button"
               [disabled]="personalForm.invalid"
               class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+              [class.cursor-not-allowed]="personalForm.invalid"
               (click)="nextStep()"
             >
               Continue
@@ -383,6 +388,9 @@
               type="button"
               [disabled]="passwordForm.invalid || (signupService.isSubmitting$ | async)"
               class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+              [class.cursor-not-allowed]="
+                passwordForm.invalid || (signupService.isSubmitting$ | async)
+              "
               (click)="nextStep()"
             >
               {{ (signupService.isSubmitting$ | async) ? 'Creating...' : 'Create Account' }}
