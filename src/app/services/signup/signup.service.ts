@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SignupData } from '../../interfaces/signup.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -69,7 +70,7 @@ export class SignupService {
       return null;
     } else if (this.currentStep === 4 && this.passwordForm.valid) {
       this.saveToLocalStorage();
-      return this.submitForm();
+      // return this.submitForm();
     }
     return null;
   }
@@ -111,22 +112,33 @@ export class SignupService {
     }
   }
 
-  private submitForm(): Observable<any> {
-    const formData = {
-      email: this.emailForm.value.email,
-      firstName: this.personalForm.value.firstName,
-      lastName: this.personalForm.value.lastName,
-      phoneNumber: this.personalForm.value.phoneNumber,
-      password: this.passwordForm.value.password,
-      confirmPassword: this.passwordForm.value.confirmPassword,
-    };
+  // private submitForm(): Observable<any> {
+  //   const formData = {
+  //     email: this.emailForm.value.email,
+  //     firstName: this.personalForm.value.firstName,
+  //     lastName: this.personalForm.value.lastName,
+  //     phoneNumber: this.personalForm.value.phoneNumber,
+  //     password: this.passwordForm.value.password,
+  //     confirmPassword: this.passwordForm.value.confirmPassword,
+  //   };
 
-    return this.submitCustomerSignup(formData as SignupData);
+  //   return this.submitCustomerSignup(formData as SignupData);
+  // }
+
+  public submitCustomerEmailForOtp(email: string) {
+    return this.http.post<string>(`${environment.apiBaseUrl}/user/signup/stage1`, { email });
   }
 
-  public submitCustomerSignup(formData: SignupData): Observable<SignupData> {
-    return this.http.post<SignupData>('/user/auth/signup', formData);
-  }
+  // public verifyCustomerOtp(email: string, otp: string) {
+  //   return this.http.post<string>(`${environment.apiBaseUrl}/user/signup/stage2`, {
+  //     email,
+  //     otp,
+  //   });
+  // }
+
+  // public registerCustomer(formData: SignupData): Observable<SignupData> {
+  //   return this.http.post<SignupData>(`${environment.apiBaseUrl}/user/signup/stage3`, formData);
+  // }
 
   public emailErrorMessage(): string {
     const control = this.emailForm.get('email');
