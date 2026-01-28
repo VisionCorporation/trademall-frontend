@@ -15,14 +15,22 @@
                 <div class="step cursor-pointer flex flex-col md:flex-row text-center" [class.active]="currentStep >= 2"
                     (click)="goToStep(2)">
                     <span class="circle">2</span>
+                    <p class="md:text-2xl leading-5">Email Verification</p>
+                </div>
+
+                <div class="line"></div>
+
+                <div class="step cursor-pointer flex flex-col md:flex-row text-center" [class.active]="currentStep >= 2"
+                    (click)="goToStep(3)">
+                    <span class="circle">3</span>
                     <p class="md:text-2xl leading-5">Personal Details</p>
                 </div>
 
                 <div class="line"></div>
 
                 <div class="step cursor-pointer flex flex-col md:flex-row text-center" [class.active]="currentStep >= 3"
-                    (click)="goToStep(3)">
-                    <span class="circle">3</span>
+                    (click)="goToStep(4)">
+                    <span class="circle">4</span>
                     <p class="md:text-2xl leading-5">Password Creation</p>
                 </div>
             </div>
@@ -81,6 +89,21 @@
         </div>
         }
         @if(currentStep=== 2){
+        <div class="max-w-[90%] w-full z-50">
+            <p class="text-center md:text-lg text-[#AAAAAA] tracking-tighter mb-12.5">Enter the verification code sent
+                to
+                {{emailForm.value.email}}</p>
+            <form class="flex items-center justify-center gap-5">
+                <input #otpInput type="text" maxlength="1" pattern="[0-9]" class="otp-input" (input)="onOtpInput($event, 0)" (paste)="onOtpPaste($event)">
+                <input #otpInput type="text" maxlength="1" pattern="[0-9]" class="otp-input" (input)="onOtpInput($event, 1)" (paste)="onOtpPaste($event)">
+                <input #otpInput type="text" maxlength="1" pattern="[0-9]" class="otp-input" (input)="onOtpInput($event, 2)" (paste)="onOtpPaste($event)">
+                <input #otpInput type="text" maxlength="1" pattern="[0-9]" class="otp-input" (input)="onOtpInput($event, 3)" (paste)="onOtpPaste($event)">
+                <input #otpInput type="text" maxlength="1" pattern="[0-9]" class="otp-input" (input)="onOtpInput($event, 4)" (paste)="onOtpPaste($event)">
+                <input #otpInput type="text" maxlength="1" pattern="[0-9]" class="otp-input" (input)="onOtpInput($event, 5)" (paste)="onOtpPaste($event)">
+            </form>
+        </div>
+        }
+        @if(currentStep=== 3){
         <div class="max-w-85 w-full z-50">
             <div class="w-full">
                 <form [formGroup]="personalForm">
@@ -118,7 +141,7 @@
             </div>
         </div>
         }
-        @if(currentStep=== 3){
+        @if(currentStep=== 4){
         <div class="max-w-85 w-full z-50">
             <div class="w-full">
                 <form [formGroup]="passwordForm">

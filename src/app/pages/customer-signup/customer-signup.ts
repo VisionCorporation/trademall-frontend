@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
@@ -15,6 +15,8 @@ export class CustomerSignup implements OnInit, OnDestroy {
   public signupService = inject(SignupService);
   private subscription = new Subscription();
   public isSubmitting = false;
+
+  @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
   get currentStep() {
     return this.signupService.currentStep;
@@ -89,5 +91,26 @@ export class CustomerSignup implements OnInit, OnDestroy {
 
   formatPhoneNumber() {
     this.signupService.formatPhoneNumber();
+  }
+
+  onOtpInput(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, '');
+    if (input.value.length === 1 && index < 5) {
+      const inputs = this.otpInputs.toArray();
+      inputs[index + 1].nativeElement.focus();
+    }
+  }
+
+  onOtpPaste(event: ClipboardEvent) {
+    const pasted = event.clipboardData?.getData('text');
+    if (pasted && /^\d{6}$/.test(pasted)) {
+      event.preventDefault();
+      const inputs = this.otpInputs.toArray();
+      for (let i = 0; i < 6; i++) {
+        inputs[i].nativeElement.value = pasted[i];
+      }
+      inputs[5].nativeElement.focus();
+    }
   }
 }

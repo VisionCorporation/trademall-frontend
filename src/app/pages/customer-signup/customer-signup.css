@@ -44,7 +44,6 @@
     .stepper {
         flex-direction: row;
         justify-content: center;
-        /* gap: 10px; */
     }
 
     .step {
@@ -84,4 +83,19 @@
 
 .or-divider::after {
     margin-left: 10px;
+}
+
+.otp-input {
+    width: 85px;
+    height: 77px;
+    text-align: center;
+    font-size: 24px;
+    background-color: #F5F5F5;
+    border-radius: 6px;
+}
+
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
