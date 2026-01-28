@@ -1,5 +1,13 @@
-import { Component, inject, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import {
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
 import { Subscription } from 'rxjs';
@@ -14,7 +22,6 @@ import { AsyncPipe } from '@angular/common';
 export class CustomerSignup implements OnInit, OnDestroy {
   public signupService = inject(SignupService);
   private subscription = new Subscription();
-  public isSubmitting = false;
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
@@ -24,6 +31,10 @@ export class CustomerSignup implements OnInit, OnDestroy {
 
   get emailForm() {
     return this.signupService.emailForm;
+  }
+
+  get otpForm() {
+    return this.signupService.otpForm;
   }
 
   get personalForm() {
@@ -65,7 +76,7 @@ export class CustomerSignup implements OnInit, OnDestroy {
           } else {
             alert(`Signup failed: ${error.error.message || 'Unknown error occurred.'}`);
           }
-        }
+        },
       });
     }
   }
@@ -112,5 +123,20 @@ export class CustomerSignup implements OnInit, OnDestroy {
       }
       inputs[5].nativeElement.focus();
     }
+  }
+
+  logTheValues() {
+    this.signupService.isVerifying$.next(true)
+
+    setTimeout(() => {
+       this.signupService.isVerifying$.next(false)
+    }, 3000);
+
+    const stage2Data = {
+      email: this.emailForm.value.email,
+      otp: Object.values(this.otpForm.value).join(''),
+    };
+
+    console.log(stage2Data);
   }
 }
