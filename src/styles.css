@@ -1,39 +1,38 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @font-face {
-    font-family: 'Bebas Neue';
-    src: url('/assets/fonts/BebasNeue-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Bebas Neue';
+  src: url('/assets/fonts/BebasNeue-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Atkinson Hyperlegible';
-    src: url('/assets/fonts/AtkinsonHyperlegible-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/assets/fonts/AtkinsonHyperlegible-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Atkinson Hyperlegible';
-    src: url('/assets/fonts/AtkinsonHyperlegible-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Atkinson Hyperlegible';
+  src: url('/assets/fonts/AtkinsonHyperlegible-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 html {
-    width: 100%;
-    scroll-behavior: smooth;
-
+  width: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 h1,
@@ -42,17 +41,17 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 p,
 span,
 button,
 ::placeholder {
-    font-family: 'Atkinson Hyperlegible', sans-serif;
-    font-weight: 400;
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-weight: 400;
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;  
 }
