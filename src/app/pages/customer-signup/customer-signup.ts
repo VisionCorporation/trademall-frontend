@@ -33,6 +33,26 @@ export class CustomerSignup implements OnInit, OnDestroy {
     return this.signupService.emailForm;
   }
 
+  public submitEmailForOtp() {
+    this.signupService.isSubmitting$.next(true);
+
+    const email = this.emailForm.value.email || '';
+
+    this.signupService.submitCustomerEmailForOtp(email).subscribe({
+      next: (res) => {
+        this.signupService.isSubmitting$.next(false);
+        alert('Email submitted successfully. Check your email for the otp code.');
+        console.log('Success info: ', res);
+        this.signupService.currentStep++;
+      },
+      error: (err) => {
+        this.signupService.isSubmitting$.next(false);
+        alert(`Failed to submit email: ${err.error.message || 'Unknown error occurred.'}`);
+        console.log('Failure: ', err);
+      },
+    });
+  }
+
   get otpForm() {
     return this.signupService.otpForm;
   }
@@ -56,29 +76,29 @@ export class CustomerSignup implements OnInit, OnDestroy {
   nextStep() {
     const result = this.signupService.nextStep();
 
-    if (result) {
-      this.signupService.isSubmitting$.next(true);
+    // if (result) {
+    //   this.signupService.isSubmitting$.next(true);
 
-      result.subscribe({
-        next: (response) => {
-          this.signupService.isSubmitting$.next(false);
-          console.log('Signup successful:', response);
-          this.signupService.resetAfterSuccess();
-          alert('Signup successful! You can now log in.');
-        },
-        error: (error) => {
-          this.signupService.isSubmitting$.next(false);
-          console.error('Signup failed:', error);
-          if (error.status === 500) {
-            alert(`Signup failed: Email already registered.`);
-          } else if (error.status === 0) {
-            alert('Signup failed. Internet connection error.');
-          } else {
-            alert(`Signup failed: ${error.error.message || 'Unknown error occurred.'}`);
-          }
-        },
-      });
-    }
+    //   result.subscribe({
+    //     next: (response) => {
+    //       this.signupService.isSubmitting$.next(false);
+    //       console.log('Signup successful:', response);
+    //       this.signupService.resetAfterSuccess();
+    //       alert('Signup successful! You can now log in.');
+    //     },
+    //     error: (error) => {
+    //       this.signupService.isSubmitting$.next(false);
+    //       console.error('Signup failed:', error);
+    //       if (error.status === 500) {
+    //         alert(`Signup failed: Email already registered.`);
+    //       } else if (error.status === 0) {
+    //         alert('Signup failed. Internet connection error.');
+    //       } else {
+    //         alert(`Signup failed: ${error.error.message || 'Unknown error occurred.'}`);
+    //       }
+    //     },
+    //   });
+    // }
   }
   goToStep(step: number) {
     this.signupService.goToStep(step);
@@ -126,10 +146,10 @@ export class CustomerSignup implements OnInit, OnDestroy {
   }
 
   logTheValues() {
-    this.signupService.isVerifying$.next(true)
+    this.signupService.isVerifying$.next(true);
 
     setTimeout(() => {
-       this.signupService.isVerifying$.next(false)
+      this.signupService.isVerifying$.next(false);
     }, 3000);
 
     const stage2Data = {

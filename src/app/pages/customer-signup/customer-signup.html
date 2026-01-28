@@ -128,11 +128,11 @@
 
             <button
               type="button"
-              [disabled]="emailForm.invalid"
+              [disabled]="emailForm.invalid || (signupService.isSubmitting$ | async)"
               class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
-              (click)="nextStep()"
+              (click)="submitEmailForOtp()"
             >
-              Continue with Email
+              {{ (signupService.isSubmitting$ | async) ? 'Sending...' : ' Continue with Email' }}
             </button>
           </form>
         </div>
@@ -221,7 +221,7 @@
             class="max-w-85 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
             (click)="logTheValues()"
           >
-           {{ (signupService.isVerifying$ | async) ? 'Verifying...' : 'Verify Email' }}
+            {{ (signupService.isVerifying$ | async) ? 'Verifying...' : 'Verify Email' }}
           </button>
         </form>
       </div>
