@@ -5,29 +5,48 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SignupData } from '../../interfaces/signup.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SignupService {
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
   private fb = inject(FormBuilder);
 
   public currentStep = 1;
   public isSubmitting$ = new BehaviorSubject<boolean>(false);
+  public isVerifying$ = new BehaviorSubject<boolean>(false);
 
   public emailForm = this.fb.group({
-    email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]]
+    email: [
+      '',
+      [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+    ],
+  });
+
+  public otpForm = this.fb.group({
+    digit1: ['', [Validators.required]],
+    digit2: ['', [Validators.required]],
+    digit3: ['', [Validators.required]],
+    digit4: ['', [Validators.required]],
+    digit5: ['', [Validators.required]],
+    digit6: ['', [Validators.required]],
   });
 
   public personalForm = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    phoneNumber: ['', [Validators.required, Validators.pattern(/^\+233\s(?:2\d{2}|5\d{2})\s\d{3}\s\d{3}$/)]]
+    phoneNumber: [
+      '',
+      [Validators.required, Validators.pattern(/^\+233\s(?:2\d{2}|5\d{2})\s\d{3}\s\d{3}$/)],
+    ],
   });
 
-  public passwordForm = this.fb.group({
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', Validators.required]
-  }, { validators: this.passwordMatchValidator });
+  public passwordForm = this.fb.group(
+    {
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   private passwordMatchValidator(form: any) {
     const password = form.get('password');
@@ -48,7 +67,7 @@ export class SignupService {
       this.saveToLocalStorage();
       this.currentStep++;
       return null;
-    } else if (this.currentStep === 3 && this.passwordForm.valid) {
+    } else if (this.currentStep === 4 && this.passwordForm.valid) {
       this.saveToLocalStorage();
       return this.submitForm();
     }
@@ -69,7 +88,7 @@ export class SignupService {
       phoneNumber: this.personalForm.value.phoneNumber,
       password: this.passwordForm.value.password,
       confirmPassword: this.passwordForm.value.confirmPassword,
-      currentStep: this.currentStep
+      currentStep: this.currentStep,
     };
     localStorage.setItem('customerSignup', JSON.stringify(data));
   }
@@ -82,11 +101,11 @@ export class SignupService {
       this.personalForm.patchValue({
         firstName: parsed.firstName,
         lastName: parsed.lastName,
-        phoneNumber: parsed.phoneNumber
+        phoneNumber: parsed.phoneNumber,
       });
       this.passwordForm.patchValue({
         password: parsed.password,
-        confirmPassword: parsed.confirmPassword
+        confirmPassword: parsed.confirmPassword,
       });
       this.currentStep = parsed.currentStep || 1;
     }
@@ -99,7 +118,7 @@ export class SignupService {
       lastName: this.personalForm.value.lastName,
       phoneNumber: this.personalForm.value.phoneNumber,
       password: this.passwordForm.value.password,
-      confirmPassword: this.passwordForm.value.confirmPassword
+      confirmPassword: this.passwordForm.value.confirmPassword,
     };
 
     return this.submitCustomerSignup(formData as SignupData);
