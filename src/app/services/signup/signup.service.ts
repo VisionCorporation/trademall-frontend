@@ -36,7 +36,7 @@ export class SignupService {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     phoneNumber: [
-      '',
+      '+233 ',
       [Validators.required, Validators.pattern(/^\+233\s(?:2\d{2}|5\d{2})\s\d{3}\s\d{3}$/)],
     ],
   });
