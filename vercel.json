@@ -1,12 +1,12 @@
-{
-  "rewrites": [
-    {
-      "source": "/env.js",
-      "destination": "/env.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
-}
+// {
+//   "rewrites": [
+//     {
+//       "source": "/env.js",
+//       "destination": "/env.js"
+//     },
+//     {
+//       "source": "/(.*)",
+//       "destination": "/index.html"
+//     }
+//   ]
+// }
