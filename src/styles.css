@@ -53,5 +53,10 @@ button,
 }
 
 button {
-  cursor: pointer;  
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
 }
