@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SignupData } from '../../interfaces/signup.interface';
+import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interface';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -11,10 +11,8 @@ import { environment } from '../../../environments/environment';
 export class SignupService {
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
-
   public currentStep = 1;
   public isSubmitting$ = new BehaviorSubject<boolean>(false);
-  public isVerifying$ = new BehaviorSubject<boolean>(false);
 
   public emailForm = this.fb.group({
     email: [
@@ -59,86 +57,30 @@ export class SignupService {
     return null;
   }
 
-  public nextStep(): Observable<any> | null {
-    if (this.currentStep === 1 && this.emailForm.valid) {
-      this.saveToLocalStorage();
-      this.currentStep++;
-      return null;
-    } else if (this.currentStep === 2 && this.personalForm.valid) {
-      this.saveToLocalStorage();
-      this.currentStep++;
-      return null;
-    } else if (this.currentStep === 4 && this.passwordForm.valid) {
-      this.saveToLocalStorage();
-      // return this.submitForm();
-    }
-    return null;
+  public nextStep(): void {
+    this.currentStep++;
   }
 
-  public goToStep(step: number) {
+  public goToStep(step: number): void {
     if (step <= this.currentStep) {
       this.currentStep = step;
     }
   }
 
-  private saveToLocalStorage() {
-    const data = {
-      email: this.emailForm.value.email,
-      firstName: this.personalForm.value.firstName,
-      lastName: this.personalForm.value.lastName,
-      phoneNumber: this.personalForm.value.phoneNumber,
-      password: this.passwordForm.value.password,
-      confirmPassword: this.passwordForm.value.confirmPassword,
-      currentStep: this.currentStep,
-    };
-    localStorage.setItem('customerSignup', JSON.stringify(data));
-  }
-
-  private loadFromLocalStorage() {
-    const data = localStorage.getItem('customerSignup');
-    if (data) {
-      const parsed = JSON.parse(data);
-      this.emailForm.patchValue({ email: parsed.email });
-      this.personalForm.patchValue({
-        firstName: parsed.firstName,
-        lastName: parsed.lastName,
-        phoneNumber: parsed.phoneNumber,
-      });
-      this.passwordForm.patchValue({
-        password: parsed.password,
-        confirmPassword: parsed.confirmPassword,
-      });
-      this.currentStep = parsed.currentStep || 1;
-    }
-  }
-
-  // private submitForm(): Observable<any> {
-  //   const formData = {
-  //     email: this.emailForm.value.email,
-  //     firstName: this.personalForm.value.firstName,
-  //     lastName: this.personalForm.value.lastName,
-  //     phoneNumber: this.personalForm.value.phoneNumber,
-  //     password: this.passwordForm.value.password,
-  //     confirmPassword: this.passwordForm.value.confirmPassword,
-  //   };
-
-  //   return this.submitCustomerSignup(formData as SignupData);
-  // }
-
-  public submitCustomerEmailForOtp(email: string) {
+  public submitCustomerEmailForOtp(email: string): Observable<string> {
     return this.http.post<string>(`${environment.apiBaseUrl}/user/signup/stage1`, { email });
   }
 
-  // public verifyCustomerOtp(email: string, otp: string) {
-  //   return this.http.post<string>(`${environment.apiBaseUrl}/user/signup/stage2`, {
-  //     email,
-  //     otp,
-  //   });
-  // }
+  public verifyCustomerOtp(email: string, otp: string): Observable<OtpSuccessResponse> {
+    return this.http.post<OtpSuccessResponse>(`${environment.apiBaseUrl}/user/signup/stage2`, {
+      email,
+      otp,
+    });
+  }
 
-  // public registerCustomer(formData: SignupData): Observable<SignupData> {
-  //   return this.http.post<SignupData>(`${environment.apiBaseUrl}/user/signup/stage3`, formData);
-  // }
+  public registerCustomer(formData: SignupData): Observable<Object> {
+    return this.http.post<Object>(`${environment.apiBaseUrl}/user/signup/stage3`, formData);
+  }
 
   public emailErrorMessage(): string {
     const control = this.emailForm.get('email');
@@ -176,7 +118,7 @@ export class SignupService {
     return '';
   }
 
-  public formatPhoneNumber() {
+  public formatPhoneNumber(): void {
     const control = this.personalForm.get('phoneNumber');
     if (control) {
       let value = control.value;
@@ -192,15 +134,11 @@ export class SignupService {
     }
   }
 
-  public resetAfterSuccess() {
-    localStorage.removeItem('customerSignup');
+  public resetAfterSuccess(): void {
     this.emailForm.reset();
+    this.otpForm.reset();
     this.personalForm.reset();
     this.passwordForm.reset();
     this.currentStep = 1;
-  }
-
-  public initialize() {
-    this.loadFromLocalStorage();
   }
 }
