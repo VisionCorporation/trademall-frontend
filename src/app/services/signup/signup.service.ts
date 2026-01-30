@@ -61,12 +61,6 @@ export class SignupService {
     this.currentStep++;
   }
 
-  public goToStep(step: number): void {
-    if (step <= this.currentStep) {
-      this.currentStep = step;
-    }
-  }
-
   public submitCustomerEmailForOtp(email: string): Observable<string> {
     return this.http.post<string>(`${environment.apiBaseUrl}/user/signup/stage1`, { email });
   }
@@ -76,6 +70,10 @@ export class SignupService {
       email,
       otp,
     });
+  }
+
+  public resendOtp(email: string) {
+    return this.http.post<string>(`${environment.apiBaseUrl}/user/signup/resend-otp`, { email });
   }
 
   public registerCustomer(formData: SignupData): Observable<Object> {
