@@ -127,13 +127,16 @@
             <button
               type="button"
               [disabled]="emailForm.invalid || (signupService.isSubmitting$ | async)"
-              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
+              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               [class.cursor-not-allowed]="
                 emailForm.invalid || (signupService.isSubmitting$ | async)
               "
               (click)="submitEmailForOtp()"
             >
-              {{ (signupService.isSubmitting$ | async) ? 'Sending...' : ' Continue with Email' }}
+              @if (signupService.isSubmitting$ | async) {
+                <div class="loader"></div>
+              }
+              {{ (signupService.isSubmitting$ | async) ? 'Sending Code...' : ' Continue with Email' }}
             </button>
           </form>
         </div>
@@ -263,11 +266,14 @@
           <button
             type="button"
             [disabled]="otpForm.invalid || (signupService.isSubmitting$ | async)"
-            class="md:max-w-85 max-w-150 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+            class="md:max-w-85 max-w-150 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
             [class.cursor-not-allowed]="otpForm.invalid || (signupService.isSubmitting$ | async)"
             (click)="verifyOtpCode()"
           >
-            {{ (signupService.isSubmitting$ | async) ? 'Verifying...' : 'Verify Email' }}
+            @if (signupService.isSubmitting$ | async) {
+              <div class="loader"></div>
+            }
+            {{ (signupService.isSubmitting$ | async) ? 'Verifying Email...' : 'Verify Email' }}
           </button>
         </form>
       </div>
@@ -429,13 +435,16 @@
             <button
               type="button"
               [disabled]="passwordForm.invalid || (signupService.isSubmitting$ | async)"
-              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
               [class.cursor-not-allowed]="
                 passwordForm.invalid || (signupService.isSubmitting$ | async)
               "
               (click)="registerCustomer()"
             >
-              {{ (signupService.isSubmitting$ | async) ? 'Creating...' : 'Create Account' }}
+              @if (signupService.isSubmitting$ | async) {
+                <div class="loader"></div>
+              }
+              {{ (signupService.isSubmitting$ | async) ? 'Creating Account...' : 'Create Account' }}
             </button>
           </form>
         </div>
@@ -445,7 +454,7 @@
       class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-[17px] md:text-xl z-10 px-4"
     >
       Already have an account?
-      <a class="text-[#2E790E] py-3 px-3" routerLink="">Log In</a>
+      <a class="text-[#2E790E] py-3 px-3" routerLink="/login">Log In</a>
     </p>
   </div>
 </section>
