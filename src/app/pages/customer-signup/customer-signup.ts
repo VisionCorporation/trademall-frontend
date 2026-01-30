@@ -1,19 +1,10 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  OnDestroy,
-  ViewChildren,
-  QueryList,
-  ElementRef,
-} from '@angular/core';
+import { Component, inject, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
-import { Observable, Subject, Subscription, interval } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interface';
-import { map, takeUntil, takeWhile } from 'rxjs/operators';
 import { CountdownTimerService } from '../../services/countdown-timer/coutdown-timer.service';
 
 @Component({
@@ -22,7 +13,7 @@ import { CountdownTimerService } from '../../services/countdown-timer/coutdown-t
   templateUrl: './customer-signup.html',
   styleUrl: './customer-signup.css',
 })
-export class CustomerSignup implements OnInit, OnDestroy {
+export class CustomerSignup implements OnDestroy {
   public signupService = inject(SignupService);
   private subscription = new Subscription();
   private userId = '';
@@ -32,12 +23,6 @@ export class CustomerSignup implements OnInit, OnDestroy {
   private TIMER_KEY = 'otp_expiry';
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
-
-  ngOnInit() {
-    if (this.signupService.currentStep === 2) {
-      this.initTimer();
-    }
-  }
 
   get currentStep() {
     return this.signupService.currentStep;
@@ -54,6 +39,7 @@ export class CustomerSignup implements OnInit, OnDestroy {
 
     this.signupService.submitCustomerEmailForOtp(email).subscribe({
       next: (res) => {
+        this.initTimer();
         this.signupService.isSubmitting$.next(false);
         alert('Email submitted successfully. Check your email for the otp code.');
         console.log('Success info: ', res);
@@ -97,10 +83,20 @@ export class CustomerSignup implements OnInit, OnDestroy {
   }
 
   public resendOtp(): void {
-    this.countdownTimerService.clear(this.TIMER_KEY);
-    this.initTimer();
-    this.signupService.otpForm.reset();
-    this.otpInputs.first.nativeElement.focus();
+    this.signupService.resendOtp(this.emailForm.value.email || '').subscribe({
+      next: (res) => {
+        alert('OTP resent successfully. Check your email for the new otp code.');
+        console.log('Success info: ', res);
+        this.countdownTimerService.clear(this.TIMER_KEY);
+        this.initTimer();
+        this.signupService.otpForm.reset();
+        this.otpInputs.first.nativeElement.focus();
+      },
+      error: (err) => {
+        alert(`Failed to resend OTP: ${err.error.message || 'Unknown error occurred.'}`);
+        console.log('Failure: ', err);
+      },
+    });
   }
 
   public registerCustomer(): void {
@@ -144,10 +140,6 @@ export class CustomerSignup implements OnInit, OnDestroy {
 
   public nextStep(): void {
     this.signupService.nextStep();
-  }
-
-  public goToStep(step: number): void {
-    this.signupService.goToStep(step);
   }
 
   public emailErrorMessage(): string {
