@@ -1,14 +1,13 @@
 <section class="grid grid-cols-1 md:grid-cols-2">
-  <div class="bg-[#E3E8E1] min-h-[40svh] md:min-h-screen flex flex-col items-center justify-center">
+  <div class="bg-[#E3E8E1] min-h-[45svh] md:min-h-screen flex flex-col items-center justify-center">
     <div>
       <h1 class="text-4xl sm:text-5xl mb-5 text-center md:text-left text-[#171717] tracking-tight">
         Create an account
       </h1>
       <div class="stepper mx-2.5 md:mx-0">
         <div
-          class="step cursor-pointer flex flex-col md:flex-row text-center px-0"
+          class="step flex flex-col md:flex-row text-center px-0"
           [class.active]="currentStep >= 1"
-          (click)="goToStep(1)"
         >
           <span class="circle">1</span>
           <p class="text-[15px] md:text-2xl leading-5">Email Options</p>
@@ -17,9 +16,8 @@
         <div class="line"></div>
 
         <div
-          class="step cursor-pointer flex flex-col md:flex-row text-center px-0"
+          class="step flex flex-col md:flex-row text-center px-0"
           [class.active]="currentStep >= 2"
-          (click)="goToStep(2)"
         >
           <span class="circle">2</span>
           <p class="text-[15px] md:text-2xl leading-5">Email Verification</p>
@@ -28,9 +26,8 @@
         <div class="line"></div>
 
         <div
-          class="step cursor-pointer flex flex-col md:flex-row text-center px-0"
+          class="step flex flex-col md:flex-row text-center px-0"
           [class.active]="currentStep >= 3"
-          (click)="goToStep(3)"
         >
           <span class="circle">3</span>
           <p class="text-[15px] md:text-2xl leading-5">Personal Details</p>
@@ -39,9 +36,8 @@
         <div class="line"></div>
 
         <div
-          class="step cursor-pointer flex flex-col md:flex-row text-center px-0"
+          class="step flex flex-col md:flex-row text-center px-0"
           [class.active]="currentStep >= 4"
-          (click)="goToStep(4)"
         >
           <span class="circle">4</span>
           <p class="text-[15px] md:text-2xl leading-5">Password Creation</p>
@@ -50,7 +46,7 @@
     </div>
   </div>
   <div
-    class="relative bg-white min-h-[60svh] md:min-h-screen flex flex-col items-center justify-center"
+    class="relative bg-white min-h-[55svh] md:min-h-screen flex flex-col items-center justify-center"
   >
     @if (currentStep === 1) {
       <div class="max-w-85 w-full z-50">
@@ -150,7 +146,7 @@
         </p>
         <form [formGroup]="otpForm" class="flex items-center justify-center flex-col">
           <div
-            class="flex items-center justify-between gap-2 md:gap-3 lg:gap-5 mb-7.5 max-w-150 w-full"
+            class="flex items-center justify-between gap-2 md:gap-3 lg:gap-5 mb-6 sm:mb-7.5 max-w-150 w-full"
           >
             <input
               #otpInput
@@ -243,9 +239,10 @@
             />
           </div>
 
-          <div class="flex max-w-150 w-full items-center justify-between text-lg md:text-xl">
+          <div class="flex max-w-150 w-full items-center justify-between text-[17px] md:text-xl">
             <span class="text-[#E23F3F]">
               {{ countdown$ | async }}
+              0000
             </span>
 
             <p class="text-[#171717]">
@@ -445,7 +442,7 @@
       </div>
     }
     <p
-      class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-lg md:text-xl z-10 px-4"
+      class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-[17px] md:text-xl z-10 px-4"
     >
       Already have an account?
       <a class="text-[#2E790E] py-3 px-3" routerLink="">Log In</a>
