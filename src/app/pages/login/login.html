@@ -1,0 +1,115 @@
+<section class="grid grid-cols-1 md:grid-cols-2">
+  <div class="bg-[#E3E8E1] min-h-[45svh] md:min-h-screen flex flex-col items-center justify-center">
+    <div>
+      <h1
+        class="text-4xl sm:text-5xl mb-5 text-center md:text-left text-[#171717] tracking-tight uppercase"
+      >
+        Welcome back
+      </h1>
+    </div>
+  </div>
+  <div
+    class="relative bg-white min-h-[55svh] md:min-h-screen flex flex-col items-center justify-center"
+  >
+    <div class="max-w-85 w-full z-50">
+      <div class="w-full">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+          <div>
+            <label for="email" hidden>Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your Email"
+              formControlName="email"
+              autocomplete="off"
+              class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733]"
+            />
+
+            @if (
+              loginForm.get('email')?.invalid &&
+              (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
+            ) {
+              <span
+                class="text-[#ff6b6b] mt-2 text-[15px] text-left customise-sub-title flex items-center gap-2"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
+                    stroke="#ff6b6b"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                {{ errorMessage('email') }}
+              </span>
+            }
+          </div>
+
+          <div>
+            <label for="password" hidden>Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your Password"
+              formControlName="password"
+              class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733]"
+            />
+
+            @if (
+              loginForm.get('password')?.invalid &&
+              (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)
+            ) {
+              <span
+                class="text-[#ff6b6b] mt-2 text-[15px] text-left customise-sub-title flex items-center gap-2"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
+                    stroke="#ff6b6b"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                {{ errorMessage('password') }}
+              </span>
+            }
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid || (signupService.isSubmitting$ | async)"
+            class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full rounded-lg disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
+            [class.cursor-not-allowed]="loginForm.invalid || (signupService.isSubmitting$ | async)"
+          >
+            @if (signupService.isSubmitting$ | async) {
+              <div class="loader"></div>
+            }
+            {{ (signupService.isSubmitting$ | async) ? 'Logging in...' : 'Login' }}
+          </button>
+        </form>
+      </div>
+    </div>
+    <p
+      class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-[17px] md:text-xl z-10 px-4"
+    >
+      Don’t have an account?
+      <a class="text-[#2E790E] py-3 px-3" routerLink="/customer/signup">Create an account</a>
+    </p>
+  </div>
+</section>
