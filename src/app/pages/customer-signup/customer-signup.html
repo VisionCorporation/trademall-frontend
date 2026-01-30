@@ -4,47 +4,47 @@
       <h1 class="text-4xl sm:text-5xl mb-5 text-center md:text-left text-[#171717] tracking-tight">
         Create an account
       </h1>
-      <div class="stepper">
+      <div class="stepper mx-2.5 md:mx-0">
         <div
-          class="step cursor-pointer flex flex-col md:flex-row text-center"
+          class="step cursor-pointer flex flex-col md:flex-row text-center px-0"
           [class.active]="currentStep >= 1"
           (click)="goToStep(1)"
         >
           <span class="circle">1</span>
-          <p class="md:text-2xl leading-5">Email Options</p>
+          <p class="text-[15px] md:text-2xl leading-5">Email Options</p>
         </div>
 
         <div class="line"></div>
 
         <div
-          class="step cursor-pointer flex flex-col md:flex-row text-center"
+          class="step cursor-pointer flex flex-col md:flex-row text-center px-0"
           [class.active]="currentStep >= 2"
           (click)="goToStep(2)"
         >
           <span class="circle">2</span>
-          <p class="md:text-2xl leading-5">Email Verification</p>
+          <p class="text-[15px] md:text-2xl leading-5">Email Verification</p>
         </div>
 
         <div class="line"></div>
 
         <div
-          class="step cursor-pointer flex flex-col md:flex-row text-center"
+          class="step cursor-pointer flex flex-col md:flex-row text-center px-0"
           [class.active]="currentStep >= 3"
           (click)="goToStep(3)"
         >
           <span class="circle">3</span>
-          <p class="md:text-2xl leading-5">Personal Details</p>
+          <p class="text-[15px] md:text-2xl leading-5">Personal Details</p>
         </div>
 
         <div class="line"></div>
 
         <div
-          class="step cursor-pointer flex flex-col md:flex-row text-center"
+          class="step cursor-pointer flex flex-col md:flex-row text-center px-0"
           [class.active]="currentStep >= 4"
           (click)="goToStep(4)"
         >
           <span class="circle">4</span>
-          <p class="md:text-2xl leading-5">Password Creation</p>
+          <p class="text-[15px] md:text-2xl leading-5">Password Creation</p>
         </div>
       </div>
     </div>
@@ -144,86 +144,129 @@
       </div>
     }
     @if (currentStep === 2) {
-      <div class="max-w-[75%] w-full z-50">
-        <p class="text-center md:text-lg text-[#AAAAAA] tracking-tight mb-12.5">
+      <div class="sm:max-w-[90%] w-[90%] z-50">
+        <p class="text-center md:text-lg text-[#AAAAAA] tracking-tight mb-10 sm:mb-12.5">
           Enter the verification code sent to {{ emailForm.value.email }}
         </p>
         <form [formGroup]="otpForm" class="flex items-center justify-center flex-col">
-          <div class="flex items-center justify-center gap-5 mb-7.5">
+          <div
+            class="flex items-center justify-between gap-2 md:gap-3 lg:gap-5 mb-7.5 max-w-150 w-full"
+          >
             <input
               #otpInput
               type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
               maxlength="1"
-              pattern="[0-9]"
               formControlName="digit1"
               class="otp-input"
+              (focus)="moveCursorToEnd($event)"
+              (click)="moveCursorToEnd($event)"
               (input)="onOtpInput($event, 0)"
+              (keydown)="onKeyDown($event, 0)"
               (paste)="onOtpPaste($event)"
             />
+
             <input
               #otpInput
               type="text"
-              maxl
-              ength="1"
-              pattern="[0-9]"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="1"
               formControlName="digit2"
               class="otp-input"
+              (focus)="moveCursorToEnd($event)"
+              (click)="moveCursorToEnd($event)"
               (input)="onOtpInput($event, 1)"
+              (keydown)="onKeyDown($event, 1)"
               (paste)="onOtpPaste($event)"
             />
+
             <input
               #otpInput
               type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
               maxlength="1"
-              pattern="[0-9]"
               formControlName="digit3"
               class="otp-input"
+              (focus)="moveCursorToEnd($event)"
+              (click)="moveCursorToEnd($event)"
               (input)="onOtpInput($event, 2)"
+              (keydown)="onKeyDown($event, 2)"
               (paste)="onOtpPaste($event)"
             />
+
             <input
               #otpInput
               type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
               maxlength="1"
-              pattern="[0-9]"
               formControlName="digit4"
               class="otp-input"
+              (focus)="moveCursorToEnd($event)"
+              (click)="moveCursorToEnd($event)"
               (input)="onOtpInput($event, 3)"
+              (keydown)="onKeyDown($event, 3)"
               (paste)="onOtpPaste($event)"
             />
+
             <input
               #otpInput
               type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
               maxlength="1"
-              pattern="[0-9]"
               formControlName="digit5"
               class="otp-input"
+              (focus)="moveCursorToEnd($event)"
+              (click)="moveCursorToEnd($event)"
               (input)="onOtpInput($event, 4)"
+              (keydown)="onKeyDown($event, 4)"
               (paste)="onOtpPaste($event)"
             />
+
             <input
               #otpInput
               type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
               maxlength="1"
-              pattern="[0-9]"
               formControlName="digit6"
               class="otp-input"
+              (focus)="moveCursorToEnd($event)"
+              (click)="moveCursorToEnd($event)"
               (input)="onOtpInput($event, 5)"
+              (keydown)="onKeyDown($event, 5)"
               (paste)="onOtpPaste($event)"
             />
           </div>
 
-          <div class="flex w-full items-center justify-between text-xl">
-            <span class="text-[#E23F3F]">00:59s</span>
+          <div class="flex max-w-150 w-full items-center justify-between text-lg md:text-xl">
+            <span class="text-[#E23F3F]">
+              {{ countdown$ | async }}
+            </span>
+
             <p class="text-[#171717]">
-              Didn’t get the code? <span class="text-[#2E790E] cursor-pointer">Resend</span>
+              Didn’t get the code?
+              <button
+                class="cursor-pointer"
+                [disabled]="!(canResend$ | async)"
+                [class.text-gray-400]="!(canResend$ | async)"
+                [class.pointer-events-none]="!(canResend$ | async)"
+                [class.text-[#2E790E]]="canResend$ | async"
+                (click)="resendOtp()"
+              >
+                Resend
+              </button>
             </p>
           </div>
 
           <button
             type="button"
             [disabled]="otpForm.invalid || (signupService.isSubmitting$ | async)"
-            class="max-w-85 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+            class="md:max-w-85 max-w-150 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
             [class.cursor-not-allowed]="otpForm.invalid || (signupService.isSubmitting$ | async)"
             (click)="verifyOtpCode()"
           >
@@ -402,7 +445,7 @@
       </div>
     }
     <p
-      class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center md:right-12.5 text-lg md:text-xl z-10 px-4"
+      class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-lg md:text-xl z-10 px-4"
     >
       Already have an account?
       <a class="text-[#2E790E] py-3 px-3" routerLink="">Log In</a>

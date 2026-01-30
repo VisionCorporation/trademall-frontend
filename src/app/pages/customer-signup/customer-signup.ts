@@ -10,9 +10,11 @@ import {
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, interval } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interface';
+import { map, takeUntil, takeWhile } from 'rxjs/operators';
+import { CountdownTimerService } from '../../services/countdown-timer/coutdown-timer.service';
 
 @Component({
   selector: 'app-customer-signup',
@@ -20,12 +22,22 @@ import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interfac
   templateUrl: './customer-signup.html',
   styleUrl: './customer-signup.css',
 })
-export class CustomerSignup implements OnDestroy {
+export class CustomerSignup implements OnInit, OnDestroy {
   public signupService = inject(SignupService);
   private subscription = new Subscription();
   private userId = '';
+  countdown$!: Observable<string>;
+  canResend$!: Observable<boolean>;
+  private readonly countdownTimerService = inject(CountdownTimerService);
+  private TIMER_KEY = 'otp_expiry';
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
+
+  ngOnInit() {
+    if (this.signupService.currentStep === 2) {
+      this.initTimer();
+    }
+  }
 
   get currentStep() {
     return this.signupService.currentStep;
@@ -46,6 +58,7 @@ export class CustomerSignup implements OnDestroy {
         alert('Email submitted successfully. Check your email for the otp code.');
         console.log('Success info: ', res);
         this.signupService.nextStep();
+        this.otpInputs.first.nativeElement.focus();
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
@@ -75,6 +88,19 @@ export class CustomerSignup implements OnDestroy {
         console.log('Failure: ', err);
       },
     });
+  }
+
+  private initTimer(): void {
+    const { time$, finished$ } = this.countdownTimerService.start(this.TIMER_KEY, 600);
+    this.countdown$ = time$;
+    this.canResend$ = finished$;
+  }
+
+  public resendOtp(): void {
+    this.countdownTimerService.clear(this.TIMER_KEY);
+    this.initTimer();
+    this.signupService.otpForm.reset();
+    this.otpInputs.first.nativeElement.focus();
   }
 
   public registerCustomer(): void {
@@ -172,6 +198,27 @@ export class CustomerSignup implements OnDestroy {
         inputs[i].nativeElement.value = pasted[i];
       }
       inputs[5].nativeElement.focus();
+    }
+  }
+
+  public moveCursorToEnd(event: FocusEvent): void {
+    const input = event.target as HTMLInputElement;
+
+    setTimeout(() => {
+      const length = input.value.length;
+      input.setSelectionRange(length, length);
+    });
+  }
+
+  public onKeyDown(event: KeyboardEvent, index: number): void {
+    const inputs = this.otpInputs.toArray();
+    const input = event.target as HTMLInputElement;
+
+    if (event.key === 'Backspace') {
+      if (input.value === '' && index > 0) {
+        inputs[index - 1].nativeElement.focus();
+        inputs[index - 1].nativeElement.value = '';
+      }
     }
   }
 
