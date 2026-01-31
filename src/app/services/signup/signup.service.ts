@@ -73,7 +73,7 @@ export class SignupService {
   }
 
   public resendOtp(email: string) {
-    return this.http.post<string>(`${environment.apiBaseUrl}/user/signup/resend-otp`, { email });
+    return this.http.post<string>(`${environment.apiBaseUrl}/user/resend-otp`, { email });
   }
 
   public registerCustomer(formData: SignupData): Observable<Object> {

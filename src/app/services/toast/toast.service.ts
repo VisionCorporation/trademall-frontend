@@ -18,7 +18,7 @@ export class ToastService {
     this.activeMessages.add(message);
     this.toastsSubject.next([...this.toastsSubject.value, toast]);
 
-    // setTimeout(() => this.remove(id, message), duration);
+    setTimeout(() => this.remove(id, message), duration);
   }
 
   private remove(id: string, message: string): void {
