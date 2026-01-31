@@ -136,7 +136,9 @@
               @if (signupService.isSubmitting$ | async) {
                 <div class="loader"></div>
               }
-              {{ (signupService.isSubmitting$ | async) ? 'Sending Code...' : ' Continue with Email' }}
+              {{
+                (signupService.isSubmitting$ | async) ? 'Sending Code...' : ' Continue with Email'
+              }}
             </button>
           </form>
         </div>
@@ -251,13 +253,13 @@
               Didn’t get the code?
               <button
                 class="cursor-pointer"
-                [disabled]="!(canResend$ | async)"
+                [disabled]="!(canResend$ | async) || (signupService.isSubmitting$ | async)"
                 [class.text-gray-400]="!(canResend$ | async)"
                 [class.pointer-events-none]="!(canResend$ | async)"
                 [class.text-[#2E790E]]="canResend$ | async"
                 (click)="resendOtp()"
               >
-                Resend
+                {{ (signupService.isSubmitting$ | async) ? 'Resending...' : 'Resend' }}
               </button>
             </p>
           </div>

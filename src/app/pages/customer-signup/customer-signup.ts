@@ -60,8 +60,10 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
         this.initTimer();
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('OTP code sent successfully to your email.');
-        this.signupService.nextStep();
-        this.otpInputs.first.nativeElement.focus();
+        setTimeout(() => {
+          this.signupService.nextStep();
+          this.otpInputs.first.nativeElement.focus();
+        }, 1000);
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
@@ -82,8 +84,10 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
       next: (res: OtpSuccessResponse) => {
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('Email verified successfully.');
-        this.userId = res.userId;
-        this.signupService.nextStep();
+        setTimeout(() => {
+          this.userId = res.userId;
+          this.signupService.nextStep();
+        }, 1000);
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
@@ -95,14 +99,17 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
   }
 
   private initTimer(): void {
-    const { time$, finished$ } = this.countdownTimerService.start(this.TIMER_KEY, 180);
+    const { time$, finished$ } = this.countdownTimerService.start(this.TIMER_KEY, 120);
     this.countdown$ = time$;
     this.canResend$ = finished$;
   }
 
   public resendOtp(): void {
+    this.signupService.isSubmitting$.next(true);
+
     this.signupService.resendOtp(this.emailForm.value.email || '').subscribe({
       next: () => {
+        this.signupService.isSubmitting$.next(false);
         this.toastService.success('OTP code resent successfully to your email.');
         this.countdownTimerService.clear(this.TIMER_KEY);
         this.initTimer();
@@ -132,7 +139,9 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('Account registered successfully. Log in now.');
         this.signupService.resetAfterSuccess();
-        this.route.navigate(['/login']);
+        setTimeout(() => {
+          this.route.navigate(['/login']);
+        }, 1000);
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
