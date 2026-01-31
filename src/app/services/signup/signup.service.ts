@@ -13,6 +13,7 @@ export class SignupService {
   private fb = inject(FormBuilder);
   public currentStep = 1;
   public isSubmitting$ = new BehaviorSubject<boolean>(false);
+  public isResending$ = new BehaviorSubject<boolean>(false);
 
   public emailForm = this.fb.group({
     email: [
@@ -137,6 +138,5 @@ export class SignupService {
     this.otpForm.reset();
     this.personalForm.reset();
     this.passwordForm.reset();
-    this.currentStep = 1;
   }
 }
