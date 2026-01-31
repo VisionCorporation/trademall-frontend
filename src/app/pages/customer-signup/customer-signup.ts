@@ -60,10 +60,8 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
         this.initTimer();
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('OTP code sent successfully to your email.');
-        setTimeout(() => {
-          this.signupService.nextStep();
-          this.otpInputs.first.nativeElement.focus();
-        }, 1000);
+        this.signupService.nextStep();
+        this.otpInputs.first.nativeElement.focus();
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
@@ -84,10 +82,8 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
       next: (res: OtpSuccessResponse) => {
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('Email verified successfully.');
-        setTimeout(() => {
-          this.userId = res.userId;
-          this.signupService.nextStep();
-        }, 1000);
+        this.userId = res.userId;
+        this.signupService.nextStep();
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
@@ -139,9 +135,7 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('Account registered successfully. Log in now.');
         this.signupService.resetAfterSuccess();
-        setTimeout(() => {
-          this.route.navigate(['/login']);
-        }, 1000);
+        this.route.navigate(['/login']);
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
