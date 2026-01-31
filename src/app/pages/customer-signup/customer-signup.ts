@@ -16,6 +16,7 @@ import { AsyncPipe } from '@angular/common';
 import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interface';
 import { CountdownTimerService } from '../../services/countdown-timer/coutdown-timer.service';
 import { ToastService } from '../../services/toast/toast.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-customer-signup',
@@ -32,7 +33,7 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
   public canResend$!: Observable<boolean>;
   private readonly countdownTimerService = inject(CountdownTimerService);
   private TIMER_KEY = 'otp_expiry';
-  private route = inject(Router);
+  private router = inject(Router);
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
@@ -123,6 +124,13 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  public signInWithGoogle(): void {
+    if (this.signupService.signingWithGoogle$.value) return;
+
+    this.signupService.signingWithGoogle$.next(true);
+    window.location.href = `${environment.apiBaseUrl}/user/google`;
+  }
+
   public registerCustomer(): void {
     this.signupService.isSubmitting$.next(true);
 
@@ -140,7 +148,7 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('Account registered successfully. Log in now.');
         this.signupService.resetAfterSuccess();
-        this.route.navigate(['/login']);
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
