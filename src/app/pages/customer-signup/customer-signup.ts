@@ -1,4 +1,13 @@
-import { Component, inject, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
@@ -13,16 +22,22 @@ import { CountdownTimerService } from '../../services/countdown-timer/coutdown-t
   templateUrl: './customer-signup.html',
   styleUrl: './customer-signup.css',
 })
-export class CustomerSignup implements OnDestroy {
+export class CustomerSignup implements AfterViewInit, OnDestroy {
   public signupService = inject(SignupService);
   private subscription = new Subscription();
   private userId = '';
-  countdown$!: Observable<string>;
-  canResend$!: Observable<boolean>;
+  public countdown$!: Observable<string>;
+  public canResend$!: Observable<boolean>;
   private readonly countdownTimerService = inject(CountdownTimerService);
   private TIMER_KEY = 'otp_expiry';
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
+
+  ngAfterViewInit(): void {
+    if (this.signupService.currentStep === 2) {
+      this.otpInputs.first?.nativeElement.focus();
+    }
+  }
 
   get currentStep() {
     return this.signupService.currentStep;
@@ -77,7 +92,7 @@ export class CustomerSignup implements OnDestroy {
   }
 
   private initTimer(): void {
-    const { time$, finished$ } = this.countdownTimerService.start(this.TIMER_KEY, 600);
+    const { time$, finished$ } = this.countdownTimerService.start(this.TIMER_KEY, 180);
     this.countdown$ = time$;
     this.canResend$ = finished$;
   }
@@ -183,13 +198,16 @@ export class CustomerSignup implements OnDestroy {
 
   public onOtpPaste(event: ClipboardEvent): void {
     const pasted = event.clipboardData?.getData('text');
+
     if (pasted && /^\d{6}$/.test(pasted)) {
       event.preventDefault();
-      const inputs = this.otpInputs.toArray();
-      for (let i = 0; i < 6; i++) {
-        inputs[i].nativeElement.value = pasted[i];
-      }
-      inputs[5].nativeElement.focus();
+
+      pasted.split('').forEach((digit, index) => {
+        const controlName = `digit${index + 1}` as keyof typeof this.otpForm.value;
+        this.otpForm.controls[controlName].setValue(digit);
+      });
+
+      this.otpInputs.last?.nativeElement.focus();
     }
   }
 

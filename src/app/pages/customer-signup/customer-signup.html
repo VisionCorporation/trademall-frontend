@@ -149,7 +149,7 @@
         </p>
         <form [formGroup]="otpForm" class="flex items-center justify-center flex-col">
           <div
-            class="flex items-center justify-between gap-2 md:gap-3 lg:gap-5 mb-6 sm:mb-7.5 max-w-150 w-full"
+            class="flex items-center justify-between gap-2 md:gap-3 lg:gap-3 mb-6 sm:mb-7.5 max-w-150"
           >
             <input
               #otpInput
@@ -245,7 +245,6 @@
           <div class="flex max-w-150 w-full items-center justify-between text-[17px] md:text-xl">
             <span class="text-[#E23F3F]">
               {{ countdown$ | async }}
-              0000
             </span>
 
             <p class="text-[#171717]">
