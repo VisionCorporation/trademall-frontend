@@ -8,13 +8,14 @@ import {
   OnInit,
   AfterViewInit,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
 import { Observable, Subscription } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interface';
 import { CountdownTimerService } from '../../services/countdown-timer/coutdown-timer.service';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-customer-signup',
@@ -24,12 +25,14 @@ import { CountdownTimerService } from '../../services/countdown-timer/coutdown-t
 })
 export class CustomerSignup implements AfterViewInit, OnDestroy {
   public signupService = inject(SignupService);
+  private toastService = inject(ToastService);
   private subscription = new Subscription();
   private userId = '';
   public countdown$!: Observable<string>;
   public canResend$!: Observable<boolean>;
   private readonly countdownTimerService = inject(CountdownTimerService);
   private TIMER_KEY = 'otp_expiry';
+  private route = inject(Router);
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
@@ -53,18 +56,18 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
     const email = this.emailForm.value.email || '';
 
     this.signupService.submitCustomerEmailForOtp(email).subscribe({
-      next: (res) => {
+      next: () => {
         this.initTimer();
         this.signupService.isSubmitting$.next(false);
-        alert('Email submitted successfully. Check your email for the otp code.');
-        console.log('Success info: ', res);
+        this.toastService.success('OTP code sent successfully to your email.');
         this.signupService.nextStep();
         this.otpInputs.first.nativeElement.focus();
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
-        alert(`Failed to submit email: ${err.error.message || 'Unknown error occurred.'}`);
-        console.log('Failure: ', err);
+        this.toastService.error(
+          `${err.error.message || 'Failed to submit email. Try again later.'}`,
+        );
       },
     });
   }
@@ -78,15 +81,15 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
     this.signupService.verifyCustomerOtp(email, otp).subscribe({
       next: (res: OtpSuccessResponse) => {
         this.signupService.isSubmitting$.next(false);
-        alert('OTP verified successfully.');
-        console.log('Success info: ', res);
+        this.toastService.success('Email verified successfully.');
         this.userId = res.userId;
         this.signupService.nextStep();
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
-        alert(`Failed to submit email: ${err.error.message || 'Unknown error occurred.'}`);
-        console.log('Failure: ', err);
+        this.toastService.error(
+          `${err.error.message || 'Failed to verify email. Try again later.'}`,
+        );
       },
     });
   }
@@ -99,17 +102,15 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
 
   public resendOtp(): void {
     this.signupService.resendOtp(this.emailForm.value.email || '').subscribe({
-      next: (res) => {
-        alert('OTP resent successfully. Check your email for the new otp code.');
-        console.log('Success info: ', res);
+      next: () => {
+        this.toastService.success('OTP code resent successfully to your email.');
         this.countdownTimerService.clear(this.TIMER_KEY);
         this.initTimer();
         this.signupService.otpForm.reset();
         this.otpInputs.first.nativeElement.focus();
       },
       error: (err) => {
-        alert(`Failed to resend OTP: ${err.error.message || 'Unknown error occurred.'}`);
-        console.log('Failure: ', err);
+        this.toastService.error(`${err.error.message || 'Failed to resend OTP. Try again later.'}`);
       },
     });
   }
@@ -127,16 +128,15 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
     };
 
     this.signupService.registerCustomer(formData as SignupData).subscribe({
-      next: (res) => {
+      next: () => {
         this.signupService.isSubmitting$.next(false);
-        alert('Customer registered successfully.');
-        console.log('Success info: ', res);
+        this.toastService.success('Account registered successfully. Log in now.');
         this.signupService.resetAfterSuccess();
+        this.route.navigate(['/login']);
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
-        alert(`Failed to register customer: ${err.error.message || 'Unknown error occurred.'}`);
-        console.log('Failure: ', err);
+        this.toastService.error(`${err.error.message || 'Failed to register. Try again later.'}`);
       },
     });
   }
