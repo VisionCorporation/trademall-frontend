@@ -253,13 +253,17 @@
               Didn’t get the code?
               <button
                 class="cursor-pointer"
-                [disabled]="!(canResend$ | async) || (signupService.isSubmitting$ | async)"
-                [class.text-gray-400]="!(canResend$ | async)"
-                [class.pointer-events-none]="!(canResend$ | async)"
+                [disabled]="!(canResend$ | async) || (signupService.isResending$ | async)"
+                [class.text-gray-400]="
+                  !(canResend$ | async) || (signupService.isResending$ | async)
+                "
+                [class.pointer-events-none]="
+                  !(canResend$ | async) || (signupService.isResending$ | async)
+                "
                 [class.text-[#2E790E]]="canResend$ | async"
                 (click)="resendOtp()"
               >
-                {{ (signupService.isSubmitting$ | async) ? 'Resending...' : 'Resend' }}
+                {{ (signupService.isResending$ | async) ? 'Resending...' : 'Resend' }}
               </button>
             </p>
           </div>

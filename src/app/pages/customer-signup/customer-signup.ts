@@ -23,7 +23,7 @@ import { ToastService } from '../../services/toast/toast.service';
   templateUrl: './customer-signup.html',
   styleUrl: './customer-signup.css',
 })
-export class CustomerSignup implements AfterViewInit, OnDestroy {
+export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
   public signupService = inject(SignupService);
   private toastService = inject(ToastService);
   private subscription = new Subscription();
@@ -35,6 +35,10 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
   private route = inject(Router);
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
+
+  ngOnInit(): void {
+    this.countdownTimerService.clear(this.TIMER_KEY);
+  }
 
   ngAfterViewInit(): void {
     if (this.signupService.currentStep === 2) {
@@ -101,11 +105,11 @@ export class CustomerSignup implements AfterViewInit, OnDestroy {
   }
 
   public resendOtp(): void {
-    this.signupService.isSubmitting$.next(true);
+    this.signupService.isResending$.next(true);
 
     this.signupService.resendOtp(this.emailForm.value.email || '').subscribe({
       next: () => {
-        this.signupService.isSubmitting$.next(false);
+        this.signupService.isResending$.next(false);
         this.toastService.success('OTP code resent successfully to your email.');
         this.countdownTimerService.clear(this.TIMER_KEY);
         this.initTimer();
