@@ -151,7 +151,7 @@
         </p>
         <form [formGroup]="otpForm" class="flex items-center justify-center flex-col">
           <div
-            class="flex items-center justify-between gap-2 md:gap-3 lg:gap-3 mb-6 sm:mb-7.5 max-w-150"
+            class="flex items-center justify-between gap-2 md:gap-3 lg:gap-3 mb-6 sm:mb-7.5 max-w-125"
           >
             <input
               #otpInput
@@ -244,7 +244,7 @@
             />
           </div>
 
-          <div class="flex max-w-150 w-full items-center justify-between text-[17px] md:text-xl">
+          <div class="flex max-w-125 w-full items-center justify-between text-[17px] md:text-xl">
             <span class="text-[#E23F3F]">
               {{ countdown$ | async }}
             </span>
@@ -267,7 +267,7 @@
           <button
             type="button"
             [disabled]="otpForm.invalid || (signupService.isSubmitting$ | async)"
-            class="md:max-w-85 max-w-150 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
+            class="md:max-w-85 max-w-125 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
             [class.cursor-not-allowed]="otpForm.invalid || (signupService.isSubmitting$ | async)"
             (click)="verifyOtpCode()"
           >
