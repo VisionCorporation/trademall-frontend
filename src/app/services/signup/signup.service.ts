@@ -14,6 +14,7 @@ export class SignupService {
   public currentStep = 1;
   public isSubmitting$ = new BehaviorSubject<boolean>(false);
   public isResending$ = new BehaviorSubject<boolean>(false);
+  public signingWithGoogle$ = new BehaviorSubject<boolean>(false);
 
   public emailForm = this.fb.group({
     email: [
