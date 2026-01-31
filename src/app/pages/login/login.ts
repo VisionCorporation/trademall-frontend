@@ -5,6 +5,7 @@ import { SignupService } from '../../services/signup/signup.service';
 import { RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { LoginData } from '../../interfaces/login.interface';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class Login {
   private readonly fb = inject(FormBuilder);
   public readonly signupService = inject(SignupService);
   private readonly loginService = inject(LoginService);
+  private readonly toastService = inject(ToastService);
 
   public loginForm = this.fb.group({
     email: [
@@ -46,13 +48,13 @@ export class Login {
 
     this.loginService.login(loginData as LoginData).subscribe({
       next: (res) => {
-        console.log('Login successful:', res);
-        alert('Login successful!');
+        this.toastService.success('Login successful!');
+        this.loginService.saveSession(res);
         this.signupService.isSubmitting$.next(false);
+        this.loginForm.reset();
       },
       error: (err) => {
-        console.error('Login failed:', err);
-        alert(`${err.error.message || 'Login failed. Please try again.'}`);
+        this.toastService.error(err.error.message || 'Login failed. Please try again.');
         this.signupService.isSubmitting$.next(false);
       },
     });
