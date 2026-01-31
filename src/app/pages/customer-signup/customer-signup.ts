@@ -86,6 +86,7 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
       next: (res: OtpSuccessResponse) => {
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('Email verified successfully.');
+        this.countdownTimerService.clear(this.TIMER_KEY);
         this.userId = res.userId;
         this.signupService.nextStep();
       },
