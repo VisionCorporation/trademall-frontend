@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { LoginData } from '../../interfaces/login.interface';
 import { ToastService } from '../../services/toast/toast.service';
@@ -18,6 +18,7 @@ export class Login {
   public readonly signupService = inject(SignupService);
   private readonly loginService = inject(LoginService);
   private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
 
   public loginForm = this.fb.group({
     email: [
@@ -52,6 +53,7 @@ export class Login {
         this.loginService.saveSession(res);
         this.signupService.isSubmitting$.next(false);
         this.loginForm.reset();
+        this.router.navigate(['/']);
       },
       error: (err) => {
         this.toastService.error(err.error.message || 'Login failed. Please try again.');
