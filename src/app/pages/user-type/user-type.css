@@ -1,0 +1,38 @@
+.user-type-card {
+  transition: all 0.2s ease;
+}
+
+.user-type-card:hover {
+  transform: scale(1.02);
+}
+
+.custom-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 25px;
+  height: 25px;
+  border: 2px solid #171717;
+  border-radius: 50%;
+  background-color: transparent;
+
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.custom-radio:checked {
+  background-color: #2e790e;
+  border: none;
+}
+
+.custom-radio:focus-visible {
+  outline: 2px solid #2e790e;
+  outline-offset: 2px;
+}
+
+.custom-radio:hover {
+  transform: scale(1.05);
+}
