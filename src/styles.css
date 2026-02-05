@@ -47,9 +47,15 @@ h6 {
 p,
 span,
 button,
+a, .initials,
 ::placeholder {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-weight: 400;
+}
+
+.logo {
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-weight: 700;
 }
 
 button {
