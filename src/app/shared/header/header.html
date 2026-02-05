@@ -1,0 +1,33 @@
+<section class="py-12.5 px-12 2xl:px-0 flex items-center justify-between">
+  <h1 class="logo text-[#171717] tracking-tight text-[32px]">trademall</h1>
+
+  <nav>
+    <ol class="flex items-center justify-center gap-5">
+      <li class="px-3.5 py-2">
+        <a routerLink="" class="text-[20px] tracking-tight">About Us</a>
+      </li>
+      <li class="px-3.5 py-2">
+        <a routerLink="" class="text-[20px] tracking-tight">Contact Us</a>
+      </li>
+      <li class="px-3.5 py-2">
+        <a routerLink="" class="text-[20px] tracking-tight">FAQs</a>
+      </li>
+    </ol>
+  </nav>
+
+  @if (!isLoggedIn) {
+    <div class="flex items-center justify-center gap-8.5">
+      <a routerLink="/login" class="text-[20px] tracking-tight">Log In</a>
+      <a
+        routerLink="/"
+        class="text-[20px] tracking-tight bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in px-3.75 py-2 text-white rounded-lg"
+        >Create an account</a
+      >
+    </div>
+  } @else {
+    <div class="flex items-center justify-center gap-10">
+      <span class="text-[#171717] text-xl">{{ userName }}</span>
+      <div class="initials w-15 h-15 bg-[#171717] text-white rounded-3xl flex items-center justify-center text-2xl">{{ userInitials }}</div>
+    </div>
+  }
+</section>
