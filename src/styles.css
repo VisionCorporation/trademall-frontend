@@ -47,7 +47,8 @@ h6 {
 p,
 span,
 button,
-a, .initials,
+a,
+.initials,
 ::placeholder {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-weight: 400;
@@ -93,5 +94,98 @@ input:focus {
 @keyframes l4 {
   to {
     transform: rotate(1turn);
+  }
+}
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  width: full;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  color: #aaaaaa;
+  transition: color 0.4s ease;
+}
+
+.step.active {
+  color: #2e790e;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #aaaaaa;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background 0.4s ease;
+}
+
+.step.active .circle {
+  background: #2e790e;
+}
+
+.line {
+  width: 2px;
+  height: 50px;
+  background: #171717;
+  opacity: 0.4;
+  margin-left: 19px;
+  margin-block: 5px;
+}
+
+.otp-input {
+  max-width: 85px;
+  width: 100%;
+  height: 75px;
+  text-align: center;
+  font-size: 24px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  text-align: center;
+  caret-color: black;
+}
+
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .stepper {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .step {
+    flex-direction: column;
+    gap: 7px;
+    align-items: center;
+  }
+
+  .circle {
+    width: 39px;
+    height: 39px;
+    font-size: 15px;
+  }
+
+  .line {
+    width: 40px;
+    height: 2px;
+    margin: 0;
+    margin-top: 20px;
+  }
+
+  .otp-input {
+    max-width: 70px;
+    height: 65px;
   }
 }
