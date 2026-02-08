@@ -2,7 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interface';
+import {
+  OtpSuccessResponse,
+  SignupData,
+  VendorSignupData,
+} from '../../interfaces/signup.interface';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -15,6 +19,7 @@ export class SignupService {
   public isSubmitting$ = new BehaviorSubject<boolean>(false);
   public isResending$ = new BehaviorSubject<boolean>(false);
   public signingWithGoogle$ = new BehaviorSubject<boolean>(false);
+  private vendorFormData: Partial<VendorSignupData> | null = null;
 
   public emailForm = this.fb.group({
     email: [
@@ -59,6 +64,18 @@ export class SignupService {
     return null;
   }
 
+  public setVendorFormData(data: Partial<VendorSignupData>): void {
+    this.vendorFormData = data;
+  }
+
+  public getVendorFormData(): Partial<VendorSignupData> | null {
+    return this.vendorFormData;
+  }
+
+  public clearVendorFormData() {
+    this.vendorFormData = null;
+  }
+
   public nextStep(): void {
     this.currentStep++;
   }
@@ -74,12 +91,27 @@ export class SignupService {
     });
   }
 
-  public resendOtp(email: string) {
-    return this.http.post<string>(`${environment.apiBaseUrl}/user/resend-otp`, { email });
-  }
-
   public registerCustomer(formData: SignupData): Observable<Object> {
     return this.http.post<Object>(`${environment.apiBaseUrl}/user/signup/stage3`, formData);
+  }
+
+  public submitVendorEmailForOtp(email: string): Observable<string> {
+    return this.http.post<string>(`${environment.apiBaseUrl}/vendor/signup/stage1`, { email });
+  }
+
+  public verifyVendorOtp(email: string, otp: string): Observable<OtpSuccessResponse> {
+    return this.http.post<OtpSuccessResponse>(`${environment.apiBaseUrl}/vendor/signup/stage2`, {
+      email,
+      otp,
+    });
+  }
+
+  public registerVendor(formData: VendorSignupData): Observable<Object> {
+    return this.http.post<Object>(`${environment.apiBaseUrl}/vendor/signup/stage3`, formData);
+  }
+
+  public resendOtp(email: string) {
+    return this.http.post<string>(`${environment.apiBaseUrl}/user/resend-otp`, { email });
   }
 
   public formatPhoneNumber(): void {
