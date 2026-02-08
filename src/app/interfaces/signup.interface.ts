@@ -7,6 +7,10 @@ export interface SignupData {
   confirmPassword: string;
 }
 
+export interface VendorSignupData extends SignupData {
+  vendorType: string;
+}
+
 export interface OtpSuccessResponse {
   userId: string;
   success: boolean;
