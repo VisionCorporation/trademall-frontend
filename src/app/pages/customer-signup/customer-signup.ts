@@ -17,10 +17,11 @@ import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interfac
 import { CountdownTimerService } from '../../services/countdown-timer/coutdown-timer.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { environment } from '../../../environments/environment';
+import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
 
 @Component({
   selector: 'app-customer-signup',
-  imports: [RouterLink, ReactiveFormsModule, AsyncPipe],
+  imports: [RouterLink, ReactiveFormsModule, AsyncPipe, InputErrorMessage],
   templateUrl: './customer-signup.html',
   styleUrl: './customer-signup.css',
 })
@@ -34,6 +35,10 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
   private readonly countdownTimerService = inject(CountdownTimerService);
   private TIMER_KEY = 'otp_expiry';
   private router = inject(Router);
+
+  steps = ['Email Options', 'Email Verification', 'Personal Details', 'Password Creation'];
+
+  otpControls = ['digit1', 'digit2', 'digit3', 'digit4', 'digit5', 'digit6'];
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
@@ -171,22 +176,6 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
 
   public nextStep(): void {
     this.signupService.nextStep();
-  }
-
-  public emailErrorMessage(): string {
-    return this.signupService.emailErrorMessage();
-  }
-
-  public phoneErrorMessage(): string {
-    return this.signupService.phoneErrorMessage();
-  }
-
-  public passwordErrorMessage(): string {
-    return this.signupService.passwordErrorMessage();
-  }
-
-  public confirmPasswordErrorMessage(): string {
-    return this.signupService.confirmPasswordErrorMessage();
   }
 
   public formatPhoneNumber(): void {

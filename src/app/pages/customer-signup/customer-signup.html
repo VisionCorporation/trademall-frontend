@@ -5,43 +5,19 @@
         Create an account
       </h1>
       <div class="stepper mx-2.5 md:mx-0">
-        <div
-          class="step flex flex-col md:flex-row text-center px-0"
-          [class.active]="currentStep >= 1"
-        >
-          <span class="circle">1</span>
-          <p class="text-[15px] md:text-2xl leading-5">Email Options</p>
-        </div>
+        @for (step of steps; track $index) {
+          <div
+            class="step flex flex-col md:flex-row text-center px-0"
+            [class.active]="currentStep >= $index + 1"
+          >
+            <span class="circle">{{ $index + 1 }}</span>
+            <p class="text-[15px] md:text-2xl leading-5">{{ step }}</p>
+          </div>
 
-        <div class="line"></div>
-
-        <div
-          class="step flex flex-col md:flex-row text-center px-0"
-          [class.active]="currentStep >= 2"
-        >
-          <span class="circle">2</span>
-          <p class="text-[15px] md:text-2xl leading-5">Email Verification</p>
-        </div>
-
-        <div class="line"></div>
-
-        <div
-          class="step flex flex-col md:flex-row text-center px-0"
-          [class.active]="currentStep >= 3"
-        >
-          <span class="circle">3</span>
-          <p class="text-[15px] md:text-2xl leading-5">Personal Details</p>
-        </div>
-
-        <div class="line"></div>
-
-        <div
-          class="step flex flex-col md:flex-row text-center px-0"
-          [class.active]="currentStep >= 4"
-        >
-          <span class="circle">4</span>
-          <p class="text-[15px] md:text-2xl leading-5">Password Creation</p>
-        </div>
+          @if ($index < steps.length - 1) {
+            <div class="line"></div>
+          }
+        }
       </div>
     </div>
   </div>
@@ -109,31 +85,13 @@
               class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733]"
             />
 
-            @if (
-              emailForm.get('email')?.invalid &&
-              (emailForm.get('email')?.dirty || emailForm.get('email')?.touched)
-            ) {
-              <span
-                class="text-[#ff6b6b] mt-2 text-[15px] text-left customise-sub-title flex items-center gap-2"
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
-                    stroke="#ff6b6b"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                {{ emailErrorMessage() }}
-              </span>
-            }
+            <app-input-error-message
+              [control]="emailForm.controls.email"
+              [messages]="{
+                required: 'Email is required',
+                pattern: 'Invalid email (e.g., user@domain.com)',
+              }"
+            />
 
             <button
               type="button"
@@ -161,98 +119,23 @@
           Enter the verification code sent to {{ emailForm.value.email }}
         </p>
         <form [formGroup]="otpForm" class="flex items-center justify-center flex-col">
-          <div
-            class="flex items-center justify-between gap-2 md:gap-3 lg:gap-3 mb-6 sm:mb-7.5 max-w-125"
-          >
-            <input
-              #otpInput
-              type="text"
-              inputmode="numeric"
-              autocomplete="one-time-code"
-              maxlength="1"
-              formControlName="digit1"
-              class="otp-input"
-              (focus)="moveCursorToEnd($event)"
-              (click)="moveCursorToEnd($event)"
-              (input)="onOtpInput($event, 0)"
-              (keydown)="onKeyDown($event, 0)"
-              (paste)="onOtpPaste($event)"
-            />
-
-            <input
-              #otpInput
-              type="text"
-              inputmode="numeric"
-              autocomplete="one-time-code"
-              maxlength="1"
-              formControlName="digit2"
-              class="otp-input"
-              (focus)="moveCursorToEnd($event)"
-              (click)="moveCursorToEnd($event)"
-              (input)="onOtpInput($event, 1)"
-              (keydown)="onKeyDown($event, 1)"
-              (paste)="onOtpPaste($event)"
-            />
-
-            <input
-              #otpInput
-              type="text"
-              inputmode="numeric"
-              autocomplete="one-time-code"
-              maxlength="1"
-              formControlName="digit3"
-              class="otp-input"
-              (focus)="moveCursorToEnd($event)"
-              (click)="moveCursorToEnd($event)"
-              (input)="onOtpInput($event, 2)"
-              (keydown)="onKeyDown($event, 2)"
-              (paste)="onOtpPaste($event)"
-            />
-
-            <input
-              #otpInput
-              type="text"
-              inputmode="numeric"
-              autocomplete="one-time-code"
-              maxlength="1"
-              formControlName="digit4"
-              class="otp-input"
-              (focus)="moveCursorToEnd($event)"
-              (click)="moveCursorToEnd($event)"
-              (input)="onOtpInput($event, 3)"
-              (keydown)="onKeyDown($event, 3)"
-              (paste)="onOtpPaste($event)"
-            />
-
-            <input
-              #otpInput
-              type="text"
-              inputmode="numeric"
-              autocomplete="one-time-code"
-              maxlength="1"
-              formControlName="digit5"
-              class="otp-input"
-              (focus)="moveCursorToEnd($event)"
-              (click)="moveCursorToEnd($event)"
-              (input)="onOtpInput($event, 4)"
-              (keydown)="onKeyDown($event, 4)"
-              (paste)="onOtpPaste($event)"
-            />
-
-            <input
-              #otpInput
-              type="text"
-              inputmode="numeric"
-              autocomplete="one-time-code"
-              maxlength="1"
-              formControlName="digit6"
-              class="otp-input"
-              (focus)="moveCursorToEnd($event)"
-              (click)="moveCursorToEnd($event)"
-              (input)="onOtpInput($event, 5)"
-              (keydown)="onKeyDown($event, 5)"
-              (paste)="onOtpPaste($event)"
-            />
+          <div class="flex gap-2 md:gap-3 mb-6 max-w-125">
+            @for (ctrl of otpControls; track $index) {
+              <input
+                #otpInput
+                type="text"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                maxlength="1"
+                class="otp-input"
+                [formControlName]="ctrl"
+                (focus)="moveCursorToEnd($event)"
+                (click)="moveCursorToEnd($event)"
+                (input)="onOtpInput($event, $index)"
+                (keydown)="onKeyDown($event, $index)"
+                (paste)="onOtpPaste($event)"
+              />
+            }
           </div>
 
           <div class="flex max-w-125 w-full items-center justify-between text-[17px] md:text-xl">
@@ -332,31 +215,13 @@
               class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733]"
             />
 
-            @if (
-              personalForm.get('phoneNumber')?.invalid &&
-              (personalForm.get('phoneNumber')?.dirty || personalForm.get('phoneNumber')?.touched)
-            ) {
-              <span
-                class="text-[#ff6b6b] mt-2 text-[15px] text-left customise-sub-title flex items-center gap-2"
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
-                    stroke="#ff6b6b"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                {{ phoneErrorMessage() }}
-              </span>
-            }
+            <app-input-error-message
+              [control]="personalForm.controls.phoneNumber"
+              [messages]="{
+                required: 'Phone number is required',
+                pattern: 'Invalid phone number (e.g., +233 245 678 901)',
+              }"
+            />
 
             <button
               type="button"
@@ -385,31 +250,13 @@
               class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733]"
             />
 
-            @if (
-              passwordForm.get('password')?.invalid &&
-              (passwordForm.get('password')?.dirty || passwordForm.get('password')?.touched)
-            ) {
-              <span
-                class="text-[#ff6b6b] mt-2 text-[15px] text-left customise-sub-title flex items-center gap-2"
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
-                    stroke="#ff6b6b"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                {{ passwordErrorMessage() }}
-              </span>
-            }
+            <app-input-error-message
+              [control]="passwordForm.controls.password"
+              [messages]="{
+                required: 'Password is required',
+                minlength: 'Password must be 6+ characters',
+              }"
+            />
 
             <label for="confirmPassword" hidden>Confirm Password</label>
             <input
@@ -421,32 +268,13 @@
               class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733] mt-5"
             />
 
-            @if (
-              passwordForm.get('confirmPassword')?.invalid &&
-              (passwordForm.get('confirmPassword')?.dirty ||
-                passwordForm.get('confirmPassword')?.touched)
-            ) {
-              <span
-                class="text-[#ff6b6b] mt-2 text-[15px] text-left customise-sub-title flex items-center gap-2"
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
-                    stroke="#ff6b6b"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                {{ confirmPasswordErrorMessage() }}
-              </span>
-            }
+            <app-input-error-message
+              [control]="passwordForm.controls.confirmPassword"
+              [messages]="{
+                required: 'Confirm password is required',
+                mismatch: 'Passwords do not match',
+              }"
+            />
 
             <button
               type="button"
