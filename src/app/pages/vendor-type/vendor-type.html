@@ -1,0 +1,45 @@
+<section class="relative bg-[#E3E8E1] h-screen py-18.75 px-37.5">
+  <h1 class="uppercase text-[64px] max-w-59 tracking-tight leading-none mb-2.5 text-[#171717]">
+    Welcome to trademall
+  </h1>
+  <p class="text-[24px] text-[#171717] mb-7">Select a vendor type to continue</p>
+  <form [formGroup]="vendorTypeForm" (ngSubmit)="onSubmit()" class="flex items-end justify-between">
+    <div class="flex items-center gap-10">
+      @for (vendorType of vendorTypes; track vendorType.value) {
+        <div
+          class="vendor-type-card bg-white w-76 h-76 rounded-2xl p-7.5 cursor-pointer"
+          (click)="selectVendorType(vendorType.value)"
+        >
+          <input
+            type="radio"
+            formControlName="vendorType"
+            [value]="vendorType.value"
+            [id]="vendorType.value"
+            class="custom-radio cursor-pointer"
+          />
+          <h2 class="uppercase text-[32px]">{{ vendorType.name }}</h2>
+        </div>
+      }
+    </div>
+    <button
+      [disabled]="
+        vendorTypeForm.get('vendorType')?.value === '' || (signupService.isSubmitting$ | async)
+      "
+      class="text-[20px] tracking-tight bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in px-3.75 py-2 text-white rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+      [class.cursor-not-allowed]="vendorTypeForm.get('vendorType')?.value === ''"
+      (click)="registerVendor()"
+    >
+      @if (signupService.isSubmitting$ | async) {
+        <div class="loader"></div>
+      }
+      {{ (signupService.isSubmitting$ | async) ? 'Creating Account...' : 'Create an account' }}
+    </button>
+  </form>
+
+  <p
+    class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-[17px] md:text-xl z-10 px-4"
+  >
+    Already have an account?
+    <a class="text-[#2E790E] py-3 px-3" routerLink="/login">Log In</a>
+  </p>
+</section>
