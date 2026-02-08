@@ -1,0 +1,255 @@
+<section class="grid grid-cols-1 md:grid-cols-2">
+  <div class="bg-[#E3E8E1] min-h-[45svh] md:min-h-screen flex flex-col items-center justify-center">
+    <div>
+      <h1 class="text-4xl sm:text-5xl mb-5 text-center md:text-left text-[#171717] tracking-tight">
+        Create an account
+      </h1>
+      <div class="stepper mx-2.5 md:mx-0">
+        @for (step of steps; track $index) {
+          <div
+            class="step flex flex-col md:flex-row text-center px-0"
+            [class.active]="currentStep >= $index + 1"
+          >
+            <span class="circle">{{ $index + 1 }}</span>
+            <p class="text-[15px] md:text-2xl leading-5">{{ step }}</p>
+          </div>
+
+          @if ($index < steps.length - 1) {
+            <div class="line"></div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+  <div
+    class="relative bg-white min-h-[55svh] md:min-h-screen flex flex-col items-center justify-center"
+  >
+    @if (currentStep === 1) {
+      <div class="max-w-85 w-full z-50">
+        <div class="w-full">
+          <form [formGroup]="emailForm">
+            <label for="email" hidden>Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              formControlName="email"
+              autocomplete="off"
+              class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733]"
+            />
+
+            <app-input-error-message
+              [control]="emailForm.controls.email"
+              [messages]="{
+                required: 'Email is required',
+                pattern: 'Invalid email (e.g., user@domain.com)',
+              }"
+            />
+
+            <button
+              type="button"
+              [disabled]="emailForm.invalid || (signupService.isSubmitting$ | async)"
+              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              [class.cursor-not-allowed]="
+                emailForm.invalid || (signupService.isSubmitting$ | async)
+              "
+              (click)="submitEmailForOtp()"
+            >
+              @if (signupService.isSubmitting$ | async) {
+                <div class="loader"></div>
+              }
+              {{
+                (signupService.isSubmitting$ | async) ? 'Sending Code...' : ' Continue with Email'
+              }}
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+    @if (currentStep === 2) {
+      <div class="sm:max-w-[90%] w-[90%] z-50">
+        <p class="text-center md:text-lg text-[#AAAAAA] tracking-tight mb-10 sm:mb-12.5">
+          Enter the verification code sent to {{ emailForm.value.email }}
+        </p>
+        <form [formGroup]="otpForm" class="flex items-center justify-center flex-col">
+          <div class="flex gap-2 md:gap-3 mb-6 max-w-125">
+            @for (ctrl of otpControls; track $index) {
+              <input
+                #otpInput
+                type="text"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                maxlength="1"
+                class="otp-input"
+                [formControlName]="ctrl"
+                (focus)="moveCursorToEnd($event)"
+                (click)="moveCursorToEnd($event)"
+                (input)="onOtpInput($event, $index)"
+                (keydown)="onKeyDown($event, $index)"
+                (paste)="onOtpPaste($event)"
+              />
+            }
+          </div>
+
+          <div class="flex max-w-125 w-full items-center justify-between text-[17px] md:text-xl">
+            <span class="text-[#E23F3F]">
+              {{ countdown$ | async }}
+            </span>
+
+            <p class="text-[#171717]">
+              Didn’t get the code?
+              <button
+                class="cursor-pointer"
+                [disabled]="!(canResend$ | async) || (signupService.isResending$ | async)"
+                [class.text-gray-400]="
+                  !(canResend$ | async) || (signupService.isResending$ | async)
+                "
+                [class.pointer-events-none]="
+                  !(canResend$ | async) || (signupService.isResending$ | async)
+                "
+                [class.text-[#2E790E]]="canResend$ | async"
+                (click)="resendOtp()"
+              >
+                {{ (signupService.isResending$ | async) ? 'Resending...' : 'Resend' }}
+              </button>
+            </p>
+          </div>
+
+          <button
+            type="button"
+            [disabled]="otpForm.invalid || (signupService.isSubmitting$ | async)"
+            class="md:max-w-85 max-w-125 w-full bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white mt-5.5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
+            [class.cursor-not-allowed]="otpForm.invalid || (signupService.isSubmitting$ | async)"
+            (click)="verifyOtpCode()"
+          >
+            @if (signupService.isSubmitting$ | async) {
+              <div class="loader"></div>
+            }
+            {{ (signupService.isSubmitting$ | async) ? 'Verifying Email...' : 'Verify Email' }}
+          </button>
+        </form>
+      </div>
+    }
+    @if (currentStep === 3) {
+      <div class="max-w-85 w-full z-50">
+        <div class="w-full">
+          <form [formGroup]="personalForm">
+            <label for="firstName" hidden>First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              placeholder="Enter your First Name"
+              autocomplete="off"
+              formControlName="firstName"
+              class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733] mb-5"
+            />
+
+            <label for="lastName" hidden>Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              placeholder="Enter your Last Name"
+              autocomplete="off"
+              formControlName="lastName"
+              class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733] mb-5"
+            />
+
+            <label for="phoneNumber" hidden>Phone Number</label>
+            <input
+              type="tel"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder="Enter your Phone Number"
+              autocomplete="off"
+              formControlName="phoneNumber"
+              (input)="formatPhoneNumber()"
+              class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733]"
+            />
+
+            <app-input-error-message
+              [control]="personalForm.controls.phoneNumber"
+              [messages]="{
+                required: 'Phone number is required',
+                pattern: 'Invalid phone number (e.g., +233 245 678 901)',
+              }"
+            />
+
+            <button
+              type="button"
+              [disabled]="personalForm.invalid"
+              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+              [class.cursor-not-allowed]="personalForm.invalid"
+              (click)="nextStep()"
+            >
+              Continue
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+    @if (currentStep === 4) {
+      <div class="max-w-85 w-full z-50">
+        <div class="w-full">
+          <form [formGroup]="passwordForm">
+            <label for="password" hidden>Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Create a Password"
+              formControlName="password"
+              class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733]"
+            />
+
+            <app-input-error-message
+              [control]="passwordForm.controls.password"
+              [messages]="{
+                required: 'Password is required',
+                minlength: 'Password must be 6+ characters',
+              }"
+            />
+
+            <label for="confirmPassword" hidden>Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirm your Password"
+              formControlName="confirmPassword"
+              class="block w-full border border-[#17171799] rounded-md py-3 px-5 placeholder:text-[#17171733] mt-5"
+            />
+
+            <app-input-error-message
+              [control]="passwordForm.controls.confirmPassword"
+              [messages]="{
+                required: 'Confirm password is required',
+                mismatch: 'Passwords do not match',
+              }"
+            />
+
+            <button
+              type="button"
+              [disabled]="passwordForm.invalid || (signupService.isSubmitting$ | async)"
+              class="bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in p-3.75 text-white w-full mt-5 rounded-lg disabled:cursor-not-allowed disabled:opacity-60 flex items-center justify-center gap-2"
+              [class.cursor-not-allowed]="
+                passwordForm.invalid || (signupService.isSubmitting$ | async)
+              "
+              (click)="onProceed()"
+            >
+              Continue
+            </button>
+          </form>
+        </div>
+      </div>
+    }
+    <p
+      class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-[17px] md:text-xl z-10 px-4"
+    >
+      Already have an account?
+      <a class="text-[#2E790E] py-3 px-3" routerLink="/login">Log In</a>
+    </p>
+  </div>
+</section>
