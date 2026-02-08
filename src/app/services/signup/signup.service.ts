@@ -82,42 +82,6 @@ export class SignupService {
     return this.http.post<Object>(`${environment.apiBaseUrl}/user/signup/stage3`, formData);
   }
 
-  public emailErrorMessage(): string {
-    const control = this.emailForm.get('email');
-    if (control?.invalid && (control.dirty || control.touched)) {
-      if (control.errors?.['required']) return 'Email is required';
-      if (control.errors?.['pattern']) return 'Invalid email (e.g., user@domain.com)';
-    }
-    return '';
-  }
-
-  public phoneErrorMessage(): string {
-    const control = this.personalForm.get('phoneNumber');
-    if (control?.invalid && (control.dirty || control.touched)) {
-      if (control.errors?.['required']) return 'Phone number is required';
-      if (control.errors?.['pattern']) return 'Invalid phone number (e.g., +233 245 678 901)';
-    }
-    return '';
-  }
-
-  public passwordErrorMessage(): string {
-    const control = this.passwordForm.get('password');
-    if (control?.invalid && (control.dirty || control.touched)) {
-      if (control.errors?.['required']) return 'Password is required';
-      if (control.errors?.['minlength']) return 'Password must be 6+ characters';
-    }
-    return '';
-  }
-
-  public confirmPasswordErrorMessage(): string {
-    const control = this.passwordForm.get('confirmPassword');
-    if (control?.invalid && (control.dirty || control.touched)) {
-      if (control.errors?.['required']) return 'Confirm password is required';
-      if (control.errors?.['mismatch']) return 'Passwords do not match';
-    }
-    return '';
-  }
-
   public formatPhoneNumber(): void {
     const control = this.personalForm.get('phoneNumber');
     if (control) {
