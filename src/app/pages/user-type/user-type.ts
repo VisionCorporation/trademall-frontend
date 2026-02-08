@@ -33,7 +33,7 @@ export class UserType implements AfterViewInit {
     if (selectedUserType === 'customer') {
       this.router.navigate(['/customer/signup']);
     } else if (selectedUserType === 'vendor') {
-      alert('Vendor signup is not implemented yet.');
+      this.router.navigate(['/vendor/signup']);
     }
   }
 }
