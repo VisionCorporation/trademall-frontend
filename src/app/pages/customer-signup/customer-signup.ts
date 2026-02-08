@@ -18,6 +18,7 @@ import { CountdownTimerService } from '../../services/countdown-timer/coutdown-t
 import { ToastService } from '../../services/toast/toast.service';
 import { environment } from '../../../environments/environment';
 import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
+import { otpControls, steps } from '../../data/constants/signup.constant';
 
 @Component({
   selector: 'app-customer-signup',
@@ -35,10 +36,8 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
   private readonly countdownTimerService = inject(CountdownTimerService);
   private TIMER_KEY = 'otp_expiry';
   private router = inject(Router);
-
-  steps = ['Email Options', 'Email Verification', 'Personal Details', 'Password Creation'];
-
-  otpControls = ['digit1', 'digit2', 'digit3', 'digit4', 'digit5', 'digit6'];
+  public steps = steps;
+  public otpControls = otpControls;
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
