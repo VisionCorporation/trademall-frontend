@@ -19,6 +19,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/vendor-signup/vendor-signup').then((m) => m.VendorSignup),
   },
   {
+    path: 'vendor-type',
+    loadComponent: () => import('./pages/vendor-type/vendor-type').then((m) => m.VendorType),
+  },
+  {
     path: 'login',
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
   },
