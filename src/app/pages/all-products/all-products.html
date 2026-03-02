@@ -109,34 +109,47 @@
     <div class="max-w-[85%] w-full">
       <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717]">Phones</span>
       <p class="text-[32px] mt-5 mb-7.5">5 items</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
-        @for (product of products; track product.id) {
-          <div
-            class="bg-[#F4F4F4] rounded-2xl max-w-70.75 hover:scale-105 transition-transform duration-300"
-          >
-            <div class="bg-[#E6E6E8] mx-1.25 mt-1.25 mb-3.75 rounded-[11px] pt-3.75">
-              <img [src]="product.imageUrl" alt="{{ product.name }}" class="w-37.25 h-40 mx-auto" />
-            </div>
-            <div class="p-3.75">
-              <div class="flex items-center justify-between">
-                <p class="text-xl truncate max-w-[13ch]">{{ product.name }}</p>
-                <span class="bg-[#D1D1D133] py-0.75 px-1.25 rounded-sm text-[#171717]">Phones</span>
+      @if (!isProductsLoading()) {
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75"
+          [@staggerProducts]="products.length"
+        >
+          @for (product of products; track product.id) {
+            <div
+              class="bg-[#F4F4F4] rounded-2xl max-w-70.75 hover:scale-105 transition-transform duration-300"
+            >
+              <div class="bg-[#E6E6E8] mx-1.25 mt-1.25 mb-3.75 rounded-[11px] pt-3.75">
+                <img
+                  [src]="product.imageUrl"
+                  alt="{{ product.name }}"
+                  class="w-37.25 h-40 mx-auto"
+                />
               </div>
-              <p class="text-sm text-[#2E790E] text-[13px]">
-                {{ product.businessName }}
-              </p>
-              <p class="text-[13px] mt-4 mb-6.25">{{ product.description }}</p>
-              <div class="flex justify-center">
-                <button
-                  class="border border-[#171717] px-3.5 py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
-                >
-                  Buy Now - {{ product.price | currency: 'GHS' : 'symbol' : '1.2-2' }}
-                </button>
+              <div class="p-3.75">
+                <div class="flex items-center justify-between">
+                  <p class="text-xl truncate max-w-[13ch]">{{ product.name }}</p>
+                  <span class="bg-[#D1D1D133] py-0.75 px-1.25 rounded-sm text-[#171717]"
+                    >Phones</span
+                  >
+                </div>
+                <p class="text-sm text-[#2E790E] text-[13px]">
+                  {{ product.businessName }}
+                </p>
+                <p class="text-[13px] mt-4 mb-6.25">{{ product.description }}</p>
+                <div class="flex justify-center">
+                  <button
+                    class="border border-[#171717] px-3.5 py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
+                  >
+                    Buy Now - {{ product.price | currency: 'GHS' : 'symbol' : '1.2-2' }}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        }
-      </div>
+          }
+        </div>
+      } @else {
+        <app-skeleton-loader skeletonType="product" />
+      }
     </div>
   </div>
 </div>
