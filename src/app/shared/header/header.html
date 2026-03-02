@@ -1,26 +1,26 @@
-<section class="py-12.5 px-12 2xl:px-0 flex items-center justify-between">
-  <h1 class="logo text-[#171717] tracking-tight text-[32px]">trademall</h1>
+<section class="mt-7.5 px-12 2xl:px-0 flex items-center justify-between">
+  <h1 class="logo text-[#171717] text-[32px]">trademall</h1>
 
   <nav>
     <ol class="flex items-center justify-center gap-5">
       <li class="px-3.5 py-2">
-        <a routerLink="" class="text-[20px] tracking-tight">About Us</a>
+        <a routerLink="" class="text-[20px]">About Us</a>
       </li>
       <li class="px-3.5 py-2">
-        <a routerLink="" class="text-[20px] tracking-tight">Contact Us</a>
+        <a routerLink="" class="text-[20px]">Contact Us</a>
       </li>
       <li class="px-3.5 py-2">
-        <a routerLink="" class="text-[20px] tracking-tight">FAQs</a>
+        <a routerLink="" class="text-[20px]">FAQs</a>
       </li>
     </ol>
   </nav>
 
   @if (!isLoggedIn) {
     <div class="flex items-center justify-center gap-8.5">
-      <a routerLink="/login" class="text-[20px] tracking-tight">Log In</a>
+      <a routerLink="/login" class="text-[20px]">Log In</a>
       <a
         routerLink="/user-type"
-        class="text-[20px] tracking-tight bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
+        class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
         >Create an account</a
       >
     </div>
@@ -38,40 +38,40 @@
         @if (isDropdownOpen) {
           <div
             [@fadeInOut]
-            class="absolute flex flex-col gap-2 top-full right-0 p-7.5 mt-2 w-75 rounded-[20px] bg-[#E3E8E1] text-[#171717] text-[14px] tracking-tight z-50"
+            class="absolute flex flex-col gap-2 top-full right-0 p-7.5 mt-2 w-75 rounded-[20px] bg-[#E3E8E1] text-[#171717] text-[14px] z-50"
           >
             <a
               routerLink=""
               (click)="closeDropdown()"
-              class="px-3.5 py-2 text-xl tracking-tighter rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
+              class="px-3.5 py-2 text-xl er rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
               >Profile</a
             >
             <a
               routerLink=""
               (click)="closeDropdown()"
-              class="px-3.5 py-2 text-xl tracking-tighter rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
+              class="px-3.5 py-2 text-xl er rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
               >Cart</a
             >
             <a
               routerLink=""
               (click)="closeDropdown()"
-              class="px-3.5 py-2 text-xl tracking-tighter rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
+              class="px-3.5 py-2 text-xl er rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
               >Order History</a
             >
             <a
               routerLink=""
               (click)="closeDropdown()"
-              class="px-3.5 py-2 text-xl tracking-tighter rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
+              class="px-3.5 py-2 text-xl er rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
               >Notifications</a
             >
             <a
               routerLink=""
               (click)="closeDropdown()"
-              class="px-3.5 py-2 text-xl tracking-tighter rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
+              class="px-3.5 py-2 text-xl er rounded-lg hover:bg-[#D6DDD3] transition-colors duration-150 ease-in"
               >Location</a
             >
             <button
-              class="text-[#D92D20] hover:bg-[#FEE4E2] transition-colors duration-150 ease-in text-left flex items-center gap-1.25 px-3.5 py-2 text-xl tracking-tighter rounded-lg"
+              class="text-[#D92D20] hover:bg-[#FEE4E2] transition-colors duration-150 ease-in text-left flex items-center gap-1.25 px-3.5 py-2 text-xl er rounded-lg"
               (click)="logout()"
             >
               <svg
