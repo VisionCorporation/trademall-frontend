@@ -1,0 +1,1 @@
+export type SkeletonType = 'product' | 'category' | 'profile';
