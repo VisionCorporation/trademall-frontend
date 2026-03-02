@@ -1,7 +1,7 @@
 <section class="grid grid-cols-1 md:grid-cols-2">
   <div class="bg-[#E3E8E1] min-h-[45svh] md:min-h-screen flex flex-col items-center justify-center">
     <div>
-      <h1 class="text-4xl sm:text-5xl mb-5 text-center md:text-left text-[#171717] tracking-tight">
+      <h1 class="text-4xl sm:text-5xl mb-5 text-center md:text-left text-[#171717]">
         Create an account
       </h1>
       <div class="stepper mx-2.5 md:mx-0">
@@ -69,7 +69,7 @@
     }
     @if (currentStep === 2) {
       <div class="sm:max-w-[90%] w-[90%] z-50">
-        <p class="text-center md:text-lg text-[#AAAAAA] tracking-tight mb-10 sm:mb-12.5">
+        <p class="text-center md:text-lg text-[#AAAAAA] mb-10 sm:mb-12.5">
           Enter the verification code sent to {{ emailForm.value.email }}
         </p>
         <form [formGroup]="otpForm" class="flex items-center justify-center flex-col">

@@ -1,5 +1,5 @@
 <section class="relative bg-[#E3E8E1] h-screen py-18.75 px-37.5">
-  <h1 class="uppercase text-[64px] max-w-59 tracking-tight leading-none mb-2.5 text-[#171717]">
+  <h1 class="uppercase text-[64px] max-w-59 leading-none mb-2.5 text-[#171717]">
     Welcome to trademall
   </h1>
   <p class="text-[24px] text-[#171717] mb-7">Select a vendor type to continue</p>
@@ -18,7 +18,9 @@
             class="custom-radio cursor-pointer"
           />
           <h2 class="uppercase text-[32px] mb-2">{{ vendorType.name }}</h2>
-          <p class="text-[#171717] opacity-60 text-[19px] leading-6">{{ vendorType.description }}</p>
+          <p class="text-[#171717] opacity-60 text-[19px] leading-6">
+            {{ vendorType.description }}
+          </p>
         </div>
       }
     </div>
@@ -26,7 +28,7 @@
       [disabled]="
         vendorTypeForm.get('vendorType')?.value === '' || (signupService.isSubmitting$ | async)
       "
-      class="text-[20px] tracking-tight bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in px-3.75 py-2 text-white rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+      class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in px-3.75 py-2 text-white rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
       [class.cursor-not-allowed]="vendorTypeForm.get('vendorType')?.value === ''"
       (click)="registerVendor()"
     >
