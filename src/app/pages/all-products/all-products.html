@@ -1,0 +1,143 @@
+<div class="max-w-350 mx-auto">
+  <app-header />
+
+  <div class="mt-15 flex items-start w-full gap-7">
+    <button
+      class="max-w-[15%] w-full bg-[#D1D1D180] rounded-[20px] py-4.5 px-8.5 flex items-center gap-1.5"
+    >
+      <span class="text-[19px]">Watch Tutorial</span>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 1.75C14.2177 1.75 15.9565 1.74854 17.3115 1.93066C18.6882 2.11575 19.7805 2.50313 20.6387 3.36133C21.4969 4.21953 21.8842 5.31182 22.0693 6.68848C22.2515 8.0435 22.25 9.78227 22.25 12C22.25 14.2177 22.2515 15.9565 22.0693 17.3115C21.8842 18.6882 21.4969 19.7805 20.6387 20.6387C19.7805 21.4969 18.6882 21.8842 17.3115 22.0693C15.9565 22.2515 14.2177 22.25 12 22.25C9.78227 22.25 8.0435 22.2515 6.68848 22.0693C5.31182 21.8842 4.21953 21.4969 3.36133 20.6387C2.50313 19.7805 2.11575 18.6882 1.93066 17.3115C1.74854 15.9565 1.75 14.2177 1.75 12C1.75 9.78227 1.74854 8.0435 1.93066 6.68848C2.11575 5.31182 2.50313 4.21953 3.36133 3.36133C4.21953 2.50313 5.31182 2.11575 6.68848 1.93066C8.0435 1.74854 9.78227 1.75 12 1.75ZM11.3418 8.02734C10.8783 7.81274 10.3499 7.65124 9.79883 7.82129C9.43467 7.93367 9.11102 8.14416 8.85547 8.4248C8.48358 8.83337 8.36113 9.36767 8.30566 9.90137C8.24945 10.4423 8.25 11.1438 8.25 12C8.25 12.8562 8.24945 13.5577 8.30566 14.0986C8.36113 14.6323 8.48358 15.1666 8.85547 15.5752C9.11102 15.8558 9.43467 16.0663 9.79883 16.1787C10.3499 16.3488 10.8783 16.1873 11.3418 15.9727C11.8085 15.7565 12.3738 15.4058 13.0488 14.9883C13.7483 14.5556 14.3311 14.1963 14.751 13.8623C15.1747 13.5252 15.5473 13.1265 15.6816 12.5713C15.7722 12.1968 15.7722 11.8032 15.6816 11.4287C15.5473 10.8735 15.1747 10.4748 14.751 10.1377C14.3311 9.80373 13.7483 9.44444 13.0488 9.01172C12.3738 8.59415 11.8085 8.24349 11.3418 8.02734Z"
+          fill="#FBFCFF"
+        />
+      </svg>
+    </button>
+    <div class="max-w-[85%] w-full h-15 bg-[#E6E6E8] rounded-2xl"></div>
+  </div>
+
+  <div class="flex items-start w-full gap-7.5 mt-15 pb-37.5">
+    <div class="max-w-[15%] w-full">
+      <div class="mb-7.5">
+        <h2 class="products-font text-[30px] mb-3.75">Promos</h2>
+        <button class="text-2xl flex items-center gap-1.75">
+          Deals <img src="assets/icons/arrow.svg" alt="arrow icon" />
+        </button>
+      </div>
+      <div>
+        <h2 class="products-font text-[30px] mb-3.75">Categories</h2>
+        <div class="flex flex-col gap-3.75">
+          <div>
+            <button class="text-2xl flex items-center gap-1.75" (click)="toggleCategory()">
+              Electronics
+              <img
+                src="assets/icons/arrow.svg"
+                alt="arrow icon"
+                [class.rotate-180]="isCategoryOpen"
+                @smoothCollapse
+              />
+            </button>
+            @if (isCategoryOpen) {
+              <div class="ml-3.75 my-[7.5px] gap-[7.5px] flex flex-col" @smoothCollapse>
+                <label
+                  for="phones"
+                  class="custom-checkbox flex items-center gap-2 cursor-pointer text-xl"
+                >
+                  <input type="checkbox" id="phones" />
+
+                  <span class="checkmark">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 13L10 18L19 7" />
+                    </svg>
+                  </span>
+
+                  <span>Phones</span>
+                </label>
+                <label
+                  for="laptops"
+                  class="custom-checkbox flex items-center gap-2 cursor-pointer text-xl"
+                >
+                  <input type="checkbox" id="laptops" />
+
+                  <span class="checkmark">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 13L10 18L19 7" />
+                    </svg>
+                  </span>
+
+                  <span>Laptops</span>
+                </label>
+
+                <label
+                  for="extra"
+                  class="custom-checkbox flex items-center gap-2 cursor-pointer text-xl"
+                >
+                  <input type="checkbox" id="extra" />
+
+                  <span class="checkmark">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 13L10 18L19 7" />
+                    </svg>
+                  </span>
+
+                  <span>Extra</span>
+                </label>
+              </div>
+            }
+          </div>
+          <button class="text-2xl flex items-center gap-1.75">
+            Clothing <img src="assets/icons/arrow.svg" alt="arrow icon" />
+          </button>
+          <button class="text-2xl flex items-center gap-1.75">
+            Kitchenware <img src="assets/icons/arrow.svg" alt="arrow icon" />
+          </button>
+          <button class="text-2xl flex items-center gap-1.75">
+            Furniture <img src="assets/icons/arrow.svg" alt="arrow icon" />
+          </button>
+          <button class="text-2xl flex items-center gap-1.75">
+            Lighting <img src="assets/icons/arrow.svg" alt="arrow icon" />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-[85%] w-full">
+      <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717]">Phones</span>
+      <p class="text-[32px] mt-5 mb-7.5">5 items</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
+        @for (product of products; track product.id) {
+          <div
+            class="bg-[#F4F4F4] rounded-2xl max-w-70.75 hover:scale-105 transition-transform duration-300"
+          >
+            <div class="bg-[#E6E6E8] mx-1.25 mt-1.25 mb-3.75 rounded-[11px] pt-3.75">
+              <img [src]="product.imageUrl" alt="{{ product.name }}" class="w-37.25 h-40 mx-auto" />
+            </div>
+            <div class="p-3.75">
+              <div class="flex items-center justify-between">
+                <p class="text-xl truncate max-w-[13ch]">{{ product.name }}</p>
+                <span class="bg-[#D1D1D133] py-0.75 px-1.25 rounded-sm text-[#171717]">Phones</span>
+              </div>
+              <p class="text-sm text-[#2E790E] text-[13px]">
+                {{ product.businessName }}
+              </p>
+              <p class="text-[13px] mt-4 mb-6.25">{{ product.description }}</p>
+              <div class="flex justify-center">
+                <button
+                  class="border border-[#171717] px-3.5 py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
+                >
+                  Buy Now - {{ product.price | currency: 'GHS' : 'symbol' : '1.2-2' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer />
