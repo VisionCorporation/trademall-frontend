@@ -1,0 +1,20 @@
+@if (skeletonType() === 'product') {
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
+    @for (product of [1, 2, 3, 4]; track product) {
+      <div class="bg-[#F4F4F4] rounded-2xl max-w-70.75">
+        <div
+          class="bg-[#E6E6E8] mx-1.25 mt-1.25 mb-3.75 rounded-[11px] h-43.75 pt-3.75 animate-pulse"
+        ></div>
+        <div class="p-3.75">
+          <div class="flex items-center justify-between">
+            <div class="w-38.5 h-7.25 bg-[#E6E6E8] rounded-[5px] animate-pulse"></div>
+            <div class="w-16 h-7.25 bg-[#E6E6E8] rounded-[5px] animate-pulse"></div>
+          </div>
+          <div class="w-26.25 h-2.5 bg-[#E6E6E8] rounded-[5px] mt-2 animate-pulse"></div>
+          <div class="w-full h-7 bg-[#E6E6E8] rounded-[5px] mt-4 mb-6.25 animate-pulse"></div>
+          <div class="w-37.75 h-8.75 bg-[#E6E6E8] rounded-[5px] mx-auto animate-pulse"></div>
+        </div>
+      </div>
+    }
+  </div>
+}
