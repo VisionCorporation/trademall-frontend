@@ -107,9 +107,9 @@
       </div>
     </div>
     <div class="max-w-[85%] w-full">
-      <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717]">Phones</span>
-      <p class="text-[32px] mt-5 mb-7.5">5 items</p>
       @if (!isProductsLoading()) {
+        <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717]">Phones</span>
+        <p class="text-[32px] mt-5 mb-7.5">5 items</p>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75"
           [@staggerProducts]="products.length"
@@ -148,6 +148,8 @@
           }
         </div>
       } @else {
+        <div class="bg-[#E6E6E8] w-15 h-6.25 rounded-sm text-[#171717] animate-pulse"></div>
+        <div class="bg-[#E6E6E8] w-25 h-11 mt-5 mb-7.5 rounded-[5px] animate-pulse"></div>
         <app-skeleton-loader skeletonType="product" />
       }
     </div>
