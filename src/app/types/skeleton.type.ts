@@ -1,1 +1,1 @@
-export type SkeletonType = 'product' | 'category' | 'profile';
+export type SkeletonType = 'product' | 'product-details';
