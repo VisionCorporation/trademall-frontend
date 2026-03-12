@@ -81,7 +81,7 @@ export class Products {
     return this.childrenMap.get(slug) ?? [];
   }
 
-  public getAllProducts() {
-    return this.http.get(`${environment.apiBaseUrl}/products`);
+  public getProductBySlug(slug: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}/products/${slug}/`);
   }
 }
