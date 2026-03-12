@@ -1,0 +1,20 @@
+@if (!isLoading()) {
+  <section class="px-25 flex items-center justify-center h-[80vh] pt-25 gap-25">
+    <div class="w-[35%]">
+      <img src="{{ product?.images?.[0]?.url }}" alt="{{ product?.name }}" class="" />
+    </div>
+    <div class="bg-[#F5F5F5] p-7.5 rounded-[20px] w-[65%]">
+      <h1 class="products-font text-2xl text-[#000000] mb-2.75">{{ product?.name }}</h1>
+      <div class="flex items-center justify-between">
+        <span class="bg-[#E6E6E8] px-1.25 py-0.75">{{ product?.category?.name }}</span>
+        <span class="text-[20px] text-[#2E790E]">{{ product?.vendor?.businessName }}</span>
+      </div>
+      <h2 class="mt-7.5 text-[#FF860D] text-2xl mb-5">
+        {{ product?.price | currency: 'GHS' : 'symbol' }}
+      </h2>
+      <p class="text-lg text-[#333333] mb-7.5">{{ product?.description }}</p>
+    </div>
+  </section>
+} @else {
+  <p class="flex items-center justify-center h-screen">Loading...</p>
+}
