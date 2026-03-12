@@ -20,7 +20,7 @@ export interface Product {
   status: string;
   slug: string;
   brand: string;
-  images: string[];
+  images: ProductImage[];
   attributes: Record<string, string>;
   approvedAt: string;
   createdAt: string;
@@ -38,4 +38,10 @@ export interface Product {
     kycVerified: boolean;
     vendorStatus: string;
   };
+}
+
+interface ProductImage {
+  isMain: boolean;
+  url: string;
+  _id: string;
 }
