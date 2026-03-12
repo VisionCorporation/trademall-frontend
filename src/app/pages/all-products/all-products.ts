@@ -25,17 +25,37 @@ export class AllProducts implements OnInit {
   public selectedCategorySlug: string | null = null;
   public selectedCategoryProducts: Product[] = [];
 
-  ngOnInit() {
-    this.isProductsLoading.set(true);
+ ngOnInit() {
+  this.isProductsLoading.set(true);
 
-    this.productService.getAllCategoriesWithChildren().subscribe({
-      next: (categories) => {
-        this.categories = categories;
+  this.productService.getAllCategoriesWithChildren().subscribe({
+    next: (categories) => {
+      this.categories = categories;
+
+      // open first category
+      if (categories.length > 0) {
+        const firstCategory = categories[0];
+        this.openCategorySlug = firstCategory.slug;
+        this.childrenCategories = this.productService.getChildrenFromCache(firstCategory.slug);
+
+        // check and fetch products for first child
+        if (this.childrenCategories.length > 0) {
+          const firstChild = this.childrenCategories[0];
+          this.selectedCategorySlug = firstChild.slug;
+          this.fetchProductsByCategory(firstChild.slug);
+        } else {
+          this.isProductsLoading.set(false);
+        }
+      } else {
         this.isProductsLoading.set(false);
-      },
-      error: (err) => console.error('Failed to fetch categories', err),
-    });
-  }
+      }
+    },
+    error: (err) => {
+      console.error('Failed to fetch categories', err);
+      this.isProductsLoading.set(false);
+    },
+  });
+}
 
   public toggleCategory(categorySlug: string) {
     this.openCategorySlug = this.openCategorySlug === categorySlug ? null : categorySlug;
