@@ -7,10 +7,11 @@ import { smoothCollapse, staggerProducts } from '../../animations/smooth-collaps
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Category } from '../../interfaces/categories.interface';
 import { Product } from '../../interfaces/products.interface';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-all-products',
-  imports: [Header, Footer, CurrencyPipe, SkeletonLoader],
+  imports: [Header, Footer, CurrencyPipe, SkeletonLoader, RouterLink],
   templateUrl: './all-products.html',
   styleUrl: './all-products.css',
   animations: [smoothCollapse, staggerProducts],

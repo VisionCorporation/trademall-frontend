@@ -94,7 +94,8 @@
           >
             @for (product of selectedCategoryProducts; track product._id) {
               <div
-                class="bg-[#F4F4F4] rounded-2xl max-w-70.75 hover:scale-105 transition-transform duration-300"
+                class="bg-[#F4F4F4] rounded-2xl max-w-70.75 hover:scale-105 transition-transform duration-300 cursor-pointer"
+                [routerLink]="['/products', product?.slug]"
               >
                 <div class="bg-[#E6E6E8] mx-1.25 mt-1.25 mb-3.75 rounded-[11px] pt-3.75">
                   <img
