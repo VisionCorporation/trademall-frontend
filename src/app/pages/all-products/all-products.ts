@@ -61,7 +61,6 @@ export class AllProducts implements OnInit {
 
     this.productService.getProductsByCategory(categorySlug).subscribe({
       next: (products) => {
-        console.log('Products for category', categorySlug, products.data);
         this.selectedCategoryProducts = products.data;
         this.isProductsLoading.set(false);
       },
