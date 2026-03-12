@@ -1,0 +1,83 @@
+<div class="max-w-350 mx-auto">
+  <app-header />
+</div>
+
+@if (vendorData) {
+  <section class="mt-10 mb-30 w-[80%] mx-auto">
+    <div class="w-20 h-20 bg-[#E6E6E8] rounded-2xl mb-5"></div>
+    <div class="flex items-center gap-2.5 mb-2.5">
+      <p class="text-4xl">{{ vendorData.vendor.businessName }}</p>
+      <span>{{ vendorData.vendor.dateOfJoining | date: 'MMMM d, y' }}</span>
+    </div>
+    <div class="flex items-center gap-1.25 mb-7.5">
+      <div class="bg-[#D1D1D133] rounded-sm py-0.75 px-1.25 flex items-center gap-1.25">
+        @if (vendorData.vendor.isVerified) {
+          <img src="assets/icons/verified-badge.svg" width="20" height="20" alt="verified-badge" />
+          <span>Verified</span>
+        } @else {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#EF4444"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M15 9L9 15M9 9L15 15" />
+          </svg>
+          <span>Unverified</span>
+        }
+      </div>
+    </div>
+    <hr class="opacity-20" />
+    <div class="mt-7.5">
+      <p class="italic text-2xl mb-7.5">Products by {{ vendorData.vendor.businessName }}</p>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75"
+        [@staggerProducts]="vendorData.data.length"
+      >
+        @for (product of vendorData.data; track product._id) {
+          <div
+            class="bg-[#F4F4F4] rounded-2xl max-w-70.75 hover:scale-105 transition-transform duration-300 cursor-pointer"
+            [routerLink]="['/products', product?.slug]"
+          >
+            <div class="bg-[#E6E6E8] mx-1.25 mt-1.25 mb-3.75 rounded-[11px] pt-3.75">
+              <img
+                [src]="product.images[0]?.url"
+                alt="{{ product.name }}"
+                class="w-[95%] mx-auto h-40 object-cover"
+              />
+            </div>
+            <div class="p-3.75">
+              <div class="flex items-center justify-between">
+                <p class="text-xl truncate max-w-[19ch]">{{ product.name }}</p>
+              </div>
+              <a
+                class="text-sm text-[#2E790E] text-[13px] hover:underline"
+                [routerLink]="['/products/vendor', vendorData.vendor._id]"
+              >
+                {{ vendorData.vendor.businessName }}
+              </a>
+              <p class="text-[13px] mt-4 mb-6.25">{{ product.metaDescription }}</p>
+              <div class="flex justify-center">
+                <button
+                  class="border border-[#171717] px-3.5 py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
+                >
+                  Buy Now - {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+} @else {
+  <div class="text-center p-10">Loading...</div>
+}
+
+<app-footer />
