@@ -77,11 +77,15 @@ export class Products {
     );
   }
 
-  getChildrenFromCache(slug: string): Category[] {
+  public getChildrenFromCache(slug: string): Category[] {
     return this.childrenMap.get(slug) ?? [];
   }
 
   public getProductBySlug(slug: string): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}/products/${slug}/`);
+  }
+
+  public getVendorProductsById(vendorId: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}/products/vendor/${vendorId}/`);
   }
 }
