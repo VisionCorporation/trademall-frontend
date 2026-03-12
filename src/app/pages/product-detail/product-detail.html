@@ -15,7 +15,11 @@
         <h1 class="products-font text-2xl text-[#000000] mb-2.75">{{ product.name }}</h1>
         <div class="flex items-center justify-between">
           <span class="bg-[#E6E6E8] px-1.25 py-0.75">{{ product.category.name }}</span>
-          <span class="text-[20px] text-[#2E790E]">{{ product.vendor.businessName }}</span>
+          <a
+            class="text-[20px] text-[#2E790E] hover:underline"
+            [routerLink]="['/products/vendor', product.vendor._id]"
+            >{{ product.vendor.businessName }}</a
+          >
         </div>
         <p class="mt-7.5 text-[#FF860D] text-2xl mb-5 products-font">
           {{ product.price | currency: 'GHS ' : 'symbol' }}

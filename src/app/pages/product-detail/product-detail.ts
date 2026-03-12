@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Products } from '../../services/products/products';
 import { Product } from '../../interfaces/products.interface';
 import { CurrencyPipe } from '@angular/common';
@@ -8,7 +8,7 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CurrencyPipe, SkeletonLoader],
+  imports: [CurrencyPipe, SkeletonLoader, RouterLink],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
