@@ -3,7 +3,9 @@
     <section class="px-25 flex items-start justify-center py-25 gap-25">
       <div class="w-[40%]">
         <div class="flex flex-col">
-          <img src="{{ product?.images?.[0]?.url }}" alt="{{ product.name }}" class="" />
+          @if (product && product.images[0]) {
+            <img src="{{ product.images[0].url }}" alt="{{ product.name }}" class="" />
+          }
           <div class="mt-5 flex items-center justify-center gap-7">
             <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
             <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
