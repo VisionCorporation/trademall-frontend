@@ -2,17 +2,15 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
     @for (product of [1, 2, 3, 4]; track product) {
       <div class="bg-[#F4F4F4] rounded-2xl max-w-70.75">
-        <div
-          class="bg-[#E6E6E8] mx-1.25 mt-1.25 mb-3.75 rounded-[11px] h-43.75 pt-3.75 animate-pulse"
-        ></div>
+        <div class="skeleton-shimmer mx-1.25 mt-1.25 mb-3.75 rounded-[11px] h-43.75 pt-3.75"></div>
         <div class="p-3.75">
           <div class="flex items-center justify-between">
-            <div class="w-38.5 h-7.25 bg-[#E6E6E8] rounded-[5px] animate-pulse"></div>
-            <div class="w-16 h-7.25 bg-[#E6E6E8] rounded-[5px] animate-pulse"></div>
+            <div class="w-38.5 h-7.25 skeleton-shimmer rounded-[5px]"></div>
+            <div class="w-16 h-7.25 skeleton-shimmer rounded-[5px]"></div>
           </div>
-          <div class="w-26.25 h-2.5 bg-[#E6E6E8] rounded-[5px] mt-2 animate-pulse"></div>
-          <div class="w-full h-7 bg-[#E6E6E8] rounded-[5px] mt-4 mb-6.25 animate-pulse"></div>
-          <div class="w-37.75 h-8.75 bg-[#E6E6E8] rounded-[5px] mx-auto animate-pulse"></div>
+          <div class="w-26.25 h-2.5 skeleton-shimmer rounded-[5px] mt-2"></div>
+          <div class="w-full h-7 skeleton-shimmer rounded-[5px] mt-4 mb-6.25"></div>
+          <div class="w-37.75 h-8.75 skeleton-shimmer rounded-[5px] mx-auto"></div>
         </div>
       </div>
     }
@@ -22,25 +20,26 @@
   <section class="bg-white px-25 flex items-start justify-center py-25 gap-25">
     <div class="w-[40%]">
       <div class="flex flex-col">
-        <div class="bg-gray-300 w-full h-100 rounded-lg animate-pulse"></div>
+        <div class="skeleton-shimmer w-full h-100 rounded-lg"></div>
         <div class="mt-5 flex items-center justify-center gap-7">
-          <div class="bg-gray-200 w-20 h-20 rounded-lg animate-pulse"></div>
-          <div class="bg-gray-200 w-20 h-20 rounded-lg animate-pulse"></div>
-          <div class="bg-gray-200 w-20 h-20 rounded-lg animate-pulse"></div>
+          <div class="skeleton-shimmer w-20 h-20 rounded-lg"></div>
+          <div class="skeleton-shimmer w-20 h-20 rounded-lg"></div>
+          <div class="skeleton-shimmer w-20 h-20 rounded-lg"></div>
         </div>
       </div>
     </div>
-    <div class="bg-gray-300 p-7.5 rounded-[20px] h-100 w-[60%] animate-pulse">
-      <div class="bg-gray-200 h-10 w-[50%] mb-2.75 rounded-lg"></div>
+
+    <div class="skeleton-shimmer p-7.5 rounded-[20px] h-100 w-[60%]">
+      <div class="bg-white/30 h-10 w-[50%] mb-2.75 rounded-lg"></div>
       <div class="flex items-center justify-between">
-        <div class="bg-gray-200 h-8 w-1/4 rounded-lg"></div>
-        <div class="bg-gray-200 h-8 w-1/4 rounded-lg"></div>
+        <div class="bg-white/30 h-8 w-1/4 rounded-lg"></div>
+        <div class="bg-white/30 h-8 w-1/4 rounded-lg"></div>
       </div>
       <div class="mt-7.5 mb-5">
-        <div class="bg-gray-200 h-8 w-1/2 rounded-lg"></div>
+        <div class="bg-white/30 h-8 w-1/2 rounded-lg"></div>
       </div>
-      <div class="bg-gray-200 h-14 w-full rounded-lg mb-7.5"></div>
-      <button class="bg-gray-200 h-10 w-1/3 rounded-lg animate-pulse"></button>
+      <div class="bg-white/30 h-14 w-full rounded-lg mb-7.5"></div>
+      <button class="bg-white/30 h-10 w-1/3 rounded-lg"></button>
     </div>
   </section>
 }
