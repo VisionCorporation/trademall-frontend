@@ -75,6 +75,11 @@ button:disabled {
   font-weight: 700;
 }
 
+.light-header {
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-weight: 400;
+}
+
 input:focus {
   outline: none;
   box-shadow: 0 0 0 2px #2e790e5d;
