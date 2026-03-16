@@ -7,6 +7,7 @@ import { Footer } from '../../shared/footer/footer';
 import { CurrencyPipe } from '@angular/common';
 import { Product } from '../../interfaces/products.interface';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-category-products',
@@ -25,6 +26,8 @@ export class CategoryProducts implements OnInit {
   private readonly route = inject(ActivatedRoute);
   public subCategories: any[] = [];
   public categoryName = '';
+  public wishlistedIds = new Set<string>();
+  private readonly toastService = inject(ToastService);
 
   ngOnInit() {
     const slug = this.route.snapshot.paramMap.get('slug');
@@ -78,5 +81,16 @@ export class CategoryProducts implements OnInit {
         this.isProductsLoading.set(false);
       },
     });
+  }
+
+  public toggleWishlist(productId: string, productName: string = ''): void {
+    if (this.wishlistedIds.has(productId)) {
+      this.wishlistedIds.delete(productId);
+      this.toastService.success(`${productName} removed from wishlist`);
+    } else {
+      this.wishlistedIds.add(productId);
+      this.toastService.success(`${productName} added to wishlist`);
+    }
+    console.log('Wishlisted IDs:', Array.from(this.wishlistedIds));
   }
 }
