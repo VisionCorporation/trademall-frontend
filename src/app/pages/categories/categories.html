@@ -3,13 +3,17 @@
 
   @if (categories.length > 0 && !isLoading()) {
     <section
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-5 md:px-12 2xl:px-0" [@staggerProducts]="categories.length"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-5 md:px-12 2xl:px-0"
+      [@staggerProducts]="categories.length"
     >
       @for (category of categories; track category._id) {
         <div
-          class="relative w-full bg-[url('https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800')] bg-cover bg-center rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col hover:scale-105 transition-transform duration-300" 
+          [style.backgroundImage]="'url(' + category.image + ')'"
+          class="relative w-full bg-cover bg-center rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col hover:scale-105 transition-transform duration-300"
         >
-          <div class="absolute inset-0 bg-black/50 rounded-2xl"></div>
+          <div
+            class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"
+          ></div>
           <div class="relative z-10 flex flex-col items-start h-full">
             <h1 class="text-4xl light-header mb-3.75">{{ category.name }}</h1>
             <p class="text-[15px] mb-6.25">{{ category.description }}</p>
