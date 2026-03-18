@@ -6,10 +6,11 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { RootCategory } from '../../interfaces/categories.interface';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { RouterLink } from '@angular/router';
+import { Newsletter } from '../../shared/newsletter/newsletter';
 
 @Component({
   selector: 'app-categories',
-  imports: [Header, Footer, SkeletonLoader, RouterLink],
+  imports: [Header, Footer, SkeletonLoader, RouterLink, Newsletter],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
   animations: [staggerProducts],
