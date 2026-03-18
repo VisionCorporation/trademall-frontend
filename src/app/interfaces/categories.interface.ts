@@ -9,12 +9,18 @@ export interface RootCategory {
   isFeatured: boolean;
 }
 
-export interface RootCategoryResponse {
-  success: boolean;
+interface Pagination {
+  currentPage: number;
+  limit: number;
+  totalPages: number;
   totalResults: number;
-  data: RootCategory[];
 }
 
+export interface RootCategoryResponse {
+  success: boolean;
+  pagination: Pagination;
+  data: RootCategory[];
+}
 
 export interface SelectedCategoryDetail {
   _id: string;
