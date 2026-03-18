@@ -13,9 +13,9 @@ import {
 export class Products {
   private http = inject(HttpClient);
 
-  public getRootCategories(): Observable<RootCategoryResponse> {
+  public getRootCategories(currentPage: number): Observable<RootCategoryResponse> {
     return this.http.get<RootCategoryResponse>(
-      `${environment.apiBaseUrl}/products/categories/root`,
+      `${environment.apiBaseUrl}/products/categories/root?page=${currentPage}`,
     );
   }
 
