@@ -9,6 +9,7 @@
   } @else {
     <h1
       class="text-[36px] sm:text-[52px] lg:text-[64px] mt-10 lg:mt-15 mb-6 lg:mb-10 px-5 md:px-12 2xl:px-0"
+      [@fadeInOut]
     >
       {{ categoryName }}
     </h1>
@@ -22,7 +23,7 @@
       @if (isSubCategoriesLoading()) {
         <app-skeleton-loader skeletonType="sub-categories" />
       } @else {
-        <div>
+        <div [@fadeInOut]>
           <h2 class="products-font text-[20px] mb-2.5">Subcategories</h2>
           <div class="flex flex-col gap-1.25">
             @for (subCategory of subCategories; track subCategory._id) {
@@ -75,7 +76,7 @@
         </div>
 
         @if (displayedProducts.length > 0) {
-          <div class="flex items-start flex-col gap-3 mb-5">
+          <div class="flex items-start flex-col gap-3 mb-5" [@fadeInOut]>
             @if (selectedCategorySlug) {
               <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm">{{
                 selectedCategoryProducts[0]?.category?.name
@@ -159,57 +160,19 @@
             }
           </div>
         } @else if (selectedCategorySlug) {
-          <div class="flex flex-col items-center justify-center py-20 text-center">
-            <svg
-              width="150"
-              height="150"
-              viewBox="0 0 120 120"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+          <div class="flex flex-col items-center justify-center py-14 text-center" [@fadeInOut]>
+            <div
+              class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full"
             >
-              <rect x="20" y="55" width="80" height="50" rx="4" stroke="#D1D5DB" stroke-width="3" />
-              <path
-                d="M20 55L35 35H85L100 55"
-                stroke="#D1D5DB"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+              <img
+                src="assets/icons/no-item.svg"
+                alt="no-item"
+                class="w-15 h-15 sm:w-auto sm:h-auto"
               />
-              <path d="M20 55L42 45" stroke="#D1D5DB" stroke-width="3" stroke-linecap="round" />
-              <path d="M100 55L78 45" stroke="#D1D5DB" stroke-width="3" stroke-linecap="round" />
-              <path
-                d="M42 45L50 55H70L78 45"
-                stroke="#D1D5DB"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path d="M47 75L73 95" stroke="#D1D5DB" stroke-width="3" stroke-linecap="round" />
-              <path d="M73 75L47 95" stroke="#D1D5DB" stroke-width="3" stroke-linecap="round" />
-              <path
-                d="M12 40L12 46M9 43L15 43"
-                stroke="#D1D5DB"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-              <path
-                d="M108 40L108 46M105 43L111 43"
-                stroke="#D1D5DB"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-              <path
-                d="M60 10L60 16M57 13L63 13"
-                stroke="#D1D5DB"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-            </svg>
-
-            <h3 class="text-lg sm:text-xl text-[#171717] mb-2 light-header">No Products Found</h3>
-            <p class="text-gray-400 max-w-80 sm:text-[17px]">
-              No products available here yet. Check back later or try another subcategory.
-            </p>
+            </div>
+            <h3 class="text-lg sm:text-[32px] text-[#171717] mb-2 light-header">
+              No Item in Stock (No Item Yet)
+            </h3>
           </div>
         }
       }
