@@ -7,10 +7,11 @@ import { RootCategory } from '../../interfaces/categories.interface';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { RouterLink } from '@angular/router';
 import { Newsletter } from '../../shared/newsletter/newsletter';
+import { SearchBar } from '../../shared/search-bar/search-bar';
 
 @Component({
   selector: 'app-categories',
-  imports: [Header, Footer, SkeletonLoader, RouterLink, Newsletter],
+  imports: [Header, Footer, SkeletonLoader, RouterLink, Newsletter, SearchBar],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
   animations: [staggerProducts],
