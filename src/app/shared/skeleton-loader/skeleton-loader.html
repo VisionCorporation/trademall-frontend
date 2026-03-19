@@ -1,16 +1,13 @@
 @if (skeletonType() === 'product') {
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
     @for (product of [1, 2, 3, 4]; track product) {
       <div class="bg-[#F4F4F4] rounded-2xl max-w-70.75">
-        <div class="skeleton-shimmer mx-1.25 mt-1.25 mb-3.75 rounded-[11px] h-43.75 pt-3.75"></div>
+        <div class="skeleton-shimmer mx-1.25 mt-1.25 mb-3.75 rounded-[11px] h-32 sm:h-43.75 pt-3.75"></div>
         <div class="p-3.75">
-          <div class="flex items-center justify-between">
-            <div class="w-38.5 h-7.25 skeleton-shimmer rounded-[5px]"></div>
-            <div class="w-16 h-7.25 skeleton-shimmer rounded-[5px]"></div>
-          </div>
+          <div class="w-24 sm:w-38.5 h-6 sm:h-7.25 skeleton-shimmer rounded-[5px]"></div>
           <div class="w-26.25 h-2.5 skeleton-shimmer rounded-[5px] mt-2"></div>
           <div class="w-full h-7 skeleton-shimmer rounded-[5px] mt-4 mb-6.25"></div>
-          <div class="w-37.75 h-8.75 skeleton-shimmer rounded-[5px] mx-auto"></div>
+          <div class="w-24 sm:w-37.75 h-8.75 skeleton-shimmer rounded-[5px] mx-auto"></div>
         </div>
       </div>
     }
