@@ -20,6 +20,7 @@ import { SearchBar } from '../../shared/search-bar/search-bar';
   animations: [staggerProducts, fadeInOutAnimation, smoothCollapse],
 })
 export class CategoryProducts implements OnInit, OnDestroy {
+  public allProducts: Product[] = [];
   public isProductsLoading = signal(true);
   public isSubCategoriesLoading = signal(true);
   public openCategorySlug: string | null = null;
@@ -57,20 +58,23 @@ export class CategoryProducts implements OnInit, OnDestroy {
         next: (res) => {
           this.categoryName = res.data.category.name;
           this.subCategories = res.data.children;
-          this.isProductsLoading.set(false);
           this.isSubCategoriesLoading.set(false);
-
-          if (this.subCategories.length > 0) {
-            this.selectedCategorySlug = this.subCategories[0].slug;
-            this.fetchProductsByCategory(this.selectedCategorySlug!);
-          } else {
-            this.isProductsLoading.set(false);
-          }
         },
         error: (err) => {
           console.error('Failed to fetch product', err);
           this.isProductsLoading.set(false);
           this.isSubCategoriesLoading.set(false);
+        },
+      });
+
+      this.productService.getProductsByCategory(slug).subscribe({
+        next: (res) => {
+          this.allProducts = res.data;  
+          this.isProductsLoading.set(false);
+        },
+        error: (err) => {
+          console.log(err);
+          this.isProductsLoading.set(false);
         },
       });
     }
@@ -91,6 +95,9 @@ export class CategoryProducts implements OnInit, OnDestroy {
       this.selectedCategorySlug = null;
       this.selectedCategoryProducts = [];
     }
+  }
+  get displayedProducts(): Product[] {
+    return this.selectedCategorySlug ? this.selectedCategoryProducts : this.allProducts;
   }
 
   private fetchProductsByCategory(categorySlug: string): void {

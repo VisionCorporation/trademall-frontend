@@ -74,14 +74,21 @@
           </button>
         </div>
 
-        @if (selectedCategoryProducts.length > 0) {
+        @if (displayedProducts.length > 0) {
           <div class="flex items-start flex-col gap-3 mb-5">
-            <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm">{{
-              selectedCategoryProducts[0]?.category?.name
-            }}</span>
+            @if (selectedCategorySlug) {
+              <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm">{{
+                selectedCategoryProducts[0]?.category?.name
+              }}</span>
+            } @else {
+              <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm">
+                All Products
+              </span>
+            }
+
             <p class="text-[24px] lg:text-[32px]">
-              {{ selectedCategoryProducts.length }}
-              {{ selectedCategoryProducts.length > 1 ? 'items' : 'item' }}
+              {{ displayedProducts.length }}
+              {{ displayedProducts.length > 1 ? 'items' : 'item' }}
             </p>
           </div>
 
@@ -89,7 +96,7 @@
             class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"
             [@staggerProducts]="selectedCategoryProducts.length"
           >
-            @for (product of selectedCategoryProducts; track product._id) {
+            @for (product of displayedProducts; track product._id) {
               <div
                 class="bg-[#F4F4F4] rounded-2xl w-full hover:scale-105 transition-transform duration-300 cursor-pointer"
                 [routerLink]="['/products', product?.slug]"
@@ -97,7 +104,7 @@
                 <div class="relative rounded-2xl mt-1.25 mb-3.75">
                   <span
                     class="absolute bg-[#D1D1D1] px-1.25 py-0.75 top-2.5 left-2.5 sm:left-4 rounded-sm truncate max-w-[10ch] text-xs"
-                    >{{ selectedCategoryProducts[0]?.category?.name }}</span
+                    >{{ product?.category?.name }}</span
                   >
                   <svg
                     width="24"
@@ -151,7 +158,7 @@
               </div>
             }
           </div>
-        } @else {
+        } @else if (selectedCategorySlug) {
           <div class="flex flex-col items-center justify-center py-20 text-center">
             <svg
               width="80"
