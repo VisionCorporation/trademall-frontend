@@ -10,10 +10,11 @@ import { smoothCollapse, staggerProducts } from '../../animations/smooth-collaps
 import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
+import { SearchBar } from '../../shared/search-bar/search-bar';
 
 @Component({
   selector: 'app-category-products',
-  imports: [SkeletonLoader, Header, Footer, RouterLink, CurrencyPipe, Newsletter],
+  imports: [SkeletonLoader, Header, Footer, RouterLink, CurrencyPipe, Newsletter, SearchBar],
   templateUrl: './category-products.html',
   styleUrl: './category-products.css',
   animations: [staggerProducts, fadeInOutAnimation, smoothCollapse],
