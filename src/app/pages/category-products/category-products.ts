@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, Renderer2 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Products } from '../../services/products/products';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
@@ -6,17 +6,19 @@ import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { CurrencyPipe } from '@angular/common';
 import { Product } from '../../interfaces/products.interface';
-import { staggerProducts } from '../../animations/smooth-collapse.animations';
+import { smoothCollapse, staggerProducts } from '../../animations/smooth-collapse.animations';
 import { ToastService } from '../../services/toast/toast.service';
+import { Newsletter } from '../../shared/newsletter/newsletter';
+import { fadeInOutAnimation } from '../../animations/toast.animations';
 
 @Component({
   selector: 'app-category-products',
-  imports: [SkeletonLoader, Header, Footer, RouterLink, CurrencyPipe],
+  imports: [SkeletonLoader, Header, Footer, RouterLink, CurrencyPipe, Newsletter],
   templateUrl: './category-products.html',
   styleUrl: './category-products.css',
-  animations: [staggerProducts],
+  animations: [staggerProducts, fadeInOutAnimation, smoothCollapse],
 })
-export class CategoryProducts implements OnInit {
+export class CategoryProducts implements OnInit, OnDestroy {
   public isProductsLoading = signal(true);
   public isSubCategoriesLoading = signal(true);
   public openCategorySlug: string | null = null;
@@ -24,10 +26,27 @@ export class CategoryProducts implements OnInit {
   public selectedCategoryProducts: Product[] = [];
   private readonly productService = inject(Products);
   private readonly route = inject(ActivatedRoute);
+  private readonly renderer = inject(Renderer2);
+  private readonly toastService = inject(ToastService);
   public subCategories: any[] = [];
   public categoryName = '';
   public wishlistedIds = new Set<string>();
-  private readonly toastService = inject(ToastService);
+  public sheetTranslateY = 0;
+  private touchStartY = 0;
+  private _isFilterOpen = false;
+
+  public set isFilterOpen(value: boolean) {
+    this._isFilterOpen = value;
+    if (value) {
+      this.renderer.addClass(document.body, 'overflow-hidden');
+    } else {
+      this.renderer.removeClass(document.body, 'overflow-hidden');
+    }
+  }
+
+  public get isFilterOpen(): boolean {
+    return this._isFilterOpen;
+  }
 
   ngOnInit() {
     const slug = this.route.snapshot.paramMap.get('slug');
@@ -56,12 +75,17 @@ export class CategoryProducts implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.renderer.removeClass(document.body, 'overflow-hidden');
+  }
+
   public onCategoryChange(slug: string, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
       this.selectedCategorySlug = slug;
       this.fetchProductsByCategory(slug);
+      this.isFilterOpen = false;
     } else {
       this.selectedCategorySlug = null;
       this.selectedCategoryProducts = [];
@@ -91,6 +115,27 @@ export class CategoryProducts implements OnInit {
       this.wishlistedIds.add(productId);
       this.toastService.success(`${productName} added to wishlist`);
     }
-    console.log('Wishlisted IDs:', Array.from(this.wishlistedIds));
+  }
+
+  public onHandleTouchStart(event: TouchEvent) {
+    this.touchStartY = event.touches[0].clientY;
+  }
+
+  public onHandleTouchMove(event: TouchEvent) {
+    const diff = event.touches[0].clientY - this.touchStartY;
+    if (diff > 0) {
+      this.sheetTranslateY = diff;
+    }
+  }
+
+  public onHandleTouchEnd(event: TouchEvent) {
+    const touchEndY = event.changedTouches[0].clientY;
+    const diff = touchEndY - this.touchStartY;
+
+    if (diff > 50) {
+      this.isFilterOpen = false;
+    }
+
+    this.sheetTranslateY = 0;
   }
 }
