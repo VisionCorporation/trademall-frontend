@@ -1,0 +1,40 @@
+<div class="mt-10 lg:mt-15 flex items-center w-full gap-3 lg:gap-10 px-5 md:px-12 2xl:px-0">
+  <button
+    class="shrink-0 bg-[#D1D1D180] rounded-[20px] py-3 lg:py-4.5 px-4 lg:px-8.5 flex items-center gap-1.75 whitespace-nowrap hover:scale-105 transition-transform duration-300 ease-in"
+  >
+    <span class="hidden lg:inline text-[19px]">Watch Tutorial</span>
+    <img src="assets/icons/play.svg" alt="play-video" class="w-6 h-6" />
+  </button>
+  <div
+    class="flex-1 bg-[#E6E6E8] rounded-2xl flex items-center gap-2 px-4 lg:px-9.5 py-3 lg:py-4.25 focus-within:ring-2 focus-within:ring-[#171717] transition-all duration-150"
+  >
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="shrink-0 text-[#17171799]"
+    >
+      <path
+        d="M17.5 17.5L22 22"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M20 11C20 6.02944 15.9706 2 11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20C15.9706 20 20 15.9706 20 11Z"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <input
+      type="text"
+      [placeholder]="placeholder()"
+      (input)="onSearch($event)"
+      class="no-focus-style bg-transparent w-full outline-none border-none text-[#171717] placeholder:text-[#17171799] text-base lg:text-xl"
+    />
+  </div>
+</div>
