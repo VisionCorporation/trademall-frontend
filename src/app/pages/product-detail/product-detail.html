@@ -5,10 +5,10 @@
     @if (product) {
       <div class="my-16.75 px-5 md:px-12 2xl:px-0">
         <app-breadcrumb
-          [categoryName]="categoryName"
-          [categorySlug]="categorySlug"
-          [subCategoryName]="product.category.name"
-          [subCategorySlug]="product.category.slug"
+          [categoryName]="product.breadcrumbs[0].name"
+          [categorySlug]="product.breadcrumbs[0].slug"
+          [subCategoryName]="product.breadcrumbs[1].name"
+          [subCategorySlug]="product.breadcrumbs[1].slug"
           [productName]="product.name"
         />
       </div>
@@ -17,11 +17,7 @@
         <div class="w-[40%]">
           <div class="flex flex-col">
             @if (product && product.images[0]) {
-              <img
-                src="{{ product.images[0].url }}"
-                alt="{{ product.name }}"
-                class="rounded-lg"
-              />
+              <img src="{{ product.images[0].url }}" alt="{{ product.name }}" class="rounded-lg" />
             } @else if (product && product.images.length > 1) {
               <div class="mt-5 flex items-center justify-center gap-7">
                 <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>

@@ -19,18 +19,12 @@ export class ProductDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly productService = inject(Products);
   private readonly toastService = inject(ToastService);
-  public categoryName = '';
-  public categorySlug = '';
-  public selectedSubCategorySlug = '';
   public wishlistedIds = new Set<string>();
   public product: ProductDetails | null = null;
   public isLoading = signal(true);
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
-    this.categoryName = history.state?.category;
-    this.categorySlug = history.state?.slug;
-    this.selectedSubCategorySlug = history.state?.subcategorySlug;
 
     if (slug) {
       this.productService.getProductBySlug(slug).subscribe({
