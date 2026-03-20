@@ -1,66 +1,82 @@
-@if (!isLoading()) {
-  @if (product) {
-    <section class="px-25 flex items-start justify-center py-25 gap-25">
-      <div class="w-[40%]">
-        <div class="flex flex-col">
-          @if (product && product.images[0]) {
-            <img src="{{ product.images[0].url }}" alt="{{ product.name }}" class="" />
-          }
-          <div class="mt-5 flex items-center justify-center gap-7">
-            <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
-            <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
-            <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+<div class="max-w-350 mx-auto">
+  <app-header />
+
+  @if (!isLoading()) {
+    @if (product) {
+      <div class="my-16.75 px-5 md:px-12 2xl:px-0">
+        <app-breadcrumb
+          [categoryName]="categoryName"
+          [categorySlug]="categorySlug"
+          [subCategoryName]="product.category.name"
+          [subCategorySlug]="product.category.slug"
+          [productName]="product.name"
+        />
+      </div>
+
+      <section class="flex items-start justify-center gap-25 px-5 md:px-12 2xl:px-0">
+        <div class="w-[40%]">
+          <div class="flex flex-col">
+            @if (product && product.images[0]) {
+              <img src="{{ product.images[0].url }}" alt="{{ product.name }}" class="" />
+            }
+            <div class="mt-5 flex items-center justify-center gap-7">
+              <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+              <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+              <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="bg-[#F5F5F5] p-7.5 rounded-[20px] w-[60%]">
-        <h1 class="products-font text-2xl text-[#000000] mb-2.75">{{ product.name }}</h1>
-        <div class="flex items-center justify-between">
-          <span class="bg-[#E6E6E8] px-1.25 py-0.75">{{ product.category.name }}</span>
-          <a
-            class="text-[20px] text-[#2E790E] hover:underline"
-            [routerLink]="['/products/vendor', product.vendor._id]"
-            >{{ product.vendor.businessName }}</a
+        <div class="bg-[#F5F5F5] p-7.5 rounded-[20px] w-[60%]">
+          <h1 class="products-font text-2xl text-[#000000] mb-2.75">{{ product.name }}</h1>
+          <div class="flex items-center justify-between">
+            <span class="bg-[#E6E6E8] px-1.25 py-0.75">{{ product.category.name }}</span>
+            <a
+              class="text-[20px] text-[#2E790E] hover:underline"
+              [routerLink]="['/products/vendor', product.vendor._id]"
+              >{{ product.vendor.businessName }}</a
+            >
+          </div>
+          <p class="mt-7.5 text-[#FF860D] text-2xl mb-5 products-font">
+            {{ product.price | currency: 'GHS ' : 'symbol' }}
+          </p>
+          <p class="text-lg text-[#333333] mb-7.5 leading-6">{{ product.description }}</p>
+          <button
+            class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
           >
+            Add to Cart
+          </button>
         </div>
-        <p class="mt-7.5 text-[#FF860D] text-2xl mb-5 products-font">
-          {{ product.price | currency: 'GHS ' : 'symbol' }}
+      </section>
+    } @else {
+      <div class="flex flex-col items-center justify-center h-screen mx-1">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="70"
+          height="70"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <p class="text-lg my-3 text-center leading-5">
+          There was an error while fetching the product details.
         </p>
-        <p class="text-lg text-[#333333] mb-7.5 leading-6">{{ product.description }}</p>
         <button
           class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
         >
-          Add to Cart
+          Try again
         </button>
       </div>
-    </section>
+    }
   } @else {
-    <div class="flex flex-col items-center justify-center h-screen mx-1">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="70"
-        height="70"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <line x1="12" y1="8" x2="12" y2="12" />
-        <line x1="12" y1="16" x2="12.01" y2="16" />
-      </svg>
-      <p class="text-lg my-3 text-center leading-5">
-        There was an error while fetching the product details.
-      </p>
-      <button
-        class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
-      >
-        Try again
-      </button>
-    </div>
+    <app-skeleton-loader skeletonType="product-details" />
   }
-} @else {
-  <app-skeleton-loader skeletonType="product-details" />
-}
+</div>
+
+<app-footer />
