@@ -44,6 +44,10 @@
   </section>
 }
 @if (skeletonType() === 'categories') {
+  <div class="px-5 md:px-12 2xl:px-0 mt-10 sm:mt-14">
+    <div class="skeleton-shimmer w-50 sm:w-75 h-15 md:h-20 mb-4 rounded-2xl"></div>
+    <div class="skeleton-shimmer max-w-150 w-[85%] h-5 rounded-2xl"></div>
+  </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-5 md:px-12 2xl:px-0">
     @for (category of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track $index) {
       <div class="relative w-full max-w-138.75 h-50 rounded-2xl overflow-hidden skeleton-shimmer">
