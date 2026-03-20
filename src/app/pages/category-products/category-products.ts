@@ -73,7 +73,6 @@ export class CategoryProducts implements OnInit, OnDestroy {
       this.productService.getProductsByCategory(slug).subscribe({
         next: (res) => {
           this.allProducts = res.data;
-          console.log('Fetched Products ', res.data);
           this.isProductsLoading.set(false);
         },
         error: (err) => {
