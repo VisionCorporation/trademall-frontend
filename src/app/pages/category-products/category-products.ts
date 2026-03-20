@@ -32,7 +32,6 @@ export class CategoryProducts implements OnInit, OnDestroy {
   private readonly toastService = inject(ToastService);
   public subCategories: any[] = [];
   public categoryName = '';
-  public categorySlug = '';
   public wishlistedIds = new Set<string>();
   public sheetTranslateY = 0;
   private touchStartY = 0;
@@ -55,12 +54,13 @@ export class CategoryProducts implements OnInit, OnDestroy {
     const slug = this.route.snapshot.paramMap.get('slug');
     const filterSlug = history.state?.filter;
 
+    history.replaceState({}, '');
+
     if (slug) {
       this.productService.getCategoryWithDirectChildren(slug).subscribe({
         next: (res) => {
           this.categoryName = res.data.category.name;
           this.subCategories = res.data.children;
-          this.categorySlug = slug;
           this.isSubCategoriesLoading.set(false);
         },
         error: (err) => {
