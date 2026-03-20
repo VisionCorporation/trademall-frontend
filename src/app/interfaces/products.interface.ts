@@ -1,47 +1,70 @@
-export interface Product {
+export interface ProductImage {
+  url: string;
+  isMain: boolean;
+  _id: string;
+}
+
+export interface ProductAttributes {
+  [key: string]: string;
+}
+
+export interface ProductBreadcrumb {
   _id: string;
   name: string;
+  slug: string;
+}
+
+export interface ProductCategory {
+  _id: string;
+  name: string;
+  slug: string;
   description: string;
-  metaDescription: string;
-  metaTitle: string;
-  metaKeywords: string[];
+  parent: string;
+}
+
+export interface ProductVendor {
+  _id: string;
+  name: string;
+  businessName: string;
+  email: string;
+  vendorStatus: string;
+  isVerified: boolean;
+}
+
+export interface ProductDetails {
+  _id: string;
+  name: string;
+  slug: string;
+  brand: string;
   price: number;
-  salePrice: number | null;
+  salePrice: number;
+  effectivePrice: number;
+  discount: number;
+  description: string;
+  attributes: ProductAttributes;
+  images: ProductImage[];
   stockQuantity: number;
   lowStockThreshold: number;
   rating: number;
   reviewCount: number;
   viewCount: number;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string[];
+  category: ProductCategory;
+  vendor: ProductVendor;
+  availability: 'in_stock' | 'out_of_stock' | 'pre_order';
   isPreOrder: boolean;
-  isSearchable: boolean;
-  isVisible: boolean;
-  minPreOrderQuantity: number;
-  preOrderDays: number;
-  status: string;
-  slug: string;
-  brand: string;
-  images: ProductImage[];
-  attributes: Record<string, string>;
-  approvedAt: string;
+  deliveryTimeline: string;
+  preOrderDays: number | null;
+  minPreOrderQuantity: number | null;
   createdAt: string;
   updatedAt: string;
-  __v: number;
-  category: {
-    _id: string;
-    name: string;
-    slug: string;
-    parent: string;
-  };
-  vendor: {
-    _id: string;
-    businessName: string;
-    kycVerified: boolean;
-    vendorStatus: string;
-  };
+  relatedProducts: ProductDetails[];
+  breadcrumbs: ProductBreadcrumb[];
 }
 
-interface ProductImage {
-  isMain: boolean;
-  url: string;
-  _id: string;
+export interface ProductDetailsResponse {
+  success: boolean;
+  data: ProductDetails;
 }
