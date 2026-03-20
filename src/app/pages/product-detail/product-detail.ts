@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Products } from '../../services/products/products';
-import { Product } from '../../interfaces/products.interface';
+import { ProductDetails } from '../../interfaces/products.interface';
 import { CurrencyPipe } from '@angular/common';
 import { ToastService } from '../../services/toast/toast.service';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
@@ -21,9 +21,9 @@ export class ProductDetail implements OnInit {
   private readonly toastService = inject(ToastService);
   public categoryName = '';
   public categorySlug = '';
-  public selectedSubCategorySlug = ''
-
-  public product: Product | null = null;
+  public selectedSubCategorySlug = '';
+  public wishlistedIds = new Set<string>();
+  public product: ProductDetails | null = null;
   public isLoading = signal(true);
 
   ngOnInit(): void {
@@ -44,6 +44,16 @@ export class ProductDetail implements OnInit {
           this.isLoading.set(false);
         },
       });
+    }
+  }
+
+  public toggleWishlist(productId: string, productName: string = ''): void {
+    if (this.wishlistedIds.has(productId)) {
+      this.wishlistedIds.delete(productId);
+      this.toastService.success(`${productName} removed from wishlist`);
+    } else {
+      this.wishlistedIds.add(productId);
+      this.toastService.success(`${productName} added to wishlist`);
     }
   }
 }

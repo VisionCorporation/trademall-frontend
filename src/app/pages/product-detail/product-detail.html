@@ -13,38 +13,74 @@
         />
       </div>
 
-      <section class="flex items-start justify-center gap-25 px-5 md:px-12 2xl:px-0">
+      <section class="flex items-start justify-center mb-37.5 gap-25 px-5 md:px-12 2xl:px-0">
         <div class="w-[40%]">
           <div class="flex flex-col">
             @if (product && product.images[0]) {
-              <img src="{{ product.images[0].url }}" alt="{{ product.name }}" class="" />
+              <img
+                src="{{ product.images[0].url }}"
+                alt="{{ product.name }}"
+                class="rounded-lg"
+              />
+            } @else if (product && product.images.length > 1) {
+              <div class="mt-5 flex items-center justify-center gap-7">
+                <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+                <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+                <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+              </div>
             }
-            <div class="mt-5 flex items-center justify-center gap-7">
-              <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
-              <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
-              <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
-            </div>
           </div>
         </div>
-        <div class="bg-[#F5F5F5] p-7.5 rounded-[20px] w-[60%]">
+        <div class="bg-[#EEEEEE] p-7.5 rounded-[20px] w-[60%]">
           <h1 class="products-font text-2xl text-[#000000] mb-2.75">{{ product.name }}</h1>
           <div class="flex items-center justify-between">
-            <span class="bg-[#E6E6E8] px-1.25 py-0.75">{{ product.category.name }}</span>
+            <span class="bg-[#F4F4F4] px-1.25 py-0.75">{{ product.category.name }}</span>
             <a
               class="text-[20px] text-[#2E790E] hover:underline"
               [routerLink]="['/products/vendor', product.vendor._id]"
               >{{ product.vendor.businessName }}</a
             >
           </div>
-          <p class="mt-7.5 text-[#FF860D] text-2xl mb-5 products-font">
-            {{ product.price | currency: 'GHS ' : 'symbol' }}
-          </p>
-          <p class="text-lg text-[#333333] mb-7.5 leading-6">{{ product.description }}</p>
-          <button
-            class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
-          >
-            Add to Cart
-          </button>
+          <div class="flex items-center justify-between">
+            <p class="mt-7.5 text-[#FF860D] text-2xl mb-5 products-font">
+              {{ product.price | currency: 'GHS ' : 'symbol' }}
+            </p>
+            <span class="text-[#1B5DD7] text-[22px]">{{ product.discount }}% Off Promo</span>
+          </div>
+          <p class="text-[20px] text-[#333333] mb-5 leading-6">{{ product.description }}</p>
+          <div class="mb-7.5">
+            <div>
+              <span class="block text-[#17171780]">QUANTITY</span>
+              <span class="text-[20px]">{{ product.stockQuantity }}</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <button
+              class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
+            >
+              Add to Cart
+            </button>
+            <div class="flex items-center justify-center gap-1.25 py-2 px-3.5">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="cursor-pointer hover:scale-110 transition-transform duration-300"
+                (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)"
+              >
+                <path
+                  d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
+                  [attr.fill]="wishlistedIds.has(product._id) ? '#26C34D' : '#FBFCFF'"
+                  [attr.stroke]="wishlistedIds.has(product._id) ? '#26C34D' : '#000'"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span class="text-xl">Add to Wishlist</span>
+            </div>
+          </div>
         </div>
       </section>
     } @else {
