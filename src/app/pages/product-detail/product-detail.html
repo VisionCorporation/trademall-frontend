@@ -20,7 +20,10 @@
           <div class="flex flex-col">
             @if (product && product.images[0]) {
               <img
-                src="{{ product.images[0].url }}"
+                ngSrc="{{ product.images[0].url }}"
+                width="800"
+                height="536"
+                priority
                 alt="{{ product.name }}"
                 class="rounded-lg w-full"
               />

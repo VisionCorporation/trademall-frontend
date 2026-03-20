@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Products } from '../../services/products/products';
 import { ProductDetails } from '../../interfaces/products.interface';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ToastService } from '../../services/toast/toast.service';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Breadcrumb } from '../../shared/breadcrumb/breadcrumb';
@@ -11,7 +11,7 @@ import { Footer } from '../../shared/footer/footer';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CurrencyPipe, SkeletonLoader, RouterLink, Breadcrumb, Header, Footer],
+  imports: [CurrencyPipe, SkeletonLoader, RouterLink, Breadcrumb, Header, Footer, NgOptimizedImage],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
