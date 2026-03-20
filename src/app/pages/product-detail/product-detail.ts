@@ -8,10 +8,11 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Breadcrumb } from '../../shared/breadcrumb/breadcrumb';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
+import { Newsletter } from '../../shared/newsletter/newsletter';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CurrencyPipe, SkeletonLoader, RouterLink, Breadcrumb, Header, Footer, NgOptimizedImage],
+  imports: [CurrencyPipe, SkeletonLoader, RouterLink, Breadcrumb, Header, Footer, NgOptimizedImage, Newsletter],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
