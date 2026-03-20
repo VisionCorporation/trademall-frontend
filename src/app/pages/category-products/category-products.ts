@@ -5,7 +5,7 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { CurrencyPipe } from '@angular/common';
-import { Product } from '../../interfaces/products.interface';
+import { ProductDetails } from '../../interfaces/products.interface';
 import { smoothCollapse, staggerProducts } from '../../animations/smooth-collapse.animations';
 import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
@@ -20,12 +20,12 @@ import { SearchBar } from '../../shared/search-bar/search-bar';
   animations: [staggerProducts, fadeInOutAnimation, smoothCollapse],
 })
 export class CategoryProducts implements OnInit, OnDestroy {
-  public allProducts: Product[] = [];
+  public allProducts: ProductDetails[] = [];
   public isProductsLoading = signal(true);
   public isSubCategoriesLoading = signal(true);
   public openCategorySlug: string | null = null;
   public selectedCategorySlug: string | null = null;
-  public selectedCategoryProducts: Product[] = [];
+  public selectedCategoryProducts: ProductDetails[] = [];
   private readonly productService = inject(Products);
   private readonly route = inject(ActivatedRoute);
   private readonly renderer = inject(Renderer2);
@@ -105,7 +105,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
       this.selectedCategoryProducts = [];
     }
   }
-  get displayedProducts(): Product[] {
+  get displayedProducts(): ProductDetails[] {
     return this.selectedCategorySlug ? this.selectedCategoryProducts : this.allProducts;
   }
 
