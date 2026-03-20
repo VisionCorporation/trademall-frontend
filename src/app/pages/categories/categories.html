@@ -3,6 +3,13 @@
   <app-search-bar placeholder="Search categories..." />
 
   @if (categories.length > 0 && !isLoading()) {
+    <div class="px-5 md:px-12 2xl:px-0 mt-10 sm:mt-14">
+      <h1 class="text-[36px] sm:text-[52px] lg:text-[64px]" [@fadeInOut]>Shop by Category</h1>
+      <p class="text-[#17171780] sm:text-lg leading-0" [@fadeInOut]>
+        Explore our wide range of categories and find exactly what you're looking for.
+      </p>
+    </div>
+
     <section
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-5 md:px-12 2xl:px-0 mb-15"
       [@staggerProducts]="categories.length"
