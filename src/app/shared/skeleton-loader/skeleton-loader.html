@@ -2,7 +2,9 @@
   <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
     @for (product of [1, 2, 3, 4]; track product) {
       <div class="bg-[#F4F4F4] rounded-2xl max-w-70.75">
-        <div class="skeleton-shimmer mx-1.25 mt-1.25 mb-3.75 rounded-[11px] h-32 sm:h-43.75 pt-3.75"></div>
+        <div
+          class="skeleton-shimmer mx-1.25 mt-1.25 mb-3.75 rounded-[11px] h-32 sm:h-43.75 pt-3.75"
+        ></div>
         <div class="p-3.75">
           <div class="w-24 sm:w-38.5 h-6 sm:h-7.25 skeleton-shimmer rounded-[5px]"></div>
           <div class="w-26.25 h-2.5 skeleton-shimmer rounded-[5px] mt-2"></div>
@@ -14,7 +16,8 @@
   </div>
 }
 @if (skeletonType() === 'product-details') {
-  <section class="bg-white px-25 flex items-start justify-center py-25 gap-25">
+  <div class="skeleton-shimmer w-[60%] h-7 my-16.75 px-5 md:px-12 2xl:px-0 rounded-lg"></div>
+  <section class="bg-white flex items-start justify-center mb-37.5 gap-25 px-5 md:px-12 2xl:px-0">
     <div class="w-[40%]">
       <div class="flex flex-col">
         <div class="skeleton-shimmer w-full h-100 rounded-lg"></div>
@@ -26,7 +29,7 @@
       </div>
     </div>
 
-    <div class="skeleton-shimmer p-7.5 rounded-[20px] h-100 w-[60%]">
+    <div class="skeleton-shimmer p-7.5 rounded-[20px] h-125 w-[60%]">
       <div class="bg-white/30 h-10 w-[50%] mb-2.75 rounded-lg"></div>
       <div class="flex items-center justify-between">
         <div class="bg-white/30 h-8 w-1/4 rounded-lg"></div>
