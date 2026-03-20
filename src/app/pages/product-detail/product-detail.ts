@@ -41,6 +41,11 @@ export class ProductDetail implements OnInit {
     }
   }
 
+  get specifications() {
+    if (!this.product) return [];
+    return Object.entries(this.product.attributes).map(([label, value]) => ({ label, value }));
+  }
+
   public toggleWishlist(productId: string, productName: string = ''): void {
     if (this.wishlistedIds.has(productId)) {
       this.wishlistedIds.delete(productId);

@@ -3,7 +3,7 @@
 
   @if (!isLoading()) {
     @if (product) {
-      <div class="my-16.75 px-5 md:px-12 2xl:px-0">
+      <div class="my-10 sm:my-16.75 px-5 md:px-12 2xl:px-0">
         <app-breadcrumb
           [categoryName]="product.breadcrumbs[0].name"
           [categorySlug]="product.breadcrumbs[0].slug"
@@ -13,11 +13,17 @@
         />
       </div>
 
-      <section class="flex items-start justify-center mb-37.5 gap-25 px-5 md:px-12 2xl:px-0">
-        <div class="w-[40%]">
+      <section
+        class="flex flex-col lg:flex-row items-start justify-center mb-15 lg:mb-37.5 gap-10 lg:gap-16 px-5 md:px-12 2xl:px-0"
+      >
+        <div class="w-full lg:w-[50%]">
           <div class="flex flex-col">
             @if (product && product.images[0]) {
-              <img src="{{ product.images[0].url }}" alt="{{ product.name }}" class="rounded-lg" />
+              <img
+                src="{{ product.images[0].url }}"
+                alt="{{ product.name }}"
+                class="rounded-lg w-full"
+              />
             } @else if (product && product.images.length > 1) {
               <div class="mt-5 flex items-center justify-center gap-7">
                 <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
@@ -27,44 +33,53 @@
             }
           </div>
         </div>
-        <div class="bg-[#EEEEEE] p-7.5 rounded-[20px] w-[60%]">
-          <h1 class="products-font text-2xl text-[#000000] mb-2.75">{{ product.name }}</h1>
+
+        <div class="bg-[#EEEEEE] p-5 sm:p-7.5 rounded-[20px] w-full lg:w-[50%]">
+          <h1 class="products-font text-xl sm:text-2xl text-[#000000] mb-2.75">
+            {{ product.name }}
+          </h1>
           <div class="flex items-center justify-between">
-            <span class="bg-[#F4F4F4] px-1.25 py-0.75">{{ product.category.name }}</span>
+            <span class="bg-[#F4F4F4] px-1.25 py-0.75 text-sm sm:text-base">{{
+              product.category.name
+            }}</span>
             <a
-              class="text-[20px] text-[#2E790E] hover:underline"
+              class="text-base sm:text-[20px] text-[#2E790E] hover:underline truncate max-w-[15ch]"
               [routerLink]="['/products/vendor', product.vendor._id]"
               >{{ product.vendor.businessName }}</a
             >
           </div>
-          <div class="flex items-center justify-between">
-            <p class="mt-7.5 text-[#FF860D] text-2xl mb-5 products-font">
+          <div class="flex items-center justify-between flex-wrap gap-2 mt-7.5 mb-5">
+            <p class="text-[#FF860D] text-xl sm:text-2xl products-font">
               {{ product.price | currency: 'GHS ' : 'symbol' }}
             </p>
-            <span class="text-[#1B5DD7] text-[22px]">{{ product.discount }}% Off Promo</span>
+            <span class="text-[#1B5DD7] text-base sm:text-[22px]"
+              >{{ product.discount }}% Off Promo</span
+            >
           </div>
-          <p class="text-[20px] text-[#333333] mb-5 leading-6">{{ product.description }}</p>
+          <p class="text-base sm:text-[20px] text-[#333333] mb-5 leading-6">
+            {{ product.description }}
+          </p>
           <div class="mb-7.5">
-            <div>
-              <span class="block text-[#17171780]">QUANTITY</span>
-              <span class="text-[20px]">{{ product.stockQuantity }}</span>
-            </div>
+            <span class="block text-[#17171780] text-sm">QUANTITY</span>
+            <span class="text-base sm:text-[20px]">{{ product.stockQuantity }}</span>
           </div>
-          <div class="flex items-center justify-between">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <button
-              class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
+              class="w-full sm:w-auto text-base sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
             >
               Add to Cart
             </button>
-            <div class="flex items-center justify-center gap-1.25 py-2 px-3.5">
+            <div
+              class="flex items-center gap-1.25 py-2 px-3.5 cursor-pointer"
+              (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)"
+            >
               <svg
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                class="cursor-pointer hover:scale-110 transition-transform duration-300"
-                (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)"
+                class="hover:scale-110 transition-transform duration-300 shrink-0"
               >
                 <path
                   d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
@@ -74,11 +89,27 @@
                   stroke-linecap="round"
                 />
               </svg>
-              <span class="text-xl">Add to Wishlist</span>
+              <span class="text-base sm:text-xl">Add to Wishlist</span>
             </div>
           </div>
         </div>
       </section>
+
+      <div class="mb-25 px-5 md:px-12 2xl:px-0">
+        <p class="text-[#2E790E] underline text-[22px] sm:text-[28px] mb-5">Specifications</p>
+        <div class="bg-[#F4F4F4] rounded-2xl p-5 sm:p-7.5">
+          <table class="w-full text-sm sm:text-base">
+            <tbody>
+              @for (spec of specifications; track $index) {
+                <tr class="border-b-2 border-[#E6E6E8] last:border-0">
+                  <td class="py-3 text-[#17171780] w-[50%]">{{ spec.label }}</td>
+                  <td class="py-3 text-[#171717] w-[50%]">{{ spec.value }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
     } @else {
       <div class="flex flex-col items-center justify-center h-screen mx-1">
         <svg
