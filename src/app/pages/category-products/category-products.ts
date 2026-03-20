@@ -102,6 +102,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
     } else {
       this.selectedCategorySlug = null;
       this.selectedCategoryProducts = [];
+      this.isFilterOpen = false;
     }
   }
   get displayedProducts(): ProductDetails[] {
