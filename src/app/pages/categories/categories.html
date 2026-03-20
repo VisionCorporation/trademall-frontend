@@ -16,12 +16,23 @@
     >
       @for (category of categories; track category._id) {
         <div
-          [style.backgroundImage]="'url(' + category.image + ')'"
-          class="relative w-full bg-cover bg-center rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col hover:scale-105 transition-transform duration-300"
+          class="relative w-full rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col hover:scale-105 transition-transform duration-300 overflow-hidden"
         >
+          <!-- Background image -->
+          <img
+            [ngSrc]="category.image ?? ''"
+            fill
+            alt="{{ category.name }}"
+            class="object-cover object-center rounded-2xl"
+            priority
+          />
+
+          <!-- Overlay -->
           <div
             class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"
           ></div>
+
+          <!-- Content -->
           <div class="relative z-10 flex flex-col items-start h-full">
             <h1 class="text-4xl light-header mb-3.75">{{ category.name }}</h1>
             <p class="text-[15px] mb-6.25">{{ category.description }}</p>

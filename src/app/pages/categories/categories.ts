@@ -9,10 +9,11 @@ import { RouterLink } from '@angular/router';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-categories',
-  imports: [Header, Footer, SkeletonLoader, RouterLink, Newsletter, SearchBar],
+  imports: [Header, Footer, SkeletonLoader, RouterLink, Newsletter, SearchBar, NgOptimizedImage],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
   animations: [staggerProducts, fadeInOutAnimation],
