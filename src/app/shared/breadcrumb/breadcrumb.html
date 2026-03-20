@@ -1,15 +1,15 @@
-<nav class="flex items-center gap-3 text-[#17171780] text-lg">
+<nav class="flex items-center gap-1.5 sm:gap-3 text-[#17171780] text-sm sm:text-lg flex-wrap">
   <button
     (click)="goBack()"
-    class="hover:text-[#171717] hover:scale-105 transition-transform duration-300 ease-in"
+    class="hover:text-[#171717] hover:scale-105 transition-transform duration-300 ease-in shrink-0"
   >
     <svg
-      width="30"
-      height="30"
+      width="24"
+      height="24"
       viewBox="0 0 30 30"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      class=""
+      class="sm:w-7.5 sm:h-7.5"
     >
       <path
         d="M18.7499 7.49976C18.7499 7.49976 11.25 13.0234 11.25 14.9998C11.25 16.9762 18.75 22.4998 18.75 22.4998"
@@ -24,25 +24,25 @@
   @if (categoryName()) {
     <a
       [routerLink]="['/categories', categorySlug()]"
-      class="hover:text-[#171717] transition-colors duration-150"
+      class="hover:text-[#171717] transition-colors duration-150 truncate max-w-[10ch] sm:max-w-none"
     >
       {{ categoryName() }}
     </a>
   }
 
   @if (subCategoryName()) {
-    <span>›</span>
+    <span class="shrink-0">›</span>
     <a
       [routerLink]="['/categories', categorySlug()]"
       [state]="{ filter: subCategorySlug() }"
-      class="hover:text-[#171717] transition-colors duration-150"
+      class="hover:text-[#171717] transition-colors duration-150 truncate max-w-[10ch] sm:max-w-none"
     >
       {{ subCategoryName() }}
     </a>
   }
 
   @if (productName()) {
-    <span>›</span>
-    <span class="text-[#171717]">{{ productName() }}</span>
+    <span class="shrink-0">›</span>
+    <span class="text-[#171717] truncate max-w-[12ch] sm:max-w-none">{{ productName() }}</span>
   }
 </nav>
