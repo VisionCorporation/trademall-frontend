@@ -18,6 +18,7 @@
   <div
     class="flex flex-col lg:flex-row items-start w-full gap-6 lg:gap-10 pb-20 lg:pb-37.5 px-5 md:px-12 2xl:px-0"
   >
+  
     <!-- Subcategories Sidebar — desktop only -->
     <div class="hidden lg:block w-full lg:max-w-[15%]">
       @if (isSubCategoriesLoading()) {
@@ -101,6 +102,7 @@
               <div
                 class="bg-[#F4F4F4] rounded-2xl w-full hover:scale-105 transition-transform duration-300 cursor-pointer"
                 [routerLink]="['/products', product?.slug]"
+                [state]="{ category: categoryName, slug: categorySlug, subcategorySlug: product.category.slug}"
               >
                 <div class="relative rounded-2xl mt-1.25 mb-3.75">
                   <span

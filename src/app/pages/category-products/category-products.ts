@@ -11,10 +11,20 @@ import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { SearchBar } from '../../shared/search-bar/search-bar';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-category-products',
-  imports: [SkeletonLoader, Header, Footer, RouterLink, CurrencyPipe, Newsletter, SearchBar],
+  imports: [
+    SkeletonLoader,
+    Header,
+    Footer,
+    RouterLink,
+    CurrencyPipe,
+    Newsletter,
+    SearchBar,
+    FormsModule,
+  ],
   templateUrl: './category-products.html',
   styleUrl: './category-products.css',
   animations: [staggerProducts, fadeInOutAnimation, smoothCollapse],
@@ -32,6 +42,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   private readonly toastService = inject(ToastService);
   public subCategories: any[] = [];
   public categoryName = '';
+  public categorySlug = '';
   public wishlistedIds = new Set<string>();
   public sheetTranslateY = 0;
   private touchStartY = 0;
@@ -52,12 +63,14 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
   ngOnInit() {
     const slug = this.route.snapshot.paramMap.get('slug');
+    const filterSlug = history.state?.filter;
 
     if (slug) {
       this.productService.getCategoryWithDirectChildren(slug).subscribe({
         next: (res) => {
           this.categoryName = res.data.category.name;
           this.subCategories = res.data.children;
+          this.categorySlug = slug;
           this.isSubCategoriesLoading.set(false);
         },
         error: (err) => {
@@ -69,7 +82,8 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
       this.productService.getProductsByCategory(slug).subscribe({
         next: (res) => {
-          this.allProducts = res.data;  
+          this.allProducts = res.data;
+          console.log('Fetched Products ', res.data);
           this.isProductsLoading.set(false);
         },
         error: (err) => {
@@ -77,6 +91,11 @@ export class CategoryProducts implements OnInit, OnDestroy {
           this.isProductsLoading.set(false);
         },
       });
+
+      if (filterSlug) {
+        this.selectedCategorySlug = filterSlug;
+        this.fetchProductsByCategory(filterSlug);
+      }
     }
   }
 
