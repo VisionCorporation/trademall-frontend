@@ -1,9 +1,8 @@
-import { NgOptimizedImage } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-search-bar',
-  imports: [NgOptimizedImage],
+  imports: [],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.css',
 })
