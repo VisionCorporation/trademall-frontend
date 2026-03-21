@@ -1,83 +1,193 @@
 <div class="max-w-350 mx-auto">
   <app-header />
-</div>
 
-@if (vendorData) {
-  <section class="mt-10 mb-30 w-[80%] mx-auto">
-    <div class="w-20 h-20 bg-[#E6E6E8] rounded-2xl mb-5"></div>
-    <div class="flex items-center gap-2.5 mb-2.5">
-      <p class="text-4xl">{{ vendorData.vendor.businessName }}</p>
-      <span>{{ vendorData.vendor.dateOfJoining | date: 'MMMM d, y' }}</span>
-    </div>
-    <div class="flex items-center gap-1.25 mb-7.5">
-      <div class="bg-[#D1D1D133] rounded-sm py-0.75 px-1.25 flex items-center gap-1.25">
-        @if (vendorData.vendor.isVerified) {
-          <img src="assets/icons/verified-badge.svg" width="20" height="20" alt="verified-badge" />
-          <span>Verified</span>
-        } @else {
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#EF4444"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M15 9L9 15M9 9L15 15" />
+  @if (!isLoading()) {
+    @if (vendorData) {
+      <section class="mb-30 mt-16 sm:mt-24 px-5 md:px-12 2xl:px-0">
+        <img
+          ngSrc="assets/images/vendor-image.jpg"
+          width="80"
+          height="80"
+          [alt]="vendorInfo?.businessName"
+          class="block mb-5 rounded-2xl"
+        />
+        <p class="text-3xl sm:text-4xl mb-2.5">{{ vendorData.vendor.businessName }}</p>
+        <div class="flex items-center gap-1.5 text-[#6B6B6B] mb-3">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M8 2V5M16 2V5M3 8H21M4 4H20C20.5523 4 21 4.44772 21 5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V5C3 4.44772 3.44772 4 4 4Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
           </svg>
-          <span>Unverified</span>
-        }
-      </div>
-    </div>
-    <hr class="opacity-20" />
-    <div class="mt-7.5">
-      <p class="italic text-2xl mb-7.5">Products by {{ vendorData.vendor.businessName }}</p>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75"
-        [@staggerProducts]="vendorData.data.length"
-      >
-        @for (product of vendorData.data; track product._id) {
-          <div
-            class="bg-[#F4F4F4] rounded-2xl max-w-70.75 hover:scale-105 transition-transform duration-300 cursor-pointer"
-            [routerLink]="['/products', product?.slug]"
+          <span class="text-sm sm:text-base"
+            >Joined {{ vendorData.vendor.dateOfJoining | date: 'MMMM d, y' }}</span
           >
-            <div class="bg-[#E6E6E8] mx-1.25 mt-1.25 mb-3.75 rounded-[11px] pt-3.75">
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.25 mb-7.5">
+          <div class="bg-[#D1D1D133] rounded-sm py-0.75 px-1.25 flex items-center gap-1.25">
+            @if (vendorData.vendor.isVerified) {
               <img
-                [src]="product.images[0]?.url"
-                alt="{{ product.name }}"
-                class="w-[95%] mx-auto h-40 object-cover"
+                src="assets/icons/verified-badge.svg"
+                width="20"
+                height="20"
+                alt="verified-badge"
               />
-            </div>
-            <div class="p-3.75">
-              <div class="flex items-center justify-between">
-                <p class="text-xl truncate max-w-[19ch]">{{ product.name }}</p>
-              </div>
-              <a
-                class="text-sm text-[#2E790E] text-[13px] hover:underline"
-                [routerLink]="['/products/vendor', vendorData.vendor._id]"
+              <span class="text-sm sm:text-base">Verified</span>
+            } @else {
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#EF4444"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
-                {{ vendorData.vendor.businessName }}
-              </a>
-              <p class="text-[13px] mt-4 mb-6.25">{{ product.metaDescription }}</p>
-              <div class="flex justify-center">
-                <button
-                  class="border border-[#171717] px-3.5 py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
-                >
-                  Buy Now - {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
-                </button>
-              </div>
-            </div>
+                <circle cx="12" cy="12" r="10" />
+                <path d="M15 9L9 15M9 9L15 15" />
+              </svg>
+              <span class="text-sm sm:text-base">Unverified</span>
+            }
           </div>
-        }
+
+          <div class="bg-[#D1D1D133] rounded-sm py-0.75 px-1.25 flex items-center gap-1.25">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.92315 11.0054C8.43146 11.0054 6.93978 11.0156 5.44948 11.0054C3.47868 10.985 2.01624 9.66388 1.72097 7.64869C1.49951 6.13402 2.4299 4.9831 3.90766 4.96128C4.70573 4.94964 5.50241 4.96128 6.30048 4.96128C6.54144 4.96128 6.74896 4.96128 6.74061 4.6048C6.703 3.06831 7.42308 2.16911 9.21839 2.10363C9.99882 2.05897 10.7815 2.08819 11.5569 2.19094C12.5764 2.34808 13.2283 3.14688 13.2784 4.41565C13.2951 4.89435 13.4553 4.97874 13.8578 4.96128C14.5681 4.93072 15.2798 4.94964 15.9902 4.954C17.6518 4.96128 18.6365 6.2737 18.2493 7.97024C18.0678 8.82534 17.613 9.59044 16.96 10.1397C16.3069 10.6889 15.4943 10.9896 14.6559 10.9923C13.0778 11.0141 11.4998 10.9923 9.92036 10.9923L9.92315 11.0054ZM9.98304 4.95837C10.5694 4.95837 11.1572 4.95837 11.7435 4.95837C11.8828 4.95837 12.0583 5.01075 12.1335 4.7925C12.3243 4.23377 11.8953 3.46116 11.3243 3.38987C10.5341 3.30767 9.73848 3.29891 8.9468 3.36368C8.16265 3.41169 7.85902 3.81473 7.88549 4.62663C7.89384 4.89144 7.98577 4.9671 8.22254 4.96419C8.80891 4.95109 9.39528 4.95691 9.98304 4.95837Z"
+                fill="#171717"
+              />
+              <path
+                d="M1.7046 10.1455C2.9219 11.714 4.47348 12.104 6.19498 12.0196C6.36907 12.0123 6.54178 12.0196 6.71588 12.0196C7.0613 12.0196 7.45546 11.9279 7.74237 12.0676C8.07664 12.2291 7.81898 12.686 7.90812 13.0032C8.10311 13.6885 8.46523 14.1963 9.16163 14.3709C9.63616 14.4833 10.1269 14.4996 10.6074 14.4189C11.5614 14.2734 12.1171 13.6012 12.1283 12.5405C12.1283 12.0952 12.2759 12.0021 12.6659 12.0094C13.4612 12.0254 14.2607 12.0094 15.056 11.9672C16.0875 11.917 17.0642 11.4673 17.7956 10.7057C17.9349 10.5602 18.0407 10.371 18.2385 10.2488C18.2566 12.0574 18.492 13.8311 18.07 15.5669C17.7273 16.9739 16.6772 17.7494 15.0058 17.8178C11.6789 17.9497 8.35149 17.9497 5.02363 17.8178C2.93444 17.7319 1.88566 16.5767 1.74081 14.4101C1.65306 13.1006 1.67674 11.8057 1.66699 10.5034C1.66838 10.4365 1.68092 10.3681 1.7046 10.1455Z"
+                fill="#171717"
+              />
+              <path
+                d="M10.1308 13.2592C9.23108 13.2592 8.99431 13.0264 9.03331 12.3265C9.04584 12.0879 9.12802 12.0137 9.33972 12.0181C9.68374 12.0268 10.0361 11.9948 10.3718 12.0282C10.5988 12.0501 10.9735 11.8318 10.9874 12.3382C10.9985 12.7747 10.9024 13.1326 10.4303 13.2374C10.3315 13.2559 10.2311 13.2632 10.1308 13.2592Z"
+                fill="#171717"
+              />
+            </svg>
+            <span class="text-sm sm:text-base">Vendor</span>
+          </div>
+
+          <div class="bg-[#D1D1D133] rounded-sm py-0.75 px-1.25 flex items-center gap-1.25">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5.83398 15C4.30988 15.3431 3.33398 15.8702 3.33398 16.4614C3.33398 17.4952 6.31875 18.3333 10.0007 18.3333C13.6825 18.3333 16.6673 17.4952 16.6673 16.4614C16.6673 15.8702 15.6914 15.3431 14.1673 15"
+                stroke="#171717"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M10.0003 0.916992C12.592 0.916992 15.0537 2.49241 16.0823 4.96582C17.0395 7.2681 16.5168 9.23832 15.4476 10.9043C14.4137 12.5148 12.8154 13.9172 11.5687 15.1182C11.1476 15.5236 10.5848 15.75 10.0003 15.75C9.41598 15.7498 8.85389 15.5236 8.43293 15.1182L8.43098 15.1172C7.18938 13.9141 5.59029 12.5111 4.55598 10.9033C3.4854 9.23898 2.96096 7.27089 3.91926 4.96582C4.94778 2.49261 7.40886 0.917246 10.0003 0.916992ZM10.0003 4.66699C8.43584 4.66726 7.16748 5.93551 7.16731 7.5C7.16748 9.06449 8.43584 10.3337 10.0003 10.334C11.565 10.334 12.8341 9.06466 12.8343 7.5C12.8341 5.93534 11.565 4.66699 10.0003 4.66699Z"
+                fill="#171717"
+              />
+            </svg>
+            <span class="text-sm sm:text-base">Kumasi, Ghana</span>
+          </div>
+        </div>
+        <hr class="opacity-20" />
+        <div class="mt-8.5">
+          <h2 class="text-[30px] sm:text-[40px] mb-5">
+            Products from {{ vendorData.vendor.businessName }}
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" [@staggerProducts]>
+            @for (vendorProduct of vendorData.data; track vendorProduct._id) {
+              <div
+                class="bg-[#F4F4F4] rounded-2xl w-full hover:scale-105 transition-transform duration-300 cursor-pointer"
+                [routerLink]="['/products', vendorProduct?.slug]"
+              >
+                <div class="relative rounded-2xl mt-1.25 mb-3.75">
+                  <span
+                    class="absolute bg-[#D1D1D1] px-1.25 py-0.75 top-2.5 left-2.5 sm:left-4 rounded-sm truncate max-w-[10ch] text-xs"
+                    >{{ vendorProduct?.category?.name }}</span
+                  >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="absolute top-2.5 right-2.5 sm:right-4 hover:scale-110 transition-transform duration-300 z-10"
+                    (click)="
+                      $event.stopPropagation();
+                      toggleWishlist(vendorProduct._id, vendorProduct.name)
+                    "
+                  >
+                    <path
+                      d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
+                      [attr.fill]="wishlistedIds.has(vendorProduct._id) ? '#26C34D' : '#FBFCFF'"
+                      [attr.stroke]="wishlistedIds.has(vendorProduct._id) ? '#26C34D' : '#000'"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <img
+                    [src]="vendorProduct.images[0]?.url"
+                    alt="{{ vendorProduct.name }}"
+                    class="w-[95%] mx-auto h-32 sm:h-36 lg:h-40 object-cover rounded-2xl"
+                  />
+                </div>
+                <div class="p-2.5 lg:p-3.75">
+                  <p class="text-base lg:text-xl truncate max-w-[15ch]">{{ vendorProduct.name }}</p>
+                  <div class="flex items-center justify-between mt-0.5">
+                    <a
+                      class="text-[#2E790E] text-[11px] lg:text-[13px] hover:underline truncate max-w-[12ch]"
+                      [routerLink]="['/products/vendor', vendorInfo?._id]"
+                      (click)="$event.stopPropagation()"
+                    >
+                      {{ vendorInfo?.businessName }}
+                    </a>
+                    <span class="text-xs lg:text-sm">{{
+                      vendorProduct.price | currency: 'GHS ' : 'symbol' : '1.2-2'
+                    }}</span>
+                  </div>
+                  <p class="text-[11px] lg:text-[13px] mt-3 mb-4 lg:mb-6.25 line-clamp-2">
+                    {{ vendorProduct.metaDescription }}
+                  </p>
+                  <div class="flex justify-center">
+                    <button
+                      class="border border-[#171717] px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
+                      (click)="$event.stopPropagation()"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+    }
+  } @else {
+    <div class="mb-30">
+      <app-skeleton-loader skeletonType="vendor-details" />
+      <div class="mt-8.5 max-w-350 mx-5 md:mx-12 2xl:mx-0">
+        <div class="skeleton-shimmer w-77.25 h-15 rounded mb-8.5"></div>
       </div>
+      <app-skeleton-loader />
     </div>
-  </section>
-} @else {
-  <div class="text-center p-10">Loading...</div>
-}
+  }
+
+  <app-newsletter />
+</div>
 
 <app-footer />
