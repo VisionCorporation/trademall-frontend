@@ -36,9 +36,12 @@ export class Products {
     return this.http.get<any>(`${environment.apiBaseUrl}/products/${slug}/`);
   }
 
-  public getVendorProductsById(vendorId: string): Observable<VendorProductsResponse> {
+  public getVendorProductsById(
+    vendorId: string,
+    currentPage?: number,
+  ): Observable<VendorProductsResponse> {
     return this.http.get<VendorProductsResponse>(
-      `${environment.apiBaseUrl}/products/vendor/${vendorId}/`,
+      `${environment.apiBaseUrl}/products/vendor/${vendorId}?page=${currentPage}`,
     );
   }
 }
