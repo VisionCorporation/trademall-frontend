@@ -34,7 +34,7 @@
                 <input
                   type="checkbox"
                   [id]="subCategory.slug"
-                  [checked]="selectedCategorySlug === subCategory.slug"
+                  [checked]="selectedCategorySlugs.includes(subCategory.slug)"
                   (change)="onCategoryChange(subCategory.slug, $event)"
                 />
                 <span class="checkmark shrink-0">
@@ -77,10 +77,30 @@
 
         @if (displayedProducts.length > 0) {
           <div class="flex items-start flex-col gap-3 mb-5" [@fadeInOut]>
-            @if (selectedCategorySlug) {
-              <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm">{{
-                selectedCategoryProducts[0]?.category?.name
-              }}</span>
+            @if (selectedCategorySlugs.length > 0) {
+              <div class="flex flex-wrap gap-1.5">
+                @for (slug of selectedCategorySlugs; track slug) {
+                  <span
+                    class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm flex items-center gap-2"
+                  >
+                    {{ getCategoryName(slug) }}
+                    <button
+                      (click)="removeCategory(slug)"
+                      class="hover:text-red-500 transition-colors duration-150 leading-none"
+                      aria-label="Remove {{ getCategoryName(slug) }}"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M19 5L5 19M5 5L19 19"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </button>
+                  </span>
+                }
+              </div>
             } @else {
               <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm">
                 All Products
@@ -159,7 +179,7 @@
               </div>
             }
           </div>
-        } @else if (selectedCategorySlug) {
+        } @else if (selectedCategorySlugs.length > 0) {
           <div class="flex flex-col items-center justify-center py-14 text-center" [@fadeInOut]>
             <div
               class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full"
@@ -243,7 +263,7 @@
             <input
               type="checkbox"
               [id]="subCategory.slug"
-              [checked]="selectedCategorySlug === subCategory.slug"
+              [checked]="selectedCategorySlugs.includes(subCategory.slug)"
               (change)="onCategoryChange(subCategory.slug, $event)"
             />
             <span class="checkmark shrink-0">

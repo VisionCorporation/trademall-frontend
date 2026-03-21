@@ -11,6 +11,7 @@ import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { SearchBar } from '../../shared/search-bar/search-bar';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-category-products',
@@ -24,7 +25,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   public isProductsLoading = signal(true);
   public isSubCategoriesLoading = signal(true);
   public openCategorySlug: string | null = null;
-  public selectedCategorySlug: string | null = null;
+  public selectedCategorySlugs: string[] = [];
   public selectedCategoryProducts: ProductDetails[] = [];
   private readonly productService = inject(Products);
   private readonly route = inject(ActivatedRoute);
@@ -50,7 +51,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
     return this._isFilterOpen;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
     const filterSlug = history.state?.filter;
 
@@ -64,7 +65,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
           this.isSubCategoriesLoading.set(false);
         },
         error: (err) => {
-          console.error('Failed to fetch product', err);
+          console.error('Failed to fetch subcategories', err);
           this.isProductsLoading.set(false);
           this.isSubCategoriesLoading.set(false);
         },
@@ -76,19 +77,19 @@ export class CategoryProducts implements OnInit, OnDestroy {
           this.isProductsLoading.set(false);
         },
         error: (err) => {
-          console.log(err);
+          console.error('Failed to fetch all products', err);
           this.isProductsLoading.set(false);
         },
       });
 
       if (filterSlug) {
-        this.selectedCategorySlug = filterSlug;
-        this.fetchProductsByCategory(filterSlug);
+        this.selectedCategorySlugs = [filterSlug];
+        this.fetchSelectedCategoryProducts();
       }
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.renderer.removeClass(document.body, 'overflow-hidden');
   }
 
@@ -96,29 +97,47 @@ export class CategoryProducts implements OnInit, OnDestroy {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     if (isChecked) {
-      this.selectedCategorySlug = slug;
-      this.fetchProductsByCategory(slug);
-      this.isFilterOpen = false;
+      this.selectedCategorySlugs = [...this.selectedCategorySlugs, slug];
     } else {
-      this.selectedCategorySlug = null;
-      this.selectedCategoryProducts = [];
-      this.isFilterOpen = false;
+      this.selectedCategorySlugs = this.selectedCategorySlugs.filter((s) => s !== slug);
     }
-  }
-  get displayedProducts(): ProductDetails[] {
-    return this.selectedCategorySlug ? this.selectedCategoryProducts : this.allProducts;
+
+    this.isFilterOpen = false;
+    this.fetchSelectedCategoryProducts();
   }
 
-  private fetchProductsByCategory(categorySlug: string): void {
+  get displayedProducts(): ProductDetails[] {
+    return this.selectedCategorySlugs.length > 0 ? this.selectedCategoryProducts : this.allProducts;
+  }
+
+  public getCategoryName(slug: string): string {
+    return this.subCategories.find((c) => c.slug === slug)?.name ?? slug;
+  }
+
+  public removeCategory(slug: string): void {
+    this.selectedCategorySlugs = this.selectedCategorySlugs.filter((s) => s !== slug);
+    this.fetchSelectedCategoryProducts();
+  }
+
+  private fetchSelectedCategoryProducts(): void {
+    if (this.selectedCategorySlugs.length === 0) {
+      this.selectedCategoryProducts = [];
+      return;
+    }
+
     this.isProductsLoading.set(true);
 
-    this.productService.getProductsByCategory(categorySlug).subscribe({
-      next: (products) => {
-        this.selectedCategoryProducts = products.data;
+    const requests = this.selectedCategorySlugs.map((slug) =>
+      this.productService.getProductsByCategory(slug),
+    );
+
+    forkJoin(requests).subscribe({
+      next: (results) => {
+        this.selectedCategoryProducts = results.flatMap((r) => r.data);
         this.isProductsLoading.set(false);
       },
       error: (err) => {
-        console.error('Failed to fetch products', err);
+        console.error('Failed to fetch products for selected categories', err);
         this.isProductsLoading.set(false);
       },
     });
@@ -134,18 +153,18 @@ export class CategoryProducts implements OnInit, OnDestroy {
     }
   }
 
-  public onHandleTouchStart(event: TouchEvent) {
+  public onHandleTouchStart(event: TouchEvent): void {
     this.touchStartY = event.touches[0].clientY;
   }
 
-  public onHandleTouchMove(event: TouchEvent) {
+  public onHandleTouchMove(event: TouchEvent): void {
     const diff = event.touches[0].clientY - this.touchStartY;
     if (diff > 0) {
       this.sheetTranslateY = diff;
     }
   }
 
-  public onHandleTouchEnd(event: TouchEvent) {
+  public onHandleTouchEnd(event: TouchEvent): void {
     const touchEndY = event.changedTouches[0].clientY;
     const diff = touchEndY - this.touchStartY;
 
