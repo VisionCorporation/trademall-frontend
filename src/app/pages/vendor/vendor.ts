@@ -3,8 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Products } from '../../services/products/products';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
-// import { Product } from '../../interfaces/products.interface';
-import { ProductsResponse } from '../../interfaces/vendor.interface';
+import { VendorProductsResponse } from '../../interfaces/vendor.interface';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 
@@ -18,7 +17,7 @@ import { staggerProducts } from '../../animations/smooth-collapse.animations';
 export class Vendor {
   private productService = inject(Products);
   private readonly route = inject(ActivatedRoute);
-  public vendorData: ProductsResponse | null = null;
+  public vendorData: VendorProductsResponse | null = null;
   public isLoading = signal(true);
 
   ngOnInit(): void {
