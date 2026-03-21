@@ -1,34 +1,23 @@
-export interface ProductImage {
-  url: string;
-  isMain: boolean;
-  _id: string;
-}
-
-export interface ProductCategory {
+export interface VendorProduct {
   _id: string;
   name: string;
   slug: string;
-}
-
-export interface ProductVendor {
-  _id: string;
-  businessName: string;
-  kycVerified: boolean;
-  vendorStatus: string;
-}
-
-export interface Product {
-  _id: string;
-  name: string;
-  slug: string;
-  description: string;
   brand?: string;
+  category: {
+    _id: string;
+    name: string;
+    slug: string;
+  };
+  vendor: string;
+  description: string;
+  attributes: { [key: string]: string };
   price: number;
   salePrice: number | null;
-  images: ProductImage[];
-  category: ProductCategory;
-  vendor: ProductVendor | string; 
-  attributes: Record<string, string>;
+  images: {
+    url: string;
+    isMain: boolean;
+    _id: string;
+  }[];
   status: string;
   stockQuantity: number;
   lowStockThreshold: number;
@@ -38,18 +27,18 @@ export interface Product {
   rating: number;
   reviewCount: number;
   isSearchable: boolean;
-  isVisible: boolean;
-  viewCount: number;
   metaTitle: string;
   metaDescription: string;
   metaKeywords: string[];
   approvedAt: string;
+  isVisible: boolean;
+  viewCount: number;
   createdAt: string;
   updatedAt: string;
   __v: number;
 }
 
-export interface ProductVendorInfo {
+export interface VendorInfo {
   _id: string;
   name: string;
   businessName: string;
@@ -58,16 +47,16 @@ export interface ProductVendorInfo {
   dateOfJoining: string;
 }
 
-export interface ProductPagination {
+export interface VendorPagination {
   currentPage: number;
   limit: number;
   totalPages: number;
   totalResults: number;
 }
 
-export interface ProductsResponse {
+export interface VendorProductsResponse {
   success: boolean;
-  vendor: ProductVendorInfo;
-  pagination: ProductPagination;
-  data: Product[];
+  vendor: VendorInfo;
+  pagination: VendorPagination;
+  data: VendorProduct[];
 }
