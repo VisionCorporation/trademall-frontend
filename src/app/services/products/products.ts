@@ -6,6 +6,7 @@ import {
   RootCategoryResponse,
   SelectedCategoryDetailResponse,
 } from '../../interfaces/categories.interface';
+import { VendorProductsResponse } from '../../interfaces/vendor.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +36,9 @@ export class Products {
     return this.http.get<any>(`${environment.apiBaseUrl}/products/${slug}/`);
   }
 
-  public getVendorProductsById(vendorId: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}/products/vendor/${vendorId}/`);
+  public getVendorProductsById(vendorId: string): Observable<VendorProductsResponse> {
+    return this.http.get<VendorProductsResponse>(
+      `${environment.apiBaseUrl}/products/vendor/${vendorId}/`,
+    );
   }
 }
