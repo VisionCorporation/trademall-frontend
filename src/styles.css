@@ -2,26 +2,26 @@
 
 @font-face {
   font-family: 'Bebas Neue';
-  src: url('/assets/fonts/BebasNeue-Regular.ttf') format('truetype');
+  src: url('/assets/fonts/BebasNeue-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src: url('/assets/fonts/AtkinsonHyperlegible-Regular.ttf') format('truetype');
+  src: url('/assets/fonts/AtkinsonHyperlegible-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src: url('/assets/fonts/AtkinsonHyperlegible-Bold.ttf') format('truetype');
+  src: url('/assets/fonts/AtkinsonHyperlegible-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 html {
