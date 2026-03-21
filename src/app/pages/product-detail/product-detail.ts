@@ -10,6 +10,7 @@ import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { VendorInfo, VendorProduct } from '../../interfaces/vendor.interface';
+import { staggerProducts } from '../../animations/smooth-collapse.animations';
 
 @Component({
   selector: 'app-product-detail',
@@ -25,6 +26,7 @@ import { VendorInfo, VendorProduct } from '../../interfaces/vendor.interface';
   ],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
+  animations:[staggerProducts]
 })
 export class ProductDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
