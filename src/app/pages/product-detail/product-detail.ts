@@ -34,8 +34,12 @@ export class ProductDetail implements OnInit {
   public product: ProductDetails | null = null;
   public vendorProductsDetails: VendorProduct[] = [];
   public vendorInfo: VendorInfo | null = null;
+  public vendorId = '';
   public isLoading = signal(true);
   public isVendorProductsLoading = signal(true);
+  public totalPages = 0;
+  public currentPage = 1;
+  public totalPagesArray: number[] = [];
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -45,25 +49,16 @@ export class ProductDetail implements OnInit {
       this.vendorProductsDetails = [];
       this.vendorInfo = null;
       this.isLoading.set(true);
+      this.currentPage = 1;
       this.isVendorProductsLoading.set(true);
 
       if (slug) {
         this.productService.getProductBySlug(slug).subscribe({
           next: (response) => {
             this.product = response.data;
+            this.vendorId = response.data.vendor._id;
             this.isLoading.set(false);
-
-            this.productService.getVendorProductsById(response.data.vendor._id).subscribe({
-              next: (res) => {
-                this.vendorProductsDetails = res.data;
-                this.vendorInfo = res.vendor;
-                this.isVendorProductsLoading.set(false);
-              },
-              error: (err) => {
-                console.log('An error occurred ', err);
-                this.isVendorProductsLoading.set(false);
-              },
-            });
+            this.fetchVendorProducts(this.currentPage);
           },
           error: (err) => {
             this.toastService.error('An error occurred while fetching product details. Try again');
@@ -88,5 +83,44 @@ export class ProductDetail implements OnInit {
       this.wishlistedIds.add(productId);
       this.toastService.success(`${productName} added to wishlist`);
     }
+  }
+
+  private fetchVendorProducts(currentPage: number) {
+    this.isVendorProductsLoading.set(true);
+    this.productService.getVendorProductsById(this.vendorId, currentPage).subscribe({
+      next: (response) => {
+        this.vendorProductsDetails = response.data;
+        this.vendorInfo = response.vendor;
+        this.totalPages = response.pagination.totalPages;
+        this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+        this.isVendorProductsLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to fetch vendor products', err);
+        this.isVendorProductsLoading.set(false);
+      },
+    });
+  }
+
+  public goToPreviousVendorProducts(): void {
+    if (this.currentPage <= 1) return;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.currentPage--;
+    this.fetchVendorProducts(this.currentPage);
+  }
+
+  public goToNextVendorProducts(): void {
+    if (this.currentPage >= this.totalPages) return;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.currentPage++;
+    this.fetchVendorProducts(this.currentPage);
+  }
+
+  public goToPage(pageNumber: number): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.currentPage = pageNumber;
+    this.fetchVendorProducts(pageNumber);
   }
 }
