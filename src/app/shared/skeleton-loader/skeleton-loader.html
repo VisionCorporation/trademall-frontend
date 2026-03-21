@@ -100,3 +100,20 @@
     </div>
   </div>
 }
+@if (skeletonType() === 'product-additional-details') {
+  <div class="mx-5 md:mx-12 2xl:mx-0 mb-25">
+    <div class="w-50 h-7.5 rounded-2xl mb-5 skeleton-shimmer"></div>
+    <div class="rounded-2xl p-5 sm:p-7.5 skeleton-shimmer">
+      <table class="w-full text-sm sm:text-base">
+        <tbody class="flex flex-col gap-10">
+          @for (data of [1, 2, 3, 4, 5, 6]; track $index) {
+            <tr class="border-b border-gray-300 last:border-0">
+              <td class="py-3 w-[50%] h-4 rounded skeleton-shimmer"></td>
+              <td class="py-3 w-[50%] h-4 rounded skeleton-shimmer"></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+}
