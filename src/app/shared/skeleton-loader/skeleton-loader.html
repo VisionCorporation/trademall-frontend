@@ -1,7 +1,7 @@
 @if (skeletonType() === 'product') {
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mx-5 md:mx-12 2xl:mx-0">
     @for (product of [1, 2, 3, 4]; track product) {
-      <div class="bg-[#F4F4F4] rounded-2xl max-w-70.75">
+      <div class="bg-[#F4F4F4] rounded-2xl w-full">
         <div
           class="skeleton-shimmer mx-1.25 mt-1.25 mb-3.75 rounded-[11px] h-32 sm:h-43.75 pt-3.75"
         ></div>
@@ -75,5 +75,28 @@
         <span class="skeleton-shimmer h-5 w-1/2 rounded"></span>
       </label>
     }
+  </div>
+}
+@if (skeletonType() === 'vendor-details') {
+  <div class="max-w-350 mx-5 md:mx-12 2xl:mx-0">
+    <div>
+      <div class="mt-24">
+        <div class="skeleton-shimmer w-20 h-20 rounded-2xl mb-5"></div>
+        <div class="skeleton-shimmer w-50 h-10 rounded mb-2.5"></div>
+        <div class="flex items-center gap-1.5 text-gray-400 mb-3">
+          <div class="skeleton-shimmer w-5 h-5 rounded"></div>
+          <div class="skeleton-shimmer w-36.5 h-5 rounded"></div>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.25 mb-7.5">
+          @for (desc of [1, 2, 3]; track $index) {
+            <div class="skeleton-shimmer rounded-sm py-0.75 px-1.25 flex items-center gap-1.25">
+              <div class="skeleton-shimmer w-5 h-5 rounded"></div>
+              <div class="skeleton-shimmer w-16 h-6 rounded"></div>
+            </div>
+          }
+        </div>
+        <hr class="opacity-20" />
+      </div>
+    </div>
   </div>
 }
