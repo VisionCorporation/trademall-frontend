@@ -44,4 +44,11 @@ export const routes: Routes = [
     path: 'products/vendor/:id',
     loadComponent: () => import('./pages/vendor/vendor').then((m) => m.Vendor),
   },
+  {
+    path: 'order-history',
+    loadComponent: () =>
+      import('./pages/customer-order-history/customer-order-history').then(
+        (m) => m.CustomerOrderHistory,
+      ),
+  },
 ];
