@@ -14,7 +14,7 @@ import { VendorProductsResponse } from '../../interfaces/vendor.interface';
 export class Products {
   private http = inject(HttpClient);
 
-  public getRootCategories(currentPage: number): Observable<RootCategoryResponse> {
+  public getRootCategories(currentPage = 1): Observable<RootCategoryResponse> {
     return this.http.get<RootCategoryResponse>(
       `${environment.apiBaseUrl}/products/categories/root?page=${currentPage}`,
     );
