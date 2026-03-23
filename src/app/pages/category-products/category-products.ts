@@ -34,8 +34,6 @@ export class CategoryProducts implements OnInit, OnDestroy {
   public subCategories: any[] = [];
   public categoryName = '';
   public wishlistedIds = new Set<string>();
-  public sheetTranslateY = 0;
-  private touchStartY = 0;
   private _isFilterOpen = false;
 
   public set isFilterOpen(value: boolean) {
@@ -151,27 +149,5 @@ export class CategoryProducts implements OnInit, OnDestroy {
       this.wishlistedIds.add(productId);
       this.toastService.success(`${productName} added to wishlist`);
     }
-  }
-
-  public onHandleTouchStart(event: TouchEvent): void {
-    this.touchStartY = event.touches[0].clientY;
-  }
-
-  public onHandleTouchMove(event: TouchEvent): void {
-    const diff = event.touches[0].clientY - this.touchStartY;
-    if (diff > 0) {
-      this.sheetTranslateY = diff;
-    }
-  }
-
-  public onHandleTouchEnd(event: TouchEvent): void {
-    const touchEndY = event.changedTouches[0].clientY;
-    const diff = touchEndY - this.touchStartY;
-
-    if (diff > 50) {
-      this.isFilterOpen = false;
-    }
-
-    this.sheetTranslateY = 0;
   }
 }
