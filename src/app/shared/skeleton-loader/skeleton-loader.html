@@ -117,3 +117,18 @@
     </div>
   </div>
 }
+@if (skeletonType() === 'featured-categories') {
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="flex flex-col gap-4">
+      <div class="rounded-[20px] skeleton-shimmer sm:min-h-65 min-h-45"></div>
+      <div class="rounded-[20px] skeleton-shimmer sm:min-h-65 min-h-45"></div>
+    </div>
+
+    <div class="rounded-[20px] skeleton-shimmer min-h-75 sm:min-h-full lg:min-h-125"></div>
+
+    <div class="flex flex-col gap-4">
+      <div class="rounded-[20px] skeleton-shimmer flex-1 sm:min-h-75 min-h-55"></div>
+      <div class="rounded-lg skeleton-shimmer h-12 w-40 lg:self-end"></div>
+    </div>
+  </div>
+}

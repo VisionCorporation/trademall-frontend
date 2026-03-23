@@ -4,4 +4,5 @@ export type SkeletonType =
   | 'categories'
   | 'sub-categories'
   | 'vendor-details'
-  | 'product-additional-details';
+  | 'product-additional-details'
+  | 'featured-categories';
