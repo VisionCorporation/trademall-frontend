@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -50,5 +51,6 @@ export const routes: Routes = [
       import('./pages/customer-order-history/customer-order-history').then(
         (m) => m.CustomerOrderHistory,
       ),
+    canActivate: [authGuard],
   },
 ];
