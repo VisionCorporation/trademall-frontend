@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { ToastService } from '../../services/toast/toast.service';
+import { CustomerDropdown, VendorDropdown } from '../../data/constants/dropdown.constant';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,8 @@ export class Header {
   public isDropdownOpen = false;
   private router = inject(Router);
   private toastService = inject(ToastService);
+  public customerDropdown = CustomerDropdown;
+  public vendorDropdown = VendorDropdown;
   @ViewChild('dropdownRef', { static: true })
   dropdownRef!: ElementRef<HTMLElement>;
 
