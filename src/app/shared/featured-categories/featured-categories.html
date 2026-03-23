@@ -1,0 +1,131 @@
+<section class="mt-25 md:mt-37.5 max-w-350 mx-auto px-5 md:px-12 2xl:px-0 mb-28.75">
+  <h2 class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none mb-3.5">
+    Featured Categories
+  </h2>
+  <p class="text-[#17171799] mb-7.5 text-[20px] sm:text-[24px] leading-6 sm:leading-none">
+    Explore some of our most popular categories and so much more.
+  </p>
+
+  @if (isLoading()) {
+    <app-skeleton-loader skeletonType="featured-categories" />
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" [@staggerProducts]>
+      <div class="flex flex-col gap-4">
+        @for (category of leftCategories; track category._id) {
+          <div
+            class="relative rounded-[20px] overflow-hidden bg-black hover:scale-105 transition-transform duration-300"
+          >
+            <img
+              [ngSrc]="category.image ?? ''"
+              [alt]="category.name"
+              fill
+              class="absolute inset-0 w-full h-full object-cover opacity-70"
+            />
+
+            <div
+              class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"
+            ></div>
+            <div class="relative z-10 p-7 sm:p-10 flex flex-col justify-between">
+              <div>
+                <h3
+                  class="light-header text-white text-[28px] sm:text-[36px] font-semibold leading-tight mb-3.75"
+                >
+                  {{ category.name }}
+                </h3>
+                <p class="text-[#FBFCFF] max-w-75">{{ category.description }}</p>
+              </div>
+              <a
+                [routerLink]="['/categories', category.slug]"
+                class="mt-6 w-fit text-[20px] bg-white hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-[#171717] rounded-lg"
+              >
+                Explore
+              </a>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (centerCategory) {
+        <div
+          class="relative rounded-[20px] overflow-hidden bg-black hover:scale-105 transition-transform duration-300"
+        >
+          <img
+            [src]="centerCategory.image"
+            [alt]="centerCategory.name"
+            class="absolute inset-0 w-full h-full object-cover opacity-70"
+          />
+          <div class="relative z-10 p-7 sm:p-10 flex flex-col justify-between">
+            <div>
+              <h3
+                class="light-header text-white text-[28px] sm:text-[36px] font-semibold leading-tight mb-3.75"
+              >
+                {{ centerCategory.name }}
+              </h3>
+              <p class="text-[#FBFCFF] max-w-75">{{ centerCategory.description }}</p>
+            </div>
+            <a
+              [routerLink]="['/categories', centerCategory.slug]"
+              class="mt-6 w-fit text-[20px] bg-white hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-[#171717] rounded-lg"
+            >
+              Explore
+            </a>
+          </div>
+        </div>
+      }
+
+      @if (rightCategory) {
+        <div class="flex flex-col gap-4">
+          <div
+            class="relative rounded-[20px] overflow-hidden bg-black flex-1 hover:scale-105 transition-transform duration-300"
+          >
+            <img
+              [src]="rightCategory.image"
+              [alt]="rightCategory.name"
+              class="absolute inset-0 w-full h-full object-cover opacity-70"
+            />
+            <div class="relative z-10 p-7 sm:p-10 flex flex-col justify-between">
+              <div>
+                <h3
+                  class="light-header text-white text-[28px] sm:text-[36px] font-semibold leading-tight mb-3.75"
+                >
+                  {{ rightCategory.name }}
+                </h3>
+                <p class="text-[#FBFCFF] max-w-75">{{ rightCategory.description }}</p>
+              </div>
+              <a
+                [routerLink]="['/categories', rightCategory.slug]"
+                class="mt-6 w-fit text-[20px] bg-white hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-[#171717] rounded-lg"
+              >
+                Explore
+              </a>
+            </div>
+          </div>
+
+          <div class="flex lg:justify-end">
+            <a
+              routerLink="/categories"
+              class="flex items-center gap-2 bg-[#171717] text-white text-xl font-medium px-5 py-3 rounded-lg hover:opacity-80 transition-opacity duration-150"
+            >
+              Explore More
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7 17L17 7M17 7H7M17 7V17"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>
