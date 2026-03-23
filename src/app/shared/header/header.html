@@ -44,7 +44,7 @@
               @if (user.userType === 'customer') {
                 @for (item of customerDropdown; track item.label) {
                   <a
-                    routerLink=""
+                    [routerLink]="item.url"
                     (click)="closeDropdown()"
                     class="px-3.5 py-1.5 text-xl rounded-lg hover:bg-[#F0E8D8] transition-colors duration-150 ease-in"
                     >{{ item.label }}</a
