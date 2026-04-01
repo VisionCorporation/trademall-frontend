@@ -94,14 +94,10 @@
 
 <section class="mt-25 md:mt-37.5 mb-28.75">
   <div class="max-w-350 mx-auto px-5 md:px-12 2xl:px-0">
-    <h2
-      class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none mb-3.5"
-    >
+    <h2 class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none mb-3.5">
       Featured Products
     </h2>
-    <p
-      class="text-[#17171799] mb-7.5 text-[20px] sm:text-[24px] leading-6 sm:leading-none"
-    >
+    <p class="text-[#17171799] mb-7.5 text-[20px] sm:text-[24px] leading-6 sm:leading-none">
       Shop our curated selection of top products from verified sellers.
     </p>
   </div>
@@ -192,7 +188,7 @@
   <div class="flex flex-col gap-7">
     @for (question of commonQuestions; track question.question) {
       <div
-        class="bg-[#F2F2F2] rounded-xl cursor-pointer transition-all duration-300 py-4.5 sm:py-5.25 px-6 sm:px-7.5"
+        class="bg-[#F2F2F2] rounded-xl cursor-pointer py-4.5 sm:py-5.25 px-6 sm:px-7.5"
         (click)="toggleQuestion(question.question)"
       >
         <div
