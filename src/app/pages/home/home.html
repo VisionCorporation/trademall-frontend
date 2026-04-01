@@ -92,5 +92,91 @@
   </div>
 </section>
 
+<section class="mt-25 md:mt-37.5 mb-28.75">
+  <div class="max-w-350 mx-auto pl-5 md:pl-12 2xl:pl-0">
+    <h2 class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none mb-3.5">
+      Featured Products
+    </h2>
+    <p class="text-[#17171799] mb-7.5 text-[20px] sm:text-[24px] leading-6 sm:leading-none">
+      Shop our curated selection of top products from verified sellers.
+    </p>
+  </div>
+
+  @if (isFeaturedProductsLoading()) {
+    <div class="max-w-350 mx-auto pl-5 md:pl-12 2xl:pl-0">
+      <app-skeleton-loader skeletonType="product" />
+    </div>
+  } @else {
+    <div
+      class="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 pl-5 md:pl-12 2xl:pl-[calc((100vw-1400px)/2)]"
+      [@staggerProducts]
+    >
+      @for (featuredProduct of featuredProducts; track featuredProduct._id) {
+        <div
+          class="bg-[#F4F4F4] rounded-2xl shrink-0 snap-end w-52 sm:w-64 lg:w-70.75 hover:scale-105 transition-transform duration-300 cursor-pointer"
+          [routerLink]="['/products', featuredProduct?.slug]"
+        >
+          <div class="relative rounded-2xl mt-1.25 mb-3.75">
+            <span
+              class="absolute bg-[#D1D1D1] px-1.25 py-0.75 top-2.5 left-2.5 sm:left-4 rounded-sm truncate max-w-[10ch] text-xs"
+              >{{ featuredProduct?.category?.name }}</span
+            >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="absolute top-2.5 right-2.5 sm:right-4 hover:scale-110 transition-transform duration-300 z-10"
+              (click)="
+                $event.stopPropagation(); toggleWishlist(featuredProduct._id, featuredProduct.name)
+              "
+            >
+              <path
+                d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
+                [attr.fill]="wishlistedIds.has(featuredProduct._id) ? '#26C34D' : '#FBFCFF'"
+                [attr.stroke]="wishlistedIds.has(featuredProduct._id) ? '#26C34D' : '#000'"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <img
+              [src]="featuredProduct.images[0]?.url"
+              alt="{{ featuredProduct.name }}"
+              class="w-[95%] mx-auto h-32 sm:h-36 lg:h-40 object-cover rounded-2xl"
+            />
+          </div>
+          <div class="p-2.5 lg:p-3.75">
+            <p class="text-base lg:text-xl truncate max-w-[15ch]">{{ featuredProduct.name }}</p>
+            <div class="flex items-center justify-between mt-0.5">
+              <a
+                class="text-[#2E790E] text-[11px] lg:text-[13px] hover:underline truncate max-w-[12ch]"
+                [routerLink]="['/products/vendor', featuredProduct.vendor._id]"
+                (click)="$event.stopPropagation()"
+              >
+                {{ featuredProduct.vendor.businessName }}
+              </a>
+              <span class="text-xs lg:text-sm">{{
+                featuredProduct.price | currency: 'GHS ' : 'symbol' : '1.2-2'
+              }}</span>
+            </div>
+            <p class="text-[11px] lg:text-[13px] mt-3 mb-4 lg:mb-6.25 line-clamp-2">
+              {{ featuredProduct.metaDescription }}
+            </p>
+            <div class="flex justify-center">
+              <button
+                class="border border-[#171717] px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
+                (click)="$event.stopPropagation()"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>
+
 <app-newsletter />
 <app-footer />
