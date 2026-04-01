@@ -108,7 +108,7 @@
           <h2 class="text-[30px] sm:text-[40px] mb-5">
             Products from {{ vendorData.vendor.businessName }}
           </h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" [@staggerProducts]>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75" [@staggerProducts]>
             @for (vendorProduct of vendorData.data; track vendorProduct._id) {
               <div
                 class="bg-[#F4F4F4] rounded-2xl w-full hover:scale-105 transition-transform duration-300 cursor-pointer"
