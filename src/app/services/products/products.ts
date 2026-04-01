@@ -44,4 +44,8 @@ export class Products {
       `${environment.apiBaseUrl}/products/vendor/${vendorId}?page=${currentPage}`,
     );
   }
+
+  public getFeaturedProducts(): Observable<FeaturedProductsResponse> {
+    return this.http.get<FeaturedProductsResponse>(`${environment.apiBaseUrl}/products/featured`);
+  }
 }
