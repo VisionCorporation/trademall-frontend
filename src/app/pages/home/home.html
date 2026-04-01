@@ -2,17 +2,17 @@
   <app-header />
 
   <section
-    class="grid grid-cols-1 lg:grid-cols-2 gap-7 lg:gap-40 items-center mt-20 mb-25 px-5 md:px-12 2xl:px-0"
+    class="grid grid-cols-1 lg:grid-cols-2 gap-7 lg:gap-40 items-center mt-16 sm:mt-20 mb-20 sm:mb-25 px-5 md:px-12 2xl:px-0"
   >
     <div>
-      <h1 class="text-center lg:text-left text-6xl lg:text-[100px] xl:text-[128px]">
+      <h1 class="text-6xl lg:text-[100px] xl:text-[128px]">
         QUALITY FINDS,
         <br />
         ONE CLICK AWAY.
       </h1>
     </div>
 
-    <div class="text-center lg:text-left">
+    <div class="">
       <p
         class="text-[#17171799] text-lg sm:text-xl md:text-2xl max-w-md mx-auto lg:mx-0 leading-5 sm:leading-8"
       >
@@ -93,11 +93,15 @@
 </section>
 
 <section class="mt-25 md:mt-37.5 mb-28.75">
-  <div class="max-w-350 mx-auto pl-5 md:pl-12 2xl:pl-0">
-    <h2 class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none mb-3.5">
+  <div class="max-w-350 mx-auto px-5 md:px-12 2xl:px-0">
+    <h2
+      class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none mb-3.5"
+    >
       Featured Products
     </h2>
-    <p class="text-[#17171799] mb-7.5 text-[20px] sm:text-[24px] leading-6 sm:leading-none">
+    <p
+      class="text-[#17171799] mb-7.5 text-[20px] sm:text-[24px] leading-6 sm:leading-none"
+    >
       Shop our curated selection of top products from verified sellers.
     </p>
   </div>
@@ -176,6 +180,80 @@
       }
     </div>
   }
+</section>
+
+<section class="mt-20 md:mt-37.5 mb-28.75 max-w-350 mx-auto px-5 md:px-12 2xl:px-0">
+  <h2
+    class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none mb-10 sm:mb-17.5"
+  >
+    Common Questions
+  </h2>
+
+  <div class="flex flex-col gap-7">
+    @for (question of commonQuestions; track question.question) {
+      <div
+        class="bg-[#F2F2F2] rounded-xl cursor-pointer transition-all duration-300 py-4.5 sm:py-5.25 px-6 sm:px-7.5"
+        (click)="toggleQuestion(question.question)"
+      >
+        <div
+          class="flex items-center justify-between"
+          [class]="openQuestion === question.question ? 'mb-2.5' : 'mb-0'"
+        >
+          <h3
+            [class]="openQuestion === question.question ? 'text-base' : 'text-xl sm:text-2xl'"
+            class="transition-all duration-300 light-header text-[#1E1E1E] leading-tight"
+          >
+            {{ question.question }}
+          </h3>
+          <button class="shrink-0 ml-4">
+            @if (openQuestion === question.question) {
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.8337 4.16656L4.16705 15.8332M4.16705 4.16656L15.8337 15.8332"
+                  stroke="#1E1E1E"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            } @else {
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.99998 3.33333V16.6667M16.6666 10H3.33331"
+                  stroke="#1E1E1E"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+          </button>
+        </div>
+
+        @if (openQuestion === question.question) {
+          <div [@slideDown] style="display: grid">
+            <div class="overflow-hidden">
+              <p class="text-xl sm:text-[22px] leading-tight">
+                {{ question.answer }}
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
 </section>
 
 <app-newsletter />

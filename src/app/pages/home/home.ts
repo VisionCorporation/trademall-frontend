@@ -9,6 +9,9 @@ import { ToastService } from '../../services/toast/toast.service';
 import { CurrencyPipe } from '@angular/common';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
+import { COMMONQUESTIONS } from '../../data/constants/common-questions.constant';
+import { slideDown } from '../../animations/expand.animation';
+import { fadeInOutAnimation } from '../../animations/toast.animations';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +26,7 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
-  animations: [staggerProducts],
+  animations: [staggerProducts, slideDown, fadeInOutAnimation],
 })
 export class Home {
   private readonly productsService = inject(Products);
@@ -31,6 +34,8 @@ export class Home {
   public wishlistedIds = new Set<string>();
   private readonly toastService = inject(ToastService);
   public isFeaturedProductsLoading = signal(false);
+  public readonly commonQuestions = COMMONQUESTIONS;
+  public openQuestion: string | null = null;
 
   ngOnInit() {
     this.isFeaturedProductsLoading.set(true);
@@ -39,7 +44,7 @@ export class Home {
         this.featuredProducts = response.data;
         this.isFeaturedProductsLoading.set(false);
       },
-      error: (error) => {
+      error: () => {
         this.toastService.error('Failed to load featured products');
         this.isFeaturedProductsLoading.set(false);
       },
@@ -54,5 +59,9 @@ export class Home {
       this.wishlistedIds.add(productId);
       this.toastService.success(`${productName} added to wishlist`);
     }
+  }
+
+  public toggleQuestion(question: string) {
+    this.openQuestion = this.openQuestion === question ? null : question;
   }
 }
