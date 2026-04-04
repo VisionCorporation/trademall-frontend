@@ -52,39 +52,36 @@ export class CategoryProducts implements OnInit, OnDestroy {
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
     const filterSlug = history.state?.filter;
-
     history.replaceState({}, '');
 
-    if (slug) {
-      this.productService.getCategoryWithDirectChildren(slug).subscribe({
-        next: (res) => {
-          this.categoryName = res.data.category.name;
-          this.subCategories = res.data.children;
-          this.isSubCategoriesLoading.set(false);
-        },
-        error: (err) => {
-          console.error('Failed to fetch subcategories', err);
-          this.isProductsLoading.set(false);
-          this.isSubCategoriesLoading.set(false);
-        },
-      });
+    if (!slug) return;
 
-      this.productService.getProductsByCategory(slug).subscribe({
-        next: (res) => {
-          this.allProducts = res.data;
-          this.isProductsLoading.set(false);
-        },
-        error: (err) => {
-          console.error('Failed to fetch all products', err);
-          this.isProductsLoading.set(false);
-        },
-      });
+    forkJoin({
+      category: this.productService.getCategoryWithDirectChildren(slug),
+      products: this.productService.getProductsByCategory(slug),
+    }).subscribe({
+      next: ({ category, products }) => {
+        this.categoryName = category.data.category.name;
+        this.subCategories = category.data.children;
+        this.allProducts = products.data;
 
-      if (filterSlug) {
-        this.selectedCategorySlugs = [filterSlug];
-        this.fetchSelectedCategoryProducts();
-      }
-    }
+        this.isSubCategoriesLoading.set(false);
+        this.isProductsLoading.set(false);
+
+        if (filterSlug) {
+          this.selectedCategorySlugs = [filterSlug];
+
+          this.selectedCategoryProducts = this.allProducts.filter(
+            (p) => p.category?.slug === filterSlug,
+          );
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.isProductsLoading.set(false);
+        this.isSubCategoriesLoading.set(false);
+      },
+    });
   }
 
   ngOnDestroy(): void {
