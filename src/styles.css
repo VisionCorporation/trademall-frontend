@@ -225,3 +225,14 @@ input:focus {
   background-size: 200% 100%;
   animation: shimmer 1.2s infinite linear;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
