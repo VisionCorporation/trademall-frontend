@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './guards/auth-guard';
+import { authGuard } from './guards/authentication/auth-guard';
+import { customerGuard } from './guards/authorization/customer-guard';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,6 @@ export const routes: Routes = [
       import('./pages/customer-order-history/customer-order-history').then(
         (m) => m.CustomerOrderHistory,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, customerGuard],
   },
 ];
