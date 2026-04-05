@@ -16,7 +16,9 @@
   </nav>
 
   <div class="hidden lg:block">
-    @if (!isLoggedIn) {
+    @if (!sessionLoaded) {
+      <div class="w-62.5 h-12.5 skeleton-shimmer rounded-md"></div>
+    } @else if (!isLoggedIn) {
       <div class="flex items-center justify-center gap-8.5">
         <a routerLink="/login" class="text-[20px]">Log In</a>
         <a

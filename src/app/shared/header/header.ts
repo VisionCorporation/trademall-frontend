@@ -1,4 +1,12 @@
-import { Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  ViewChild,
+  OnInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
@@ -12,20 +20,30 @@ import { CustomerDropdown, VendorDropdown } from '../../data/constants/dropdown.
   styleUrl: './header.css',
   animations: [fadeInOutAnimation],
 })
-export class Header {
+export class Header implements OnInit {
   private readonly loginService = inject(LoginService);
-  public user: any;
-  public isDropdownOpen = false;
+  private readonly cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private toastService = inject(ToastService);
+
+  public user: any;
+  public sessionLoaded = false;
+  public isDropdownOpen = false;
   public customerDropdown = CustomerDropdown;
   public vendorDropdown = VendorDropdown;
+
   @ViewChild('dropdownRef', { static: true })
   dropdownRef!: ElementRef<HTMLElement>;
 
   ngOnInit() {
     this.loginService.user$.subscribe((user) => {
       this.user = user;
+      this.cdr.detectChanges();
+    });
+
+    this.loginService.sessionLoaded$.subscribe((loaded) => {
+      this.sessionLoaded = loaded;
+      this.cdr.detectChanges();
     });
   }
 
