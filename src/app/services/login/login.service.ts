@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { LoginData } from '../../interfaces/login.interface';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -11,40 +11,45 @@ export class LoginService {
   private http = inject(HttpClient);
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
+  private sessionLoadedSubject = new BehaviorSubject<boolean>(false);
+  sessionLoaded$ = this.sessionLoadedSubject.asObservable();
 
   constructor() {
     this.restoreSession();
   }
 
-  public login(loginData: LoginData): Observable<Object> {
-    return this.http.post<Object>(`${environment.apiBaseUrl}/user/login`, loginData);
-  }
-
-  saveSession(response: any) {
-    localStorage.setItem('token', response.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
-    this.userSubject.next(response.user);
-  }
-
   public restoreSession(): void {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
+    this.http.get<any>(`${environment.apiBaseUrl}/user/me`).subscribe({
+      next: (response) => {
+        this.userSubject.next(response.user);
+        this.sessionLoadedSubject.next(true);
+      },
+      error: () => {
+        this.userSubject.next(null);
+        this.sessionLoadedSubject.next(true);
+      },
+    });
+  }
 
-    if (token && user) {
-      this.userSubject.next(JSON.parse(user));
-    }
+  public login(loginData: LoginData): Observable<any> {
+    return this.http.post<any>(`${environment.apiBaseUrl}/user/login`, loginData).pipe(
+      tap((response) => {
+        this.userSubject.next(response.user);
+      }),
+    );
   }
 
   public logout(): void {
-    localStorage.clear();
-    this.userSubject.next(null);
+    this.http.post(`${environment.apiBaseUrl}/user/logout`, {}).subscribe({
+      complete: () => this.userSubject.next(null),
+    });
   }
 
-  public getToken() {
-    return localStorage.getItem('token');
+  public getCurrentUser() {
+    return this.userSubject.value;
   }
 
-  public isLoggedIn() {
-    return !!this.getToken();
+  public isLoggedIn(): boolean {
+    return this.userSubject.value !== null;
   }
 }
