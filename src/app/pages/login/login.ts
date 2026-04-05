@@ -50,7 +50,6 @@ export class Login {
     this.loginService.login(loginData as LoginData).subscribe({
       next: (res) => {
         this.toastService.success('Login successful!');
-        this.loginService.saveSession(res);
         this.signupService.isSubmitting$.next(false);
         this.loginForm.reset();
         this.router.navigate(['/']);
