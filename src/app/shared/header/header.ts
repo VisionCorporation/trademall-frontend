@@ -12,6 +12,8 @@ import { LoginService } from '../../services/login/login.service';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { ToastService } from '../../services/toast/toast.service';
 import { CustomerDropdown, VendorDropdown } from '../../data/constants/dropdown.constant';
+import { Cart as CartService } from '../../services/cart/cart';
+import { CartResponse } from '../../interfaces/cart.interface';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +24,7 @@ import { CustomerDropdown, VendorDropdown } from '../../data/constants/dropdown.
 })
 export class Header implements OnInit {
   private readonly loginService = inject(LoginService);
+  private readonly cartService = inject(CartService);
   private readonly cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private toastService = inject(ToastService);
@@ -29,6 +32,7 @@ export class Header implements OnInit {
   public user: any;
   public sessionLoaded = false;
   public isDropdownOpen = false;
+  public cartItemCount = 0;
   public customerDropdown = CustomerDropdown;
   public vendorDropdown = VendorDropdown;
 
@@ -38,12 +42,34 @@ export class Header implements OnInit {
   ngOnInit() {
     this.loginService.user$.subscribe((user) => {
       this.user = user;
+      if (user) {
+        this.fetchCartCount(); 
+      } else {
+        this.cartService.updateCartCount(0);
+      }
       this.cdr.detectChanges();
     });
 
     this.loginService.sessionLoaded$.subscribe((loaded) => {
       this.sessionLoaded = loaded;
       this.cdr.detectChanges();
+    });
+
+    this.cartService.cartCount$.subscribe((count) => {
+      this.cartItemCount = count;
+      this.cdr.detectChanges();
+    });
+  }
+
+  private fetchCartCount(): void {
+    this.cartService.getCartSummary().subscribe({
+      next: (data: CartResponse) => {
+        const count = data?.data?.cart?.items ?? 0;
+        this.cartService.updateCartCount(count);
+      },
+      error: () => {
+        this.cartService.updateCartCount(0);
+      },
     });
   }
 
@@ -53,6 +79,10 @@ export class Header implements OnInit {
 
   get userName(): string {
     return `${this.user?.firstName} ${this.user?.lastName}`;
+  }
+
+  get userEmail(): string {
+    return this.user?.email || '';
   }
 
   get userInitials(): string {
