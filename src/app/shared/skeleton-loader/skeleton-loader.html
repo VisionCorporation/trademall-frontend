@@ -132,3 +132,68 @@
     </div>
   </div>
 }
+@if (skeletonType() === 'cart-items') {
+  <div class="mt-8 md:mt-12.5 w-full px-4 md:px-12 2xl:px-0 mb-20 md:mb-37.5">
+    <!-- Title skeleton -->
+    <div class="h-10 md:h-14 w-32 rounded-lg mb-5 md:mb-7.5 skeleton-shimmer"></div>
+
+    <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
+      <!-- Left: Cart Items skeleton -->
+      <div class="flex-1">
+        @for (item of [1, 2, 3, 4]; track $index) {
+          <div
+            class="flex items-center justify-between pb-4 lg:pb-5 mb-4 lg:mb-5 border-b border-[#17171733]"
+          >
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+              <!-- Remove button skeleton -->
+              <div class="w-6 h-6 rounded-full shrink-0 skeleton-shimmer"></div>
+
+              <!-- Image skeleton -->
+              <div class="w-14 h-14 md:w-17.5 md:h-17.5 rounded-md shrink-0 skeleton-shimmer"></div>
+
+              <!-- Product name skeleton -->
+              <div class="h-5 rounded-md skeleton-shimmer w-3/4"></div>
+            </div>
+
+            <!-- Price skeleton -->
+            <div class="h-5 w-20 rounded-md ml-4 shrink-0 skeleton-shimmer"></div>
+          </div>
+        }
+      </div>
+
+      <!-- Divider -->
+      <div class="hidden lg:block lg:h-auto lg:w-px bg-[#17171733]"></div>
+
+      <!-- Right: Cart Total skeleton -->
+      <div class="lg:w-80 lg:shrink-0">
+        <!-- Cart Total title skeleton -->
+        <div class="h-7 w-36 rounded-md mb-3.75 skeleton-shimmer"></div>
+
+        <div class="flex flex-col gap-2.5 mb-8 md:mb-10">
+          @for (item of [1, 2, 3]; track $index) {
+            <div class="flex items-center justify-between">
+              <div class="h-5 rounded-md skeleton-shimmer w-32"></div>
+              <div class="h-5 rounded-md skeleton-shimmer w-20"></div>
+            </div>
+          }
+
+          <!-- Grand Total skeleton -->
+          <div class="flex items-center justify-between mt-5">
+            <div class="h-6 rounded-md skeleton-shimmer w-28"></div>
+            <div class="h-6 rounded-md skeleton-shimmer w-24"></div>
+          </div>
+        </div>
+
+        <!-- Button skeleton -->
+        <div class="flex justify-center">
+          <div class="h-10 w-52 rounded-lg skeleton-shimmer"></div>
+        </div>
+
+        <!-- Resume shopping skeleton -->
+        <div class="flex items-center justify-center gap-1.25 mt-3.75">
+          <div class="h-5 w-36 rounded-md skeleton-shimmer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
