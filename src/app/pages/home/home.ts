@@ -31,13 +31,14 @@ import { Cart as cart } from '../../services/cart/cart';
 })
 export class Home {
   private readonly productsService = inject(Products);
+  private readonly toastService = inject(ToastService);
+  private readonly cartService = inject(cart);
+
   public featuredProducts: FeaturedProduct[] = [];
   public wishlistedIds = new Set<string>();
-  private readonly toastService = inject(ToastService);
   public isFeaturedProductsLoading = signal(false);
   public readonly commonQuestions = COMMONQUESTIONS;
   public openQuestion: string | null = null;
-  private readonly cartService = inject(cart);
   public addingToCartIds = new Set<string>();
 
   ngOnInit() {
@@ -57,9 +58,12 @@ export class Home {
   public addToCart(productId: string, quantity = 1): void {
     this.addingToCartIds.add(productId);
     this.cartService.addToCart(productId, quantity).subscribe({
-      next: () => {
+      next: (data: any) => {
         this.toastService.success('Product added to cart');
         this.addingToCartIds.delete(productId);
+
+        const count = data?.data?.cart?.items ?? 0;
+        this.cartService.updateCartCount(count);
       },
       error: () => {
         this.toastService.error('Failed to add product to cart');
@@ -68,7 +72,7 @@ export class Home {
     });
   }
 
-  isProductAddingToCart(productId: string): boolean {
+  public isProductAddingToCart(productId: string): boolean {
     return this.addingToCartIds.has(productId);
   }
 
