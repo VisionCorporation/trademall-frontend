@@ -1,6 +1,6 @@
 export const CustomerDropdown = [
   { label: 'Profile', url: '' },
-  { label: 'Cart', url: '' },
+  { label: 'Cart', url: '/cart' },
   { label: 'Wishlist', url: '' },
   { label: 'Order History', url: '/order-history' },
   { label: 'Notifications', url: '' },
