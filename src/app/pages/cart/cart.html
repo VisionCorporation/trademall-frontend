@@ -1,0 +1,199 @@
+<div class="max-w-350 mx-auto">
+  <app-header />
+
+  @if (!isCartItemsLoading()) {
+    @if (cartSummary?.data?.cart?.isEmpty) {
+      <div
+        class="h-[80vh] flex items-center justify-center flex-col gap-7 sm:gap-10 px-5 md:px-12 2xl:px-0"
+        [@fadeInOut]
+      >
+        <div class="bg-[#F7F7F7] p-10 sm:p-12.5 rounded-full">
+          <svg
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M33.333 66.6667L69.6668 63.6388C81.0355 62.6917 83.5876 60.2083 84.8476 48.8704L87.4997 25"
+              stroke="#AAAAAA"
+              stroke-width="6"
+              stroke-linecap="round"
+            />
+            <path d="M25 25H91.6667" stroke="#AAAAAA" stroke-width="6" stroke-linecap="round" />
+            <path
+              d="M25.0003 91.6667C29.6027 91.6667 33.3337 87.9357 33.3337 83.3333C33.3337 78.731 29.6027 75 25.0003 75C20.398 75 16.667 78.731 16.667 83.3333C16.667 87.9357 20.398 91.6667 25.0003 91.6667Z"
+              stroke="#AAAAAA"
+              stroke-width="6"
+            />
+            <path
+              d="M70.8333 91.6667C75.4357 91.6667 79.1667 87.9357 79.1667 83.3333C79.1667 78.731 75.4357 75 70.8333 75C66.231 75 62.5 78.731 62.5 83.3333C62.5 87.9357 66.231 91.6667 70.8333 91.6667Z"
+              stroke="#AAAAAA"
+              stroke-width="6"
+            />
+            <path
+              d="M33.333 83.3334H62.4997"
+              stroke="#AAAAAA"
+              stroke-width="6"
+              stroke-linecap="round"
+            />
+            <path
+              d="M8.33301 8.33337H12.358C16.2942 8.33337 19.7253 10.9358 20.6799 14.6456L33.0768 62.8188C33.7033 65.2534 33.1672 67.8321 31.6173 69.84L27.6335 75"
+              stroke="#AAAAAA"
+              stroke-width="6"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <p class="text-xl sm:text-2xl text-center">You have not added any items yet.</p>
+        <a
+          routerLink="/categories"
+          class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
+          >Discover Products</a
+        >
+      </div>
+    } @else {
+      <div class="mt-8 md:mt-12.5 w-full px-4 md:px-12 2xl:px-0 mb-20 md:mb-37.5"  [@fadeInOut]>
+        <h1 class="text-[32px] md:text-[48px] mb-5 md:mb-7.5">Cart</h1>
+
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
+          <div class="flex-1">
+            @for (cartItem of cartSummary?.data?.cart?.vendorGroups; track $index) {
+              @for (vendorGroupItem of cartItem.items; track $index) {
+                <div
+                  class="flex items-center justify-between pb-4 lg:pb-5 mb-4 lg:mb-5 border-b border-[#17171733]"
+                >
+                  <div class="flex items-center gap-3 flex-1 min-w-0">
+                    @if (isRemoving(vendorGroupItem._id)) {
+                      <svg
+                        class="shrink-0 animate-spin"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-dasharray="32"
+                          stroke-dashoffset="12"
+                        />
+                      </svg>
+                    } @else {
+                      <button
+                        (click)="removeFromCart(vendorGroupItem._id)"
+                        class="shrink-0 hover:text-red-500 hover:scale-105 transition-all duration-150"
+                        aria-label="Remove {{ vendorGroupItem?.productName }} from cart"
+                      >
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          class="cursor-pointer"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M19 5L5 19M5 5L19 19"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    }
+
+                    <div
+                      class="bg-[#E6E6E880] w-14 h-14 md:w-17.5 md:h-17.5 p-2 rounded-md shrink-0 flex items-center justify-center"
+                    >
+                      <img
+                        [ngSrc]="vendorGroupItem?.productImage ?? ''"
+                        [alt]="vendorGroupItem?.productName"
+                        width="70"
+                        height="70"
+                      />
+                    </div>
+
+                    <p class="text-lg md:text-xl truncate">{{ vendorGroupItem?.productName }}</p>
+                  </div>
+
+                  <p class="text-lg md:text-xl ml-4 shrink-0">
+                    {{ vendorGroupItem?.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                  </p>
+                </div>
+              }
+            }
+          </div>
+
+          <div class="hidden lg:block lg:h-auto lg:w-px bg-[#17171733]"></div>
+
+          <div class="lg:w-80 lg:shrink-0">
+            <h2 class="text-2xl products-font mb-3.75">Cart Total</h2>
+            <div class="flex flex-col gap-2.5 mb-8 md:mb-10">
+              @for (cartItem of cartSummary?.data?.cart?.vendorGroups; track $index) {
+                <div class="flex items-center justify-between">
+                  <span class="text-lg md:text-xl">Vendor Dividend</span>
+                  <span class="text-lg md:text-xl">GHS 0</span>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span class="text-lg md:text-xl">Delivery Fee</span>
+                  <span class="text-lg md:text-xl">GHS 0</span>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span class="text-lg md:text-xl">Subtotal</span>
+                  <span class="text-lg md:text-xl">{{
+                    cartItem.subtotal | currency: 'GHS ' : 'symbol' : '1.2-2'
+                  }}</span>
+                </div>
+
+                <div class="flex items-center justify-between mt-5">
+                  <span class="text-lg md:text-xl products-font font-bold">Grand Total</span>
+                  <span class="text-lg md:text-xl products-font font-bold">{{
+                    cartItem.subtotal | currency: 'GHS ' : 'symbol' : '1.2-2'
+                  }}</span>
+                </div>
+              }
+            </div>
+
+            <div class="flex justify-center">
+              <a
+                routerLink=""
+                class="text-[18px] md:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
+                >Proceed to Checkout</a
+              >
+            </div>
+
+            <div class="flex gap-1.25 items-center justify-center mt-3.75 text-center">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18"
+                  stroke="#171717"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <a routerLink="" class="text-lg md:text-xl">Resume Shopping</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  } @else {
+    <app-skeleton-loader [skeletonType]="'cart-items'" />
+  }
+</div>
