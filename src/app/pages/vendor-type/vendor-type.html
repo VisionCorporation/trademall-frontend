@@ -1,13 +1,20 @@
-<section class="relative bg-[#E3E8E1] h-screen py-18.75 px-37.5">
-  <h1 class="uppercase text-[64px] max-w-59 leading-none mb-2.5 text-[#171717]">
+<section class="relative bg-[#E3E8E1] min-h-screen py-10 md:py-18.75 px-5 md:px-12 lg:px-37.5">
+  <h1
+    class="uppercase text-[36px] md:text-[48px] lg:text-[64px] max-w-full lg:max-w-59 leading-none mb-2.5 text-[#171717]"
+  >
     Welcome to trademall
   </h1>
-  <p class="text-[24px] text-[#171717] mb-7">Select a vendor type to continue</p>
-  <form [formGroup]="vendorTypeForm" (ngSubmit)="onSubmit()" class="flex items-end justify-between">
-    <div class="flex items-center gap-10">
+  <p class="text-[18px] md:text-[24px] text-[#171717] mb-7">Select a vendor type to continue</p>
+
+  <form
+    [formGroup]="vendorTypeForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8"
+  >
+    <div class="flex flex-col sm:flex-row items-center gap-5 md:gap-10">
       @for (vendorType of vendorTypes; track vendorType.value) {
         <div
-          class="vendor-type-card bg-white w-76 h-76 rounded-2xl p-7.5 cursor-pointer"
+          class="vendor-type-card bg-white w-full sm:w-60 md:w-76 h-auto md:h-76 rounded-2xl p-5 md:p-7.5 cursor-pointer"
           (click)="selectVendorType(vendorType.value)"
         >
           <input
@@ -17,18 +24,19 @@
             [id]="vendorType.value"
             class="custom-radio cursor-pointer"
           />
-          <h2 class="uppercase text-[32px] mb-2">{{ vendorType.name }}</h2>
-          <p class="text-[#171717] opacity-60 text-[19px] leading-6">
+          <h2 class="uppercase text-[24px] md:text-[32px] mb-2">{{ vendorType.name }}</h2>
+          <p class="text-[#171717] opacity-60 text-[16px] md:text-[19px] leading-6">
             {{ vendorType.description }}
           </p>
         </div>
       }
     </div>
+
     <button
       [disabled]="
         vendorTypeForm.get('vendorType')?.value === '' || (signupService.isSubmitting$ | async)
       "
-      class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in px-3.75 py-2 text-white rounded-lg disabled:cursor-not-allowed disabled:opacity-60"
+      class="w-full lg:w-auto text-[18px] md:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in px-3.75 py-2 text-white rounded-lg disabled:cursor-not-allowed disabled:opacity-60 text-nowrap"
       [class.cursor-not-allowed]="vendorTypeForm.get('vendorType')?.value === ''"
       (click)="registerVendor()"
     >
@@ -40,7 +48,7 @@
   </form>
 
   <p
-    class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-[17px] md:text-xl z-10 px-4"
+    class="mt-8 lg:mt-0 lg:absolute lg:bottom-auto lg:top-14.5 text-center lg:right-12.5 text-[16px] md:text-xl z-10"
   >
     Already have an account?
     <a class="text-[#2E790E] py-3 px-3" routerLink="/login">Log In</a>
