@@ -42,7 +42,7 @@ export interface Cart {
   itemCount: number;
   unavailableItemCount: number;
   hasPriceChanges: boolean;
-  items: CartItem[];
+  items: number;
   vendorGroups: VendorGroup[];
 }
 
