@@ -16,7 +16,8 @@
       <p
         class="text-[#17171799] text-lg sm:text-xl md:text-2xl max-w-md lg:mx-0 leading-5 sm:leading-8"
       >
-        Your go-to marketplace for quality products across every category, from trusted sellers you can count on.
+        Your go-to marketplace for quality products across every category, from trusted sellers you
+        can count on.
       </p>
 
       <div class="mt-7 sm:mt-9">
@@ -165,10 +166,11 @@
             </p>
             <div class="flex justify-center">
               <button
-                class="border border-[#171717] px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
-                (click)="$event.stopPropagation()"
+                [disabled]="isProductAddingToCart(featuredProduct._id)"
+                class="border border-[#171717] px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60"
+                (click)="addToCart(featuredProduct._id); $event.stopPropagation()"
               >
-                Add to Cart
+                {{ isProductAddingToCart(featuredProduct._id) ? 'Adding...' : 'Add to Cart' }}
               </button>
             </div>
           </div>

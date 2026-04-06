@@ -12,6 +12,7 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { COMMONQUESTIONS } from '../../data/constants/common-questions.constant';
 import { slideDown } from '../../animations/expand.animation';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
+import { Cart as cart } from '../../services/cart/cart';
 
 @Component({
   selector: 'app-home',
@@ -36,6 +37,8 @@ export class Home {
   public isFeaturedProductsLoading = signal(false);
   public readonly commonQuestions = COMMONQUESTIONS;
   public openQuestion: string | null = null;
+  private readonly cartService = inject(cart);
+  public addingToCartIds = new Set<string>();
 
   ngOnInit() {
     this.isFeaturedProductsLoading.set(true);
@@ -49,6 +52,24 @@ export class Home {
         this.isFeaturedProductsLoading.set(false);
       },
     });
+  }
+
+  public addToCart(productId: string, quantity = 1): void {
+    this.addingToCartIds.add(productId);
+    this.cartService.addToCart(productId, quantity).subscribe({
+      next: () => {
+        this.toastService.success('Product added to cart');
+        this.addingToCartIds.delete(productId);
+      },
+      error: () => {
+        this.toastService.error('Failed to add product to cart');
+        this.addingToCartIds.delete(productId);
+      },
+    });
+  }
+
+  isProductAddingToCart(productId: string): boolean {
+    return this.addingToCartIds.has(productId);
   }
 
   public toggleWishlist(productId: string, productName: string = ''): void {
