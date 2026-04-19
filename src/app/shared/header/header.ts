@@ -43,7 +43,7 @@ export class Header implements OnInit {
     this.loginService.user$.subscribe((user) => {
       this.user = user;
       if (user) {
-        this.fetchCartCount(); 
+        this.fetchCartCount();
       } else {
         this.cartService.updateCartCount(0);
       }

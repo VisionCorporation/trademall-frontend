@@ -16,11 +16,11 @@
       </ol>
     </nav>
 
-    <div class="hidden lg:block">
+    <div class="">
       @if (!sessionLoaded) {
-        <div class="w-62.5 h-12.5 skeleton-shimmer rounded-md"></div>
+        <div class="w-9.25 lg:w-62.5 h-9.25 lg:h-12.5 skeleton-shimmer rounded-md"></div>
       } @else if (!isLoggedIn) {
-        <div class="flex items-center justify-center gap-8.5">
+        <div class="lg:flex items-center justify-center gap-8.5 hidden">
           <a routerLink="/login" class="text-[20px]">Log In</a>
           <a
             routerLink="/user-type"
@@ -29,7 +29,7 @@
           >
         </div>
       } @else {
-        <div class="flex items-center justify-center gap-10">
+        <div class="flex items-center justify-center lg:gap-10">
           <a routerLink="/cart" class="relative">
             <svg
               width="28"
@@ -78,7 +78,7 @@
             }
           </a>
           <div class="relative inline-block" #dropdownRef (click)="$event.stopPropagation()">
-            <div class="flex items-center gap-3">
+            <div class="lg:flex items-center gap-3 hidden">
               <div
                 class="cursor-pointer initials w-15 h-15 bg-[#171717] text-white rounded-full flex items-center justify-center text-2xl"
                 (click)="toggleDropdown($event)"
