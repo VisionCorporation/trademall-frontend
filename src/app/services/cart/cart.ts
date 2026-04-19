@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { CartResponse } from '../../interfaces/cart.interface';
 
 @Injectable({
@@ -13,7 +14,9 @@ export class Cart {
   cartCount$ = this.cartCountSubject.asObservable();
 
   public addToCart(productId: string, quantity: number) {
-    return this.http.post(`${environment.apiBaseUrl}/cart`, { productId, quantity });
+    return this.http.post(`${environment.apiBaseUrl}/cart`, { productId, quantity }).pipe(
+      tap(() => this.cartCountSubject.next(this.cartCountSubject.getValue() + quantity))
+    );
   }
 
   public updateCartCount(count: number): void {
@@ -25,6 +28,8 @@ export class Cart {
   }
 
   public removeFromCart(productId: string) {
-    return this.http.delete(`${environment.apiBaseUrl}/cart/${productId}`);
+    return this.http.delete(`${environment.apiBaseUrl}/cart/${productId}`).pipe(
+      tap(() => this.cartCountSubject.next(this.cartCountSubject.getValue() - 1))
+    );
   }
 }
