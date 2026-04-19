@@ -61,9 +61,6 @@ export class Home {
       next: (data: any) => {
         this.toastService.success('Product added to cart');
         this.addingToCartIds.delete(productId);
-
-        const count = data?.data?.cart?.items ?? 0;
-        this.cartService.updateCartCount(count);
       },
       error: () => {
         this.toastService.error('Failed to add product to cart');
