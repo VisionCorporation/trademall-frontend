@@ -11,6 +11,9 @@ import { Footer } from '../../shared/footer/footer';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { VendorInfo, VendorProduct } from '../../interfaces/vendor.interface';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
+import { buttons } from '../../data/constants/product-details.constant';
+import { fadeInOutAnimation } from '../../animations/toast.animations';
+import { Reviews } from '../../services/reviews/reviews';
 
 @Component({
   selector: 'app-product-detail',
@@ -26,22 +29,25 @@ import { staggerProducts } from '../../animations/smooth-collapse.animations';
   ],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
-  animations:[staggerProducts]
+  animations: [staggerProducts, fadeInOutAnimation],
 })
 export class ProductDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly productService = inject(Products);
   private readonly toastService = inject(ToastService);
+  private readonly reviewService = inject(Reviews);
   public wishlistedIds = new Set<string>();
   public product: ProductDetails | null = null;
   public vendorProductsDetails: VendorProduct[] = [];
   public vendorInfo: VendorInfo | null = null;
   public vendorId = '';
   public isLoading = signal(true);
-  public isVendorProductsLoading = signal(true);
-  public totalPages = 0;
-  public currentPage = 1;
+  public isVendorProductsLoading = signal(false);
+  public isReviewsLoading = signal(false);
   public totalPagesArray: number[] = [];
+  public activeButton = 'about-product';
+  public buttons = buttons;
+  public reviews: any;
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -51,7 +57,6 @@ export class ProductDetail implements OnInit {
       this.vendorProductsDetails = [];
       this.vendorInfo = null;
       this.isLoading.set(true);
-      this.currentPage = 1;
       this.isVendorProductsLoading.set(true);
 
       if (slug) {
@@ -60,7 +65,7 @@ export class ProductDetail implements OnInit {
             this.product = response.data;
             this.vendorId = response.data.vendor._id;
             this.isLoading.set(false);
-            this.fetchVendorProducts(this.currentPage);
+            this.fetchVendorProducts();
           },
           error: (err) => {
             this.toastService.error('An error occurred while fetching product details. Try again');
@@ -77,6 +82,30 @@ export class ProductDetail implements OnInit {
     return Object.entries(this.product.attributes).map(([label, value]) => ({ label, value }));
   }
 
+  public switchButtons(activeButton: string, productId: string) {
+    this.activeButton = activeButton;
+
+    if (activeButton === 'reviews') {
+      this.fetchReviews(productId);
+    }
+  }
+
+  private fetchReviews(productId: string) {
+    this.isReviewsLoading.set(true);
+    this.reviewService.getReviewsForAProduct(productId).subscribe({
+      next: (response) => {
+        this.reviews = response.data;
+        console.log(this.reviews);
+        this.isReviewsLoading.set(false);
+      },
+      error: (err) => {
+        this.toastService.error(err.error.message);
+        console.error('Failed to fetch reviews', err);
+        this.isReviewsLoading.set(false);
+      },
+    });
+  }
+
   public toggleWishlist(productId: string, productName: string = ''): void {
     if (this.wishlistedIds.has(productId)) {
       this.wishlistedIds.delete(productId);
@@ -87,14 +116,13 @@ export class ProductDetail implements OnInit {
     }
   }
 
-  private fetchVendorProducts(currentPage: number) {
+  private fetchVendorProducts(currentPage = 1) {
     this.isVendorProductsLoading.set(true);
     this.productService.getVendorProductsById(this.vendorId, currentPage).subscribe({
       next: (response) => {
         this.vendorProductsDetails = response.data;
         this.vendorInfo = response.vendor;
-        this.totalPages = response.pagination.totalPages;
-        this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+
         this.isVendorProductsLoading.set(false);
       },
       error: (err) => {
@@ -102,27 +130,5 @@ export class ProductDetail implements OnInit {
         this.isVendorProductsLoading.set(false);
       },
     });
-  }
-
-  public goToPreviousVendorProducts(): void {
-    if (this.currentPage <= 1) return;
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    this.currentPage--;
-    this.fetchVendorProducts(this.currentPage);
-  }
-
-  public goToNextVendorProducts(): void {
-    if (this.currentPage >= this.totalPages) return;
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    this.currentPage++;
-    this.fetchVendorProducts(this.currentPage);
-  }
-
-  public goToPage(pageNumber: number): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    this.currentPage = pageNumber;
-    this.fetchVendorProducts(pageNumber);
   }
 }
