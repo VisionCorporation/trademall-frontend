@@ -3,272 +3,155 @@
   <app-search-bar placeholder="Search products..." />
 
   @if (isSubCategoriesLoading()) {
-    <div
-      class="h-16 w-[80%] sm:w-125 skeleton-shimmer rounded-lg mt-10 lg:mt-15 mb-6 lg:mb-10 mx-5 md:mx-12 2xl:mx-0"
-    ></div>
+  <div class="h-16 w-[80%] sm:w-125 skeleton-shimmer rounded-lg mt-10 lg:mt-15 mb-6 lg:mb-10 mx-5 md:mx-12 2xl:mx-0">
+  </div>
   } @else {
-    <h1
-      class="text-[36px] sm:text-[52px] lg:text-[64px] mt-10 lg:mt-15 mb-6 lg:mb-10 px-5 md:px-12 2xl:px-0"
-      [@fadeInOut]
-    >
-      {{ categoryName }}
-    </h1>
+  <h1 class="text-[36px] sm:text-[52px] lg:text-[64px] mt-10 lg:mt-15 mb-6 lg:mb-10 px-5 md:px-12 2xl:px-0"
+    [@fadeInOut]>
+    {{ categoryName }}
+  </h1>
   }
 
-  <div
-    class="flex flex-col lg:flex-row items-start w-full gap-6 lg:gap-10 pb-20 lg:pb-37.5 px-5 md:px-12 2xl:px-0"
-  >
+  <div class="flex flex-col lg:flex-row items-start w-full gap-6 lg:gap-10 pb-20 lg:pb-37.5 px-5 md:px-12 2xl:px-0">
     <!-- Subcategories Sidebar — desktop only -->
     <div class="hidden lg:block w-full lg:max-w-[15%]">
       @if (isSubCategoriesLoading()) {
-        <app-skeleton-loader skeletonType="sub-categories" />
+      <app-skeleton-loader skeletonType="sub-categories" />
       } @else {
-        <div [@fadeInOut]>
-          <h2 class="products-font text-[20px] mb-2.5">Subcategories</h2>
-          <div class="flex flex-col gap-1.25">
-            @for (subCategory of subCategories; track subCategory._id) {
-              <label
-                [for]="subCategory.slug"
-                class="custom-checkbox flex items-center gap-1.25 py-0.75 cursor-pointer text-base leading-5 hover:scale-105 transition-transform duration-300 ease-in"
-              >
-                <input
-                  type="checkbox"
-                  [id]="subCategory.slug"
-                  [checked]="selectedCategorySlugs.includes(subCategory.slug)"
-                  (change)="onCategoryChange(subCategory.slug, $event)"
-                />
-                <span class="checkmark shrink-0">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M5 13L10 18L19 7" />
-                  </svg>
-                </span>
-                <span class="text-base">{{ subCategory.name }}</span>
-              </label>
-            }
-          </div>
+      <div [@fadeInOut]>
+        <h2 class="products-font text-[20px] mb-2.5">Subcategories</h2>
+        <div class="flex flex-col gap-1.25">
+          @for (subCategory of subCategories; track subCategory._id) {
+          <label [for]="subCategory.slug"
+            class="custom-checkbox flex items-center gap-1.25 py-0.75 cursor-pointer text-base leading-5 hover:scale-105 transition-transform duration-300 ease-in">
+            <input type="checkbox" [id]="subCategory.slug" [checked]="selectedCategorySlugs.includes(subCategory.slug)"
+              (change)="onCategoryChange(subCategory.slug, $event)" />
+            <span class="checkmark shrink-0">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 13L10 18L19 7" />
+              </svg>
+            </span>
+            <span class="text-base">{{ subCategory.name }}</span>
+          </label>
+          }
         </div>
+      </div>
       }
     </div>
 
     <!-- Products Section -->
     <div class="w-full lg:max-w-[85%]">
       @if (isProductsLoading()) {
-        <div class="skeleton-shimmer w-15 h-6.25 rounded-sm"></div>
-        <div class="skeleton-shimmer w-25 h-11 mt-5 mb-7.5 rounded-[5px]"></div>
-        <app-skeleton-loader skeletonType="product" />
+      <div class="skeleton-shimmer w-15 h-6.25 rounded-sm"></div>
+      <div class="skeleton-shimmer w-25 h-11 mt-5 mb-7.5 rounded-[5px]"></div>
+      <app-skeleton-loader skeletonType="product" />
       } @else {
-        <!-- Filter button — always visible on mobile/tablet -->
-        <div class="flex justify-end mb-5 lg:hidden">
-          <button
-            class="flex items-center gap-2 border border-[#171717] px-3.5 py-2 rounded-lg text-sm"
-            (click)="isFilterOpen = true"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M3 7H21M6 12H18M10 17H14"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-              />
-            </svg>
-            Filter
-          </button>
-        </div>
+      <!-- Filter button — always visible on mobile/tablet -->
+      <div class="flex justify-end mb-5 lg:hidden">
+        <button class="flex items-center gap-2 border border-[#171717] px-3.5 py-2 rounded-lg text-sm"
+          (click)="isFilterOpen = true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M3 7H21M6 12H18M10 17H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          Filter
+        </button>
+      </div>
 
-        @if (displayedProducts.length > 0) {
-          <div class="flex items-start flex-col gap-3 mb-5" [@fadeInOut]>
-            @if (selectedCategorySlugs.length > 0) {
-              <div class="flex flex-wrap gap-1.5">
-                @for (slug of selectedCategorySlugs; track slug) {
-                  <span
-                    class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm flex items-center gap-2"
-                  >
-                    {{ getCategoryName(slug) }}
-                    <button
-                      (click)="removeCategory(slug)"
-                      class="hover:text-red-500 transition-colors duration-150 leading-none"
-                      aria-label="Remove {{ getCategoryName(slug) }}"
-                    >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                        <path
-                          d="M19 5L5 19M5 5L19 19"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                        />
-                      </svg>
-                    </button>
-                  </span>
-                }
-              </div>
-            } @else {
-              <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm">
-                All Products
-              </span>
-            }
-
-            <p class="text-[24px] lg:text-[32px]">
-              {{ displayedProducts.length }}
-              {{ displayedProducts.length > 1 ? 'items' : 'item' }}
-            </p>
-          </div>
-
-          <div
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75"
-            [@staggerProducts]="selectedCategoryProducts.length"
-          >
-            @for (product of displayedProducts; track product._id) {
-              <div
-                class="bg-[#F4F4F4] rounded-2xl w-full hover:scale-105 transition-transform duration-300 cursor-pointer"
-                [routerLink]="['/products', product?.slug]"
-              >
-                <div class="relative rounded-2xl mt-1.25 mb-3.75">
-                  <span
-                    class="absolute bg-[#D1D1D1] px-1.25 py-0.75 top-2.5 left-2.5 sm:left-4 rounded-sm truncate max-w-[10ch] text-xs"
-                    >{{ product?.category?.name }}</span
-                  >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="absolute top-2.5 right-2.5 sm:right-4 hover:scale-110 transition-transform duration-300 z-10"
-                    (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)"
-                  >
-                    <path
-                      d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
-                      [attr.fill]="wishlistedIds.has(product._id) ? '#26C34D' : '#FBFCFF'"
-                      [attr.stroke]="wishlistedIds.has(product._id) ? '#26C34D' : '#000'"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                  <img
-                    [src]="product.images[0]?.url"
-                    alt="{{ product.name }}"
-                    class="w-[95%] mx-auto h-32 sm:h-36 lg:h-40 object-cover rounded-2xl"
-                  />
-                </div>
-                <div class="p-2.5 lg:p-3.75">
-                  <p class="text-base lg:text-xl truncate max-w-[15ch]">{{ product.name }}</p>
-                  <div class="flex items-center justify-between mt-0.5">
-                    <a
-                      class="text-[#2E790E] text-[11px] lg:text-[13px] hover:underline truncate max-w-[12ch]"
-                      [routerLink]="['/products/vendor', product.vendor._id]"
-                      (click)="$event.stopPropagation()"
-                    >
-                      {{ product.vendor.businessName }}
-                    </a>
-                    <span class="text-xs lg:text-sm">{{
-                      product.effectivePrice | currency: 'GHS ' : 'symbol' : '1.2-2'
-                    }}</span>
-                  </div>
-                  <p class="text-[11px] lg:text-[13px] mt-3 mb-4 lg:mb-6.25 line-clamp-2">
-                    {{ product.metaDescription }}
-                  </p>
-                  <div class="flex justify-center">
-                    <button
-                      class="border border-[#171717] px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
-                      (click)="$event.stopPropagation()"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-        } @else if (selectedCategorySlugs.length > 0) {
-          <div class="flex flex-col items-center justify-center py-14 text-center" [@fadeInOut]>
-            <div
-              class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full"
-            >
-              <svg
-                width="80"
-                height="80"
-                viewBox="0 0 80 80"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g clip-path="url(#clip0_843_1329)">
-                  <path
-                    d="M4.09345 6.90199e-06C5.78119 -0.118086 6.84403 1.06284 7.94623 2.16997L36.1065 30.3598L76.455 70.7083L77.1488 71.4021C79.6829 73.9755 80.0372 76.1701 78.2215 78.0153C76.4058 79.8605 73.9898 79.5357 71.6575 76.9623C70.0632 75.2007 68.4591 74.9104 66.0874 75.058C50.5385 76.0175 34.9699 75.9093 19.4111 75.2794C16.7983 75.1712 14.1707 75.4369 11.5678 74.876C5.39247 73.5474 1.69714 69.8718 0.742554 63.6965C-0.300602 57.1029 0.107804 50.4504 0.2505 43.8175C0.284943 41.9378 1.06731 40.1566 1.77095 38.4049C4.45757 31.7178 7.08514 25.0013 9.84064 18.3389C10.5443 16.6462 10.3327 15.4997 8.98939 14.245C6.36182 11.7847 3.8425 9.19159 1.35762 6.57386C0.152089 5.37324 -0.305522 3.90692 0.491606 2.27822C0.78913 1.5773 1.29327 0.983746 1.9368 0.576707C2.58032 0.169668 3.33265 -0.0315082 4.09345 6.90199e-06ZM41.6667 47.3799C41.4037 46.9753 41.1178 46.586 40.8106 46.2138C33.228 38.6214 25.6258 31.0536 18.0776 23.4267C16.9016 22.2409 16.3702 22.2901 15.765 23.8794C14.0674 28.3079 12.2616 32.702 10.5 37.1108C9.3043 40.1025 9.31415 40.2648 12.5814 40.0631C18.9338 39.694 24.6564 40.7274 28.7847 46.1793C29.0906 46.5707 29.4854 46.8833 29.9365 47.0913C30.3875 47.2993 30.8817 47.3965 31.3779 47.375C34.6451 47.3701 37.9124 47.3799 41.6667 47.3799Z"
-                    fill="#AAAAAA"
-                  />
-                  <path
-                    d="M39.9546 3.5083C45.5148 3.8183 51.0996 3.08513 56.6402 4.02988C60.6553 4.71383 63.7946 6.69189 65.9597 10.1953C67.3964 12.6785 68.6195 15.2794 69.6156 17.9698C71.8397 23.4414 73.6554 29.0902 76.2682 34.37C80.0029 41.9624 79.7569 49.8992 79.319 57.9345C79.2206 59.7305 79.0779 61.5314 78.8564 63.3126C78.635 65.0939 77.9068 65.1923 76.7012 63.9424C74.5952 61.7626 72.4253 59.6419 70.3045 57.4965C65.7514 52.9762 61.2228 48.4509 56.7189 43.9207C55.0853 42.2724 55.2427 41.6967 57.4127 40.934C60.5225 39.8564 63.7208 40.127 66.9192 40.1073C70.1175 40.0876 70.1471 40.0188 69.0006 37.155C66.3287 30.5516 63.524 23.9975 61.0145 17.3203C59.4055 13.005 56.5024 11.1942 52.0395 11.2483C43.271 11.3517 34.5026 11.327 25.7391 11.4107C25.2943 11.4498 24.8462 11.3912 24.4264 11.2391C24.0065 11.087 23.6249 10.8449 23.3084 10.5299C22.5063 9.70819 21.6403 8.9455 20.8826 8.06965C20.2035 7.29712 18.7766 6.70666 19.1308 5.60937C19.5392 4.35956 21.0991 4.30543 22.2701 4.08893C28.1502 3.05561 34.0696 3.79861 39.9546 3.5083Z"
-                    fill="#AAAAAA"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_843_1329">
-                    <rect width="79.5406" height="79.1667" fill="white" />
-                  </clipPath>
-                </defs>
+      @if (displayedProducts.length > 0) {
+      <div class="flex items-start flex-col gap-3 mb-5" [@fadeInOut]>
+        @if (selectedCategorySlugs.length > 0) {
+        <div class="flex flex-wrap gap-1.5">
+          @for (slug of selectedCategorySlugs; track slug) {
+          <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm flex items-center gap-2">
+            {{ getCategoryName(slug) }}
+            <button (click)="removeCategory(slug)"
+              class="hover:text-red-500 transition-colors duration-150 leading-none"
+              aria-label="Remove {{ getCategoryName(slug) }}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path d="M19 5L5 19M5 5L19 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
               </svg>
-            </div>
-            <h3 class="text-lg sm:text-[32px] text-[#171717] mb-2 light-header">
-              No Item in Stock (No Item Yet)
-            </h3>
-          </div>
+            </button>
+          </span>
+          }
+        </div>
+        } @else {
+        <span class="bg-[#F4F4F4] py-0.75 px-1.25 rounded-sm text-[#171717] text-sm">
+          All Products
+        </span>
         }
+
+        <p class="text-[24px] lg:text-[32px]">
+          {{ displayedProducts.length }}
+          {{ displayedProducts.length > 1 ? 'items' : 'item' }}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75"
+        [@staggerProducts]="selectedCategoryProducts.length">
+        @for (product of displayedProducts; track product._id) {
+        <app-product-card [product]="product" />
+        }
+      </div>
+      } @else if (selectedCategorySlugs.length > 0) {
+      <div class="flex flex-col items-center justify-center py-14 text-center" [@fadeInOut]>
+        <div class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_843_1329)">
+              <path
+                d="M4.09345 6.90199e-06C5.78119 -0.118086 6.84403 1.06284 7.94623 2.16997L36.1065 30.3598L76.455 70.7083L77.1488 71.4021C79.6829 73.9755 80.0372 76.1701 78.2215 78.0153C76.4058 79.8605 73.9898 79.5357 71.6575 76.9623C70.0632 75.2007 68.4591 74.9104 66.0874 75.058C50.5385 76.0175 34.9699 75.9093 19.4111 75.2794C16.7983 75.1712 14.1707 75.4369 11.5678 74.876C5.39247 73.5474 1.69714 69.8718 0.742554 63.6965C-0.300602 57.1029 0.107804 50.4504 0.2505 43.8175C0.284943 41.9378 1.06731 40.1566 1.77095 38.4049C4.45757 31.7178 7.08514 25.0013 9.84064 18.3389C10.5443 16.6462 10.3327 15.4997 8.98939 14.245C6.36182 11.7847 3.8425 9.19159 1.35762 6.57386C0.152089 5.37324 -0.305522 3.90692 0.491606 2.27822C0.78913 1.5773 1.29327 0.983746 1.9368 0.576707C2.58032 0.169668 3.33265 -0.0315082 4.09345 6.90199e-06ZM41.6667 47.3799C41.4037 46.9753 41.1178 46.586 40.8106 46.2138C33.228 38.6214 25.6258 31.0536 18.0776 23.4267C16.9016 22.2409 16.3702 22.2901 15.765 23.8794C14.0674 28.3079 12.2616 32.702 10.5 37.1108C9.3043 40.1025 9.31415 40.2648 12.5814 40.0631C18.9338 39.694 24.6564 40.7274 28.7847 46.1793C29.0906 46.5707 29.4854 46.8833 29.9365 47.0913C30.3875 47.2993 30.8817 47.3965 31.3779 47.375C34.6451 47.3701 37.9124 47.3799 41.6667 47.3799Z"
+                fill="#AAAAAA" />
+              <path
+                d="M39.9546 3.5083C45.5148 3.8183 51.0996 3.08513 56.6402 4.02988C60.6553 4.71383 63.7946 6.69189 65.9597 10.1953C67.3964 12.6785 68.6195 15.2794 69.6156 17.9698C71.8397 23.4414 73.6554 29.0902 76.2682 34.37C80.0029 41.9624 79.7569 49.8992 79.319 57.9345C79.2206 59.7305 79.0779 61.5314 78.8564 63.3126C78.635 65.0939 77.9068 65.1923 76.7012 63.9424C74.5952 61.7626 72.4253 59.6419 70.3045 57.4965C65.7514 52.9762 61.2228 48.4509 56.7189 43.9207C55.0853 42.2724 55.2427 41.6967 57.4127 40.934C60.5225 39.8564 63.7208 40.127 66.9192 40.1073C70.1175 40.0876 70.1471 40.0188 69.0006 37.155C66.3287 30.5516 63.524 23.9975 61.0145 17.3203C59.4055 13.005 56.5024 11.1942 52.0395 11.2483C43.271 11.3517 34.5026 11.327 25.7391 11.4107C25.2943 11.4498 24.8462 11.3912 24.4264 11.2391C24.0065 11.087 23.6249 10.8449 23.3084 10.5299C22.5063 9.70819 21.6403 8.9455 20.8826 8.06965C20.2035 7.29712 18.7766 6.70666 19.1308 5.60937C19.5392 4.35956 21.0991 4.30543 22.2701 4.08893C28.1502 3.05561 34.0696 3.79861 39.9546 3.5083Z"
+                fill="#AAAAAA" />
+            </g>
+            <defs>
+              <clipPath id="clip0_843_1329">
+                <rect width="79.5406" height="79.1667" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+        <h3 class="text-lg sm:text-[32px] text-[#171717] mb-2 light-header">
+          No Item in Stock (No Item Yet)
+        </h3>
+      </div>
+      }
       }
     </div>
   </div>
 
   @if (isFilterOpen) {
-    <!-- Backdrop -->
-    <div
-      class="fixed inset-0 bg-black/30 backdrop-blur-xs z-40 lg:hidden"
-      (click)="isFilterOpen = false"
-      [@smoothCollapse]
-    ></div>
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black/30 backdrop-blur-xs z-40 lg:hidden" (click)="isFilterOpen = false"
+    [@smoothCollapse]></div>
 
-    <!-- Sheet -->
-    <div
-      class="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl p-6 lg:hidden"
-      [@smoothCollapse]
-    >
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="products-font text-[20px]">Subcategories</h2>
-        <button
-          class="text-gray-400 hover:text-[#171717] transition-colors duration-150"
-          (click)="isFilterOpen = false"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M19 5L5 19M5 5L19 19"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <div class="flex flex-col gap-1.5 max-h-1/2 overflow-y-auto">
-        @for (subCategory of subCategories; track subCategory._id) {
-          <label
-            [for]="subCategory.slug"
-            class="custom-checkbox flex items-center gap-1.25 py-1 cursor-pointer text-base leading-5"
-          >
-            <input
-              type="checkbox"
-              [id]="subCategory.slug"
-              [checked]="selectedCategorySlugs.includes(subCategory.slug)"
-              (change)="onCategoryChange(subCategory.slug, $event)"
-            />
-            <span class="checkmark shrink-0">
-              <svg viewBox="0 0 24 24">
-                <path d="M5 13L10 18L19 7" />
-              </svg>
-            </span>
-            <span>{{ subCategory.name }}</span>
-          </label>
-        }
-      </div>
+  <!-- Sheet -->
+  <div class="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl p-6 lg:hidden" [@smoothCollapse]>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="products-font text-[20px]">Subcategories</h2>
+      <button class="text-gray-400 hover:text-[#171717] transition-colors duration-150" (click)="isFilterOpen = false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M19 5L5 19M5 5L19 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
     </div>
+
+    <div class="flex flex-col gap-1.5 max-h-1/2 overflow-y-auto">
+      @for (subCategory of subCategories; track subCategory._id) {
+      <label [for]="subCategory.slug"
+        class="custom-checkbox flex items-center gap-1.25 py-1 cursor-pointer text-base leading-5">
+        <input type="checkbox" [id]="subCategory.slug" [checked]="selectedCategorySlugs.includes(subCategory.slug)"
+          (change)="onCategoryChange(subCategory.slug, $event)" />
+        <span class="checkmark shrink-0">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 13L10 18L19 7" />
+          </svg>
+        </span>
+        <span>{{ subCategory.name }}</span>
+      </label>
+      }
+    </div>
+  </div>
   }
 
   <app-newsletter />

@@ -12,10 +12,12 @@ import { Newsletter } from '../../shared/newsletter/newsletter';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { forkJoin } from 'rxjs';
+import { CartState } from '../../services/cart/cart-state';
+import { ProductCard } from '../../shared/product-card/product-card/product-card';
 
 @Component({
   selector: 'app-category-products',
-  imports: [SkeletonLoader, Header, Footer, RouterLink, CurrencyPipe, Newsletter, SearchBar],
+  imports: [SkeletonLoader, Header, Footer, Newsletter, SearchBar, ProductCard],
   templateUrl: './category-products.html',
   styleUrl: './category-products.css',
   animations: [staggerProducts, fadeInOutAnimation, smoothCollapse],
@@ -27,14 +29,14 @@ export class CategoryProducts implements OnInit, OnDestroy {
   public openCategorySlug: string | null = null;
   public selectedCategorySlugs: string[] = [];
   public selectedCategoryProducts: ProductDetails[] = [];
+  public subCategories: any[] = [];
+  public categoryName = '';
+  private _isFilterOpen = false;
+
   private readonly productService = inject(Products);
   private readonly route = inject(ActivatedRoute);
   private readonly renderer = inject(Renderer2);
-  private readonly toastService = inject(ToastService);
-  public subCategories: any[] = [];
-  public categoryName = '';
-  public wishlistedIds = new Set<string>();
-  private _isFilterOpen = false;
+  private readonly cartState = inject(CartState);
 
   public set isFilterOpen(value: boolean) {
     this._isFilterOpen = value;
@@ -50,6 +52,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.cartState.loadCart();
     const slug = this.route.snapshot.paramMap.get('slug');
     const filterSlug = history.state?.filter;
     history.replaceState({}, '');
@@ -136,15 +139,5 @@ export class CategoryProducts implements OnInit, OnDestroy {
         this.isProductsLoading.set(false);
       },
     });
-  }
-
-  public toggleWishlist(productId: string, productName: string = ''): void {
-    if (this.wishlistedIds.has(productId)) {
-      this.wishlistedIds.delete(productId);
-      this.toastService.success(`${productName} removed from wishlist`);
-    } else {
-      this.wishlistedIds.add(productId);
-      this.toastService.success(`${productName} added to wishlist`);
-    }
   }
 }
