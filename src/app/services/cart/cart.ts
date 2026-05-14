@@ -27,9 +27,19 @@ export class Cart {
     return this.http.get<CartResponse>(`${environment.apiBaseUrl}/cart`);
   }
 
+  public updateCartItem(productId: string, quantity: number): Observable<any> {
+    return this.http.patch(`${environment.apiBaseUrl}/cart/${productId}`, { quantity });
+  }
+
   public removeFromCart(productId: string) {
     return this.http.delete(`${environment.apiBaseUrl}/cart/${productId}`).pipe(
       tap(() => this.cartCountSubject.next(this.cartCountSubject.getValue() - 1))
+    );
+  }
+
+  public clearCart() {
+    return this.http.delete(`${environment.apiBaseUrl}/cart`).pipe(
+      tap(() => this.cartCountSubject.next(0))
     );
   }
 }
