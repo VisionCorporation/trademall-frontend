@@ -64,6 +64,24 @@ export interface ProductDetails {
   breadcrumbs: ProductBreadcrumb[];
 }
 
+export interface ProductCardInterface {
+  _id: string;
+  name: string;
+  slug: string;
+  brand?: string;
+  price: number;
+  salePrice?: number | null;
+  effectivePrice?: number;
+  metaDescription: string;
+  images: ProductImage[];
+  category: ProductCategory;
+  vendor: ProductVendor;
+  stockQuantity: number;
+  rating: number;
+  reviewCount: number;
+  isPreOrder: boolean;
+}
+
 export interface ProductDetailsResponse {
   success: boolean;
   data: ProductDetails;
