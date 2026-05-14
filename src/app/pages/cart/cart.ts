@@ -20,6 +20,7 @@ export class Cart implements OnInit {
   private readonly toastService = inject(ToastService);
   public cartSummary: CartResponse | null = null;
   public isCartItemsLoading = signal(false);
+  public isClearingCart = signal(false);
   public removingFromCartIds = new Set<string>();
   public skeletonItems = Array(4);
   public skeletonRows = Array(3);
@@ -56,6 +57,26 @@ export class Cart implements OnInit {
       error: () => {
         this.toastService.error('Failed to remove product from cart. Please try again.');
         this.removingFromCartIds.delete(itemId);
+      },
+    });
+  }
+
+  public clearCart() {
+    if (!this.cartSummary || this.cartSummary.data.cart.vendorGroups.length === 0) {
+      this.toastService.error('Your cart is already empty.');
+      return;
+    }
+
+    this.isClearingCart.set(true);
+    this.cartService.clearCart().subscribe({
+      next: () => {
+        this.toastService.success('Cart cleared successfully.');
+        this.fetchCartSummary();
+        this.isClearingCart.set(false);
+      },
+      error: () => {
+        this.toastService.error('Failed to clear cart. Please try again.');
+        this.isClearingCart.set(false);
       },
     });
   }
