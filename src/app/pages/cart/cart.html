@@ -63,9 +63,16 @@
             <p class="text-lg md:text-xl truncate">{{ vendorGroupItem?.productName }}</p>
           </div>
 
-          <p class="text-lg md:text-xl ml-4 shrink-0">
-            {{ vendorGroupItem?.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
-          </p>
+          <div class="flex items-center gap-2">
+            <span class=" ml-4 shrink-0">
+              {{ vendorGroupItem?.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+            </span>
+
+            <span>x{{ vendorGroupItem?.quantity }}</span>
+            <span>{{
+              vendorGroupItem?.lineTotal | currency: 'GHS ' : 'symbol' : '1.2-2'
+              }}</span>
+          </div>
         </div>
         }
         }
