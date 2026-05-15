@@ -64,7 +64,9 @@ export class Header implements OnInit {
   private fetchCartCount(): void {
     this.cartService.getCartSummary().subscribe({
       next: (data: CartResponse) => {
-        const count = data?.data?.cart?.items ?? 0;
+        const count = data?.data?.cart?.vendorGroups?.reduce(
+          (total, group) => total + group.items.reduce((sum, item) => sum + item.quantity, 0), 0
+        ) ?? 0;
         this.cartService.updateCartCount(count);
       },
       error: () => {
