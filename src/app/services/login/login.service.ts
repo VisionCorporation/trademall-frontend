@@ -10,9 +10,9 @@ import { environment } from '../../../environments/environment';
 export class LoginService {
   private http = inject(HttpClient);
   private userSubject = new BehaviorSubject<any>(null);
-  user$ = this.userSubject.asObservable();
+  public user$ = this.userSubject.asObservable();
   private sessionLoadedSubject = new BehaviorSubject<boolean>(false);
-  sessionLoaded$ = this.sessionLoadedSubject.asObservable();
+  public sessionLoaded$ = this.sessionLoadedSubject.asObservable();
 
   constructor() {
     this.restoreSession();
