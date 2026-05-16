@@ -6,6 +6,7 @@ import {
   ViewChild,
   OnInit,
   ChangeDetectorRef,
+  Input,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
@@ -35,6 +36,8 @@ export class Header implements OnInit {
   public cartItemCount = 0;
   public customerDropdown = CustomerDropdown;
   public vendorDropdown = VendorDropdown;
+  @Input() transparent = false;
+  isScrolled = false;
 
   @ViewChild('dropdownRef', { static: true })
   dropdownRef!: ElementRef<HTMLElement>;
@@ -109,5 +112,12 @@ export class Header implements OnInit {
     this.loginService.logout();
     this.router.navigate(['/login']);
     this.toastService.success("You've logged out successfully!");
+  }
+
+  @HostListener('window:scroll')
+  onScroll() {
+    if (this.transparent) {
+      this.isScrolled = window.scrollY > 520;
+    }
   }
 }
