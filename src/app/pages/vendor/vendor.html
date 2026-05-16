@@ -18,10 +18,11 @@
   @if (!isLoading()) {
   @if (vendorData) {
   <section class="max-w-300 mx-auto mb-30 mt-16 sm:mt-24 px-5 md:px-12 2xl:px-0">
-    <div class="flex items-center gap-2.5 mb-2.5">
-      <p class="text-3xl sm:text-4xl">{{ vendorData.vendor.businessName }}</p>
+    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2.5 mb-2.5">
+      <p class="text-xl sm:text-3xl md:text-4xl">{{ vendorData.vendor.businessName }}</p>
       <div class="flex items-center gap-1.5">
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="12" height="12" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"
+          class="sm:w-3.75 sm:h-3.75">
           <path d="M6.875 8.125H10M5 8.125H5.00561M8.125 10.625H5M10 10.625H9.99439" stroke="currentColor"
             stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M11.25 1.25V2.5M3.75 1.25V2.5" stroke="currentColor" stroke-width="1.125" stroke-linecap="round"
@@ -32,8 +33,7 @@
           <path d="M1.875 5H13.125" stroke="currentColor" stroke-width="1.125" stroke-linecap="round"
             stroke-linejoin="round" />
         </svg>
-
-        <span class="text-sm sm:text-base">{{ vendorData.vendor.dateOfJoining | date: 'MMMM d, y' }}</span>
+        <span class="text-xs sm:text-sm md:text-base">{{ vendorData.vendor.dateOfJoining | date: 'MMMM d, y' }}</span>
       </div>
     </div>
 
@@ -161,17 +161,20 @@
         }
       </div>
       }@else if (activeTab==='about') {
-      <div class="w-full py-16.25 px-13.75 rounded-[20px] border border-[#17171733]" [@staggerProducts]>
-        <div class="flex flex-col gap-5 mb-10">
-          <h2 class="text-[32px] light-header">About</h2>
-          <p class="text-2xl">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse venenatis mi non
+      <div class="w-full py-8 px-5 sm:py-12 sm:px-8 md:py-16.25 md:px-13.75 rounded-[20px] border border-[#17171733]"
+        [@staggerProducts]>
+        <div class="flex flex-col gap-3 sm:gap-5 mb-6 sm:mb-8 md:mb-10">
+          <h2 class="text-[22px] sm:text-[26px] md:text-[32px] light-header">About</h2>
+          <p class="text-base sm:text-lg md:text-2xl leading-relaxed">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse venenatis mi non
             metus efficitur, sit amet porta eros pretium. Etiam finibus magna eget mattis porttitor.
-            Quisque sollicitudin aliquam leo, ut consequat ligula pretium elementum</p>
+            Quisque sollicitudin aliquam leo, ut consequat ligula pretium elementum
+          </p>
         </div>
 
-        <div class="flex flex-col gap-5">
-          <h2 class="text-[32px] light-header">Contact</h2>
-          <p class="text-2xl">+233 50 123 4567</p>
+        <div class="flex flex-col gap-3 sm:gap-5">
+          <h2 class="text-[22px] sm:text-[26px] md:text-[32px] light-header">Contact</h2>
+          <p class="text-base sm:text-lg md:text-2xl">+233 50 123 4567</p>
         </div>
       </div>
       }
