@@ -9,10 +9,11 @@ import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { SkeletonLoader } from "../../shared/skeleton-loader/skeleton-loader";
+import { BUTTONS } from '../../data/constants/vendor-page.constant';
 
 @Component({
   selector: 'app-vendor',
-  imports: [Header, Footer, DatePipe, RouterLink, CurrencyPipe, Newsletter, NgOptimizedImage, SkeletonLoader],
+  imports: [Header, Footer, DatePipe, RouterLink, CurrencyPipe, Newsletter, SkeletonLoader, NgOptimizedImage],
   templateUrl: './vendor.html',
   styleUrl: './vendor.css',
   animations: [staggerProducts],
@@ -25,6 +26,12 @@ export class Vendor {
   public isLoading = signal(true);
   public wishlistedIds = new Set<string>();
   private readonly toastService = inject(ToastService);
+  public vendorType = 'individual'
+  public buttons = BUTTONS
+  public activeTab = 'about';
+  heroImageLoaded = false;
+
+  public heroImage = 'https://images.pexels.com/photos/27203469/pexels-photo-27203469.jpeg';
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -45,13 +52,7 @@ export class Vendor {
     }
   }
 
-  public toggleWishlist(productId: string, productName: string = ''): void {
-    if (this.wishlistedIds.has(productId)) {
-      this.wishlistedIds.delete(productId);
-      this.toastService.success(`${productName} removed from wishlist`);
-    } else {
-      this.wishlistedIds.add(productId);
-      this.toastService.success(`${productName} added to wishlist`);
-    }
+  public switchButtons(tab: string) {
+    this.activeTab = tab;
   }
 }
