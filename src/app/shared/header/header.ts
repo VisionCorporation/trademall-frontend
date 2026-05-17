@@ -39,6 +39,7 @@ export class Header implements OnInit {
   @Input() transparent = false;
   isScrolled = false;
 
+  @ViewChild('header') header!: ElementRef;
   @ViewChild('dropdownRef', { static: true })
   dropdownRef!: ElementRef<HTMLElement>;
 
@@ -117,7 +118,9 @@ export class Header implements OnInit {
   @HostListener('window:scroll')
   onScroll() {
     if (this.transparent) {
-      this.isScrolled = window.scrollY > 520;
+      const heroHeight = document.getElementById('vendor-hero')?.clientHeight ?? 320;
+      const headerHeight = this.header.nativeElement.offsetHeight;
+      this.isScrolled = window.scrollY > (heroHeight - headerHeight);
     }
   }
 }
