@@ -10,13 +10,15 @@ import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { SkeletonLoader } from "../../shared/skeleton-loader/skeleton-loader";
 import { BUTTONS } from '../../data/constants/vendor-page.constant';
+import { VENDOR_FAQS } from '../../data/constants/vendor-page.faqs.constant';
+import { slideDown } from '../../animations/expand.animation';
 
 @Component({
   selector: 'app-vendor',
   imports: [Header, Footer, DatePipe, RouterLink, CurrencyPipe, Newsletter, SkeletonLoader, NgOptimizedImage],
   templateUrl: './vendor.html',
   styleUrl: './vendor.css',
-  animations: [staggerProducts],
+  animations: [staggerProducts, slideDown],
 })
 export class Vendor {
   private productService = inject(Products);
@@ -28,7 +30,9 @@ export class Vendor {
   private readonly toastService = inject(ToastService);
   public vendorType = 'individual'
   public buttons = BUTTONS
-  public activeTab = 'about';
+  public readonly vendorFaqs = VENDOR_FAQS;
+  public openQuestion: string | null = null;
+  public activeTab = 'products';
   heroImageLoaded = false;
 
   public heroImage = 'https://images.pexels.com/photos/27203469/pexels-photo-27203469.jpeg';
@@ -54,5 +58,9 @@ export class Vendor {
 
   public switchButtons(tab: string) {
     this.activeTab = tab;
+  }
+
+  public toggleQuestion(question: string) {
+    this.openQuestion = this.openQuestion === question ? null : question;
   }
 }

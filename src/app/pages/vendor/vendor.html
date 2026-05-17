@@ -3,7 +3,7 @@
 <div>
   <img [ngSrc]="heroImage" (load)="heroImageLoaded = true" class="hidden" width="100" height="100" priority />
 
-  <div class="relative bg-cover bg-center bg-no-repeat h-80 sm:h-150"
+  <div id="vendor-hero" class="relative bg-cover bg-center bg-no-repeat h-80 sm:h-150"
     [style.backgroundImage]="heroImageLoaded ? 'url(' + heroImage + ')' : 'none'">
 
     @if (!heroImageLoaded) {
@@ -106,7 +106,7 @@
       <div class="flex items-center gap-2.5">
         @for (button of buttons; track button.value) {
         <button [class]="
-                'text-[16px] lg:text-[18px] mb-3 sm:mb-5 shrink-0 transition-all duration-300 ease-in-out ' +
+                'text-[16px] lg:text-[20px] mb-3 sm:mb-5 shrink-0 transition-all duration-300 ease-in-out ' +
                 (button.value === activeTab
                   ? 'text-[#26C34D]'
                   : 'text-[#17171733] hover:text-[#26C34D]')
@@ -176,6 +176,44 @@
           <h2 class="text-[22px] sm:text-[26px] md:text-[32px] light-header">Contact</h2>
           <a class="text-base sm:text-lg md:text-2xl" href="tel:+233501234567">+233 50 123 4567</a>
         </div>
+      </div>
+
+      <div class="flex flex-col gap-7">
+        @for (question of vendorFaqs; track question.question) {
+        <div class="bg-[#F2F2F2] rounded-xl cursor-pointer py-4.5 sm:py-5.25 px-6 sm:px-7.5"
+          (click)="toggleQuestion(question.question)">
+          <div class="flex items-center justify-between"
+            [class]="openQuestion === question.question ? 'mb-2.5' : 'mb-0'">
+            <h3 [class]="openQuestion === question.question ? 'text-base' : 'text-xl sm:text-2xl'"
+              class="transition-all duration-300 light-header text-[#1E1E1E] leading-tight">
+              {{ question.question }}
+            </h3>
+            <button class="shrink-0 ml-4">
+              @if (openQuestion === question.question) {
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.8337 4.16656L4.16705 15.8332M4.16705 4.16656L15.8337 15.8332" stroke="#1E1E1E"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              } @else {
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.99998 3.33333V16.6667M16.6666 10H3.33331" stroke="#1E1E1E" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              }
+            </button>
+          </div>
+
+          @if (openQuestion === question.question) {
+          <div [@slideDown] style="display: grid">
+            <div class="overflow-hidden">
+              <p class="text-xl sm:text-[22px] leading-tight">
+                {{ question.answer }}
+              </p>
+            </div>
+          </div>
+          }
+        </div>
+        }
       </div>
       }
     </div>
