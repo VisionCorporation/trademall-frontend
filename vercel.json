@@ -2,6 +2,10 @@
   "buildCommand": "npm run build",
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "https://trademall-backend.onrender.com/api/v1/$1"
+    },
+    {
       "handle": "filesystem"
     },
     {
