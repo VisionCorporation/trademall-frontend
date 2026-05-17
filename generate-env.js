@@ -1,7 +1,9 @@
 const fs = require('fs');
 
 const envConfig = `window.__env = {
-  API_BASE_URL: '${process.env.API_BASE_URL || 'http://localhost:3000/api/v1'}',
+  API_BASE_URL: window.location.hostname === 'localhost'
+    ? '${process.env.API_BASE_URL || 'https://trademall-backend.onrender.com/api/v1'}'
+    : '/api',
 };
 `;
 
