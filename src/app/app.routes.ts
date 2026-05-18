@@ -1,6 +1,9 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/authentication/auth-guard';
-import { customerGuard } from './guards/authorization/customer-guard';
+import { customerGuard } from './guards/authorization/customer/customer-guard';
+import { vendorGuard } from './guards/authorization/vendor/vendor-guard';
+import { Home } from './pages/home/home';
+import { VendorProducts } from './pages/vendor-dashboard/vendor-products/vendor-products';
 
 export const routes: Routes = [
   {
@@ -50,6 +53,18 @@ export const routes: Routes = [
     path: 'cart',
     loadComponent: () => import('./pages/cart/cart').then((m) => m.Cart),
     canActivate: [authGuard, customerGuard],
+  },
+  {
+    path: 'vendor',
+    loadComponent: () => import('./pages/vendor-dashboard/vendor-dashboard').then((m) => m.VendorDashboard),
+    children: [
+      { path: 'dashboard', component: Home },
+      { path: 'orders', component: Home },
+      { path: 'products', component: VendorProducts },
+      { path: 'reports', component: Home },
+      { path: 'settings', component: Home },
+    ],
+    canActivate: [authGuard, vendorGuard],
   },
   {
     path: 'order-history',
