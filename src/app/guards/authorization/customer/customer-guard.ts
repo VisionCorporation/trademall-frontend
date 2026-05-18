@@ -4,9 +4,9 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { LoginService } from '../../services/login/login.service';
+import { LoginService } from '../../../services/login/login.service';
 import { inject } from '@angular/core';
-import { ToastService } from '../../services/toast/toast.service';
+import { ToastService } from '../../../services/toast/toast.service';
 import { filter, map, take } from 'rxjs';
 
 export const customerGuard: CanActivateFn = (
