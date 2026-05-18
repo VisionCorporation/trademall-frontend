@@ -1,5 +1,5 @@
-<section class="bg-[#F4F4F4] h-full rounded-[20px] py-7.5 px-8.75">
-    <div class="flex items-center gap-2.5 mb-3.75 pb-3.75 border-b border-[#D1D1D1]">
+<section class="bg-[#F4F4F4] h-full rounded-[20px] py-7.5 px-8.75 flex flex-col">
+    <div class="flex items-center gap-2.5 mb-3.75 pb-3.75 border-b border-[#D1D1D1] shrink-0">
         @for(filter of productsFilters; track filter){
         <button (click)="selectFilter(filter.value)"
             [style.color]="(selectedFilter === filter.value || hoveredFilter === filter.value) ? filter.activeColor : '#17171733'"
@@ -72,16 +72,17 @@
     </div>
 
 
-    <div class="flex items-center justify-between mb-5">
+    <div class="flex items-center justify-between mb-5 shrink-0">
         <span class="text-2xl block">5 items</span>
         <button
             class="text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
             Add Product
         </button>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.75">
-        @for(product of [1, 2, 3, 4, 5]; track product){
-        <div class="bg-[#FBFCFF] rounded-2xl p-5 max-w-73">
+    <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.75 overflow-y-auto flex-1 min-h-0 pt-2 pb-4 scrollbar-hide">
+        @for(product of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track product){
+        <div class="bg-[#FBFCFF] rounded-2xl p-5 max-w-73 shadow-[0_4px_20px_rgba(0,0,0,0.09)]">
             <div class="flex items-center gap-2.5">
                 <div class="w-15 h-15 rounded-lg bg-[#1717170D]"></div>
                 <h2 class="light-header text-[22px]">Google Pixel 6 Pro</h2>
