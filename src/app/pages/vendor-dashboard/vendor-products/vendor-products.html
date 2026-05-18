@@ -73,31 +73,65 @@
 
 
     <div class="flex items-center justify-between mb-5 shrink-0">
-        <span class="text-2xl block">5 items</span>
+        @if(isFetchingProducts()){
+        <div class="w-21.75 h-8 rounded-lg skeleton-shimmer"></div>
+        }@else {
+        <span class="text-2xl block">{{ filteredProducts().length }} items</span>
+        }
         <button
             class="text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
             Add Product
         </button>
     </div>
-    <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.75 overflow-y-auto flex-1 min-h-0 pt-2 pb-4 scrollbar-hide">
-        @for(product of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track product){
+
+    @if(!isFetchingProducts()){
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.75 overflow-y-auto flex-1 min-h-0 pt-2 pb-4 scrollbar-hide items-start"
+    [@staggerProducts]>
+        @for(product of filteredProducts(); track product){
         <div class="bg-[#FBFCFF] rounded-2xl p-5 max-w-73 shadow-[0_4px_20px_rgba(0,0,0,0.09)]">
             <div class="flex items-center gap-2.5">
-                <div class="w-15 h-15 rounded-lg bg-[#1717170D]"></div>
-                <h2 class="light-header text-[22px]">Google Pixel 6 Pro</h2>
+                <img [src]="product.images[0]?.url" alt="{{product.name}}" class="w-15 h-15 rounded-lg" />
+                <h2 class="light-header text-[16px] leading-5">{{product.name}}</h2>
             </div>
 
             <div class="flex items-center justify-between mt-3.75">
-                <p>GHS 4,250.00</p>
-                <p>50 in stock</p>
+                <p>{{product.price | currency: 'GHS ' : 'symbol' : '1.2-2'}}</p>
+                <p>{{product.stockQuantity}} in stock</p>
             </div>
 
             <div class="flex items-center justify-between mt-2">
-                <p class="text-[#26C34D]">Approved</p>
-                <p>January 30, 2026</p>
+                <p [style.color]="statusConfig[product.status].color">
+                    {{ statusConfig[product.status].label }}
+                </p>
+
+                <p>{{product.createdAt| date:'MMMM d, y'}}</p>
             </div>
         </div>
         }
     </div>
+    @if(filteredProducts().length === 0){
+    <div class="flex flex-col items-center gap-3 mt-10">
+        <div class="bg-[#F7F7F7] p-10 sm:p-12.5 rounded-full">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_460_983)">
+                    <path
+                        d="M12.4269 8.33338C14.1147 8.21529 15.1775 9.39622 16.2797 10.5033L44.44 38.6932L84.7885 79.0416L85.4823 79.7354C88.0164 82.3089 88.3707 84.5034 86.555 86.3486C84.7393 88.1938 82.3233 87.8691 79.991 85.2956C78.3967 83.5341 76.7926 83.2438 74.4209 83.3914C58.872 84.3509 43.3034 84.2426 27.7446 83.6128C25.1318 83.5046 22.5042 83.7703 19.9013 83.2093C13.726 81.8808 10.0306 78.2051 9.07605 72.0298C8.03289 65.4363 8.4413 58.7837 8.584 52.1508C8.61844 50.2712 9.40081 48.49 10.1044 46.7382C12.7911 40.0512 15.4186 33.3347 18.1741 26.6723C18.8778 24.9796 18.6662 23.8331 17.3229 22.5784C14.6953 20.1181 12.176 17.525 9.69112 14.9072C8.48558 13.7066 8.02797 12.2403 8.8251 10.6116C9.12263 9.91068 9.62677 9.31712 10.2703 8.91008C10.9138 8.50304 11.6661 8.30187 12.4269 8.33338ZM50.0002 55.7133C49.7371 55.3087 49.4513 54.9194 49.1441 54.5471C41.5615 46.9547 33.9593 39.3869 26.4111 31.7601C25.2351 30.5742 24.7037 30.6235 24.0985 32.2128C22.4009 36.6413 20.595 41.0353 18.8335 45.4441C17.6378 48.4358 17.6476 48.5982 20.9149 48.3965C27.2673 48.0274 32.9899 49.0607 37.1182 54.5127C37.4241 54.904 37.8189 55.2167 38.27 55.4247C38.721 55.6326 39.2152 55.7299 39.7114 55.7084C42.9786 55.7035 46.2459 55.7133 50.0002 55.7133Z"
+                        fill="#AAAAAA" />
+                    <path
+                        d="M48.2886 11.8417C53.8488 12.1517 59.4336 11.4185 64.9742 12.3633C68.9893 13.0472 72.1286 15.0253 74.2937 18.5287C75.7304 21.0119 76.9535 23.6128 77.9496 26.3032C80.1737 31.7748 81.9894 37.4236 84.6022 42.7033C88.3369 50.2957 88.0909 58.2326 87.653 66.2678C87.5545 68.0638 87.4118 69.8648 87.1904 71.646C86.969 73.4272 86.2408 73.5256 85.0352 72.2758C82.9292 70.096 80.7593 67.9753 78.6385 65.8299C74.0854 61.3096 69.5568 56.7843 65.0529 52.2541C63.4193 50.6057 63.5767 50.03 65.7467 49.2673C68.8565 48.1898 72.0548 48.4604 75.2532 48.4407C78.4515 48.421 78.481 48.3521 77.3346 45.4884C74.6627 38.885 71.858 32.3308 69.3485 25.6536C67.7395 21.3383 64.8364 19.5276 60.3734 19.5817C51.605 19.685 42.8366 19.6604 34.0731 19.7441C33.6283 19.7832 33.1802 19.7246 32.7603 19.5725C32.3405 19.4203 31.9589 19.1783 31.6424 18.8633C30.8403 18.0416 29.9743 17.2789 29.2165 16.403C28.5375 15.6305 27.1105 15.04 27.4648 13.9427C27.8732 12.6929 29.433 12.6388 30.6041 12.4223C36.4842 11.389 42.4036 12.132 48.2886 11.8417Z"
+                        fill="#AAAAAA" />
+                </g>
+                <defs>
+                    <clipPath id="clip0_460_983">
+                        <rect width="79.5406" height="79.1667" fill="white" transform="translate(8.33301 8.33337)" />
+                    </clipPath>
+                </defs>
+            </svg>
+        </div>
+        <p class="text-lg text-[#17171799]">No products found for the selected filter.</p>
+    </div>
+    }
+    }@else if(isFetchingProducts()){
+    <app-skeleton-loader [skeletonType]="'vendor-dashboard-products'" />
+    }
 </section>
