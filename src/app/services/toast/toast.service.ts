@@ -8,7 +8,7 @@ export class ToastService {
   public toasts$ = this.toastsSubject.asObservable();
   private activeMessages = new Set<string>();
 
-  public show(message: string, type: Toast['type'] = 'info', duration = 3000): void {
+  public show(message: string, type: Toast['type'] = 'info', duration = 4000): void {
     if (this.activeMessages.has(message)) return;
 
     const id = crypto.randomUUID();
