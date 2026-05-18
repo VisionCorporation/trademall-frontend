@@ -11,3 +11,9 @@ export const PRODUCTS_FILTERS = [
     { label: 'Pending', value: 'pending', activeColor: '#FF860D' },
     { label: 'Rejected', value: 'rejected', activeColor: '#FF0000' },
 ]
+
+export const PRODUCT_STATUS_CONFIG: Record<string, { label: string; color: string }> = {
+    approved: { label: 'Approved', color: '#26C34D' },
+    pending: { label: 'Pending', color: '#FF860D' },
+    rejected: { label: 'Rejected', color: '#FF0000' },
+};
