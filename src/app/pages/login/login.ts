@@ -52,7 +52,12 @@ export class Login {
         this.toastService.success('Login successful!');
         this.signupService.isSubmitting$.next(false);
         this.loginForm.reset();
-        this.router.navigate(['/']);
+
+        if (res.user.userType === 'vendor') {
+          this.router.navigate(['/vendor/products']);
+        } else if (res.user.userType === 'customer') {
+          this.router.navigate(['/']);
+        }
       },
       error: (err) => {
         this.toastService.error(err.error.message || 'Login failed. Please try again.');
