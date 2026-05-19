@@ -2,7 +2,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { VendorDashboard } from '../../../../services/vendor-dashboard/vendor-dashboard';
 import { Product } from '../../../../interfaces/vendor-dashboard.interface';
-import { PRODUCT_STATUS_CONFIG } from '../../../../data/constants/vendor-dashbaord.constant';
+import { PERIODS, PRODUCT_STATUS_CONFIG, REVENUE } from '../../../../data/constants/vendor-dashbaord.constant';
 import { SkeletonLoader } from '../../../../shared/skeleton-loader/skeleton-loader';
 
 @Component({
@@ -12,18 +12,13 @@ import { SkeletonLoader } from '../../../../shared/skeleton-loader/skeleton-load
   styleUrl: './vendor-dashboard-overview.css',
 })
 export class VendorDashboardOverview {
-  public periods = ['Weekly', 'Monthly', 'Yearly'];
+  public periods = PERIODS
+  public revenue = REVENUE
   public selectedPeriod = 'Monthly';
   public isFetchingProducts = signal(false);
   private vendorDashboardService = inject(VendorDashboard);
   public fetchedProducts: Product[] = [];
   public statusConfig = PRODUCT_STATUS_CONFIG;
-
-  revenue: Record<string, number> = {
-    Weekly: 4320,
-    Monthly: 17750,
-    Yearly: 213000,
-  };
 
   ngOnInit(): void {
     this.fetchVendorProductsListings();

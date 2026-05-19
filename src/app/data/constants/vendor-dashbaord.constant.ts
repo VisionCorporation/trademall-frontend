@@ -17,3 +17,11 @@ export const PRODUCT_STATUS_CONFIG: Record<string, { label: string; color: strin
     pending: { label: 'Pending', color: '#FF860D' },
     rejected: { label: 'Rejected', color: '#FF0000' },
 };
+
+export const PERIODS = ['Weekly', 'Monthly', 'Yearly'];
+
+export const REVENUE: Record<string, number> = {
+    Weekly: 4320,
+    Monthly: 17750,
+    Yearly: 213000,
+};
