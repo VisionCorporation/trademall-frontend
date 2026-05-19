@@ -12,6 +12,13 @@ export const PRODUCTS_FILTERS = [
     { label: 'Rejected', value: 'rejected', activeColor: '#FF0000' },
 ]
 
+export const ORDERS_FILTERS = [
+    { label: 'All Orders', value: 'all-orders', activeColor: '#1B5DD7' },
+    { label: 'Delivered', value: 'delivered', activeColor: '#26C34D' },
+    { label: 'Unfulfilled', value: 'unfulfilled', activeColor: '#FF860D' },
+    { label: 'Rejected', value: 'rejected', activeColor: '#FF0000' },
+]
+
 export const PRODUCT_STATUS_CONFIG: Record<string, { label: string; color: string }> = {
     approved: { label: 'Approved', color: '#26C34D' },
     pending: { label: 'Pending', color: '#FF860D' },
