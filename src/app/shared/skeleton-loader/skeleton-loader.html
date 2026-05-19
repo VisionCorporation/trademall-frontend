@@ -208,3 +208,46 @@
   }
 </div>
 }
+@if(skeletonType() === 'vendor-dashboard-overview-products'){
+<table class="w-full border-separate border-spacing-y-2.5">
+  <tbody>
+    @for(product of [1,2,3]; track product){
+    <tr class="bg-[#FBFCFF] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
+      <td class="py-3 pl-4 px-10 rounded-l-2xl">
+        <div class="flex items-center gap-3">
+          <div class="skeleton-shimmer rounded-lg w-10 h-10"></div>
+          <div class="flex flex-col gap-1.5">
+            <div class="skeleton-shimmer h-3 w-20 rounded"></div>
+            <div class="skeleton-shimmer h-5 w-32 rounded"></div>
+          </div>
+        </div>
+      </td>
+      <td class="py-3 px-10">
+        <div class="flex flex-col gap-1.5">
+          <div class="skeleton-shimmer h-3 w-10 rounded"></div>
+          <div class="skeleton-shimmer h-5 w-20 rounded"></div>
+        </div>
+      </td>
+      <td class="py-3 px-10">
+        <div class="flex flex-col gap-1.5">
+          <div class="skeleton-shimmer h-3 w-8 rounded"></div>
+          <div class="skeleton-shimmer h-5 w-24 rounded"></div>
+        </div>
+      </td>
+      <td class="py-3">
+        <div class="flex flex-col gap-1.5">
+          <div class="skeleton-shimmer h-3 w-8 rounded"></div>
+          <div class="skeleton-shimmer h-5 w-10 rounded"></div>
+        </div>
+      </td>
+      <td class="py-3 px-10 pr-4 rounded-r-2xl">
+        <div class="flex flex-col gap-1.5">
+          <div class="skeleton-shimmer h-3 w-20 rounded"></div>
+          <div class="skeleton-shimmer h-5 w-full rounded"></div>
+        </div>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>
+}

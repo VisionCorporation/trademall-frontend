@@ -7,4 +7,5 @@ export type SkeletonType =
   | 'product-additional-details'
   | 'featured-categories'
   | 'cart-items'
-  | 'vendor-dashboard-products';
+  | 'vendor-dashboard-products'
+  | "vendor-dashboard-overview-products";
