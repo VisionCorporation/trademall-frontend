@@ -4,6 +4,7 @@ import { customerGuard } from './guards/authorization/customer/customer-guard';
 import { vendorGuard } from './guards/authorization/vendor/vendor-guard';
 import { Home } from './pages/home/home';
 import { VendorProducts } from './pages/vendor-dashboard/vendor-products/vendor-products';
+import { VendorDashboardOverview } from './pages/vendor-dashboard/vendor-dashboard-overview/vendor-dashboard-overview/vendor-dashboard-overview';
 
 export const routes: Routes = [
   {
@@ -58,7 +59,7 @@ export const routes: Routes = [
     path: 'vendor',
     loadComponent: () => import('./pages/vendor-dashboard/vendor-dashboard').then((m) => m.VendorDashboard),
     children: [
-      { path: 'dashboard', component: Home },
+      { path: 'overview', component: VendorDashboardOverview },
       { path: 'orders', component: Home },
       { path: 'products', component: VendorProducts },
       { path: 'reports', component: Home },

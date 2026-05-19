@@ -1,5 +1,5 @@
 export const NAV_ITEMS = [
-    { label: 'Overview', route: '/vendor/dashboard', icon: 'overview', activeColor: '#26C34D' },
+    { label: 'Overview', route: '/vendor/overview', icon: 'overview', activeColor: '#26C34D' },
     { label: 'Orders', route: '/vendor/orders', icon: 'orders', activeColor: '#FF860D' },
     { label: 'Products', route: '/vendor/products', icon: 'products', activeColor: '#1B5DD7' },
     { label: 'Reports', route: '/vendor/reports', icon: 'reports', activeColor: '#FBBB0D' },

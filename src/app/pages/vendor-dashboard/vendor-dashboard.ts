@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NAV_ITEMS } from '../../data/constants/vendor-dashbaord.constant';
 import { LoginService } from '../../services/login/login.service';
 import { ToastService } from '../../services/toast/toast.service';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-vendor-dashboard',
@@ -16,6 +17,26 @@ export class VendorDashboard implements OnInit {
   private readonly loginService = inject(LoginService)
   private readonly toastService = inject(ToastService)
   public user: any
+  public headerTitle = signal('Overview');
+
+  private readonly routeTitleMap: Record<string, string> = {
+    'overview': 'Overview',
+    'orders': 'Orders',
+    'products': 'Products',
+    'reports': 'Reports',
+  };
+
+  constructor() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map((event: NavigationEnd) => {
+        const segments = event.urlAfterRedirects.split('/');
+        return segments[segments.length - 1];
+      })
+    ).subscribe(segment => {
+      this.headerTitle.set(this.routeTitleMap[segment] || 'Overview');
+    });
+  }
 
   ngOnInit() {
     this.loginService.user$.subscribe((user) => {
