@@ -54,7 +54,7 @@ export class Login {
         this.loginForm.reset();
 
         if (res.user.userType === 'vendor') {
-          this.router.navigate(['/vendor/products']);
+          this.router.navigate(['/vendor/overview']);
         } else if (res.user.userType === 'customer') {
           this.router.navigate(['/']);
         }
