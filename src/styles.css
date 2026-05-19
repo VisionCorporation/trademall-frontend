@@ -80,7 +80,9 @@ button:disabled {
   font-weight: 400;
 }
 
-table, th, td {
+table,
+th,
+td {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-weight: 400;
 }
@@ -117,6 +119,7 @@ input:focus {
   mask-composite: intersect;
   animation: l4 1s infinite steps(10);
 }
+
 @keyframes l4 {
   to {
     transform: rotate(1turn);
@@ -216,19 +219,20 @@ input:focus {
   }
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s infinite linear;
 }
 
-.skeleton-shimmer {
-  background: linear-gradient(90deg, #e6e6e8 25%, #f4f4f6 50%, #e6e6e8 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.2s infinite linear;
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .scrollbar-hide::-webkit-scrollbar {
