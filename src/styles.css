@@ -75,7 +75,10 @@ button:disabled {
   font-weight: 700;
 }
 
-.light-header {
+.light-header,
+select,
+option,
+input {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-weight: 400;
 }
