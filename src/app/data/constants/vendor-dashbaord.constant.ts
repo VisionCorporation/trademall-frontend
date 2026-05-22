@@ -47,3 +47,10 @@ export const ORDERS = [
     { orderNumber: 'ORDE - 5432 - 1098', total: 'GHS 7,654.32', customer: 'Kwame Nkrumah', status: 'delivered', date: 'March 10, 2026' },
     { orderNumber: 'ORDE - 6789 - 3210', total: 'GHS 14,321.09', customer: 'Abena Serwaa', status: 'unfulfilled', date: 'March 5, 2026' },
 ]
+
+export const ORDER_PERIODS = [
+    { label: 'All Orders', value: 'all-orders' },
+    { label: 'Last Week', value: 'last-week' },
+    { label: 'Last Month', value: 'last-month' },
+    { label: 'Last Year', value: 'last-year' },
+  ];
