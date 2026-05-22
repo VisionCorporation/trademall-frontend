@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ORDERS_FILTERS } from '../../../../data/constants/vendor-dashbaord.constant';
+import { ORDERS, ORDERS_FILTERS, ORDERS_STATUS_CONFIG } from '../../../../data/constants/vendor-dashbaord.constant';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-vendor-dashboard-orders',
@@ -9,6 +10,8 @@ import { ORDERS_FILTERS } from '../../../../data/constants/vendor-dashbaord.cons
 })
 export class VendorDashboardOrders {
   public ordersFilters = ORDERS_FILTERS
+  public orders = ORDERS
+  public statusConfig = ORDERS_STATUS_CONFIG
   public selectedFilter = 'all-orders'
   public hoveredFilter: string | null = null;
 
