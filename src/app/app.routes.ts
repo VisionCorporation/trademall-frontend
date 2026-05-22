@@ -60,6 +60,7 @@ export const routes: Routes = [
     path: 'vendor',
     loadComponent: () => import('./pages/vendor-dashboard/vendor-dashboard').then((m) => m.VendorDashboard),
     children: [
+      { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: VendorDashboardOverview },
       { path: 'orders', component: VendorDashboardOrders },
       { path: 'products', component: VendorProducts },
