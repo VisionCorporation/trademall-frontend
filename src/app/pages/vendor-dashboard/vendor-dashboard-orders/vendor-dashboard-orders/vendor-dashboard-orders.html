@@ -1,5 +1,5 @@
 <section class="bg-[#F4F4F4] h-full rounded-[20px] py-7.5 px-8.75 flex flex-col overflow-y-auto scrollbar-hide">
-    <div class="flex items-center gap-2.5 mb-3.75 pb-3.75 border-b border-[#D1D1D1] shrink-0">
+    <div class="flex items-center gap-2.5 pb-3.75 border-b border-[#D1D1D1] shrink-0">
         @for(filter of ordersFilters; track filter){
         <button (click)="selectFilter(filter.value)"
             [style.color]="(selectedFilter === filter.value || hoveredFilter === filter.value) ? filter.activeColor : '#17171733'"
@@ -71,7 +71,46 @@
         }
     </div>
 
-    <table class="w-full border-collapse">
+    <div class="mt-7.5 flex items-center gap-2.5">
+        <div class="flex items-center gap-1.25 border border-[#6A6A6B] rounded-lg max-w-50 px-2.5 py-1.25">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_1172_2632)">
+                    <path d="M10.5 10.5L12.375 12.375" stroke="#6A6A6B" stroke-width="1.5" stroke-linejoin="round" />
+                    <path
+                        d="M12.3249 13.8939C11.8917 13.4606 11.8917 12.7582 12.3249 12.3249C12.7582 11.8917 13.4606 11.8917 13.8939 12.3249L16.1751 14.6061C16.6083 15.0394 16.6083 15.7418 16.1751 16.1751C15.7418 16.6083 15.0394 16.6083 14.6061 16.1751L12.3249 13.8939Z"
+                        fill="#6A6A6B" stroke="#6A6A6B" stroke-width="1.5" stroke-linecap="round" />
+                    <path
+                        d="M12 6.75C12 3.8505 9.64949 1.5 6.75 1.5C3.8505 1.5 1.5 3.8505 1.5 6.75C1.5 9.64949 3.8505 12 6.75 12C9.64949 12 12 9.64949 12 6.75Z"
+                        stroke="#6A6A6B" stroke-width="1.5" stroke-linejoin="round" />
+                </g>
+                <defs>
+                    <clipPath id="clip0_1172_2632">
+                        <rect width="18" height="18" fill="white" />
+                    </clipPath>
+                </defs>
+            </svg>
+            <input type="search" placeholder="Search Orders"
+                class="w-full placeholder:text-[#6A6A6B] placeholder:text-[15px]" />
+        </div>
+
+        <div class="relative max-w-max">
+            <select class="appearance-none bg-[#171717] text-white rounded-lg px-2.5 py-1.25 text-[15px] pr-8"
+                (click)="isSelectOpen = !isSelectOpen" (blur)="isSelectOpen = false">
+                <option value="all-time">All Orders</option>
+                <option value="last-week">Last Week</option>
+                <option value="last-month">Last Month</option>
+                <option value="last-year">Last Year</option>
+            </select>
+            <svg class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200"
+                [class.rotate-180]="isSelectOpen" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5" stroke="#FBFCFF"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </div>
+    </div>
+
+    <table class="w-full border-collapse mt-7.5">
         <thead>
             <tr class="text-left">
                 <th class="text-[14px] pb-2.5">Order Number</th>

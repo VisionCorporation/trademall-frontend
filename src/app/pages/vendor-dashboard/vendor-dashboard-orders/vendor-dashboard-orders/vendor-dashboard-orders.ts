@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ORDERS, ORDERS_FILTERS, ORDERS_STATUS_CONFIG } from '../../../../data/constants/vendor-dashbaord.constant';
-import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-vendor-dashboard-orders',
@@ -14,6 +13,7 @@ export class VendorDashboardOrders {
   public statusConfig = ORDERS_STATUS_CONFIG
   public selectedFilter = 'all-orders'
   public hoveredFilter: string | null = null;
+  public isSelectOpen = false;
 
   public selectFilter(filterValue: string): void {
     this.selectedFilter = filterValue;
