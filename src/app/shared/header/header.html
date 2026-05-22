@@ -91,7 +91,7 @@
           </div>
 
           @if (isDropdownOpen) {
-          <div [@fadeInOut]
+          <div [@fadeInOut] appClickOutside (clickOutside)="closeDropdown()"
             class="absolute flex flex-col gap-2 top-full right-0 px-5 py-7 mt-2 w-62.5 rounded-[20px] bg-[#FAF7F2] border border-[#E8DFD0] text-[14px] z-50">
             @if (user.userType === 'customer') {
             @for (item of customerDropdown; track item.label) {

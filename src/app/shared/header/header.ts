@@ -15,10 +15,11 @@ import { ToastService } from '../../services/toast/toast.service';
 import { CustomerDropdown, VendorDropdown } from '../../data/constants/dropdown.constant';
 import { Cart as CartService } from '../../services/cart/cart';
 import { CartResponse } from '../../interfaces/cart.interface';
+import { ClickOutside } from '../../directives/click-outside/click-outside';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, ClickOutside],
   templateUrl: './header.html',
   styleUrl: './header.css',
   animations: [fadeInOutAnimation],
@@ -102,11 +103,6 @@ export class Header implements OnInit {
 
   public closeDropdown(): void {
     this.isDropdownOpen = false;
-  }
-
-  @HostListener('document:click')
-  onDocumentClick(): void {
-    this.closeDropdown();
   }
 
   public logout() {
