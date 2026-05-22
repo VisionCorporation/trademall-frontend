@@ -72,7 +72,7 @@
     </div>
 
     <div class="mt-7.5 flex items-center gap-2.5">
-        <div class="flex items-center gap-1.25 border border-[#6A6A6B] rounded-lg max-w-50 px-2.5 py-1.25">
+        <div class="flex items-center gap-1.25 border border-[#6A6A6B] rounded-lg max-w-max px-2.5 py-1.25">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_1172_2632)">
                     <path d="M10.5 10.5L12.375 12.375" stroke="#6A6A6B" stroke-width="1.5" stroke-linejoin="round" />
@@ -93,21 +93,30 @@
                 class="w-full placeholder:text-[#6A6A6B] placeholder:text-[15px]" />
         </div>
 
-        <div class="relative max-w-max">
-            <select class="appearance-none bg-[#171717] text-white rounded-lg px-2.5 py-1.25 text-[15px] pr-8"
-                (click)="isSelectOpen = !isSelectOpen" (blur)="isSelectOpen = false">
-                <option value="all-time">All Orders</option>
-                <option value="last-week">Last Week</option>
-                <option value="last-month">Last Month</option>
-                <option value="last-year">Last Year</option>
-            </select>
-            <svg class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-200"
-                [class.rotate-180]="isSelectOpen" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5" stroke="#FBFCFF"
-                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+        <div class="relative max-w-max" appClickOutside (clickOutside)="isSelectOpen = false">
+            <button class="flex items-center gap-2 bg-[#171717] text-white rounded-lg px-2.5 py-1.25"
+                (click)="isSelectOpen = !isSelectOpen">
+                <span>{{ selectedPeriod }}</span>
+                <svg class="transition-transform duration-200" [class.rotate-180]="isSelectOpen" width="20" height="20"
+                    viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5" stroke="#FBFCFF"
+                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+
+            @if(isSelectOpen){
+            <div [@fadeInOut]
+                class="absolute top-full left-0 mt-1 bg-[#171717] text-white rounded-lg overflow-hidden z-10 min-w-full">
+                @for(period of orderPeriods; track period){
+                <button class="w-full text-left px-3 py-2 text-[15px] hover:bg-white/10 transition-colors duration-150"
+                    [class.bg-white/10]="selectedPeriod === period.label" (click)="selectPeriod(period)">
+                    {{ period.label }}
+                </button>
+                }
+            </div>
+            }
         </div>
+
     </div>
 
     <table class="w-full border-collapse mt-7.5">
