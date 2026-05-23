@@ -1,3 +1,102 @@
-<section class="bg-[#F4F4F4] h-full rounded-[20px] py-7.5 px-8.75 flex flex-col">
+<section class="bg-[#F4F4F4] h-full rounded-[20px] pt-7.5 px-8.75 flex flex-col">
+    <div class="flex itemd-center justify-end gap-3.75">
+        <button
+            class="text-xl px-3.5 py-2 border border-[#171717] hover:bg-[#171717] hover:text-white transition-colors duration-200 ease-in rounded-lg">Cancel</button>
+        <button
+            class="text-xl px-3.5 py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in">Save</button>
+    </div>
 
+    <div class="flex items-start gap-10 pt-2 pb-10 overflow-hidden">
+        <div class="shrink-0 sticky top-0">
+            <h2 class="light-header mb-1.25 text-[22px]">Images</h2>
+            <div
+                class="bg-white max-w-65 rounded-[20px] flex flex-col items-center justify-between gap-2.5 py-18.75 px-17.25">
+                <p class="text-[15px]">Add four(4) images of your product</p>
+                <button
+                    class="text-xl px-3.5 py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in">Upload</button>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto scrollbar-hide h-full px-2 pb-10">
+            <div class="mt-8 flex items-center gap-2.5 mb-5.25">
+                <button class="text-[#1B5DD7] text-xl">General</button>
+                <button class="text-[#17171733] text-xl">Advanced</button>
+            </div>
+
+            <div class="mb-7">
+                <label for="product-name" class="block mb-1.25 text-[17px]">Product Name</label>
+                <input type="text" id="product-name" placeholder="Enter product name"
+                    class="text-[17px] block border border-[#17171733] rounded-lg py-2.75 px-5 w-96.25 focus:outline-none placeholder:text-[17px]">
+            </div>
+
+            <div class="mb-7">
+                <label for="product-description" class="block mb-1.25 text-[17px]">Description</label>
+                <textarea id="product-description" placeholder="Create a description of your product"
+                    class="text-[17px] block border border-[#17171733] rounded-lg py-2.75 px-5 focus:outline-none placeholder:text-[17px] w-177.75 h-33.5 resize-none"></textarea>
+            </div>
+
+            <div class="flex items-center gap-3.75 mb-7">
+                <div>
+                    <label for="product-price" class="block mb-1.25 text-[17px]">Price</label>
+                    <input type="text" id="product-price" placeholder="Enter product price"
+                        class="text-[17px] block border border-[#17171733] rounded-lg py-2.75 px-5 w-96.25 focus:outline-none placeholder:text-[17px]">
+                </div>
+
+                <div>
+                    <label for="in-stock" class="block mb-1.25 text-[17px]">In Stock</label>
+                    <input type="number" id="in-stock" placeholder="Enter amount available"
+                        class="text-[17px] block border border-[#17171733] rounded-lg py-2.75 px-5 w-77.75 focus:outline-none placeholder:text-[17px]">
+                </div>
+            </div>
+
+            <div class="mb-7">
+                <label for="" class="block mb-1.25 text-[17px]">Discount</label>
+                <div class="flex items-center gap-2.5">
+                    <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 w-50">
+                        <input type="radio" id="no-discount" name="discount" value="no-discount" class="custom-radio">
+                        <label for="no-discount" class="text-[17px] mr-5">No Discount</label>
+                    </div>
+                    <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 w-50">
+                        <input type="radio" id="has-discount" name="discount" value="has-discount" class="custom-radio">
+                        <label for="has-discount" class="text-[17px] mr-5">% Percentage</label>
+                    </div>
+                    <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 w-50">
+                        <input type="radio" id="fixed-price" name="discount" value="fixed-price" class="custom-radio">
+                        <label for="fixed-price" class="text-[17px] mr-5">Fixed Price</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-7 flex items-center gap-3.75">
+                <div>
+                    <label for="categories" class="block mb-1.25 text-[17px]">Product Category</label>
+                    <button
+                        class="flex items-center justify-between gap-2 text-[#17171766] w-71.25 text-[17px] border border-[#17171733] rounded-lg py-2.75 px-5">
+                        <span>Select a category</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
+                                stroke="#171717" stroke-opacity="0.2" stroke-width="1.25" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div>
+                    <label for="subcategory" class="block mb-1.25 text-[17px]">Product Subcategory</label>
+                    <button
+                        class="flex items-center justify-between gap-2 text-[#17171766] w-71.25 text-[17px] border border-[#17171733] rounded-lg py-2.75 px-5">
+                        <span>Select a subcategory</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
+                                stroke="#171717" stroke-opacity="0.2" stroke-width="1.25" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button
+                class="float-end text-xl px-3.5 py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in">Continue</button>
+        </div>
+    </div>
 </section>
