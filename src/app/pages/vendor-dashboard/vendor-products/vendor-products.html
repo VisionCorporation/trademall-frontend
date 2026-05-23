@@ -78,7 +78,7 @@
         }@else {
         <span class="text-2xl block">{{ filteredProducts().length }} items</span>
         }
-        <button
+        <button (click)="navigateToAddNewProduct()"
             class="text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
             Add Product
         </button>

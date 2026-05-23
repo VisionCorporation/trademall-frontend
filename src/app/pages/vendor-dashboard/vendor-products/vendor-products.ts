@@ -5,6 +5,7 @@ import { Product, ProductsResponse } from '../../../interfaces/vendor-dashboard.
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { SkeletonLoader } from '../../../shared/skeleton-loader/skeleton-loader';
 import { staggerProducts } from '../../../animations/smooth-collapse.animations';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-products',
@@ -22,6 +23,7 @@ export class VendorProducts {
   public fetchedProducts: Product[] = [];
   public statusConfig = PRODUCT_STATUS_CONFIG;
   public filteredProducts = signal<Product[]>([]);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.fetchVendorProductsListings();
@@ -50,5 +52,9 @@ export class VendorProducts {
         ? this.fetchedProducts
         : this.fetchedProducts.filter(product => product.status === filterValue)
     );
+  }
+
+  public navigateToAddNewProduct(): void {
+    this.router.navigate(['/vendor/add-product']);
   }
 }
