@@ -13,7 +13,7 @@ import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { forkJoin } from 'rxjs';
 import { CartState } from '../../services/cart/cart-state';
-import { ProductCard } from '../../shared/product-card/product-card/product-card';
+import { ProductCard } from '../../shared/product-card/product-card';
 
 @Component({
   selector: 'app-category-products',

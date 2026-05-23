@@ -1,9 +1,9 @@
 import { Component, inject, Input } from '@angular/core';
-import { CartState } from '../../../services/cart/cart-state';
+import { CartState } from '../../services/cart/cart-state';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
-import { Wishlist } from '../../../services/wishlist/wishlist/wishlist';
-import { ProductCardInterface } from '../../../interfaces/products.interface';
+import { Wishlist } from '../../services/wishlist/wishlist';
+import { ProductCardInterface } from '../../interfaces/products.interface';
 
 @Component({
   selector: 'app-product-card',

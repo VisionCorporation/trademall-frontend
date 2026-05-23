@@ -1,9 +1,9 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { VendorDashboard } from '../../../../services/vendor-dashboard/vendor-dashboard';
-import { Product } from '../../../../interfaces/vendor-dashboard.interface';
-import { PERIODS, PRODUCT_STATUS_CONFIG, REVENUE } from '../../../../data/constants/vendor-dashbaord.constant';
-import { SkeletonLoader } from '../../../../shared/skeleton-loader/skeleton-loader';
+import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashboard';
+import { Product } from '../../../interfaces/vendor-dashboard.interface';
+import { PERIODS, PRODUCT_STATUS_CONFIG, REVENUE } from '../../../data/constants/vendor-dashbaord.constant';
+import { SkeletonLoader } from '../../../shared/skeleton-loader/skeleton-loader';
 import { Router } from '@angular/router';
 
 @Component({

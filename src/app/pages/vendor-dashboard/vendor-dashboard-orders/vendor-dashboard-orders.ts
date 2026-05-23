@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
-import { ORDER_PERIODS, ORDERS, ORDERS_FILTERS, ORDERS_STATUS_CONFIG } from '../../../../data/constants/vendor-dashbaord.constant';
-import { ClickOutside } from '../../../../directives/click-outside/click-outside';
-import { fadeInOutAnimation } from '../../../../animations/toast.animations';
+import { ORDER_PERIODS, ORDERS, ORDERS_FILTERS, ORDERS_STATUS_CONFIG } from '../../../data/constants/vendor-dashbaord.constant';
+import { ClickOutside } from '../../../directives/click-outside/click-outside';
+import { fadeInOutAnimation } from '../../../animations/toast.animations';
 
 @Component({
   selector: 'app-vendor-dashboard-orders',

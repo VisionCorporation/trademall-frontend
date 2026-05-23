@@ -4,8 +4,8 @@ import { customerGuard } from './guards/authorization/customer/customer-guard';
 import { vendorGuard } from './guards/authorization/vendor/vendor-guard';
 import { Home } from './pages/home/home';
 import { VendorProducts } from './pages/vendor-dashboard/vendor-products/vendor-products';
-import { VendorDashboardOverview } from './pages/vendor-dashboard/vendor-dashboard-overview/vendor-dashboard-overview/vendor-dashboard-overview';
-import { VendorDashboardOrders } from './pages/vendor-dashboard/vendor-dashboard-orders/vendor-dashboard-orders/vendor-dashboard-orders';
+import { VendorDashboardOverview } from './pages/vendor-dashboard/vendor-dashboard-overview/vendor-dashboard-overview';
+import { VendorDashboardOrders } from './pages/vendor-dashboard/vendor-dashboard-orders/vendor-dashboard-orders';
 
 export const routes: Routes = [
   {

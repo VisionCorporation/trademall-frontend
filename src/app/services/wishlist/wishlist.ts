@@ -1,5 +1,5 @@
 import { Component, inject, Injectable } from '@angular/core';
-import { ToastService } from '../../toast/toast.service';
+import { ToastService } from '../toast/toast.service';
 
 @Component({
   selector: 'app-wishlist',

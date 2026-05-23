@@ -13,7 +13,7 @@ import { COMMONQUESTIONS } from '../../data/constants/common-questions.constant'
 import { slideDown } from '../../animations/expand.animation';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { CartState } from '../../services/cart/cart-state';
-import { ProductCard } from '../../shared/product-card/product-card/product-card';
+import { ProductCard } from '../../shared/product-card/product-card';
 
 @Component({
   selector: 'app-home',

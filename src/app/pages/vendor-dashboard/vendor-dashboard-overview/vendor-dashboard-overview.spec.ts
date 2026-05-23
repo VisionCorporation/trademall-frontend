@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VendorDashboardOverview } from './vendor-dashboard-overview';
+import { VendorDashboardOverview } from './vendor-dashboard-overview/vendor-dashboard-overview';
 
 describe('VendorDashboardOverview', () => {
   let component: VendorDashboardOverview;
