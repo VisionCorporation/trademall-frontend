@@ -46,6 +46,14 @@ export const ORDERS = [
     { orderNumber: 'ORDE - 9876 - 4321', total: 'GHS 18,901.23', customer: 'Amexo Leticia', status: 'rejected', date: 'March 15, 2026' },
     { orderNumber: 'ORDE - 5432 - 1098', total: 'GHS 7,654.32', customer: 'Kwame Nkrumah', status: 'delivered', date: 'March 10, 2026' },
     { orderNumber: 'ORDE - 6789 - 3210', total: 'GHS 14,321.09', customer: 'Abena Serwaa', status: 'unfulfilled', date: 'March 5, 2026' },
+    { orderNumber: 'ORDE - 4321 - 8765', total: 'GHS 11,234.56', customer: 'Kofi Annan', status: 'delivered', date: 'March 1, 2026' },
+    { orderNumber: 'ORDE - 2109 - 6543', total: 'GHS 8,765.43', customer: 'Esi Mensah', status: 'rejected', date: 'February 25, 2026' },
+    { orderNumber: 'ORDE - 8765 - 4321', total: 'GHS 16,543.21', customer: 'Yaw Boateng', status: 'delivered', date: 'February 20, 2026' },
+    { orderNumber: 'ORDE - 6543 - 2109', total: 'GHS 13,210.98', customer: 'Akosua Agyapong', status: 'unfulfilled', date: 'February 15, 2026' },
+    { orderNumber: 'ORDE - 3210 - 9876', total: 'GHS 10,987.65', customer: 'Kwabena Osei', status: 'rejected', date: 'February 10, 2026' },
+    { orderNumber: 'ORDE - 1098 - 5432', total: 'GHS 9,876.54', customer: 'Abigail Boateng', status: 'rejected', date: 'February 5, 2026' },
+    { orderNumber: 'ORDE - 7654 - 3210', total: 'GHS 17,654.32', customer: 'Kwame Asante', status: 'unfulfilled', date: 'February 1, 2026' },
+    { orderNumber: 'ORDE - 4321 - 8765', total: 'GHS 12,345.67', customer: 'Ama Serwaa', status: 'rejected', date: 'January 25, 2026' },
 ]
 
 export const ORDER_PERIODS = [
@@ -53,4 +61,4 @@ export const ORDER_PERIODS = [
     { label: 'Last Week', value: 'last-week' },
     { label: 'Last Month', value: 'last-month' },
     { label: 'Last Year', value: 'last-year' },
-  ];
+];
