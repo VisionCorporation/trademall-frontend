@@ -6,6 +6,7 @@ import { Home } from './pages/home/home';
 import { VendorProducts } from './pages/vendor-dashboard/vendor-products/vendor-products';
 import { VendorDashboardOverview } from './pages/vendor-dashboard/vendor-dashboard-overview/vendor-dashboard-overview';
 import { VendorDashboardOrders } from './pages/vendor-dashboard/vendor-dashboard-orders/vendor-dashboard-orders';
+import { VendorAddProduct } from './pages/vendor-dashboard/vendor-add-product/vendor-add-product';
 
 export const routes: Routes = [
   {
@@ -64,6 +65,7 @@ export const routes: Routes = [
       { path: 'overview', component: VendorDashboardOverview },
       { path: 'orders', component: VendorDashboardOrders },
       { path: 'products', component: VendorProducts },
+      { path: 'add-product', component: VendorAddProduct },
     ],
     canActivate: [authGuard, vendorGuard],
   },
