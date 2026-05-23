@@ -105,6 +105,18 @@ input:focus {
   border-color: transparent;
 }
 
+::placeholder {
+  color: #6A6A6B;
+  opacity: 1;
+}
+
+input,
+textarea,
+select {
+  color: #171717;
+  caret-color: #171717;
+}
+
 .loader {
   width: 20px;
   --b: 8px;
