@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { NAV_ITEMS } from '../../data/constants/vendor-dashbaord.constant';
+import { NAV_ITEMS, ROUTE_TITLE_MAP } from '../../data/constants/vendor-dashbaord.constant';
 import { LoginService } from '../../services/login/login.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { filter, map } from 'rxjs';
@@ -18,13 +18,7 @@ export class VendorDashboard implements OnInit {
   private readonly toastService = inject(ToastService)
   public user: any
   public headerTitle = signal('Overview');
-
-  private readonly routeTitleMap: Record<string, string> = {
-    'overview': 'Overview',
-    'orders': 'Orders',
-    'products': 'Products',
-    'reports': 'Reports',
-  };
+  private readonly routeTitleMap = ROUTE_TITLE_MAP
 
   constructor() {
     this.router.events.pipe(

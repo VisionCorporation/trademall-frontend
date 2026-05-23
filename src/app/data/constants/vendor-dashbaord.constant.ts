@@ -5,6 +5,14 @@ export const NAV_ITEMS = [
     { label: 'Reports', route: '/vendor/reports', icon: 'reports', activeColor: '#FBBB0D' },
 ];
 
+export const ROUTE_TITLE_MAP: Record<string, string> = {
+    'overview': 'Overview',
+    'orders': 'Orders',
+    'products': 'Products',
+    'reports': 'Reports',
+    'add-product': 'New Product',
+};
+
 export const PRODUCTS_FILTERS = [
     { label: 'All', value: 'all', activeColor: '#1B5DD7' },
     { label: 'Approved', value: 'approved', activeColor: '#26C34D' },
