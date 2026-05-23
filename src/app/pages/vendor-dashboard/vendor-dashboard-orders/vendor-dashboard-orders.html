@@ -124,21 +124,21 @@
         <table class="w-full border-collapse">
             <thead class="sticky top-0 bg-[#F4F4F4]">
                 <tr class="text-left">
-                    <th class="text-[14px] pb-2.5">Order Number</th>
-                    <th class="text-[14px] pb-2.5">Total</th>
-                    <th class="text-[14px] pb-2.5">Customer</th>
-                    <th class="text-[14px] pb-2.5">Status</th>
-                    <th class="text-[14px] pb-2.5">Order Date</th>
+                    <th class="text-[15px] pb-2.5">Order Number</th>
+                    <th class="text-[15px] pb-2.5">Total</th>
+                    <th class="text-[15px] pb-2.5">Customer</th>
+                    <th class="text-[15px] pb-2.5">Status</th>
+                    <th class="text-[15px] pb-2.5">Order Date</th>
                 </tr>
             </thead>
             <tbody>
                 @for(order of filteredOrders(); track order){
                 <tr class="border-b border-[#D4D4D4] last:border-b-0">
-                    <td class="py-3 text-[15px]">{{ order.orderNumber }}</td>
-                    <td class="py-3 text-[15px]">{{ order.total }}</td>
-                    <td class="py-3 text-[15px]">{{ order.customer }}</td>
+                    <td class="py-3">{{ order.orderNumber }}</td>
+                    <td class="py-3">{{ order.total }}</td>
+                    <td class="py-3">{{ order.customer }}</td>
                     <td class="py-3">
-                        <span class="text-[14px] px-2.5 py-1.25 rounded-lg"
+                        <span class="text-[15px] px-2.5 py-1.25 rounded-lg"
                             [style.color]="statusConfig[order.status].color"
                             [style.backgroundColor]="statusConfig[order.status].bgColor"
                             [style.border]="'1px solid ' + statusConfig[order.status].color">
