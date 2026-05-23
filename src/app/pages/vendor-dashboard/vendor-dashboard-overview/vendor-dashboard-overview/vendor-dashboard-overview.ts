@@ -4,6 +4,7 @@ import { VendorDashboard } from '../../../../services/vendor-dashboard/vendor-da
 import { Product } from '../../../../interfaces/vendor-dashboard.interface';
 import { PERIODS, PRODUCT_STATUS_CONFIG, REVENUE } from '../../../../data/constants/vendor-dashbaord.constant';
 import { SkeletonLoader } from '../../../../shared/skeleton-loader/skeleton-loader';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-dashboard-overview',
@@ -19,6 +20,7 @@ export class VendorDashboardOverview {
   private vendorDashboardService = inject(VendorDashboard);
   public fetchedProducts: Product[] = [];
   public statusConfig = PRODUCT_STATUS_CONFIG;
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.fetchVendorProductsListings();
@@ -37,5 +39,13 @@ export class VendorDashboardOverview {
         this.isFetchingProducts.set(false);
       }
     });
+  }
+
+  public navigateToProductsPage(): void {
+    this.router.navigate(['/vendor/products']);
+  }
+
+  public navigateToAddNewProduct(): void {
+    this.router.navigate(['/vendor/add-product']);
   }
 }

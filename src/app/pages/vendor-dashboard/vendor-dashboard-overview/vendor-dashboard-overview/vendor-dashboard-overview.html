@@ -30,11 +30,11 @@
         <div class="flex items-center justify-between mb-6.25">
             <h2 class="text-[24px] products-font text-[#000000]">Products</h2>
             <div class="flex items-center gap-3.75">
-                <button
+                <button (click)="navigateToProductsPage()"
                     class="text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
                     View More
                 </button>
-                <button
+                <button (click)="navigateToAddNewProduct()"
                     class="text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">Add
                     Product</button>
             </div>
