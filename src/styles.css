@@ -85,12 +85,14 @@ input {
 
 table,
 th,
-td {
+td,
+label {
   font-family: 'Atkinson Hyperlegible', sans-serif;
   font-weight: 400;
 }
 
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
   box-shadow: 0 0 0 2px #2e790e5d;
   border-color: #2e790e9b;
@@ -106,7 +108,7 @@ input:focus {
 }
 
 ::placeholder {
-  color: #6A6A6B;
+  color: #17171766;
   opacity: 1;
 }
 
@@ -116,6 +118,38 @@ select {
   color: #171717;
   caret-color: #171717;
 }
+
+.custom-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 20px;
+  height: 20px;
+  border: 2px solid #171717;
+  border-radius: 50%;
+  background-color: transparent;
+
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.custom-radio:checked {
+  background-color: #2e790e;
+  border: none;
+}
+
+.custom-radio:focus-visible {
+  outline: 2px solid #2e790e;
+  outline-offset: 2px;
+}
+
+.custom-radio:hover {
+  transform: scale(1.05);
+}
+
 
 .loader {
   width: 20px;
