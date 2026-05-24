@@ -22,38 +22,26 @@ export interface RootCategoryResponse {
   data: RootCategory[];
 }
 
-export interface SelectedCategoryDetail {
+export interface CategoryParent {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+export interface Category {
   _id: string;
   name: string;
   slug: string;
   description: string;
   image: string | null;
-  directProductCount: number;
-  totalProductCount: number;
+  displayOrder: number;
+  isFeatured: boolean;
   hasChildren: boolean;
 }
 
-export interface SelectedCategoryChild {
-  _id: string;
-  name: string;
-  slug: string;
-  description: string;
-  image: string | null;
-  isActive: boolean;
-  parent: string;
-  displayOrder: number;
-  isFeatured: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface SelectedCategoryDetailData {
-  category: SelectedCategoryDetail;
-  totalProductsInTree: number;
-  children: SelectedCategoryChild[];
-}
-
-export interface SelectedCategoryDetailResponse {
+export interface CategoryListResponse {
   success: boolean;
-  data: SelectedCategoryDetailData;
+  parent: CategoryParent;
+  totalResults: number;
+  data: Category[];
 }
