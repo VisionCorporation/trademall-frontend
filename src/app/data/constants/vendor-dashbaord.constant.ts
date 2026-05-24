@@ -70,3 +70,13 @@ export const ORDER_PERIODS = [
     { label: 'Last Month', value: 'last-month' },
     { label: 'Last Year', value: 'last-year' },
 ];
+
+export const CATEGORIES = [
+    { label: "Electronics & Gadgets", value: 'electronics-and-gadgets' },
+    { label: "Phones & Accessories", value: 'phones-and-accessories' },
+    { label: "Computing", value: 'computing' },
+    { label: "Fashion & Apparel", value: 'fashion-and-apparel' },
+    { label: "Home & Kitchen", value: 'home-and-kitchen' },
+    { label: "Beauty & Personal Care", value: 'beauty-and-personal-care' },
+    { label: "Sports & Outdoors", value: 'sports-and-outdoors' },
+]

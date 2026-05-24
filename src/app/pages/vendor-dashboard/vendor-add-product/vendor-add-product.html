@@ -68,17 +68,35 @@
             </div>
 
             <div class="mb-7 flex items-center gap-3.75">
-                <div>
+                <div class="relative" appClickOutside (clickOutside)="isCategoryOpen = false">
                     <label for="categories" class="block mb-1.25 text-[17px]">Product Category</label>
-                    <button
+                    <button (click)="isCategoryOpen = !isCategoryOpen"
                         class="flex items-center justify-between gap-2 text-[#17171766] w-71.25 text-[17px] border border-[#17171733] rounded-lg py-2.75 px-5">
+                        @if(selectedCategory){
+                        <span class="text-[#171717]">{{selectedCategory}}</span>
+                        }@else {
                         <span>Select a category</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        }
+                        <svg class="transition-transform duration-200" [class.rotate-180]="isCategoryOpen" width="20"
+                            height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
                                 stroke="#171717" stroke-opacity="0.2" stroke-width="1.25" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>
                     </button>
+
+                    @if(isCategoryOpen){
+                    <div [@fadeInOut]
+                        class="absolute top-full left-0 mt-1 bg-white py-3 rounded-lg overflow-hidden z-10 min-w-full shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+                        @for(category of categories; track category){
+                        <button class="w-full text-left px-5 py-2 hover:bg-[#F4F4F4] transition-colors duration-150"
+                            [class.bg-white/10]="selectedCategory === category.label"
+                            (click)="selectCategory(category)">
+                            {{ category.label }}
+                        </button>
+                        }
+                    </div>
+                    }
                 </div>
 
                 <div>
