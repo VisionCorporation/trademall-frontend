@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
 import {
   RootCategoryResponse,
-  SelectedCategoryDetailResponse,
+  CategoryListResponse,
 } from '../../interfaces/categories.interface';
 import { VendorProductsResponse } from '../../interfaces/vendor.interface';
 
@@ -20,11 +20,11 @@ export class Products {
     );
   }
 
-  public getCategoryWithDirectChildren(
+  public getSubCategories(
     categorySlug: string,
-  ): Observable<SelectedCategoryDetailResponse> {
-    return this.http.get<SelectedCategoryDetailResponse>(
-      `${environment.apiBaseUrl}/products/categories/${categorySlug}/with-children`,
+  ): Observable<CategoryListResponse> {
+    return this.http.get<CategoryListResponse>(
+      `${environment.apiBaseUrl}/products/categories/${categorySlug}/subcategories`,
     );
   }
 
