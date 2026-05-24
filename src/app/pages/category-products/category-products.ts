@@ -1,17 +1,14 @@
 import { Component, inject, OnInit, OnDestroy, signal, Renderer2 } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Products } from '../../services/products/products';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
-import { CurrencyPipe } from '@angular/common';
 import { ProductDetails } from '../../interfaces/products.interface';
 import { smoothCollapse, staggerProducts } from '../../animations/smooth-collapse.animations';
-import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { SearchBar } from '../../shared/search-bar/search-bar';
-import { forkJoin } from 'rxjs';
 import { CartState } from '../../services/cart/cart-state';
 import { ProductCard } from '../../shared/product-card/product-card';
 
@@ -32,7 +29,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   public subCategories: any[] = [];
   public categoryName = '';
   private _isFilterOpen = false;
-
+  private grandChildMap = new Map<string, string[]>();
   private readonly productService = inject(Products);
   private readonly route = inject(ActivatedRoute);
   private readonly renderer = inject(Renderer2);
@@ -59,31 +56,28 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
     if (!slug) return;
 
-    forkJoin({
-      category: this.productService.getCategoryWithDirectChildren(slug),
-      products: this.productService.getProductsByCategory(slug),
-    }).subscribe({
-      next: ({ category, products }) => {
-        this.categoryName = category.data.category.name;
-        this.subCategories = category.data.children;
-        this.allProducts = products.data;
-
+    this.productService.getSubCategories(slug).subscribe({
+      next: (category) => {
+        this.categoryName = category.parent.name;
+        this.subCategories = category.data;
         this.isSubCategoriesLoading.set(false);
+      }
+    });
+
+    this.productService.getProductsByCategory(slug).subscribe({
+      next: (products) => {
+        this.allProducts = products.data;
         this.isProductsLoading.set(false);
 
         if (filterSlug) {
           this.selectedCategorySlugs = [filterSlug];
-
-          this.selectedCategoryProducts = this.allProducts.filter(
-            (p) => p.category?.slug === filterSlug,
-          );
+          this.resolveAndFilter(filterSlug);
         }
       },
       error: (err) => {
         console.error(err);
         this.isProductsLoading.set(false);
-        this.isSubCategoriesLoading.set(false);
-      },
+      }
     });
   }
 
@@ -93,51 +87,64 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
   public onCategoryChange(slug: string, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
+    this.isFilterOpen = false;
 
     if (isChecked) {
       this.selectedCategorySlugs = [...this.selectedCategorySlugs, slug];
+      this.resolveAndFilter(slug);
     } else {
       this.selectedCategorySlugs = this.selectedCategorySlugs.filter((s) => s !== slug);
+      this.filterProductsLocally();
     }
-
-    this.isFilterOpen = false;
-    this.fetchSelectedCategoryProducts();
   }
 
-  get displayedProducts(): ProductDetails[] {
-    return this.selectedCategorySlugs.length > 0 ? this.selectedCategoryProducts : this.allProducts;
-  }
-
-  public getCategoryName(slug: string): string {
-    return this.subCategories.find((c) => c.slug === slug)?.name ?? slug;
-  }
-
-  public removeCategory(slug: string): void {
-    this.selectedCategorySlugs = this.selectedCategorySlugs.filter((s) => s !== slug);
-    this.fetchSelectedCategoryProducts();
-  }
-
-  private fetchSelectedCategoryProducts(): void {
-    if (this.selectedCategorySlugs.length === 0) {
-      this.selectedCategoryProducts = [];
+  private resolveAndFilter(slug: string): void {
+    if (this.grandChildMap.has(slug)) {
+      this.filterProductsLocally();
       return;
     }
 
     this.isProductsLoading.set(true);
 
-    const requests = this.selectedCategorySlugs.map((slug) =>
-      this.productService.getProductsByCategory(slug),
+    this.productService.getSubCategories(slug).subscribe({
+      next: (res) => {
+        if (res.data.length === 0) {
+          this.grandChildMap.set(slug, [slug]);
+        } else {
+          const childSlugs = res.data.map((c: any) => c.slug);
+          this.grandChildMap.set(slug, childSlugs);
+        }
+        this.filterProductsLocally();
+        this.isProductsLoading.set(false);
+      },
+      error: () => this.isProductsLoading.set(false),
+    });
+  }
+
+  private filterProductsLocally(): void {
+    if (this.selectedCategorySlugs.length === 0) {
+      this.selectedCategoryProducts = [];
+      return;
+    }
+    const resolvedSlugs = this.selectedCategorySlugs.flatMap((slug) =>
+      this.grandChildMap.get(slug) ?? [slug]
     );
 
-    forkJoin(requests).subscribe({
-      next: (results) => {
-        this.selectedCategoryProducts = results.flatMap((r) => r.data);
-        this.isProductsLoading.set(false);
-      },
-      error: (err) => {
-        console.error('Failed to fetch products for selected categories', err);
-        this.isProductsLoading.set(false);
-      },
-    });
+    this.selectedCategoryProducts = this.allProducts.filter((p) =>
+      resolvedSlugs.includes(p.category?.slug ?? '')
+    );
+  }
+
+  public removeCategory(slug: string): void {
+    this.selectedCategorySlugs = this.selectedCategorySlugs.filter((s) => s !== slug);
+    this.filterProductsLocally();
+  }
+
+  public get displayedProducts(): ProductDetails[] {
+    return this.selectedCategorySlugs.length > 0 ? this.selectedCategoryProducts : this.allProducts;
+  }
+
+  public getCategoryName(slug: string): string {
+    return this.subCategories.find((c) => c.slug === slug)?.name ?? slug;
   }
 }

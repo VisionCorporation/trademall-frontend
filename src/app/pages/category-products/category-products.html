@@ -86,13 +86,15 @@
         </p>
       </div>
 
+      @if(displayedProducts.length>0){
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75"
         [@staggerProducts]="selectedCategoryProducts.length">
         @for (product of displayedProducts; track product._id) {
         <app-product-card [product]="product" />
         }
       </div>
-      } @else if (selectedCategorySlugs.length > 0) {
+      }
+      } @else if (selectedCategorySlugs.length > 0 || displayedProducts.length===0) {
       <div class="flex flex-col items-center justify-center py-14 text-center" [@fadeInOut]>
         <div class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full">
           <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
