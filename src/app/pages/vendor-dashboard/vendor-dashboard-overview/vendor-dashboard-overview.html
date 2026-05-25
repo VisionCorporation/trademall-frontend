@@ -12,7 +12,7 @@
                 <div class="flex gap-2.5 bg-[#F4F4F4] rounded-lg p-0.75">
                     @for(period of periods; track period){
                     <button (click)="selectedPeriod = period"
-                        [class]="(selectedPeriod === period ? 'transition-colors duration-130 ease-in text-[16px] px-1.25 py-0.75 rounded-md bg-[#FBFCFF]' : 'transition-colors duration-130 ease-in text-[16px] px-1.25 py-0.75 rounded-md text-[#D1D1D1]')">
+                        [class]="(selectedPeriod === period ? 'transition-colors duration-130 ease-in text-[16px] px-1.25 py-0.75 rounded-md bg-[#FBFCFF]' : 'transition-colors duration-130 ease-in text-[16px] px-1.25 py-0.75 rounded-md text-[#6B6B6B]')">
                         {{ period }}
                     </button>
                     }
