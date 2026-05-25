@@ -1,8 +1,8 @@
 <section class="bg-[#F4F4F4] h-full rounded-[20px] py-7.5 px-8.75 flex flex-col">
-    <div class="flex items-center gap-2.5 mb-3.75 pb-3.75 border-b border-[#D1D1D1] shrink-0">
+    <div class="flex items-center gap-2.5 mb-3.75 pb-3.75 border-b border-[#6B6B6B99] shrink-0">
         @for(filter of productsFilters; track filter){
         <button (click)="selectFilter(filter.value)"
-            [style.color]="(selectedFilter === filter.value || hoveredFilter === filter.value) ? filter.activeColor : '#17171733'"
+            [style.color]="(selectedFilter === filter.value || hoveredFilter === filter.value) ? filter.activeColor : '#6B6B6B99'"
             (mouseenter)="hoveredFilter = filter.value" (mouseleave)="hoveredFilter = null"
             class="flex items-center gap-0.5 transition-colors duration-150 ease-in">
             @switch (filter.value) {
