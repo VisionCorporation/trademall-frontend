@@ -28,13 +28,11 @@ export class Cart {
   }
 
   public updateCartItem(productId: string, quantity: number): Observable<any> {
-    return this.http.patch(`${environment.apiBaseUrl}/cart/${productId}`, { quantity });
+    return this.http.put(`${environment.apiBaseUrl}/cart/product/${productId}`, { quantity })
   }
 
   public removeFromCart(productId: string) {
-    return this.http.delete(`${environment.apiBaseUrl}/cart/${productId}`).pipe(
-      tap(() => this.cartCountSubject.next(this.cartCountSubject.getValue() - 1))
-    );
+    return this.http.delete(`${environment.apiBaseUrl}/cart/${productId}`)
   }
 
   public clearCart() {
