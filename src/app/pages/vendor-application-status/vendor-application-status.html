@@ -1,0 +1,80 @@
+<section class="bg-[#F4F4F4] rounded-[20px] h-screen flex flex-col items-center justify-center p-6 w-full">
+    <div class="bg-[#ECECEC] py-12 sm:py-17.75 px-12 sm:px-18.75 rounded-full mb-10">
+        @if(user.vendorStatus === 'pending'){
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M41.6456 8.42056C31.2353 7.97981 23.1926 9.17906 23.1926 9.17906C18.114 9.54219 8.38149 12.3894 8.38157 29.0172C8.38166 45.5037 8.27391 65.8287 8.38157 73.9312C8.38157 78.8817 11.4467 90.4287 22.0557 91.0475C34.9508 91.8 58.1785 91.96 68.8356 91.0475C71.6885 90.8867 81.1864 88.6471 82.3885 78.3133C83.6339 67.6079 83.386 60.1679 83.386 58.3971"
+                stroke="#FF860D" stroke-width="6.66667" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M29.0857 54.2314H45.7522" stroke="#FF860D" stroke-width="6.66667" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M29.0857 70.8984H62.4189" stroke="#FF860D" stroke-width="6.66667" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path
+                d="M75.625 27.5003C84.2547 27.5003 91.25 20.5048 91.25 11.8753C91.25 8.99887 88.9182 6.66699 86.0417 6.66699H65.2083C62.3318 6.66699 60 8.99887 60 11.8753C60 20.5048 66.9953 27.5003 75.625 27.5003ZM75.625 27.5003C84.2547 27.5003 91.25 34.4959 91.25 43.1253C91.25 46.0018 88.9182 48.3337 86.0417 48.3337H65.2083C62.3318 48.3337 60 46.0018 60 43.1253C60 34.4959 66.9953 27.5003 75.625 27.5003Z"
+                stroke="#FF860D" stroke-width="6.66667" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        }
+
+        @if(user.vendorStatus === 'rejected'){
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M41.6452 8.42105C31.235 7.9803 23.1922 9.17955 23.1922 9.17955C18.1137 9.54268 8.38112 12.3898 8.38121 29.0177C8.38129 45.5042 8.27354 65.8292 8.38121 73.9317C8.38121 78.8821 11.4463 90.4292 22.0553 91.048C34.9505 91.8005 58.1781 91.9605 68.8352 91.048C71.6881 90.8871 81.186 88.6476 82.3881 78.3138C83.6335 67.6084 83.3856 60.1684 83.3856 58.3976"
+                stroke="#D92D20" stroke-width="6.66667" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M29.0853 54.2319H45.7519" stroke="#D92D20" stroke-width="6.66667" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M29.0853 70.8984H62.4185" stroke="#D92D20" stroke-width="6.66667" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path
+                d="M93.3334 26.6665C93.3334 15.6208 84.379 6.6665 73.3334 6.6665C62.2877 6.6665 53.3334 15.6208 53.3334 26.6665C53.3334 37.7121 62.2877 46.6665 73.3334 46.6665C84.379 46.6665 93.3334 37.7121 93.3334 26.6665Z"
+                stroke="#D92D20" stroke-width="6.66667" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M79.9986 33.3333L66.6666 20M66.668 33.3333L80 20" stroke="#D92D20" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        }
+
+        @if(user.vendorStatus ==='approved'){
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M62.4187 29.2319C62.4187 29.2319 64.502 31.3153 66.5854 35.4819C66.5854 35.4819 73.2029 25.0653 79.0854 22.9819"
+                stroke="#26C34D" stroke-width="6.66667" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+                d="M41.6451 8.42105C31.2348 7.9803 23.1921 9.17955 23.1921 9.17955C18.1135 9.54268 8.381 12.3898 8.38109 29.0177C8.38117 45.5042 8.27342 65.8292 8.38109 73.9317C8.38109 78.8821 11.4462 90.4292 22.0552 91.048C34.9503 91.8005 58.178 91.9605 68.8351 91.048C71.688 90.8871 81.1859 88.6476 82.388 78.3138C83.6334 67.6084 83.3855 60.1684 83.3855 58.3976"
+                stroke="#26C34D" stroke-width="6.66667" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+                d="M91.6659 29.2318C91.6659 40.7377 82.3296 50.0653 70.8126 50.0653C59.2955 50.0653 49.9592 40.7377 49.9592 29.2318C49.9592 17.7259 59.2955 8.39844 70.8126 8.39844C82.3296 8.39844 91.6659 17.7259 91.6659 29.2318Z"
+                stroke="#26C34D" stroke-width="6.66667" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M29.0852 54.2319H45.7517" stroke="#26C34D" stroke-width="6.66667" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M29.0852 70.8984H62.4184" stroke="#26C34D" stroke-width="6.66667" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+
+        }
+
+
+    </div>
+    @if(user.vendorStatus === 'pending') {
+    <p class="mb-7.5 text-lg sm:text-[23px] text-center">Your Application is Pending Approval</p>
+    <a routerLink="/"
+        class="text-[17px] text-center sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">Return
+        Home</a>
+    }@else if(user.vendorStatus==='rejected'){
+    <p class="mb-7.5 text-lg sm:text-[23px] text-center">Your Application was Rejected</p>
+    <div class="flex gap-5">
+        <a routerLink="/"
+            class="text-[17px] text-center sm:text-[20px] text-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg">Return
+            Home</a>
+        <a routerLink="/customer/signup"
+            class="text-[17px] text-center sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">Register
+            as Customer</a>
+    </div>
+    }@else {
+    <p class="mb-7.5 text-lg sm:text-[23px] text-center">Your Application has been Approved</p>
+    <a routerLink="/vendor/overview"
+        class="text-[17px] text-center sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">View
+        Vendor Dashboard</a>
+    }
+    <p class="logo mt-24.75 text-[25px] sm:text-[32px] transition-colors duration-300 w-fit text-[#171717]">
+        trademall
+    </p>
+</section>
