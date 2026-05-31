@@ -21,7 +21,7 @@ export class ToastService {
     setTimeout(() => this.remove(id, message), duration);
   }
 
-  private remove(id: string, message: string): void {
+  public remove(id: string, message: string): void {
     const updated = this.toastsSubject.value.filter((t) => t.id !== id);
     this.toastsSubject.next(updated);
     this.activeMessages.delete(message);
