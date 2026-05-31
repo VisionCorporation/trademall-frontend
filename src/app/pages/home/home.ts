@@ -41,12 +41,17 @@ export class Home {
   public addingToCartIds = new Set<string>();
   public cartQuantities = signal<Record<string, number>>({});
   private readonly cartState = inject(CartState);
+  public hasFeaturedProductFailed = signal(false);
 
   ngOnInit() {
     this.isFeaturedProductsLoading.set(true);
 
     this.cartState.loadCart();
 
+    this.fetchFeaturedProducts();
+  }
+
+  public fetchFeaturedProducts() {
     this.productsService.getFeaturedProducts().subscribe({
       next: (response) => {
         this.featuredProducts = response.data;
@@ -55,6 +60,7 @@ export class Home {
       error: () => {
         this.toastService.error('Failed to load featured products');
         this.isFeaturedProductsLoading.set(false);
+        this.hasFeaturedProductFailed.set(true);
       },
     });
   }
