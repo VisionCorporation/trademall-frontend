@@ -2,11 +2,11 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/authentication/auth-guard';
 import { customerGuard } from './guards/authorization/customer/customer-guard';
 import { vendorGuard } from './guards/authorization/vendor/vendor-guard';
-import { Home } from './pages/home/home';
 import { VendorProducts } from './pages/vendor-dashboard/vendor-products/vendor-products';
 import { VendorDashboardOverview } from './pages/vendor-dashboard/vendor-dashboard-overview/vendor-dashboard-overview';
 import { VendorDashboardOrders } from './pages/vendor-dashboard/vendor-dashboard-orders/vendor-dashboard-orders';
 import { VendorAddProduct } from './pages/vendor-dashboard/vendor-add-product/vendor-add-product';
+import { vendorApprovalGuard } from './guards/authorization/vendor-approval/vendor-approval-guard';
 
 export const routes: Routes = [
   {
@@ -58,6 +58,11 @@ export const routes: Routes = [
     canActivate: [authGuard, customerGuard],
   },
   {
+    path: 'vendor-application-status',
+    loadComponent: () => import('./pages/vendor-application-status/vendor-application-status').then((m) => m.VendorApplicationStatus),
+    canActivate: [authGuard, vendorGuard],
+  },
+  {
     path: 'vendor',
     loadComponent: () => import('./pages/vendor-dashboard/vendor-dashboard').then((m) => m.VendorDashboard),
     children: [
@@ -67,7 +72,7 @@ export const routes: Routes = [
       { path: 'products', component: VendorProducts },
       { path: 'add-product', component: VendorAddProduct },
     ],
-    canActivate: [authGuard, vendorGuard],
+    canActivate: [authGuard, vendorGuard, vendorApprovalGuard],
   },
   {
     path: 'order-history',
