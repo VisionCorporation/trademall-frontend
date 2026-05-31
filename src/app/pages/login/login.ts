@@ -19,6 +19,7 @@ export class Login {
   private readonly loginService = inject(LoginService);
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
+  private readonly vendorApplicationStatusVisitedKey = 'vendorApplicationStatusVisited';
 
   public loginForm = this.fb.group({
     email: [
@@ -39,6 +40,14 @@ export class Login {
     return '';
   }
 
+  private hasVisitedVendorApplicationStatus(): boolean {
+    return localStorage.getItem(this.vendorApplicationStatusVisitedKey) === 'true';
+  }
+
+  private markVendorApplicationStatusVisited(): void {
+    localStorage.setItem(this.vendorApplicationStatusVisitedKey, 'true');
+  }
+
   public onSubmit(): void {
     this.signupService.isSubmitting$.next(true);
 
@@ -53,9 +62,15 @@ export class Login {
         this.signupService.isSubmitting$.next(false);
         this.loginForm.reset();
 
-        if (res.user.userType === 'vendor') {
+        if (res.user.userType === 'vendor' && res.user.vendorStatus === 'approved' && this.hasVisitedVendorApplicationStatus()) {
           this.router.navigate(['/vendor/overview']);
-        } else if (res.user.userType === 'customer') {
+        } else if (res.user.userType === 'vendor' && res.user.vendorStatus === 'approved' && !this.hasVisitedVendorApplicationStatus()) {
+          this.router.navigate(['/vendor-application-status']);
+          this.markVendorApplicationStatusVisited();
+        } else if (res.user.userType === 'vendor' && (res.user.vendorStatus === 'pending' || res.user.vendorStatus === 'rejected')) {
+          this.router.navigate(['/vendor-application-status']);
+        }
+        else if (res.user.userType === 'customer') {
           this.router.navigate(['/']);
         }
       },
