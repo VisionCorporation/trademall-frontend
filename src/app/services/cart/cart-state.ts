@@ -7,63 +7,81 @@ import { CartResponse } from "../../interfaces/cart.interface";
 export class CartState {
     private readonly cartService = inject(Cart);
     private readonly toastService = inject(ToastService);
-
-    public cartQuantities = signal<Record<string, number>>({});
+    public cartQuantities = signal<Record<string, { quantity: number; itemId: string }>>({});
     public cartLoadingStates = signal<Record<string, 'adding' | 'increment' | 'decrement' | null>>({});
 
-    isAdding(productId: string): boolean {
+    public isAdding(productId: string): boolean {
         return this.cartLoadingStates()[productId] === 'adding';
     }
 
-    isIncrementing(productId: string): boolean {
+    public isIncrementing(productId: string): boolean {
         return this.cartLoadingStates()[productId] === 'increment';
     }
 
-    isDecrementing(productId: string): boolean {
+    public isDecrementing(productId: string): boolean {
         return this.cartLoadingStates()[productId] === 'decrement';
     }
 
-    loadCart() {
+    private syncCount(): void {
+        const total = Object.values(this.cartQuantities()).reduce((sum, { quantity }) => sum + quantity, 0);
+        this.cartService.updateCartCount(total);
+    }
+
+    public loadCart() {
         this.cartService.getCartSummary().subscribe({
             next: (response: CartResponse) => {
                 const items = response.data.cart.vendorGroups.flatMap(g => g.items);
-                const quantities = items.reduce<Record<string, number>>((acc, item) => {
+                const quantities = items.reduce<Record<string, { quantity: number; itemId: string }>>((acc, item) => {
                     if (item.productId?._id)
-                        acc[item.productId._id] = (acc[item.productId._id] ?? 0) + item.quantity;
+                        acc[item.productId._id] = {
+                            quantity: (acc[item.productId._id]?.quantity ?? 0) + item.quantity,
+                            itemId: item._id
+                        };
                     return acc;
                 }, {});
                 this.cartQuantities.set(quantities);
+                this.syncCount();
             },
         });
     }
 
-    addToCart(productId: string, quantity = 1) {
+    public addToCart(productId: string, quantity = 1) {
         this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: 'adding' });
 
         this.cartService.addToCart(productId, quantity).subscribe({
             next: () => {
                 this.cartQuantities.set({
                     ...this.cartQuantities(),
-                    [productId]: this.getCartQuantity(productId) + quantity,
+                    [productId]: {
+                        quantity: this.getCartQuantity(productId) + quantity,
+                        itemId: ''
+                    }
                 });
-                this.toastService.success('Product added to cart');
+                this.syncCount();
                 this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null });
+                this.toastService.success('Product added to cart');
+                this.loadCart();
             },
             error: (err) => {
-                console.log('Add to cart error:', err);
                 this.toastService.error(`${err.error?.message || 'Failed to add product to cart'}`);
                 this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null });
             }
         });
     }
 
-    incrementCartQuantity(productId: string) {
-        const newQty = this.getCartQuantity(productId) + 1;
+    public incrementCartQuantity(productId: string) {
+        const current = this.cartQuantities()[productId];
+        const newQty = current.quantity + 1;
         this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: 'increment' });
 
         this.cartService.updateCartItem(productId, newQty).subscribe({
             next: () => {
-                this.cartQuantities.set({ ...this.cartQuantities(), [productId]: newQty });
+                this.cartQuantities.set({
+                    ...this.cartQuantities(),
+                    [productId]: { ...current, quantity: newQty }
+                });
+                this.syncCount();
+                this.toastService.success('Product quantity updated');
                 this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null });
             },
             error: (err) => {
@@ -73,22 +91,24 @@ export class CartState {
         });
     }
 
-    decrementCartQuantity(productId: string) {
-        const newQty = this.getCartQuantity(productId) - 1;
-        this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: 'decrement' }); // ←
+    public decrementCartQuantity(productId: string) {
+        const current = this.cartQuantities()[productId];
+        const newQty = current.quantity - 1;
+        this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: 'decrement' });
 
         if (newQty <= 0) {
-            this.cartService.removeFromCart(productId).subscribe({
+            this.cartService.removeFromCart(current.itemId).subscribe({
                 next: () => {
                     const updated = { ...this.cartQuantities() };
                     delete updated[productId];
                     this.cartQuantities.set(updated);
-                    this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null }); // ←
+                    this.syncCount();
+                    this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null });
                     this.toastService.success('Product removed from cart');
                 },
-                error: () => {
+                error: (err) => {
                     this.toastService.error('Failed to remove product');
-                    this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null }); // ←
+                    this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null });
                 }
             });
             return;
@@ -96,21 +116,26 @@ export class CartState {
 
         this.cartService.updateCartItem(productId, newQty).subscribe({
             next: () => {
-                this.cartQuantities.set({ ...this.cartQuantities(), [productId]: newQty });
-                this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null }); // ←
+                this.cartQuantities.set({
+                    ...this.cartQuantities(),
+                    [productId]: { ...current, quantity: newQty }
+                });
+                this.syncCount();
+                this.toastService.success('Product quantity updated');
+                this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null });
             },
             error: () => {
                 this.toastService.error('Failed to update quantity');
-                this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null }); // ←
+                this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: null });
             }
         });
     }
 
-    getCartQuantity(productId: string): number {
-        return this.cartQuantities()[productId] ?? 0;
+    public getCartQuantity(productId: string): number {
+        return this.cartQuantities()[productId]?.quantity ?? 0;
     }
 
-    isProductAddingToCart(productId: string): boolean {
+    public isProductAddingToCart(productId: string): boolean {
         return this.cartLoadingStates()[productId] != null;
     }
 }
