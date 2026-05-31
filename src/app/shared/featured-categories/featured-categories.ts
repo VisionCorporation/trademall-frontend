@@ -5,6 +5,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { SkeletonLoader } from '../skeleton-loader/skeleton-loader';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { RouterLink } from '@angular/router';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-featured-categories',
@@ -19,12 +20,14 @@ export class FeaturedCategories {
   public centerCategory: RootCategory | null = null;
   public rightCategory: RootCategory | null = null;
   public isLoading = signal(false);
+  public hasFeaturedCategoryFailed = signal(false);
+  private readonly toastService = inject(ToastService);
 
   ngOnInit(): void {
     this.fetchFeaturedCategories();
   }
 
-  private fetchFeaturedCategories() {
+  public fetchFeaturedCategories() {
     this.isLoading.set(true);
     this.categoryService.getRootCategories().subscribe({
       next: (response) => {
@@ -36,7 +39,9 @@ export class FeaturedCategories {
       },
       error: (err) => {
         console.error('Failed to fetch categories', err);
+        this.toastService.error('Failed to load featured categories');
         this.isLoading.set(false);
+        this.hasFeaturedCategoryFailed.set(true);
       },
     });
   }
