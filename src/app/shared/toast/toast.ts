@@ -17,4 +17,8 @@ export class Toast {
   public trackById(item: any): any {
     return item.id;
   }
+
+  public dismiss(id: string): void {
+    this.toastService.remove(id, '');
+  }
 }
