@@ -17,6 +17,7 @@ export class VendorDashboard implements OnInit {
   private readonly loginService = inject(LoginService)
   private readonly toastService = inject(ToastService)
   public user: any
+  public drawerOpen = false;
   public headerTitle = signal('Overview');
   private readonly routeTitleMap = ROUTE_TITLE_MAP
 
