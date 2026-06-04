@@ -34,7 +34,7 @@ export class VendorDashboardOverview {
 
     this.vendorDashboardService.getVendorProductListings().subscribe({
       next: (response) => {
-        this.fetchedProducts = response.data.slice(3, 6);
+        this.fetchedProducts = response.data.slice(0, 3);
         this.isFetchingProducts.set(false);
       },
       error: (error) => {
