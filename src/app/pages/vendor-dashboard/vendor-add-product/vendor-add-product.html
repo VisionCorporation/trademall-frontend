@@ -1,172 +1,369 @@
 <section class="bg-[#F4F4F4] h-full rounded-[20px] pt-5 sm:pt-7.5 px-4 sm:px-8.75 flex flex-col">
 
+    <!-- Header Actions -->
     <div class="flex items-center justify-end gap-2.5 sm:gap-3.75 shrink-0">
         <button
             class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 border border-[#171717] hover:bg-[#171717] hover:text-white transition-colors duration-200 ease-in rounded-lg">
             Cancel
         </button>
+        @if(step() === 'images') {
+        <button (click)="uploadImages()" [disabled]="isUploadingImages() || selectedFiles.length === 0"
+            class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed">
+            {{ isUploadingImages() ? 'Saving...' : 'Save' }}
+        </button>
+        } @else {
         <button
-            class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in">
+            class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg opacity-40 cursor-not-allowed">
             Save
         </button>
+        }
     </div>
 
+    <!-- Body -->
     <div
         class="flex flex-col lg:flex-row items-start gap-6 lg:gap-10 pt-4 sm:pt-2 pb-6 sm:pb-10 overflow-y-auto scrollbar-hide flex-1 min-h-0">
+
+        <!-- Image Upload Panel -->
         <div class="w-full lg:w-auto lg:shrink-0 lg:sticky lg:top-0">
-            <h2 class="light-header mb-1.25 text-[20px] sm:text-[22px]">Images</h2>
+            <div class="flex items-center gap-2 mb-1.25">
+                <h2 class="light-header text-[20px] sm:text-[22px]">Images</h2>
+                @if(step() === 'details') {
+                <span class="text-[13px] text-[#17171766]">Complete details first</span>
+                }
+            </div>
+
+            <!-- Locked state -->
+            @if(step() === 'details') {
             <div
-                class="bg-white rounded-[20px] flex flex-col items-center justify-between gap-2.5 py-10 sm:py-18.75 px-6 sm:px-17.25">
-                <p class="text-[14px] sm:text-[15px] text-center">Add four(4) images of your product</p>
-                <button
-                    class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in">
-                    Upload
+                class="bg-white max-w-full lg:max-w-65 rounded-[20px] flex flex-col items-center justify-center gap-3 py-10 sm:py-18.75 px-6 sm:px-17.25 opacity-50 select-none">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 14.5V16.5M7 10V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V10M5 10H19C19.5523 10 20 10.4477 20 11V20C20 20.5523 19.5523 21 19 21H5C4.44772 21 4 20.5523 4 20V11C4 10.4477 4.44772 10 5 10Z"
+                        stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <p class="text-[14px] sm:text-[15px] text-center">Save product details to unlock image upload</p>
+            </div>
+            }
+
+            <!-- Unlocked state -->
+            @if(step() === 'images') {
+            <div
+                class="bg-white max-w-full lg:max-w-65 rounded-[20px] flex flex-col items-center gap-4 py-6 sm:py-10 px-6 sm:px-8">
+
+                <!-- Previews grid -->
+                @if(previewUrls.length > 0) {
+                <div class="grid grid-cols-2 gap-2 w-full">
+                    @for(url of previewUrls; track url; let i = $index) {
+                    <div class="relative rounded-xl overflow-hidden aspect-square bg-[#F4F4F4]">
+                        <img [src]="url" class="w-full h-full object-cover" alt="Product image {{i + 1}}" />
+                        <button (click)="removeImage(i)"
+                            class="absolute top-1.5 right-1.5 bg-black/60 hover:bg-black/80 text-white rounded-full w-5 h-5 flex items-center justify-center transition-colors duration-150">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                <path d="M1 1L9 9M9 1L1 9" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </button>
+                    </div>
+                    }
+                    <!-- Empty slots -->
+                    @for(_ of [].constructor(4 - previewUrls.length); track $index) {
+                    <div class="rounded-xl aspect-square bg-[#F4F4F4] border-2 border-dashed border-[#17171733]"></div>
+                    }
+                </div>
+                }
+
+                <p class="text-[13px] sm:text-[14px] text-center text-[#17171799]">
+                    {{ selectedFiles.length }}/4 images added
+                </p>
+
+                @if(imagesError()) {
+                <p class="text-[13px] text-red-500 text-center">{{ imagesError() }}</p>
+                }
+
+                <!-- Hidden file input -->
+                <input #fileInput type="file" accept="image/*" multiple class="hidden"
+                    (change)="onFilesSelected($event)" />
+
+                <button (click)="fileInput.click()" [disabled]="selectedFiles.length >= 4"
+                    class="text-base sm:text-lg px-3.5 py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed w-full text-center">
+                    {{ selectedFiles.length === 0 ? 'Upload Images' : 'Add More' }}
                 </button>
             </div>
+            }
         </div>
 
+        <!-- Form -->
         <div class="flex-1 w-full px-0 sm:px-2 pb-6 sm:pb-10">
-            <div class="mt-4 sm:mt-8 flex items-center gap-2.5 mb-5">
-                <button class="text-[#1B5DD7] text-lg sm:text-xl">General</button>
-                <button class="text-[#17171733] text-lg sm:text-xl">Advanced</button>
+
+            <!-- Step indicator -->
+            <div class="flex items-center gap-2 mb-5 mt-4 sm:mt-8">
+                <div class="flex items-center gap-1.5">
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-medium"
+                        [class]="step() === 'details' ? 'bg-[#171717] text-white' : 'bg-[#17171733] text-[#171717]'">1
+                    </div>
+                    <span class="text-[14px]"
+                        [class]="step() === 'details' ? 'text-[#171717]' : 'text-[#17171766]'">Details</span>
+                </div>
+                <div class="h-px w-6 bg-[#17171733]"></div>
+                <div class="flex items-center gap-1.5">
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-medium"
+                        [class]="step() === 'images' ? 'bg-[#171717] text-white' : 'bg-[#17171733] text-[#171717]'">2
+                    </div>
+                    <span class="text-[14px]"
+                        [class]="step() === 'images' ? 'text-[#171717]' : 'text-[#17171766]'">Images</span>
+                </div>
             </div>
 
-            <div class="mb-6 sm:mb-7">
-                <label for="product-name" class="block mb-1.25 text-[15px] sm:text-[17px]">Product Name</label>
-                <input type="text" id="product-name" placeholder="Enter product name"
-                    class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
-            </div>
+            <!-- Step 1: Details form -->
+            @if(step() === 'details') {
+            <div>
+                <!-- Tabs -->
+                <div class="flex items-center gap-2.5 mb-5">
+                    <button class="text-[#1B5DD7] text-lg sm:text-xl">General</button>
+                    <button class="text-[#17171733] text-lg sm:text-xl">Advanced</button>
+                </div>
 
-            <div class="mb-6 sm:mb-7">
-                <label for="product-description" class="block mb-1.25 text-[15px] sm:text-[17px]">Description</label>
-                <textarea id="product-description" placeholder="Create a description of your product"
-                    class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px] w-full h-28 sm:h-33.5 resize-none"></textarea>
-            </div>
-
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-3.75 mb-6 sm:mb-7">
-                <div class="flex-1">
-                    <label for="product-price" class="block mb-1.25 text-[15px] sm:text-[17px]">Price</label>
-                    <input type="text" id="product-price" placeholder="Enter product price"
+                <!-- Product Name -->
+                <div class="mb-6 sm:mb-7">
+                    <label for="product-name" class="block mb-1.25 text-[15px] sm:text-[17px]">Product Name</label>
+                    <input type="text" id="product-name" placeholder="Enter product name" [(ngModel)]="productForm.name"
                         class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
                 </div>
-                <div class="flex-1">
-                    <label for="in-stock" class="block mb-1.25 text-[15px] sm:text-[17px]">In Stock</label>
-                    <input type="number" id="in-stock" placeholder="Enter amount available"
+
+                <!-- Description -->
+                <div class="mb-6 sm:mb-7">
+                    <label for="product-description"
+                        class="block mb-1.25 text-[15px] sm:text-[17px]">Description</label>
+                    <textarea id="product-description" placeholder="Create a description of your product"
+                        [(ngModel)]="productForm.description"
+                        class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px] w-full h-28 sm:h-33.5 resize-none"></textarea>
+                </div>
+
+                <!-- Price + Stock -->
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
+                    <div class="flex-1">
+                        <label for="product-price" class="block mb-1.25 text-[15px] sm:text-[17px]">Price <span
+                                class="text-[#17171766] text-[13px]">(GHS)</span></label>
+                        <input type="number" id="product-price" placeholder="0.00" min="0"
+                            [(ngModel)]="productForm.price"
+                            class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                    </div>
+                    <div class="flex-1">
+                        <label for="in-stock" class="block mb-1.25 text-[15px] sm:text-[17px]">Stock Quantity</label>
+                        <input type="number" id="in-stock" placeholder="Enter amount available" min="0"
+                            [(ngModel)]="productForm.stockQuantity"
+                            class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                    </div>
+                </div>
+
+                <!-- Material -->
+                <div class="mb-6 sm:mb-7">
+                    <label for="material" class="block mb-1.25 text-[15px] sm:text-[17px]">
+                        Material
+                        <span class="text-[#17171766] text-[13px] ml-1">(attributes)</span>
+                    </label>
+                    <input type="text" id="material" placeholder="e.g. Cotton, Polyester, Leather"
+                        [(ngModel)]="productForm.material"
                         class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
                 </div>
-            </div>
 
-            <div class="mb-6 sm:mb-7">
-                <span class="block mb-1.25 text-[15px] sm:text-[17px]">Discount</span>
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-                    <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 flex-1">
-                        <input type="radio" id="no-discount" name="discount" value="no-discount"
-                            class="custom-radio shrink-0">
-                        <label for="no-discount" class="text-[15px] sm:text-[17px]">No Discount</label>
-                    </div>
-                    <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 flex-1">
-                        <input type="radio" id="has-discount" name="discount" value="has-discount"
-                            class="custom-radio shrink-0">
-                        <label for="has-discount" class="text-[15px] sm:text-[17px]">% Percentage</label>
-                    </div>
-                    <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 flex-1">
-                        <input type="radio" id="fixed-price" name="discount" value="fixed-price"
-                            class="custom-radio shrink-0">
-                        <label for="fixed-price" class="text-[15px] sm:text-[17px]">Fixed Price</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-start gap-4 sm:gap-3.75 mb-6 sm:mb-7">
-                <div class="relative flex-1" appClickOutside (clickOutside)="isCategoryOpen = false">
-                    <span class="block mb-1.25 text-[15px] sm:text-[17px]">Product Category</span>
-                    <button (click)="isCategoryOpen = !isCategoryOpen"
-                        class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[17px] border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5">
-                        <span [class]="selectedCategory ? 'text-[#171717]' : 'text-[#17171766]'">
-                            {{selectedCategory?.name || 'Select a category'}}
-                        </span>
-                        <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isCategoryOpen"
-                            width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
-                                stroke="#171717" stroke-opacity="0.2" stroke-width="1.25" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    @if(isCategoryOpen){
-                    <div [@fadeInOut]
-                        class="absolute top-full left-0 mt-1 bg-white py-3 rounded-lg overflow-hidden z-10 w-full shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
-                        @if(isCategoryLoading()) {
-                        <p class="text-center text-[15px] px-5 py-2">Loading categories...</p>
-                        } @else if (hasCategoryFailed()) {
-                        <div class="flex flex-col items-center gap-2 px-5 py-1.5">
-                            <p class="text-[15px] text-red-500">Failed to load categories</p>
-                            <button (click)="fetchCategories()"
-                                class="text-[15px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150">
-                                Try again
-                            </button>
-                        </div>
-                        } @else {
-                        @for(category of categories; track category) {
-                        <button class="w-full text-left px-5 py-2 hover:bg-[#F4F4F4] transition-colors duration-150"
-                            [class.bg-white/10]="selectedCategory?.name === category.name"
-                            (click)="selectCategory(category)">
-                            {{ category.name }}
+                <!-- Has Variants -->
+                <div class="mb-6 sm:mb-7">
+                    <span class="block mb-1.25 text-[15px] sm:text-[17px]">Product Variants</span>
+                    <p class="text-[13px] text-[#17171766] mb-2.5">Does this product come in different sizes, colours,
+                        etc.?</p>
+                    <div class="flex items-center gap-2.5">
+                        <button (click)="productForm.hasVariants = true"
+                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[17px] transition-colors duration-150"
+                            [class]="productForm.hasVariants
+        ? 'border-[#171717] bg-[#171717] text-white'
+        : 'border-[#17171733] text-[#171717]'">
+                            Yes
                         </button>
-                        }
-                        }
+                        <button (click)="productForm.hasVariants = false"
+                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[17px] transition-colors duration-150"
+                            [class]="!productForm.hasVariants
+        ? 'border-[#171717] bg-[#171717] text-white'
+        : 'border-[#17171733] text-[#171717]'">
+                            No
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pre-Order -->
+                <div class="mb-6 sm:mb-7">
+                    <span class="block mb-1.25 text-[15px] sm:text-[17px]">Pre-Order</span>
+                    <p class="text-[13px] text-[#17171766] mb-2.5">Allow customers to order before the product is
+                        available?</p>
+                    <div class="flex items-center gap-2.5 mb-4">
+                        <button (click)="productForm.isPreOrder = true"
+                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[17px] transition-colors duration-150"
+                            [class]="productForm.isPreOrder
+        ? 'border-[#171717] bg-[#171717] text-white'
+        : 'border-[#17171733] text-[#171717]'">
+                            Yes
+                        </button>
+                        <button (click)="productForm.isPreOrder = false"
+                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[17px] transition-colors duration-150"
+                            [class]="!productForm.isPreOrder
+        ? 'border-[#171717] bg-[#171717] text-white'
+        : 'border-[#17171733] text-[#171717]'">
+                            No
+                        </button>
+                    </div>
+
+                    <!-- Pre-order fields: conditionally shown -->
+                    @if(productForm.isPreOrder) {
+                    <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mt-3" [@fadeInOut]>
+                        <div class="flex-1">
+                            <label for="pre-order-days" class="block mb-1.25 text-[15px] sm:text-[17px]">Pre-Order
+                                Days</label>
+                            <input type="number" id="pre-order-days" placeholder="e.g. 30" min="1"
+                                [(ngModel)]="productForm.preOrderDays"
+                                class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                            <p class="text-[12px] text-[#17171766] mt-1">How many days until the product is ready</p>
+                        </div>
+                        <div class="flex-1">
+                            <label for="min-preorder-qty" class="block mb-1.25 text-[15px] sm:text-[17px]">Min.
+                                Pre-Order Quantity</label>
+                            <input type="number" id="min-preorder-qty" placeholder="e.g. 1" min="1"
+                                [(ngModel)]="productForm.minPreOrderQuantity"
+                                class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                            <p class="text-[12px] text-[#17171766] mt-1">Minimum units a customer must pre-order</p>
+                        </div>
                     </div>
                     }
                 </div>
 
-                <div class="relative flex-1" appClickOutside (clickOutside)="isSubCategoryOpen = false">
-                    <span class="block mb-1.25 text-[15px] sm:text-[17px]">Product Subcategory</span>
-                    <button (click)="isSubCategoryOpen = !isSubCategoryOpen"
-                        class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[17px] border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5">
-                        <span [class]="selectedSubCategory ? 'text-[#171717]' : 'text-[#17171766]'">
-                            {{selectedSubCategory?.name || 'Select a subcategory'}}
-                        </span>
-                        <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isSubCategoryOpen"
-                            width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
-                                stroke="#171717" stroke-opacity="0.2" stroke-width="1.25" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    @if(isSubCategoryOpen){
-                    <div [@fadeInOut]
-                        class="absolute top-full left-0 mt-1 bg-white py-3 rounded-lg overflow-hidden z-10 w-full shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
-                        @if(isSubCategoryLoading()) {
-                        <p class="text-center text-[15px] px-5 py-2">Loading subcategories...</p>
-                        } @else if(!selectedCategory){
-                        <p class="text-center text-[15px] px-5 py-2">Please select a category first</p>
-                        } @else if (hasSubCategoryFailed()) {
-                        <div class="flex flex-col items-center gap-2 px-5 py-1.5">
-                            <p class="text-[15px] text-red-500">Failed to load subcategories</p>
-                            <button (click)="fetchSubCategories()"
-                                class="text-[15px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150">
-                                Try again
-                            </button>
+                <!-- Discount -->
+                <div class="mb-6 sm:mb-7">
+                    <span class="block mb-1.25 text-[15px] sm:text-[17px]">Discount</span>
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 flex-1">
+                            <input type="radio" id="no-discount" name="discount" value="no-discount"
+                                [(ngModel)]="productForm.discount" class="custom-radio shrink-0">
+                            <label for="no-discount" class="text-[15px] sm:text-[17px]">No Discount</label>
                         </div>
-                        } @else {
-                        @for(subCategory of subCategories; track subCategory) {
-                        <button class="w-full text-left px-5 py-2 hover:bg-[#F4F4F4] transition-colors duration-150"
-                            [class.bg-white/10]="selectedSubCategory?.name === subCategory.name"
-                            (click)="selectSubCategory(subCategory)">
-                            {{ subCategory.name }}
+                        <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 flex-1">
+                            <input type="radio" id="has-discount" name="discount" value="has-discount"
+                                [(ngModel)]="productForm.discount" class="custom-radio shrink-0">
+                            <label for="has-discount" class="text-[15px] sm:text-[17px]">% Percentage</label>
+                        </div>
+                        <div class="border border-[#17171733] rounded-[10px] p-2.5 flex items-center gap-2.5 flex-1">
+                            <input type="radio" id="fixed-price" name="discount" value="fixed-price"
+                                [(ngModel)]="productForm.discount" class="custom-radio shrink-0">
+                            <label for="fixed-price" class="text-[15px] sm:text-[17px]">Fixed Price</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category + Subcategory -->
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
+                    <div class="relative flex-1" appClickOutside (clickOutside)="isCategoryOpen = false">
+                        <span class="block mb-1.25 text-[15px] sm:text-[17px]">Product Category</span>
+                        <button (click)="isCategoryOpen = !isCategoryOpen"
+                            class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[17px] border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5">
+                            <span [class]="selectedCategory ? 'text-[#171717]' : 'text-[#17171766]'">
+                                {{selectedCategory?.name || 'Select a category'}}
+                            </span>
+                            <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isCategoryOpen"
+                                width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
+                                    stroke="#171717" stroke-opacity="0.2" stroke-width="1.25" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
                         </button>
-                        }
+                        @if(isCategoryOpen){
+                        <div [@fadeInOut]
+                            class="absolute top-full left-0 mt-1 bg-white py-3 rounded-lg overflow-hidden z-10 w-full shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+                            @if(isCategoryLoading()) {
+                            <p class="text-center text-[15px] px-5 py-2">Loading categories...</p>
+                            } @else if (hasCategoryFailed()) {
+                            <div class="flex flex-col items-center gap-2 px-5 py-1.5">
+                                <p class="text-[15px] text-red-500">Failed to load categories</p>
+                                <button (click)="fetchCategories()"
+                                    class="text-[15px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150">Try
+                                    again</button>
+                            </div>
+                            } @else {
+                            @for(category of categories; track category) {
+                            <button class="w-full text-left px-5 py-2 hover:bg-[#F4F4F4] transition-colors duration-150"
+                                [class.bg-white/10]="selectedCategory?.name === category.name"
+                                (click)="selectCategory(category)">{{ category.name }}</button>
+                            }
+                            }
+                        </div>
                         }
                     </div>
-                    }
+
+                    <!-- <div class="relative flex-1" appClickOutside (clickOutside)="isSubCategoryOpen = false">
+                        <span class="block mb-1.25 text-[15px] sm:text-[17px]">Product Subcategory</span>
+                        <button (click)="isSubCategoryOpen = !isSubCategoryOpen"
+                            class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[17px] border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5">
+                            <span [class]="selectedSubCategory ? 'text-[#171717]' : 'text-[#17171766]'">
+                                {{selectedSubCategory?.name || 'Select a subcategory'}}
+                            </span>
+                            <svg class="transition-transform duration-200 shrink-0"
+                                [class.rotate-180]="isSubCategoryOpen" width="20" height="20" viewBox="0 0 20 20"
+                                fill="none">
+                                <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
+                                    stroke="#171717" stroke-opacity="0.2" stroke-width="1.25" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        @if(isSubCategoryOpen){
+                        <div [@fadeInOut]
+                            class="absolute top-full left-0 mt-1 bg-white py-3 rounded-lg overflow-hidden z-10 w-full shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+                            @if(isSubCategoryLoading()) {
+                            <p class="text-center text-[15px] px-5 py-2">Loading subcategories...</p>
+                            } @else if(!selectedCategory){
+                            <p class="text-center text-[15px] px-5 py-2">Please select a category first</p>
+                            } @else if (hasSubCategoryFailed()) {
+                            <div class="flex flex-col items-center gap-2 px-5 py-1.5">
+                                <p class="text-[15px] text-red-500">Failed to load subcategories</p>
+                                <button (click)="fetchSubCategories()"
+                                    class="text-[15px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150">Try
+                                    again</button>
+                            </div>
+                            } @else {
+                            @for(subCategory of subCategories; track subCategory) {
+                            <button class="w-full text-left px-5 py-2 hover:bg-[#F4F4F4] transition-colors duration-150"
+                                [class.bg-white/10]="selectedSubCategory?.name === subCategory.name"
+                                (click)="selectSubCategory(subCategory)">{{ subCategory.name }}</button>
+                            }
+                            }
+                        </div>
+                        }
+                    </div> -->
+                </div>
+
+                @if(detailsError()) {
+                <p class="text-[14px] text-red-500 mb-4">{{ detailsError() }}</p>
+                }
+
+                <!-- Continue -->
+                <div class="flex justify-end">
+                    <button (click)="submitDetails(buildPayload())" [disabled]="isSubmittingDetails()"
+                        class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed">
+                        {{ isSubmittingDetails() ? 'Saving...' : 'Continue' }}
+                    </button>
                 </div>
             </div>
+            }
 
-            <div class="flex justify-end">
-                <button
-                    class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in">
-                    Continue
-                </button>
+            <!-- Step 2: Images confirmation -->
+            @if(step() === 'images') {
+            <div class="flex flex-col items-center justify-center gap-3 pt-10 text-center">
+                <div class="bg-white rounded-full p-5">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                            stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <p class="text-[17px] font-medium">Product details saved!</p>
+                <p class="text-[14px] text-[#17171799]">Now upload your product images using the panel on the left.</p>
             </div>
+            }
 
         </div>
     </div>

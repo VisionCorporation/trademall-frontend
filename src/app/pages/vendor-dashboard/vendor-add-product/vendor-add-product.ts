@@ -1,12 +1,17 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { fadeInOutAnimation } from '../../../animations/toast.animations';
 import { ClickOutside } from '../../../directives/click-outside/click-outside';
 import { Products } from '../../../services/products/products';
 import { Category, RootCategory } from '../../../interfaces/categories.interface';
+import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
+
+type FormStep = 'details' | 'images';
 
 @Component({
   selector: 'app-vendor-add-product',
-  imports: [ClickOutside],
+  imports: [ClickOutside, FormsModule],
   templateUrl: './vendor-add-product.html',
   styleUrl: './vendor-add-product.css',
   animations: [fadeInOutAnimation]
@@ -23,6 +28,58 @@ export class VendorAddProduct implements OnInit {
   public isSubCategoryLoading = signal(false)
   public hasCategoryFailed = signal(false);
   public hasSubCategoryFailed = signal(false);
+
+  // Form state
+  productForm = {
+    name: '',
+    description: '',
+    material: '',
+    hasVariants: false,
+    isPreOrder: false,
+    preOrderDays: null as number | null,
+    minPreOrderQuantity: null as number | null,
+    price: null as number | null,
+    stockQuantity: null as number | null,
+    category: '',
+    discount: 'no-discount',
+  };
+
+  buildPayload() {
+    const payload: any = {
+      name: this.productForm.name,
+      description: this.productForm.description,
+      attributes: {
+        material: this.productForm.material,
+      },
+      hasVariants: this.productForm.hasVariants,
+      isPreOrder: this.productForm.isPreOrder,
+      category: this.productForm.category,
+      price: this.productForm.price,
+      stockQuantity: this.productForm.stockQuantity,
+    };
+
+    if (this.productForm.isPreOrder) {
+      payload.preOrderDays = this.productForm.preOrderDays;
+      payload.minPreOrderQuantity = this.productForm.minPreOrderQuantity;
+    }
+
+    return payload;
+  }
+
+  step = signal<FormStep>('details');
+  createdProductId = signal<string | null>(null);
+  isSubmittingDetails = signal(false);
+  isUploadingImages = signal(false);
+  detailsError = signal<string | null>(null);
+  imagesError = signal<string | null>(null);
+
+  // Track selected files
+  selectedFiles: File[] = [];
+  previewUrls: string[] = [];
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.fetchCategories()
@@ -66,11 +123,77 @@ export class VendorAddProduct implements OnInit {
     this.selectedCategory = category;
     this.selectedSubCategory = null;
     this.fetchSubCategories();
+    this.selectedCategory = category;
+    this.productForm.category = category._id;
     this.isCategoryOpen = false;
   }
 
-  public selectSubCategory(subCategory: Category) {
-    this.selectedSubCategory = subCategory;
-    this.isSubCategoryOpen = false;
+  // public selectSubCategory(subCategory: Category) {
+  //   this.selectedSubCategory = subCategory;
+  //   this.isSubCategoryOpen = false;
+  // }
+
+
+  // Step 1: Submit product details → get back the _id
+  submitDetails(payload: object) {
+    this.isSubmittingDetails.set(true);
+    this.detailsError.set(null);
+
+    this.http.post<{ _id: string }>(`${environment.apiBaseUrl}/products`, payload).subscribe({
+      next: (product) => {
+        this.createdProductId.set(product._id);
+        this.step.set('images');
+        this.isSubmittingDetails.set(false);
+      },
+      error: (err) => {
+        this.detailsError.set(err?.error?.message ?? 'Failed to save product. Please try again.');
+        this.isSubmittingDetails.set(false);
+      }
+    });
+  }
+
+  // Handle file selection + generate previews
+  onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+    const incoming = Array.from(input.files);
+    const remaining = 4 - this.selectedFiles.length;
+    const toAdd = incoming.slice(0, remaining);
+
+    toAdd.forEach(file => {
+      this.selectedFiles.push(file);
+      const reader = new FileReader();
+      reader.onload = (e) => this.previewUrls.push(e.target?.result as string);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  removeImage(index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.previewUrls.splice(index, 1);
+  }
+
+  // Step 2: Upload images using the product _id
+  uploadImages() {
+    const id = this.createdProductId();
+    if (!id || this.selectedFiles.length === 0) return;
+
+    this.isUploadingImages.set(true);
+    this.imagesError.set(null);
+
+    const formData = new FormData();
+    this.selectedFiles.forEach(file => formData.append('images', file));
+
+    this.http.post(`${environment.apiBaseUrl}/products/${id}/images`, formData).subscribe({
+      next: () => {
+        this.isUploadingImages.set(false);
+        // navigate away or show success
+      },
+      error: (err) => {
+        this.imagesError.set(err?.error?.message ?? 'Image upload failed. Please try again.');
+        this.isUploadingImages.set(false);
+      }
+    });
   }
 }
