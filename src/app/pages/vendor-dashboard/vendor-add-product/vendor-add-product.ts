@@ -6,9 +6,10 @@ import { Category, RootCategory } from '../../../interfaces/categories.interface
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
-import { Attribute, ProductDetailsPayload } from '../../../interfaces/products.interface';
+import { Attribute, CreateProductResponse, ProductDetailsPayload, UploadImagesResponse } from '../../../interfaces/products.interface';
 import { FormStep } from '../../../types/add-product.type';
 import { ToastService } from '../../../services/toast/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-add-product',
@@ -31,7 +32,7 @@ export class VendorAddProduct implements OnInit {
   public isSubCategoryLoading = signal(false)
   public hasCategoryFailed = signal(false);
   public hasSubCategoryFailed = signal(false);
-  public step = signal<FormStep>('images');
+  public step = signal<FormStep>('details');
   public createdProductId = signal<string | null>(null);
   public isSubmittingDetails = signal(false);
   public isUploadingImages = signal(false);
@@ -41,11 +42,11 @@ export class VendorAddProduct implements OnInit {
   public selectedFiles: File[] = [];
   private taostService = inject(ToastService)
   private cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router)
 
   public productForm = {
     name: '',
     description: '',
-    material: '',
     hasVariants: false,
     isPreOrder: false,
     preOrderDays: null as number | null,
@@ -53,7 +54,6 @@ export class VendorAddProduct implements OnInit {
     price: 0,
     stockQuantity: 0,
     category: '',
-
   };
 
   constructor(private http: HttpClient) { }
@@ -76,24 +76,6 @@ export class VendorAddProduct implements OnInit {
         this.hasCategoryFailed.set(true);
       },
     });
-  }
-
-  public fetchSubCategories() {
-    if (this.selectedCategory) {
-      this.isSubCategoryLoading.set(true)
-      this.hasSubCategoryFailed.set(false);
-      this.categoryService.getSubCategories(this.selectedCategory.slug).subscribe({
-        next: (response) => {
-          this.subCategories = response.data;
-          this.isSubCategoryLoading.set(false);
-        },
-        error: (err) => {
-          console.error('Failed to fetch subcategories', err);
-          this.isSubCategoryLoading.set(false);
-          this.hasSubCategoryFailed.set(true);
-        },
-      });
-    }
   }
 
   public buildPayload(): ProductDetailsPayload {
@@ -127,6 +109,44 @@ export class VendorAddProduct implements OnInit {
     return payload;
   }
 
+  public get isFormValid(): boolean {
+    return (
+      this.productForm.name.trim() !== '' &&
+      this.productForm.description.trim() !== '' &&
+      this.productForm.price > 0 &&
+      this.productForm.stockQuantity > 0 &&
+      this.productForm.category !== '' &&
+      this.attributes.every(attr => attr.name.trim() !== '' && attr.value.trim() !== '') &&
+      (!this.productForm.isPreOrder || (
+        (this.productForm.preOrderDays ?? 0) > 0 &&
+        (this.productForm.minPreOrderQuantity ?? 0) > 0
+      ))
+    );
+  }
+
+  private resetForm(): void {
+    this.productForm = {
+      name: '',
+      description: '',
+      hasVariants: false,
+      isPreOrder: false,
+      preOrderDays: null,
+      minPreOrderQuantity: null,
+      price: 0,
+      stockQuantity: 0,
+      category: '',
+    };
+
+    this.attributes = [{ name: '', value: '' }];
+    this.selectedFiles = [];
+    this.previewUrls = [];
+    this.selectedCategory = null;
+    this.selectedSubCategory = null;
+    this.createdProductId.set(null);
+    this.step.set('details');
+    this.detailsError.set(null);
+    this.imagesError.set(null);
+  }
 
   public addAttribute(): void {
     this.attributes.push({ name: '', value: '' });
@@ -140,9 +160,6 @@ export class VendorAddProduct implements OnInit {
 
   public selectCategory(category: RootCategory) {
     this.selectedCategory = category;
-    this.selectedSubCategory = null;
-    this.fetchSubCategories();
-    this.selectedCategory = category;
     this.productForm.category = category._id;
     this.isCategoryOpen = false;
   }
@@ -151,12 +168,11 @@ export class VendorAddProduct implements OnInit {
     this.isSubmittingDetails.set(true);
     this.detailsError.set(null);
 
-    this.http.post<{ _id: string }>(`${environment.apiBaseUrl}/products`, payload).subscribe({
-      next: (product) => {
-        this.createdProductId.set(product._id);
+    this.http.post<CreateProductResponse>(`${environment.apiBaseUrl}/products`, payload).subscribe({
+      next: (res) => {
+        this.createdProductId.set(res.data._id);
         this.step.set('images');
-        console.log('Product created:', product);
-        this.taostService.success('Product details saved! You can now upload images.');
+        this.taostService.success(res.message);
         this.isSubmittingDetails.set(false);
       },
       error: (err) => {
@@ -202,7 +218,6 @@ export class VendorAddProduct implements OnInit {
 
   public uploadImages() {
     const id = this.createdProductId();
-    console.log('Uploading images for product ID:', id, 'Selected files:', this.selectedFiles);
     if (!id || this.selectedFiles.length === 0) return;
 
     this.isUploadingImages.set(true);
@@ -211,14 +226,15 @@ export class VendorAddProduct implements OnInit {
     const formData = new FormData();
     this.selectedFiles.forEach(file => formData.append('images', file));
 
-    this.http.post(`${environment.apiBaseUrl}/products/${id}/images`, formData).subscribe({
+    this.http.post<UploadImagesResponse>(`${environment.apiBaseUrl}/products/${id}/images`, formData).subscribe({
       next: (res) => {
         this.isUploadingImages.set(false);
-        this.taostService.success('Images uploaded successfully!');
-        console.log("Images Upload", res)
+        this.taostService.success(res.message);
+        this.resetForm();
+        this.router.navigate(['/vendor/products']);
       },
       error: (err) => {
-        this.taostService.error('Failed to upload images. Please try again.');
+        this.taostService.error(err?.error?.message ?? 'Image upload failed. Please try again.');
         this.imagesError.set(err?.error?.message ?? 'Image upload failed. Please try again.');
         this.isUploadingImages.set(false);
       }
