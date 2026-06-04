@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { PRODUCT_STATUS_CONFIG, PRODUCTS_FILTERS } from '../../../data/constants/vendor-dashbaord.constant';
 import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashboard';
 import { Product, ProductsResponse } from '../../../interfaces/vendor-dashboard.interface';
@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
   animations: [staggerProducts]
 })
 export class VendorProducts {
+  @ViewChild('filterTabsRef') filterTabsRef!: ElementRef<HTMLElement>;
   public productsFilters = PRODUCTS_FILTERS
   public selectedFilter = 'all'
   public hoveredFilter: string | null = null;
@@ -45,13 +46,18 @@ export class VendorProducts {
     });
   }
 
-  public selectFilter(filterValue: string): void {
-    this.selectedFilter = filterValue;
+  public selectFilter(value: string): void {
+    this.selectedFilter = value;
     this.filteredProducts.set(
-      filterValue === 'all'
+      value === 'all'
         ? this.fetchedProducts
-        : this.fetchedProducts.filter(product => product.status === filterValue)
+        : this.fetchedProducts.filter(product => product.status === value)
     );
+
+    setTimeout(() => {
+      const activeBtn = this.filterTabsRef.nativeElement.querySelector(`[data-filter="${value}"]`);
+      activeBtn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }, 0);
   }
 
   public navigateToAddNewProduct(): void {
