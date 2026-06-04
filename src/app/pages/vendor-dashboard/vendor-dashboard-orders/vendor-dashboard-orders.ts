@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { ORDER_PERIODS, ORDERS, ORDERS_FILTERS, ORDERS_STATUS_CONFIG } from '../../../data/constants/vendor-dashbaord.constant';
 import { ClickOutside } from '../../../directives/click-outside/click-outside';
 import { fadeInOutAnimation } from '../../../animations/toast.animations';
@@ -11,6 +11,7 @@ import { fadeInOutAnimation } from '../../../animations/toast.animations';
   animations: [fadeInOutAnimation],
 })
 export class VendorDashboardOrders {
+  @ViewChild('filterTabsRef') filterTabsRef!: ElementRef<HTMLElement>;
   public ordersFilters = ORDERS_FILTERS
   public orders = ORDERS
   public filteredOrders = signal<any[]>([]);
@@ -30,13 +31,18 @@ export class VendorDashboardOrders {
     this.isSelectOpen = false;
   }
 
-  public selectFilter(filterValue: string): void {
-    this.selectedFilter = filterValue;
-    console.log('Selected Filter:', filterValue);
+  public selectFilter(value: string): void {
+    this.selectedFilter = value;
+    console.log('Selected Filter:', value);
     this.filteredOrders.set(
-      filterValue === 'all-orders'
+      value === 'all-orders'
         ? this.orders
-        : this.orders.filter(order => order.status === filterValue)
+        : this.orders.filter(order => order.status === value)
     );
+
+    setTimeout(() => {
+      const activeBtn = this.filterTabsRef.nativeElement.querySelector(`[data-filter="${value}"]`);
+      activeBtn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }, 0);
   }
 }
