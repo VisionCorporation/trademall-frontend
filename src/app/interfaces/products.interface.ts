@@ -104,3 +104,35 @@ export interface ProductDetailsPayload {
   stockQuantity: number;
   category: string;
 }
+
+export interface CreateProductResponse {
+  success: boolean;
+  message: string;
+  data: CreatedProduct;
+}
+
+interface CreatedProduct {
+  _id: string;
+  name: string;
+  slug: string;
+  status: 'pending' | 'approved' | 'rejected';
+}
+
+export interface UploadImagesResponse {
+  status: 'success' | 'error';
+  message: string;
+  data: UploadedImagesData;
+}
+
+interface UploadedImagesData {
+  productId: string;
+  totalImages: number;
+  images: UploadedImage[];
+}
+
+interface UploadedImage {
+  url: string;
+  publicId: string;
+  isMain: boolean;
+  uploadedAt: string;
+}
