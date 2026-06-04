@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { fadeInOutAnimation } from '../../../animations/toast.animations';
 import { ClickOutside } from '../../../directives/click-outside/click-outside';
 import { Products } from '../../../services/products/products';
@@ -6,17 +6,20 @@ import { Category, RootCategory } from '../../../interfaces/categories.interface
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
-
-type FormStep = 'details' | 'images';
+import { Attribute, ProductDetailsPayload } from '../../../interfaces/products.interface';
+import { FormStep } from '../../../types/add-product.type';
+import { ToastService } from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-vendor-add-product',
-  imports: [ClickOutside, FormsModule],
+  imports: [ClickOutside, FormsModule,],
   templateUrl: './vendor-add-product.html',
   styleUrl: './vendor-add-product.css',
   animations: [fadeInOutAnimation]
 })
 export class VendorAddProduct implements OnInit {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  attributes: Attribute[] = [{ name: '', value: '' }];
   public categories: RootCategory[] = []
   public subCategories: Category[] = []
   public isCategoryOpen = false
@@ -28,9 +31,18 @@ export class VendorAddProduct implements OnInit {
   public isSubCategoryLoading = signal(false)
   public hasCategoryFailed = signal(false);
   public hasSubCategoryFailed = signal(false);
+  public step = signal<FormStep>('images');
+  public createdProductId = signal<string | null>(null);
+  public isSubmittingDetails = signal(false);
+  public isUploadingImages = signal(false);
+  public detailsError = signal<string | null>(null);
+  public imagesError = signal<string | null>(null);
+  public previewUrls: (string | null)[] = [];
+  public selectedFiles: File[] = [];
+  private taostService = inject(ToastService)
+  private cdr = inject(ChangeDetectorRef);
 
-  // Form state
-  productForm = {
+  public productForm = {
     name: '',
     description: '',
     material: '',
@@ -38,46 +50,11 @@ export class VendorAddProduct implements OnInit {
     isPreOrder: false,
     preOrderDays: null as number | null,
     minPreOrderQuantity: null as number | null,
-    price: null as number | null,
-    stockQuantity: null as number | null,
+    price: 0,
+    stockQuantity: 0,
     category: '',
-    discount: 'no-discount',
+
   };
-
-  buildPayload() {
-    const payload: any = {
-      name: this.productForm.name,
-      description: this.productForm.description,
-      attributes: {
-        material: this.productForm.material,
-      },
-      hasVariants: this.productForm.hasVariants,
-      isPreOrder: this.productForm.isPreOrder,
-      category: this.productForm.category,
-      price: this.productForm.price,
-      stockQuantity: this.productForm.stockQuantity,
-    };
-
-    if (this.productForm.isPreOrder) {
-      payload.preOrderDays = this.productForm.preOrderDays;
-      payload.minPreOrderQuantity = this.productForm.minPreOrderQuantity;
-    }
-
-    return payload;
-  }
-
-  step = signal<FormStep>('details');
-  createdProductId = signal<string | null>(null);
-  isSubmittingDetails = signal(false);
-  isUploadingImages = signal(false);
-  detailsError = signal<string | null>(null);
-  imagesError = signal<string | null>(null);
-
-  // Track selected files
-  selectedFiles: File[] = [];
-  previewUrls: string[] = [];
-
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(private http: HttpClient) { }
 
@@ -119,6 +96,48 @@ export class VendorAddProduct implements OnInit {
     }
   }
 
+  public buildPayload(): ProductDetailsPayload {
+    const attributesObject = this.attributes.reduce<Record<string, string>>(
+      (acc, attr) => {
+        if (attr.name.trim() && attr.value.trim()) {
+          const key = attr.name.trim().toLowerCase()
+          const value = attr.value.trim().charAt(0).toUpperCase() + attr.value.trim().slice(1).toLowerCase()
+          acc[key] = value;
+        }
+        return acc;
+      },
+      {}
+    );
+    const payload: ProductDetailsPayload = {
+      name: this.productForm.name,
+      description: this.productForm.description,
+      attributes: attributesObject,
+      hasVariants: this.productForm.hasVariants,
+
+      isPreOrder: this.productForm.isPreOrder,
+      ...(this.productForm.isPreOrder && {
+        preOrderDays: this.productForm.preOrderDays ?? undefined,
+        minPreOrderQuantity: this.productForm.minPreOrderQuantity ?? undefined,
+      }),
+      category: this.productForm.category,
+      price: this.productForm.price,
+      stockQuantity: this.productForm.stockQuantity,
+    };
+
+    return payload;
+  }
+
+
+  public addAttribute(): void {
+    this.attributes.push({ name: '', value: '' });
+  }
+
+  public removeAttribute(index: number): void {
+    if (this.attributes.length > 1) {
+      this.attributes.splice(index, 1);
+    }
+  }
+
   public selectCategory(category: RootCategory) {
     this.selectedCategory = category;
     this.selectedSubCategory = null;
@@ -128,14 +147,7 @@ export class VendorAddProduct implements OnInit {
     this.isCategoryOpen = false;
   }
 
-  // public selectSubCategory(subCategory: Category) {
-  //   this.selectedSubCategory = subCategory;
-  //   this.isSubCategoryOpen = false;
-  // }
-
-
-  // Step 1: Submit product details → get back the _id
-  submitDetails(payload: object) {
+  public submitDetails(payload: object) {
     this.isSubmittingDetails.set(true);
     this.detailsError.set(null);
 
@@ -143,17 +155,20 @@ export class VendorAddProduct implements OnInit {
       next: (product) => {
         this.createdProductId.set(product._id);
         this.step.set('images');
+        console.log('Product created:', product);
+        this.taostService.success('Product details saved! You can now upload images.');
         this.isSubmittingDetails.set(false);
       },
       error: (err) => {
+        this.taostService.error('Failed to save product. Please try again.');
         this.detailsError.set(err?.error?.message ?? 'Failed to save product. Please try again.');
         this.isSubmittingDetails.set(false);
       }
     });
   }
 
-  // Handle file selection + generate previews
-  onFilesSelected(event: Event) {
+
+  public onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
 
@@ -162,21 +177,32 @@ export class VendorAddProduct implements OnInit {
     const toAdd = incoming.slice(0, remaining);
 
     toAdd.forEach(file => {
-      this.selectedFiles.push(file);
+      const index = this.selectedFiles.length;
+
+      this.selectedFiles = [...this.selectedFiles, file];
+      this.previewUrls = [...this.previewUrls, null];
+
       const reader = new FileReader();
-      reader.onload = (e) => this.previewUrls.push(e.target?.result as string);
+      reader.onload = (e) => {
+        const updated = [...this.previewUrls];
+        updated[index] = e.target?.result as string;
+        this.previewUrls = updated;
+        this.cdr.markForCheck();
+      };
       reader.readAsDataURL(file);
     });
+
+    input.value = '';
   }
 
-  removeImage(index: number) {
-    this.selectedFiles.splice(index, 1);
-    this.previewUrls.splice(index, 1);
+  public removeImage(index: number) {
+    this.previewUrls = this.previewUrls.filter((_, i) => i !== index);
+    this.selectedFiles = this.selectedFiles.filter((_, i) => i !== index);
   }
 
-  // Step 2: Upload images using the product _id
-  uploadImages() {
+  public uploadImages() {
     const id = this.createdProductId();
+    console.log('Uploading images for product ID:', id, 'Selected files:', this.selectedFiles);
     if (!id || this.selectedFiles.length === 0) return;
 
     this.isUploadingImages.set(true);
@@ -186,11 +212,13 @@ export class VendorAddProduct implements OnInit {
     this.selectedFiles.forEach(file => formData.append('images', file));
 
     this.http.post(`${environment.apiBaseUrl}/products/${id}/images`, formData).subscribe({
-      next: () => {
+      next: (res) => {
         this.isUploadingImages.set(false);
-        // navigate away or show success
+        this.taostService.success('Images uploaded successfully!');
+        console.log("Images Upload", res)
       },
       error: (err) => {
+        this.taostService.error('Failed to upload images. Please try again.');
         this.imagesError.set(err?.error?.message ?? 'Image upload failed. Please try again.');
         this.isUploadingImages.set(false);
       }
