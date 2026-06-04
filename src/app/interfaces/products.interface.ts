@@ -86,3 +86,21 @@ export interface ProductDetailsResponse {
   success: boolean;
   data: ProductDetails;
 }
+
+export interface Attribute {
+  name: string;
+  value: string;
+}
+
+export interface ProductDetailsPayload {
+  name: string;
+  description: string;
+  attributes: Record<string, string>;
+  hasVariants: boolean;
+  isPreOrder: boolean;
+  preOrderDays?: number;
+  minPreOrderQuantity?: number;
+  price: number;
+  stockQuantity: number;
+  category: string;
+}
