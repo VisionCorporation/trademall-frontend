@@ -1,42 +1,55 @@
-<section class="bg-[#F4F4F4] h-full rounded-[20px] py-7.5 px-8.75 flex flex-col overflow-y-auto scrollbar-hide">
-    <div class="grid gap-4 flex-1 mb-12.5" style="grid-template-columns: 1fr 2fr; grid-template-rows: auto auto;">
-        <div class="bg-white border border-[#FBFCFF] rounded-2xl px-6.25 py-6.75 shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
-            <p class="text-[22px] mb-6 products-font">Total Products</p>
-            <p class="text-[64px] text-right">5</p>
-        </div>
+<section
+    class="bg-[#F4F4F4] h-full rounded-[20px] py-5 px-4 sm:py-7.5 sm:px-5 lg:px-8.75 flex flex-col overflow-y-auto scrollbar-hide">
+
+    <div class="grid gap-4 flex-1 mb-8 sm:mb-12.5
+                grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_2fr] lg:grid-rows-[auto_auto]">
 
         <div
-            class="bg-white border border-[#FBFCFF] rounded-2xl px-6.25 py-6.75 row-span-2 self-stretch shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
-            <div class="flex items-center justify-between mb-3">
-                <p class="text-[22px] products-font">Total Revenue</p>
-                <div class="flex gap-2.5 bg-[#F4F4F4] rounded-lg p-0.75">
+            class="bg-white border border-[#FBFCFF] rounded-2xl px-5 py-5 sm:px-6.25 sm:py-6.75 shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
+            <p class="text-[18px] sm:text-[22px] mb-4 sm:mb-6 products-font">Total Products</p>
+            <p class="text-[40px] sm:text-[64px] text-right">5</p>
+        </div>
+
+        <div class="bg-white border border-[#FBFCFF] rounded-2xl px-5 py-5 sm:px-6.25 sm:py-6.75
+                    sm:row-span-2 sm:self-stretch shadow-[0_4px_20px_rgba(0,0,0,0.04)]
+                    order-last sm:order-0">
+            <div class="flex flex-wrap items-center justify-between mb-3 gap-3">
+                <p class="text-[18px] sm:text-[22px] products-font">Total Revenue</p>
+                <div class="flex gap-2.5 bg-[#F4F4F4] rounded-lg p-0.75 shrink-0">
                     @for(period of periods; track period){
                     <button (click)="selectedPeriod = period"
-                        [class]="(selectedPeriod === period ? 'transition-colors duration-130 ease-in text-[16px] px-1.25 py-0.75 rounded-md bg-[#FBFCFF]' : 'transition-colors duration-130 ease-in text-[16px] px-1.25 py-0.75 rounded-md text-[#6B6B6B]')">
+                        [class]="(selectedPeriod === period
+                            ? 'transition-colors duration-130 ease-in text-[13px] sm:text-[16px] px-1.25 py-0.75 rounded-md bg-[#FBFCFF]'
+                            : 'transition-colors duration-130 ease-in text-[13px] sm:text-[16px] px-1.25 py-0.75 rounded-md text-[#6B6B6B]')">
                         {{ period }}
                     </button>
                     }
                 </div>
             </div>
-            <p class="text-[64px]">{{ revenue[selectedPeriod] | currency: 'GHS ' : 'symbol' : '1.2-2' }}</p>
+            <p class="text-[32px] sm:text-[48px] lg:text-[64px] break-all">
+                {{ revenue[selectedPeriod] | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+            </p>
         </div>
 
-        <div class="bg-white border border-[#FBFCFF] rounded-2xl px-6.25 py-6.75 shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
-            <p class="text-[22px] mb-6 products-font">Total Orders</p>
-            <p class="text-[64px] text-right">4</p>
+        <div
+            class="bg-white border border-[#FBFCFF] rounded-2xl px-5 py-5 sm:px-6.25 sm:py-6.75 shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
+            <p class="text-[18px] sm:text-[22px] mb-4 sm:mb-6 products-font">Total Orders</p>
+            <p class="text-[40px] sm:text-[64px] text-right">4</p>
         </div>
     </div>
+
     <div>
-        <div class="flex items-center justify-between mb-6.25">
-            <h2 class="text-[24px] products-font text-[#000000]">Products</h2>
-            <div class="flex items-center gap-3.75">
+        <div class="flex flex-wrap items-center justify-between mb-5 sm:mb-6.25 gap-3">
+            <h2 class="text-[20px] sm:text-[24px] products-font text-[#000000]">Products</h2>
+            <div class="flex items-center gap-2 sm:gap-3.75">
                 <button (click)="navigateToProductsPage()"
-                    class="text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
+                    class="text-[15px] sm:text-[20px] transition-opacity duration-150 ease-in px-3 py-1.5 sm:px-3.75 sm:py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
                     View More
                 </button>
                 <button (click)="navigateToAddNewProduct()"
-                    class="text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">Add
-                    Product</button>
+                    class="text-[15px] sm:text-[20px] transition-opacity duration-150 ease-in px-3 py-1.5 sm:px-3.75 sm:py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
+                    Add Product
+                </button>
             </div>
         </div>
 
@@ -45,51 +58,96 @@
 
         }@else if(hasProductFailed()){
         <div class="flex flex-col mt-10 items-center justify-center">
-            <p class="text-[20px] text-[#D92D20] mb-2">Failed to fetch products.</p>
+            <p class="text-[18px] sm:text-[20px] text-[#D92D20] mb-2">Failed to fetch products.</p>
             <button (click)="fetchVendorProductsListings()"
-                class="text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
+                class="text-[18px] sm:text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
                 Retry
             </button>
         </div>
+
         }@else {
-        <table class="w-full border-separate border-spacing-y-2.5">
+
+        <!-- Desktop/tablet table -->
+        <table class="hidden md:table w-full border-separate border-spacing-y-2.5">
             <tbody>
                 @for(product of fetchedProducts; track product){
                 <tr class="bg-[#FBFCFF] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
-                    <td class="py-3 pl-4 px-10 rounded-l-2xl">
-                        <div class="flex items-center gap-3">
-                            <div class="bg-[#17171733] rounded-lg w-10 h-10 flex items-center justify-center">
+                    <td class="py-3 pl-4 pr-2 lg:pl-6 xl:pl-10 rounded-l-2xl w-[35%]">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-[#17171733] rounded-lg w-9 h-9 flex items-center justify-center shrink-0">
                                 <img [src]="product.images[0]?.url" alt="{{ product.name }}"
-                                    class="w-7.5 h-7.5 object-cover rounded-sm" />
+                                    class="w-6 h-6 object-cover rounded-sm" />
                             </div>
-                            <div>
-                                <p class="text-[13px]">Product Name</p>
-                                <span class="text-xl">{{ product.name }}</span>
+                            <div class="min-w-0">
+                                <p class="text-[12px] text-gray-500">Product Name</p>
+                                <span class="text-sm lg:text-[17px] truncate block">{{ product.name }}</span>
                             </div>
                         </div>
                     </td>
-                    <td class="py-3 px-10">
-                        <p class="text-[13px]">Status</p>
-                        <p class="text-xl" [style.color]="statusConfig[product.status].color">
+
+                    <td class="py-3 px-2 lg:px-4 w-[15%]">
+                        <p class="text-[12px] text-gray-500">Status</p>
+                        <p class="text-sm lg:text-[17px]" [style.color]="statusConfig[product.status].color">
                             {{ statusConfig[product.status].label }}
                         </p>
                     </td>
-                    <td class="py-3 px-10">
-                        <p class="text-[13px]">Price</p>
-                        <p class="text-xl">{{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}</p>
+
+                    <td class="py-3 px-2 lg:px-4 w-[15%]">
+                        <p class="text-[12px] text-gray-500">Price</p>
+                        <p class="text-sm lg:text-[17px]">
+                            {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                        </p>
                     </td>
-                    <td class="py-3">
-                        <p class="text-[13px]">Stock</p>
-                        <p class="text-xl">{{ product.stockQuantity }}</p>
+
+                    <td class="py-3 px-2 lg:px-4 w-[10%] table-cell">
+                        <p class="text-[12px] text-gray-500">Stock</p>
+                        <p class="text-sm lg:text-[17px]">{{ product.stockQuantity }}</p>
                     </td>
-                    <td class="py-3 px-10 pr-4 rounded-r-2xl">
-                        <p class="text-[13px]">Date Submitted</p>
-                        <p class="text-xl">{{ product.createdAt | date: 'MMMM d, y' }}</p>
+
+                    <td class="py-3 pl-2 lg:pl-4 pr-4 lg:pr-6 rounded-r-2xl table-cell w-[25%]">
+                        <p class="text-[12px] text-gray-500">Date Submitted</p>
+                        <p class="text-sm lg:text-[17px]">{{ product.createdAt | date: 'MMM d, y' }}</p>
                     </td>
+
                 </tr>
                 }
             </tbody>
         </table>
+
+        <!-- Mobile card list -->
+        <div class="flex md:hidden flex-col gap-3">
+            @for(product of fetchedProducts; track product){
+            <div class="bg-[#FBFCFF] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-3">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="bg-[#17171733] rounded-lg w-10 h-10 flex items-center justify-center shrink-0">
+                        <img [src]="product.images[0]?.url" alt="{{ product.name }}"
+                            class="w-7.5 h-7.5 object-cover rounded-sm" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[12px] text-[#6B6B6B]">Product Name</p>
+                        <p class="text-[14px] truncate">{{ product.name }}</p>
+                    </div>
+                    <p class="text-[14px] shrink-0" [style.color]="statusConfig[product.status].color">
+                        {{ statusConfig[product.status].label }}
+                    </p>
+                </div>
+                <div class="grid grid-cols-3 gap-2 pt-3 border-t border-[#F4F4F4]">
+                    <div>
+                        <p class="text-[12px] text-[#6B6B6B]">Price</p>
+                        <p class="text-[14px]">{{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[12px] text-[#6B6B6B]">Stock</p>
+                        <p class="text-[14px]">{{ product.stockQuantity }}</p>
+                    </div>
+                    <div>
+                        <p class="text-[12px] text-[#6B6B6B]">Date</p>
+                        <p class="text-[14px]">{{ product.createdAt | date: 'MMM d, y' }}</p>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
         }
     </div>
 </section>
