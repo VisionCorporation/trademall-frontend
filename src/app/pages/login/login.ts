@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { LoginData } from '../../interfaces/login.interface';
 import { ToastService } from '../../services/toast/toast.service';
@@ -19,6 +19,7 @@ export class Login {
   private readonly loginService = inject(LoginService);
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly vendorApplicationStatusVisitedKey = 'vendorApplicationStatusVisited';
 
   public loginForm = this.fb.group({
@@ -62,16 +63,17 @@ export class Login {
         this.signupService.isSubmitting$.next(false);
         this.loginForm.reset();
 
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+
         if (res.user.userType === 'vendor' && res.user.vendorStatus === 'approved' && this.hasVisitedVendorApplicationStatus()) {
-          this.router.navigate(['/vendor/overview']);
+          this.router.navigateByUrl(returnUrl || '/vendor/overview');
         } else if (res.user.userType === 'vendor' && res.user.vendorStatus === 'approved' && !this.hasVisitedVendorApplicationStatus()) {
           this.router.navigate(['/vendor-application-status']);
           this.markVendorApplicationStatusVisited();
         } else if (res.user.userType === 'vendor' && (res.user.vendorStatus === 'pending' || res.user.vendorStatus === 'rejected')) {
           this.router.navigate(['/vendor-application-status']);
-        }
-        else if (res.user.userType === 'customer') {
-          this.router.navigate(['/']);
+        } else if (res.user.userType === 'customer') {
+          this.router.navigateByUrl(returnUrl || '/');
         }
       },
       error: (err) => {
