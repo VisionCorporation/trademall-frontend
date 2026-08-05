@@ -8,4 +8,5 @@ export type SkeletonType =
   | 'featured-categories'
   | 'cart-items'
   | 'vendor-dashboard-products'
-  | "vendor-dashboard-overview-products";
+  | "vendor-dashboard-overview-products"
+  | "current-address";
