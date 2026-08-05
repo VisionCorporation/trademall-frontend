@@ -183,27 +183,31 @@
             </h1>
 
             <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="flex flex-col gap-4">
-                <div class="flex flex-col gap-1.5">
-                    <label class="mb-1.25 text-[15px] sm:text-[17px]">Address Line</label>
+                <div class="flex flex-col">
+                    <label class="mb-1.25 text-[15px] sm:text-[17px]">Address Line <span
+                            class="text-red-500">*</span></label>
                     <input formControlName="addressLine" placeholder="Street address"
                         class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="flex flex-col gap-1.5">
-                        <label class="mb-1.25 text-[15px] sm:text-[17px] ">City</label>
+                    <div class="flex flex-col">
+                        <label class="mb-1.25 text-[15px] sm:text-[17px] ">City <span
+                                class="text-red-500">*</span></label>
                         <input formControlName="city" placeholder="E.g. Accra, Kumasi"
                             class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                     </div>
-                    <div class="flex flex-col gap-1.5">
-                        <label class="mb-1.25 text-[15px] sm:text-[17px] ">Region</label>
+                    <div class="flex flex-col">
+                        <label class="mb-1.25 text-[15px] sm:text-[17px] ">Region <span
+                                class="text-red-500">*</span></label>
                         <input formControlName="region" placeholder="E.g. Greater Accra, Ashanti"
                             class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-1.5">
-                    <label class="mb-1.25 text-[15px] sm:text-[17px] ">Landmark</label>
+                <div class="flex flex-col">
+                    <label class="mb-1.25 text-[15px] sm:text-[17px] ">Landmark <span
+                            class="text-red-500">*</span></label>
                     <input formControlName="landmark" placeholder="E.g. Near the park, Opposite the mall"
                         class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                 </div>
