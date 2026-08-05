@@ -4,7 +4,7 @@ export const CustomerDropdown = [
   { label: 'Wishlist', url: '' },
   { label: 'Order History', url: '/order-history' },
   { label: 'Notifications', url: '' },
-  { label: 'Location', url: '' },
+  { label: 'Location', url: '/customer-location' },
 ];
 
 export const VendorDropdown = [
