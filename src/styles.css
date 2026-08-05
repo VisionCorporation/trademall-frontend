@@ -150,8 +150,18 @@ select {
   transform: scale(1.05);
 }
 
+.custom-checkbox {
+  position: relative;
+}
+
 .custom-checkbox input {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  width: 23px;
+  height: 23px;
+  margin: 0;
+  cursor: pointer;
+  z-index: 1;
 }
 
 .checkmark {
