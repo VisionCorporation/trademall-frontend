@@ -82,4 +82,12 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard, customerGuard],
   },
+  {
+    path: 'customer-location',
+    loadComponent: () =>
+      import('./pages/customer-location/customer-location').then(
+        (m) => m.CustomerLocation,
+      ),
+    canActivate: [authGuard, customerGuard],
+  },
 ];
