@@ -24,6 +24,7 @@ export class CustomerLocation {
   public areAddressesLoading = signal(false);
   public isSaving = signal(false);
   public deletingAddressId = signal<string | null>(null);
+  public settingDefaultAddressId = signal<string | null>(null);
   private fb = inject(FormBuilder);
   public view = signal<'summary' | 'manage' | 'form'>('summary');
   public addresses = signal<AddressData[]>([]);
@@ -144,7 +145,8 @@ export class CustomerLocation {
   }
 
   public setAsDefault(addressId: string) {
-    this.addressService.setAsDefaultAddress(addressId).subscribe({
+    this.settingDefaultAddressId.set(addressId);
+    this.addressService.setAsDefaultAddress(addressId).pipe(finalize(() => this.settingDefaultAddressId.set(null))).subscribe({
       next: () => {
         this.loadAddresses();
         this.toastService.success('Default address updated successfully!');
