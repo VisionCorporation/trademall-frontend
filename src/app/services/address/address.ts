@@ -30,7 +30,9 @@ export class Address {
     return this.http.put<Object>(`${environment.apiBaseUrl}/address/${addressId}/set-default`, {});
   }
 
-  public deleteAddress(addressId: string, payload: any): Observable<Object> {
-    return this.http.delete<Object>(`${environment.apiBaseUrl}/address/${addressId}`, payload);
+  public deleteAddress(addressId: string, userId: string): Observable<Object> {
+    return this.http.delete<Object>(`${environment.apiBaseUrl}/address/${addressId}`, {
+      body: { userId }
+    });
   }
 }
