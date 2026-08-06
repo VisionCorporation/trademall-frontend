@@ -1,25 +1,24 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Address } from '../../services/address/address';
-import { LoginService } from '../../services/login/login.service';
 import { AddressData, GetAllAddressesResponse, GetDefaultAddressResponse } from '../../interfaces/address.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../services/toast/toast.service';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { finalize } from 'rxjs';
+import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
 
 @Component({
   selector: 'app-customer-location',
-  imports: [Header, Footer, ReactiveFormsModule, SkeletonLoader],
+  imports: [Header, Footer, ReactiveFormsModule, SkeletonLoader, InputErrorMessage],
   templateUrl: './customer-location.html',
   styleUrl: './customer-location.css',
 })
 export class CustomerLocation {
-  private userId = ''
   private readonly addressService = inject(Address);
-  private readonly loginService = inject(LoginService);
   private readonly toastService = inject(ToastService);
+  private readonly DEFAULT_PHONE_PREFIX = '+233 ';
   public isAddressLoading = signal(false);
   public areAddressesLoading = signal(false);
   public isSaving = signal(false);
@@ -32,22 +31,22 @@ export class CustomerLocation {
   public editingId = signal<string | null>(null);
 
   public addressForm = this.fb.group({
-    landmark: ['', Validators.required],
-    addressLine: ['', Validators.required],
-    city: ['', Validators.required],
-    region: ['', Validators.required],
+    name: ['', [Validators.required, Validators.minLength(5)]],
+    phone: [this.DEFAULT_PHONE_PREFIX, [Validators.required, Validators.pattern(/^\+233\s(?:2\d{2}|5\d{2})\s\d{3}\s\d{3}$/)]],
+    landmark: ['', [Validators.required, Validators.minLength(5)]],
+    addressLine: ['', [Validators.required, Validators.minLength(5)]],
+    city: ['', [Validators.required, Validators.minLength(3)]],
+    region: ['', [Validators.required]],
     isDefault: [false],
   });
 
   ngOnInit() {
-    const user = this.loginService.getCurrentUser();
-    this.userId = user._id;
     this.loadAddresses();
   }
 
   public loadAddresses(): void {
     this.isAddressLoading.set(true);
-    this.addressService.getDefaultAddress(this.userId).subscribe({
+    this.addressService.getDefaultAddress().subscribe({
       next: (res: GetDefaultAddressResponse) => {
         this.defaultAddress.set(res.data);
         this.isAddressLoading.set(false);
@@ -60,7 +59,7 @@ export class CustomerLocation {
     });
 
     this.areAddressesLoading.set(true);
-    this.addressService.getAllAddresses(this.userId).subscribe({
+    this.addressService.getAllAddresses().subscribe({
       next: (res: GetAllAddressesResponse) => {
         this.addresses.set(Array.isArray(res.data) ? res.data : []);
         this.areAddressesLoading.set(false);
@@ -85,7 +84,10 @@ export class CustomerLocation {
 
   public startAddAddress() {
     this.editingId.set(null);
-    this.addressForm.reset({ isDefault: this.addresses().length === 0 });
+    this.addressForm.reset({
+      phone: this.DEFAULT_PHONE_PREFIX,
+      isDefault: this.addresses().length === 0,
+    });
     this.view.set('form');
     this.scrollToTop();
   }
@@ -93,6 +95,8 @@ export class CustomerLocation {
   public startEditAddress(address: AddressData) {
     this.editingId.set(address._id);
     this.addressForm.reset({
+      name: address.name,
+      phone: address.phone || this.DEFAULT_PHONE_PREFIX,
       landmark: address.landmark,
       addressLine: address.addressLine,
       city: address.city,
@@ -114,12 +118,8 @@ export class CustomerLocation {
 
     this.isSaving.set(true);
 
-    const user = this.loginService.getCurrentUser();
     const payload = {
       ...this.addressForm.getRawValue(),
-      name: user.firstName + ' ' + user.lastName,
-      phone: user.phoneNumber,
-      userId: user._id,
     };
 
     const request$ = this.editingId()
@@ -143,7 +143,7 @@ export class CustomerLocation {
   }
 
   public setAsDefault(addressId: string) {
-    this.addressService.setAsDefaultAddress(addressId, this.userId).subscribe({
+    this.addressService.setAsDefaultAddress(addressId).subscribe({
       next: () => {
         this.loadAddresses();
         this.toastService.success('Default address updated successfully!');
@@ -160,7 +160,7 @@ export class CustomerLocation {
     this.deletingAddressId.set(addressId);
 
     this.addressService
-      .deleteAddress(addressId, this.userId)
+      .deleteAddress(addressId)
       .pipe(
         finalize(() => this.deletingAddressId.set(null))
       )
@@ -181,5 +181,28 @@ export class CustomerLocation {
       top: 0,
       behavior: 'smooth',
     });
+  }
+
+  public onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const rawValue = input.value;
+
+    const digitsAfterPrefix = rawValue.replace('+233', '').replace(/\D/g, '').substring(0, 9);
+
+    let formatted = '+233';
+    if (digitsAfterPrefix.length > 0) formatted += ' ' + digitsAfterPrefix.substring(0, 3);
+    if (digitsAfterPrefix.length > 3) formatted += ' ' + digitsAfterPrefix.substring(3, 6);
+    if (digitsAfterPrefix.length > 6) formatted += ' ' + digitsAfterPrefix.substring(6, 9);
+
+    this.addressForm.get('phone')?.setValue(formatted, { emitEvent: false });
+    input.value = formatted;
+    input.setSelectionRange(formatted.length, formatted.length);
+  }
+
+  public onPhoneKeydown(event: KeyboardEvent): void {
+    const input = event.target as HTMLInputElement;
+    if (event.key === 'Backspace' && (input.selectionStart ?? 0) <= 5) {
+      event.preventDefault();
+    }
   }
 }
