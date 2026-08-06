@@ -26,8 +26,8 @@ export class Address {
     return this.http.put<Object>(`${environment.apiBaseUrl}/address/${addressId}`, addressData);
   }
 
-  public setAsDefaultAddress(addressId: string): Observable<Object> {
-    return this.http.put<Object>(`${environment.apiBaseUrl}/address/${addressId}/set-default`, {});
+  public setAsDefaultAddress(addressId: string, userId: string): Observable<Object> {
+    return this.http.put<Object>(`${environment.apiBaseUrl}/address/${addressId}/set-default`, { userId });
   }
 
   public deleteAddress(addressId: string, userId: string): Observable<Object> {

@@ -143,7 +143,7 @@ export class CustomerLocation {
   }
 
   public setAsDefault(addressId: string) {
-    this.addressService.setAsDefaultAddress(addressId).subscribe({
+    this.addressService.setAsDefaultAddress(addressId, this.userId).subscribe({
       next: () => {
         this.loadAddresses();
         this.toastService.success('Default address updated successfully!');
