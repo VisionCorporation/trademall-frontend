@@ -11,17 +11,27 @@
       <ol class="flex items-center justify-center gap-5">
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'text-[20px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">About
-            Us</a>
+            [class]="'relative inline-block text-[20px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+            About Us
+            <span
+              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
+          </a>
         </li>
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'text-[20px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">Contact
-            Us</a>
+            [class]="'relative inline-block text-[20px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+            Contact Us
+            <span
+              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
+          </a>
         </li>
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'text-[20px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">FAQs</a>
+            [class]="'relative inline-block text-[20px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+            FAQs
+            <span
+              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
+          </a>
         </li>
       </ol>
     </nav>
