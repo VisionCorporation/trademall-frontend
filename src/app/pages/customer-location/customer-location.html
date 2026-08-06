@@ -196,7 +196,8 @@
                     <label for="name" class="mb-1.25 text-[15px] sm:text-[16px]">Full Name <span
                             class="text-red-500">*</span></label>
                     <input id="name" formControlName="name" placeholder="E.g. Kwesi Amissah"
-                        class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
+                        [class]="hasError('name') ? 'border-red-500' : 'border-[#17171733]'"
+                        class="border rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                     <app-input-error-message [control]="addressForm.controls.name" [messages]="{
                 required: 'Name is required',
                 minlength: 'Name must be at least 5 characters long'
@@ -207,7 +208,8 @@
                     <label for="phone" class="mb-1.25 text-[15px] sm:text-[16px]">Phone Number <span
                             class="text-red-500">*</span></label>
                     <input id="phone" formControlName="phone" type="tel" placeholder="E.g. 024 123 4567"
-                        autocomplete="off" (input)="onPhoneInput($event)" (keydown)="onPhoneKeydown($event)"
+                        [class]="hasError('phone') ? 'border-red-500' : 'border-[#17171733]'" autocomplete="off"
+                        (input)="onPhoneInput($event)" (keydown)="onPhoneKeydown($event)"
                         class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                     <app-input-error-message [control]="addressForm.controls.phone" [messages]="{
                 required: 'Phone number is required',
@@ -219,6 +221,7 @@
                     <label for="addressLine" class="mb-1.25 text-[15px] sm:text-[16px]">Address Line <span
                             class="text-red-500">*</span></label>
                     <input id="addressLine" formControlName="addressLine" placeholder="Street address"
+                        [class]="hasError('addressLine') ? 'border-red-500' : 'border-[#17171733]'"
                         class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                     <app-input-error-message [control]="addressForm.controls.addressLine" [messages]="{
                 required: 'Address line is required',
@@ -231,6 +234,7 @@
                         <label for="city" class="mb-1.25 text-[15px] sm:text-[16px] ">City <span
                                 class="text-red-500">*</span></label>
                         <input id="city" formControlName="city" placeholder="E.g. Accra, Kumasi"
+                            [class]="hasError('city') ? 'border-red-500' : 'border-[#17171733]'"
                             class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                         <app-input-error-message [control]="addressForm.controls.city" [messages]="{
                 required: 'City is required',
@@ -241,6 +245,7 @@
                         <label for="region" class="mb-1.25 text-[15px] sm:text-[16px] ">Region <span
                                 class="text-red-500">*</span></label>
                         <input id="region" formControlName="region" placeholder="E.g. Greater Accra, Ashanti"
+                            [class]="hasError('region') ? 'border-red-500' : 'border-[#17171733]'"
                             class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                         <app-input-error-message [control]="addressForm.controls.region" [messages]="{
                 required: 'Region is required'
@@ -252,6 +257,7 @@
                     <label for="landmark" class="mb-1.25 text-[15px] sm:text-[16px] ">Landmark <span
                             class="text-red-500">*</span></label>
                     <input id="landmark" formControlName="landmark" placeholder="E.g. Near the park, Opposite the mall"
+                        [class]="hasError('landmark') ? 'border-red-500' : 'border-[#17171733]'"
                         class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
                     <app-input-error-message [control]="addressForm.controls.landmark" [messages]="{
                 required: 'Landmark is required',

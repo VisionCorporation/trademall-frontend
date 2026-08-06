@@ -24,7 +24,6 @@ export class CustomerLocation {
   public isSaving = signal(false);
   public deletingAddressId = signal<string | null>(null);
   private fb = inject(FormBuilder);
-
   public view = signal<'summary' | 'manage' | 'form'>('summary');
   public addresses = signal<AddressData[]>([]);
   public defaultAddress = signal<AddressData | null>(null);
@@ -187,7 +186,13 @@ export class CustomerLocation {
     const input = event.target as HTMLInputElement;
     const rawValue = input.value;
 
-    const digitsAfterPrefix = rawValue.replace('+233', '').replace(/\D/g, '').substring(0, 9);
+    let digitsAfterPrefix = rawValue.replace('+233', '').replace(/\D/g, '');
+
+    if (digitsAfterPrefix.startsWith('0')) {
+      digitsAfterPrefix = digitsAfterPrefix.substring(1);
+    }
+
+    digitsAfterPrefix = digitsAfterPrefix.substring(0, 9);
 
     let formatted = '+233';
     if (digitsAfterPrefix.length > 0) formatted += ' ' + digitsAfterPrefix.substring(0, 3);
@@ -204,5 +209,10 @@ export class CustomerLocation {
     if (event.key === 'Backspace' && (input.selectionStart ?? 0) <= 5) {
       event.preventDefault();
     }
+  }
+
+  public hasError(controlName: string): boolean {
+    const control = this.addressForm.get(controlName);
+    return !!control && control.invalid && control.touched;
   }
 }
