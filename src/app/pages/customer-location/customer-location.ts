@@ -8,6 +8,7 @@ import { ToastService } from '../../services/toast/toast.service';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { finalize } from 'rxjs';
 import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
+import { REGIONS } from '../../data/address.constant';
 
 @Component({
   selector: 'app-customer-location',
@@ -28,6 +29,7 @@ export class CustomerLocation {
   public addresses = signal<AddressData[]>([]);
   public defaultAddress = signal<AddressData | null>(null);
   public editingId = signal<string | null>(null);
+  public regions = REGIONS
 
   public addressForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(5)]],
@@ -84,7 +86,7 @@ export class CustomerLocation {
   public startAddAddress() {
     this.editingId.set(null);
     this.addressForm.reset({
-      phone: this.DEFAULT_PHONE_PREFIX,
+      phone: this.DEFAULT_PHONE_PREFIX, region: '',
       isDefault: this.addresses().length === 0,
     });
     this.view.set('form');

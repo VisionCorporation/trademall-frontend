@@ -242,14 +242,22 @@
               }" />
                     </div>
                     <div class="flex flex-col">
-                        <label for="region" class="mb-1.25 text-[15px] sm:text-[16px] ">Region <span
+                        <label for="region" class="mb-1.25 text-[15px] sm:text-[16px]">Region <span
                                 class="text-red-500">*</span></label>
-                        <input id="region" formControlName="region" placeholder="E.g. Greater Accra, Ashanti"
-                            [class]="hasError('region') ? 'border-red-500' : 'border-[#17171733]'"
-                            class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
+                        <select id="region" formControlName="region" [class]="{
+      'border-red-500': hasError('region'),
+      'border-[#17171733]': !hasError('region'),
+      'text-gray-400': !addressForm.get('region')?.value,
+      'text-[#171717]': addressForm.get('region')?.value
+    }" class="border rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors bg-white">
+                            <option value="" disabled>Select region</option>
+                            @for (region of regions; track region) {
+                            <option value="{{region}}">{{region}}</option>
+                            }
+                        </select>
                         <app-input-error-message [control]="addressForm.controls.region" [messages]="{
-                required: 'Region is required'
-              }" />
+        required: 'Region is required'
+      }" />
                     </div>
                 </div>
 
