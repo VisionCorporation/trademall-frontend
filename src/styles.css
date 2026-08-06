@@ -92,7 +92,7 @@ label {
 }
 
 input:focus,
-textarea:focus {
+textarea:focus, select:focus {
   outline: none;
   box-shadow: 0 0 0 2px #2e790e5d;
   border-color: #2e790e9b;
