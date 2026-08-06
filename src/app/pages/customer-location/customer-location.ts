@@ -7,6 +7,7 @@ import { AddressData, GetAllAddressesResponse, GetDefaultAddressResponse } from 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastService } from '../../services/toast/toast.service';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-customer-location',
@@ -22,7 +23,7 @@ export class CustomerLocation {
   public isAddressLoading = signal(false);
   public areAddressesLoading = signal(false);
   public isSaving = signal(false);
-  public isDeleting = signal(false)
+  public deletingAddressId = signal<string | null>(null);
   private fb = inject(FormBuilder);
 
   public view = signal<'summary' | 'manage' | 'form'>('summary');
@@ -74,16 +75,19 @@ export class CustomerLocation {
 
   public goToSummary() {
     this.view.set('summary');
+    this.scrollToTop();
   }
 
   public goToManage() {
     this.view.set('manage');
+    this.scrollToTop();
   }
 
   public startAddAddress() {
     this.editingId.set(null);
     this.addressForm.reset({ isDefault: this.addresses().length === 0 });
     this.view.set('form');
+    this.scrollToTop();
   }
 
   public startEditAddress(address: AddressData) {
@@ -95,11 +99,14 @@ export class CustomerLocation {
       region: address.region,
       isDefault: address.isDefault,
     });
+
     this.view.set('form');
+    this.scrollToTop();
   }
 
   public cancelForm() {
     this.view.set(this.addresses().length > 0 ? 'manage' : 'summary');
+    this.scrollToTop();
   }
 
   public saveAddress() {
@@ -124,6 +131,7 @@ export class CustomerLocation {
         this.toastService.success(`Address ${this.editingId() ? 'updated' : 'added'} successfully!`);
         this.loadAddresses();
         this.view.set('manage');
+        this.scrollToTop();
         this.addressForm.reset({ isDefault: this.addresses().length === 0 });
         this.isSaving.set(false);
       },
@@ -134,12 +142,13 @@ export class CustomerLocation {
     });
   }
 
-  public setAsDefault(id: string) {
-    this.addressService.setAsDefaultAddress(id).subscribe({
+  public setAsDefault(addressId: string) {
+    this.addressService.setAsDefaultAddress(addressId).subscribe({
       next: () => {
         this.loadAddresses();
         this.toastService.success('Default address updated successfully!');
         this.view.set('summary');
+        this.scrollToTop();
       },
       error: (error) => {
         this.toastService.error('Error setting default address: ' + error.message);
@@ -148,18 +157,29 @@ export class CustomerLocation {
   }
 
   public deleteAddress(addressId: string) {
-    console.log('Deleting address with ID:', addressId);
-    console.log('User ID:', this.userId);
-    const payload = { userId: this.userId };
-    console.log('Payload for deletion:', payload);
-    this.addressService.deleteAddress(addressId, payload).subscribe({
-      next: () => {
-        this.toastService.success('Address deleted successfully!');
-        this.loadAddresses();
-      },
-      error: (error) => {
-        this.toastService.error('Error deleting address: ' + error.message);
-      }
+    this.deletingAddressId.set(addressId);
+
+    this.addressService
+      .deleteAddress(addressId, this.userId)
+      .pipe(
+        finalize(() => this.deletingAddressId.set(null))
+      )
+      .subscribe({
+        next: () => {
+          this.toastService.success('Address deleted successfully!');
+          this.loadAddresses();
+          this.scrollToTop();
+        },
+        error: (error) => {
+          this.toastService.error('Error deleting address: ' + error.message);
+        }
+      });
+  }
+
+  private scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
     });
   }
 }
