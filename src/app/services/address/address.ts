@@ -10,12 +10,12 @@ import { GetAllAddressesResponse, GetDefaultAddressResponse } from '../../interf
 export class Address {
   private http = inject(HttpClient);
 
-  public getDefaultAddress(userId: string): Observable<GetDefaultAddressResponse> {
-    return this.http.get<GetDefaultAddressResponse>(`${environment.apiBaseUrl}/address/default/${userId}`);
+  public getDefaultAddress(): Observable<GetDefaultAddressResponse> {
+    return this.http.get<GetDefaultAddressResponse>(`${environment.apiBaseUrl}/address/default/`);
   }
 
-  public getAllAddresses(userId: string): Observable<GetAllAddressesResponse> {
-    return this.http.get<GetAllAddressesResponse>(`${environment.apiBaseUrl}/address/${userId}`);
+  public getAllAddresses(): Observable<GetAllAddressesResponse> {
+    return this.http.get<GetAllAddressesResponse>(`${environment.apiBaseUrl}/address/`);
   }
 
   public createNewAddress(addressData: any): Observable<Object> {
@@ -26,13 +26,11 @@ export class Address {
     return this.http.put<Object>(`${environment.apiBaseUrl}/address/${addressId}`, addressData);
   }
 
-  public setAsDefaultAddress(addressId: string, userId: string): Observable<Object> {
-    return this.http.put<Object>(`${environment.apiBaseUrl}/address/${addressId}/set-default`, { userId });
+  public setAsDefaultAddress(addressId: string): Observable<Object> {
+    return this.http.put<Object>(`${environment.apiBaseUrl}/address/${addressId}/set-default`, {});
   }
 
-  public deleteAddress(addressId: string, userId: string): Observable<Object> {
-    return this.http.delete<Object>(`${environment.apiBaseUrl}/address/${addressId}`, {
-      body: { userId }
-    });
+  public deleteAddress(addressId: string): Observable<Object> {
+    return this.http.delete<Object>(`${environment.apiBaseUrl}/address/${addressId}`);
   }
 }
