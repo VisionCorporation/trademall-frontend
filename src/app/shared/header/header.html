@@ -83,18 +83,18 @@
         <div class="relative inline-block" #dropdownRef (click)="$event.stopPropagation()">
           <div class="lg:flex items-center gap-3 hidden">
             <div
-              [class]="'cursor-pointer initials w-15 h-15 rounded-full flex items-center justify-center text-2xl transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-white text-[#171717]' : 'bg-[#171717] text-white')"
+              [class]="'cursor-pointer initials w-13 h-13 rounded-full flex items-center justify-center text-xl transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-white text-[#171717]' : 'bg-[#171717] text-white')"
               (click)="toggleDropdown($event)">
               {{ userInitials }}
             </div>
 
             <div class="flex flex-col">
               <span
-                [class]="'text-[19px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+                [class]="'text-[16px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
                 {{ userName }}
               </span>
               <span
-                [class]="'text-lg truncate max-w-[15ch] -mt-1 transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white/60' : 'text-[#17171799]')">
+                [class]="'text-[15px] truncate max-w-[15ch] -mt-1 transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white/60' : 'text-[#17171799]')">
                 {{ userEmail }}
               </span>
             </div>
