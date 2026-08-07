@@ -82,8 +82,4 @@ export class VendorType {
       },
     });
   }
-
-  public onSubmit(): void {
-    const selectVendorType = this.vendorTypeForm.get('vedorType')?.value;
-  }
 }
