@@ -11,7 +11,7 @@
       <ol class="flex items-center justify-center gap-5">
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'relative inline-block text-[20px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+            [class]="'relative inline-block text-[15px] sm:text-[18px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
             About Us
             <span
               [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
@@ -19,7 +19,7 @@
         </li>
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'relative inline-block text-[20px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+            [class]="'relative inline-block text-[15px] sm:text-[18px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
             Contact Us
             <span
               [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
@@ -27,7 +27,7 @@
         </li>
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'relative inline-block text-[20px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+            [class]="'relative inline-block text-[15px] sm:text-[18px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
             FAQs
             <span
               [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
@@ -42,10 +42,10 @@
       } @else if (!isLoggedIn) {
       <div class="lg:flex items-center justify-center gap-8.5 hidden">
         <a routerLink="/login"
-          [class]="'text-[20px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">Log
+          [class]="'text-[15px] sm:text-[17px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">Log
           In</a>
         <a routerLink="/user-type"
-          [class]="'text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg ' + (transparent && !isScrolled ? 'bg-white text-[#171717] hover:opacity-80' : 'bg-[#171717] text-white hover:opacity-80')">
+          [class]="'text-[15px] sm:text-[17px] transition-opacity duration-150 ease-in px-3.75 py-3 rounded-lg ' + (transparent && !isScrolled ? 'bg-white text-[#171717] hover:opacity-80' : 'bg-[#171717] text-white hover:opacity-80')">
           Create an account
         </a>
       </div>
