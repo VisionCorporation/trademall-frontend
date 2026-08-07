@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Header } from '../../shared/header/header';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { Footer } from '../../shared/footer/footer';
@@ -10,8 +10,15 @@ import { Footer } from '../../shared/footer/footer';
   imports: [Header, RouterLink, Newsletter, Footer],
   templateUrl: './customer-order-history.html',
   styleUrl: './customer-order-history.css',
-  animations:[fadeInOutAnimation]
+  animations: [fadeInOutAnimation]
 })
 export class CustomerOrderHistory {
   public isOrderPlaced = false;
+  public view = signal<'home' | 'order-history'>('order-history');
+  private readonly router = inject(Router);
+
+  public goToHome() {
+    this.view.set('home');
+    this.router.navigate(['/']);
+  }
 }
