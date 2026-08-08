@@ -50,11 +50,13 @@ export class CartState {
 
         this.cartService.addToCart(productId, quantity).subscribe({
             next: () => {
+                const existing = this.cartQuantities()[productId];
+
                 this.cartQuantities.set({
                     ...this.cartQuantities(),
                     [productId]: {
                         quantity: this.getCartQuantity(productId) + quantity,
-                        itemId: ''
+                        itemId: existing?.itemId ?? '',
                     }
                 });
                 this.syncCount();
@@ -94,6 +96,12 @@ export class CartState {
     public decrementCartQuantity(productId: string) {
         const current = this.cartQuantities()[productId];
         const newQty = current.quantity - 1;
+
+        if (newQty <= 0 && !current.itemId) {
+            this.loadCart();
+            return;
+        }
+
         this.cartLoadingStates.set({ ...this.cartLoadingStates(), [productId]: 'decrement' });
 
         if (newQty <= 0) {
