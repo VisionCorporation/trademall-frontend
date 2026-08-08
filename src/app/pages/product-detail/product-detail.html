@@ -1,297 +1,222 @@
-<div class="max-w-350 mx-auto pt-20 md:pt-24">
+<div class="max-w-7xl mx-auto pt-20 md:pt-24">
   <app-header />
 
   @if (!isLoading()) {
-    @if (product) {
-      <div class="my-10 sm:my-16.75 px-5 md:px-12 2xl:px-0">
-        <app-breadcrumb
-          [categoryName]="product.breadcrumbs[0].name"
-          [categorySlug]="product.breadcrumbs[0].slug"
-          [subCategoryName]="product.breadcrumbs[1].name"
-          [subCategorySlug]="product.breadcrumbs[1].slug"
-          [productName]="product.name"
-        />
+  @if (product) {
+  <div class="my-10 sm:my-16.75 px-5 md:px-12 2xl:px-0">
+    <app-breadcrumb [categoryName]="product.breadcrumbs[0].name" [categorySlug]="product.breadcrumbs[0].slug"
+      [subCategoryName]="product.breadcrumbs[1].name" [subCategorySlug]="product.breadcrumbs[1].slug"
+      [productName]="product.name" />
+  </div>
+
+  <section
+    class="flex flex-col lg:flex-row items-start justify-center mb-15 lg:mb-37.5 gap-10 lg:gap-16 px-5 md:px-12 2xl:px-0">
+    <div class="w-full lg:w-[50%]">
+      <div class="flex flex-col">
+        @if (product && product.images[0]) {
+        <img ngSrc="{{ product.images[0].url }}" width="800" height="536" priority alt="{{ product.name }}"
+          class="rounded-lg w-full" />
+        } @else if (product && product.images.length > 1) {
+        <div class="mt-5 flex items-center justify-center gap-7">
+          <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+          <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+          <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
+        </div>
+        }
       </div>
+    </div>
 
-      <section
-        class="flex flex-col lg:flex-row items-start justify-center mb-15 lg:mb-37.5 gap-10 lg:gap-16 px-5 md:px-12 2xl:px-0"
-      >
-        <div class="w-full lg:w-[50%]">
-          <div class="flex flex-col">
-            @if (product && product.images[0]) {
-              <img
-                ngSrc="{{ product.images[0].url }}"
-                width="800"
-                height="536"
-                priority
-                alt="{{ product.name }}"
-                class="rounded-lg w-full"
-              />
-            } @else if (product && product.images.length > 1) {
-              <div class="mt-5 flex items-center justify-center gap-7">
-                <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
-                <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
-                <div class="bg-[#E6E6E880] w-20.5 h-20 rounded-[7px]"></div>
-              </div>
-            }
+    <div class="bg-[#EEEEEE] p-5 sm:p-7.5 rounded-[20px] w-full lg:w-[50%]">
+      <h1 class="products-font text-xl sm:text-2xl text-[#000000] mb-2.75">
+        {{ product.name }}
+      </h1>
+      <div class="flex items-center justify-between mb-7.5">
+        <div class="flex items-center gap-2.5">
+          <div class="bg-[#D1D1D1B2] rounded-sm py-0.75 px-1.25 text-sm sm:text-base flex items-center gap-1.25">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                fill="#F0B718" />
+            </svg>
+            {{ product.rating }}
           </div>
+
+          <span class="bg-[#D1D1D1B2] rounded-sm px-1.25 py-0.75 text-sm sm:text-base">{{
+            product.category.name
+            }}</span>
         </div>
-
-        <div class="bg-[#EEEEEE] p-5 sm:p-7.5 rounded-[20px] w-full lg:w-[50%]">
-          <h1 class="products-font text-xl sm:text-2xl text-[#000000] mb-2.75">
-            {{ product.name }}
-          </h1>
-          <div class="flex items-center justify-between mb-7.5">
-            <div class="flex items-center gap-2.5">
-              <div
-                class="bg-[#D1D1D1B2] rounded-sm py-0.75 px-1.25 text-sm sm:text-base flex items-center gap-1.25"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
-                    fill="#F0B718"
-                  />
-                </svg>
-                {{ product.rating }}
-              </div>
-
-              <span class="bg-[#D1D1D1B2] rounded-sm px-1.25 py-0.75 text-sm sm:text-base">{{
-                product.category.name
-              }}</span>
-            </div>
-            <div class="flex flex-col">
-              <span class="text-[#17171780]">sold by</span>
-              <a
-                class="text-base sm:text-[20px] text-[#2E790E] hover:underline truncate max-w-[15ch]"
-                [routerLink]="['/products/vendor', product.vendor._id]"
-                >{{ product.vendor.businessName }}</a
-              >
-            </div>
-          </div>
-          @if (product.discount > 0) {
-            <span class="text-[#1B5DD7] text-base sm:text-[22px] block mb-2.5"
-              >{{ product.discount }}% Off Promo</span
-            >
-          }
-          <p class="text-[#FF860D] text-xl sm:text-2xl products-font">
-            <span>GHS </span>
-            @if (product.discount > 0) {
-              <span class="line-through text-[#1717174D] mr-2 text-xl">{{
-                product.price | currency: '' : ''
-              }}</span>
-            }
-            <span>{{ product.effectivePrice | currency: '' : '' }}</span>
-          </p>
-
-          <div
-            class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-7.5"
-          >
-            <button
-              class="w-full sm:w-auto text-base sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
-            >
-              Add to Cart
-            </button>
-            <div
-              class="flex items-center gap-1.25 py-2 px-3.5 cursor-pointer"
-              (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)"
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                class="hover:scale-110 transition-transform duration-300 shrink-0"
-              >
-                <path
-                  d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
-                  [attr.fill]="wishlistedIds.has(product._id) ? '#26C34D' : '#FBFCFF'"
-                  [attr.stroke]="wishlistedIds.has(product._id) ? '#26C34D' : '#000'"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
-              <span class="text-base sm:text-xl">Add to Wishlist</span>
-            </div>
-          </div>
+        <div class="flex flex-col">
+          <span class="text-[#17171780]">sold by</span>
+          <a class="text-base sm:text-[20px] text-[#2E790E] hover:underline truncate max-w-[15ch]"
+            [routerLink]="['/products/vendor', product.vendor._id]">{{ product.vendor.businessName }}</a>
         </div>
-      </section>
+      </div>
+      @if (product.discount > 0) {
+      <span class="text-[#1B5DD7] text-base sm:text-[22px] block mb-2.5">{{ product.discount }}% Off Promo</span>
+      }
+      <p class="text-[#FF860D] text-xl sm:text-2xl products-font">
+        <span>GHS </span>
+        @if (product.discount > 0) {
+        <span class="line-through text-[#1717174D] mr-2 text-xl">{{
+          product.price | currency: '' : ''
+          }}</span>
+        }
+        <span>{{ product.effectivePrice | currency: '' : '' }}</span>
+      </p>
 
-      <div class="mb-25 px-5 md:px-12 2xl:px-0">
-        <div
-          class="flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2"
-        >
-          @for (button of buttons; track button.value) {
-            <button
-              [class]="
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-7.5">
+        <button
+          class="w-full sm:w-auto text-base sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">
+          Add to Cart
+        </button>
+        <div class="flex items-center gap-1.25 py-2 px-3.5 cursor-pointer"
+          (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            class="hover:scale-110 transition-transform duration-300 shrink-0">
+            <path
+              d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
+              [attr.fill]="wishlistedIds.has(product._id) ? '#26C34D' : '#FBFCFF'"
+              [attr.stroke]="wishlistedIds.has(product._id) ? '#26C34D' : '#000'" stroke-width="1.5"
+              stroke-linecap="round" />
+          </svg>
+          <span class="text-base sm:text-xl">Add to Wishlist</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mb-25 px-5 md:px-12 2xl:px-0">
+    <div class="flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2">
+      @for (button of buttons; track button.value) {
+      <button [class]="
                 'text-[16px] sm:text-[20px] lg:text-[24px] mb-3 sm:mb-5 shrink-0 transition-all duration-300 ease-in-out ' +
                 (button.value === activeButton
                   ? 'text-[#2E790E] underline underline-offset-4'
                   : 'text-[#17171733] hover:text-[#2E790E] hover:underline hover:underline-offset-4')
-              "
-              (click)="switchButtons(button.value, product._id)"
-            >
-              {{ button.label }}
-            </button>
-          }
-        </div>
-        @if (activeButton === 'about-product') {
-          <div
-            class="bg-[#F4F4F4] p-5 sm:p-7.5 rounded-[20px] text-[#333333] mb-5 leading-6"
-            [@fadeInOut]
-          >
-            <h3 class="light-header text-[25px] sm:text-[30px] mb-5">About Product</h3>
-            <p class="text-[18px] sm:text-[20px]">{{ product.description }}</p>
-          </div>
-        }
-        @if (activeButton === 'product-details') {
-          <div class="bg-[#F4F4F4] rounded-[20px] p-5 sm:p-7.5" [@fadeInOut]>
-            <h3 class="light-header text-[25px] sm:text-[30px] mb-5">Product Details</h3>
-            <table class="w-full text-sm sm:text-base">
-              <tbody>
-                @for (spec of specifications; track $index) {
-                  <tr class="border-t border-[#17171733]">
-                    <td class="py-1 w-[50%] text-[18px] sm:text-[20px]">{{ spec.label }}</td>
-                    <td class="py-1 w-[50%] text-[18px] sm:text-[20px]">{{ spec.value }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        }
-        @if (activeButton === 'reviews') {
-          @if (isReviewsLoading()) {
-            <div>Loading Reviews...</div>
-          }
-        }
-      </div>
-    } @else {
-      <div class="flex flex-col items-center justify-center h-screen mx-1">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="70"
-          height="70"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
-        <p class="text-lg my-3 text-center leading-5">
-          There was an error while fetching the product details.
-        </p>
-        <button
-          class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg"
-        >
-          Try again
-        </button>
-      </div>
-    }
-  } @else {
-    <app-skeleton-loader skeletonType="product-details" />
-    <app-skeleton-loader skeletonType="product-additional-details" />
-    <div class="mb-37.5">
-      <div class="w-50 h-12.5 rounded-2xl mb-8.5 skeleton-shimmer mx-5 md:mx-12 2xl:mx-0"></div>
-      <app-skeleton-loader skeletonType="product" />
+              " (click)="switchButtons(button.value, product._id)">
+        {{ button.label }}
+      </button>
+      }
     </div>
+    @if (activeButton === 'about-product') {
+    <div class="bg-[#F4F4F4] p-5 sm:p-7.5 rounded-[20px] text-[#333333] mb-5 leading-6" [@fadeInOut]>
+      <h3 class="light-header text-[25px] sm:text-[30px] mb-5">About Product</h3>
+      <p class="text-[18px] sm:text-[20px]">{{ product.description }}</p>
+    </div>
+    }
+    @if (activeButton === 'product-details') {
+    <div class="bg-[#F4F4F4] rounded-[20px] p-5 sm:p-7.5" [@fadeInOut]>
+      <h3 class="light-header text-[25px] sm:text-[30px] mb-5">Product Details</h3>
+      <table class="w-full text-sm sm:text-base">
+        <tbody>
+          @for (spec of specifications; track $index) {
+          <tr class="border-t border-[#17171733]">
+            <td class="py-1 w-[50%] text-[18px] sm:text-[20px]">{{ spec.label }}</td>
+            <td class="py-1 w-[50%] text-[18px] sm:text-[20px]">{{ spec.value }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+    @if (activeButton === 'reviews') {
+    @if (isReviewsLoading()) {
+    <div>Loading Reviews...</div>
+    }
+    }
+  </div>
+  } @else {
+  <div class="flex flex-col items-center justify-center h-screen mx-1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+    <p class="text-lg my-3 text-center leading-5">
+      There was an error while fetching the product details.
+    </p>
+    <button
+      class="text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">
+      Try again
+    </button>
+  </div>
+  }
+  } @else {
+  <app-skeleton-loader skeletonType="product-details" />
+  <app-skeleton-loader skeletonType="product-additional-details" />
+  <div class="mb-37.5">
+    <div class="w-50 h-12.5 rounded-2xl mb-8.5 skeleton-shimmer mx-5 md:mx-12 2xl:mx-0"></div>
+    <app-skeleton-loader skeletonType="product" />
+  </div>
   }
 </div>
 
 @if (!isLoading() && product) {
-  @if (isVendorProductsLoading()) {
-    <div class="mt-25 md:mt-37.5 mb-28.75 pl-5 md:pl-12 2xl:pl-[calc((100vw-1400px)/2)]">
-      <app-skeleton-loader skeletonType="product" />
-    </div>
-  } @else if (vendorProductsDetails.length > 0) {
-    <div class="mt-25 md:mt-37.5 mb-28.75">
-      <div class="max-w-350 mx-auto px-5 md:px-12 2xl:px-0">
-        <h2 class="text-[36px] sm:text-[40px] mb-3 sm:mb-4">From the same vendor</h2>
-      </div>
+@if (isVendorProductsLoading()) {
+<div class="mt-25 md:mt-37.5 mb-28.75 pl-5 md:pl-12 2xl:pl-[calc((100vw-1400px)/2)]">
+  <app-skeleton-loader skeletonType="product" />
+</div>
+} @else if (vendorProductsDetails.length > 0) {
+<div class="mt-25 md:mt-37.5 mb-28.75">
+  <div class="max-w-7xl mx-auto px-5 md:px-12 2xl:px-0">
+    <h2 class="text-[36px] sm:text-[40px] mb-3 sm:mb-4">From the same vendor</h2>
+  </div>
 
-      <div
-        class="flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 pl-5 md:pl-12 2xl:pl-[calc((100vw-1400px)/2)]"
-        [@staggerProducts]
-      >
-        @for (vendorProduct of vendorProductsDetails; track vendorProduct._id) {
-          <div
-            class="bg-[#F4F4F4] rounded-2xl shrink-0 snap-end w-52 sm:w-64 lg:w-70.75 hover:scale-105 transition-transform duration-300 cursor-pointer"
-            [routerLink]="['/products', vendorProduct?.slug]"
-          >
-            <div class="relative rounded-2xl mt-1.25 mb-3.75">
-              <span
-                class="absolute bg-[#D1D1D1] px-1.25 py-0.75 top-2.5 left-2.5 sm:left-4 rounded-sm truncate max-w-[10ch] text-xs"
-                >{{ vendorProduct?.category?.name }}</span
-              >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                class="absolute top-2.5 right-2.5 sm:right-4 hover:scale-110 transition-transform duration-300 z-10"
-                (click)="
+  <div
+    class="max-w-7xl mx-auto px-5 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2"
+    [@staggerProducts]>
+    @for (vendorProduct of vendorProductsDetails; track vendorProduct._id) {
+    <div
+      class="bg-[#F4F4F4] rounded-2xl shrink-0 snap-end w-52 sm:w-64 lg:w-70.75 hover:scale-105 transition-transform duration-300 cursor-pointer"
+      [routerLink]="['/products', vendorProduct?.slug]">
+      <div class="relative rounded-2xl mt-1.25 mb-3.75">
+        <span
+          class="absolute bg-[#D1D1D1] px-1.25 py-0.75 top-2.5 left-2.5 sm:left-4 rounded-sm truncate max-w-[10ch] text-xs">{{
+          vendorProduct?.category?.name }}</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+          class="absolute top-2.5 right-2.5 sm:right-4 hover:scale-110 transition-transform duration-300 z-10" (click)="
                   $event.stopPropagation(); toggleWishlist(vendorProduct._id, vendorProduct.name)
-                "
-              >
-                <path
-                  d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
-                  [attr.fill]="wishlistedIds.has(vendorProduct._id) ? '#26C34D' : '#FBFCFF'"
-                  [attr.stroke]="wishlistedIds.has(vendorProduct._id) ? '#26C34D' : '#000'"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                />
-              </svg>
-              <img
-                [src]="vendorProduct.images[0]?.url"
-                alt="{{ vendorProduct.name }}"
-                class="w-[95%] mx-auto h-32 sm:h-36 lg:h-40 object-cover rounded-2xl"
-              />
-            </div>
-            <div class="p-2.5 lg:p-3.75">
-              <p class="text-base lg:text-xl truncate max-w-[15ch]">{{ vendorProduct.name }}</p>
-              <div class="flex items-center justify-between mt-0.5">
-                <a
-                  class="text-[#2E790E] text-[11px] lg:text-[13px] hover:underline truncate max-w-[12ch]"
-                  [routerLink]="['/products/vendor', vendorInfo?._id]"
-                  (click)="$event.stopPropagation()"
-                >
-                  {{ vendorInfo?.businessName }}
-                </a>
-                <span class="text-xs lg:text-sm">{{
-                  vendorProduct.price | currency: 'GHS ' : 'symbol' : '1.2-2'
-                }}</span>
-              </div>
-              <p class="text-[11px] lg:text-[13px] mt-3 mb-4 lg:mb-6.25 line-clamp-2">
-                {{ vendorProduct.metaDescription }}
-              </p>
-              <div class="flex justify-center">
-                <button
-                  class="border border-[#171717] px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
-                  (click)="$event.stopPropagation()"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          </div>
-        }
+                ">
+          <path
+            d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
+            [attr.fill]="wishlistedIds.has(vendorProduct._id) ? '#26C34D' : '#FBFCFF'"
+            [attr.stroke]="wishlistedIds.has(vendorProduct._id) ? '#26C34D' : '#000'" stroke-width="1.5"
+            stroke-linecap="round" />
+        </svg>
+        <img [src]="vendorProduct.images[0]?.url" alt="{{ vendorProduct.name }}"
+          class="w-[95%] mx-auto h-32 sm:h-36 lg:h-40 object-cover rounded-2xl" />
+      </div>
+      <div class="p-2.5 lg:p-3.75">
+        <p class="text-base lg:text-xl truncate max-w-[15ch]">{{ vendorProduct.name }}</p>
+        <div class="flex items-center justify-between mt-0.5">
+          <a class="text-[#2E790E] text-[11px] lg:text-[13px] hover:underline truncate max-w-[12ch]"
+            [routerLink]="['/products/vendor', vendorInfo?._id]" (click)="$event.stopPropagation()">
+            {{ vendorInfo?.businessName }}
+          </a>
+          <span class="text-xs lg:text-sm">{{
+            vendorProduct.price | currency: 'GHS ' : 'symbol' : '1.2-2'
+            }}</span>
+        </div>
+        <p class="text-[11px] lg:text-[13px] mt-3 mb-4 lg:mb-6.25 line-clamp-2">
+          {{ vendorProduct.metaDescription }}
+        </p>
+        <div class="flex justify-center">
+          <button
+            class="border border-[#171717] px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300"
+            (click)="$event.stopPropagation()">
+            Add to Cart
+          </button>
+        </div>
       </div>
     </div>
-  }
+    }
+  </div>
+</div>
+}
 }
 
-<div class="max-w-350 mx-auto">
+<div class="max-w-7xl mx-auto">
   <app-newsletter />
 </div>
 
