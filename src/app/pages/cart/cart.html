@@ -23,7 +23,7 @@
     </div>
     <p class="text-xl sm:text-2xl text-center">You have not added any items yet.</p>
     <a routerLink="/categories"
-      class="text-[15px] sm:text-[17px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2.5 text-white rounded-lg">Discover
+      class="text-[15px] sm:text-[16px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-8 py-3 text-white rounded-lg">Discover
       Products</a>
   </div>
   } @else {
@@ -44,6 +44,34 @@
 
     <div class="flex flex-col lg:flex-row gap-8 lg:gap-10 lg:items-start">
       <div class="flex-1">
+
+        <!-- New: item count + Clear Cart, replacing the old bottom button -->
+        <div class="flex items-center justify-between mb-5">
+          <span class="text-[15px] text-[#17171780]">
+            {{ cartSummary()?.data?.cart?.itemCount }} item{{ (cartSummary()?.data?.cart?.itemCount ?? 0) === 1 ? '' :
+            's' }}
+          </span>
+
+          <button [disabled]="isClearingCart()" (click)="clearCart()"
+            class="flex items-center gap-1.5 text-[14px] sm:text-[15px] text-[#C0392B] hover:text-[#8f2a1f] transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (isClearingCart()) {
+            <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="32"
+                stroke-dashoffset="12" />
+            </svg>
+            Clearing...
+            } @else {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M4 7H20M9 7V5C9 4.44772 9.44772 4 10 4H14C14.5523 4 15 4.44772 15 5V7M18 7L17.2987 18.0129C17.2591 18.6435 16.7501 19.1213 16.1181 19.1213H7.88192C7.2499 19.1213 6.74095 18.6435 6.70129 18.0129L6 7"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Clear Cart
+            }
+          </button>
+        </div>
+
         @for (vendorGroup of cartSummary()?.data?.cart?.vendorGroups; track vendorGroup.vendorId) {
 
         @for (item of vendorGroup.items; track item._id) {
@@ -124,25 +152,25 @@
         <div class="flex flex-col gap-2.5 mb-8 md:mb-10">
           @for (cartItem of cartSummary()?.data?.cart?.vendorGroups; track $index) {
           <div class="flex items-center justify-between">
-            <span class="text-[15px] sm:text-[17px]">Vendor Dividend</span>
-            <span class="text-[15px] sm:text-[17px]">GHS 0</span>
+            <span class="text-[15px] sm:text-[16px]">Vendor Dividend</span>
+            <span class="text-[15px] sm:text-[16px]">GHS 0</span>
           </div>
 
           <div class="flex items-center justify-between">
-            <span class="text-[15px] sm:text-[17px]">Delivery Fee</span>
-            <span class="text-[15px] sm:text-[17px]">GHS 0</span>
+            <span class="text-[15px] sm:text-[16px]">Delivery Fee</span>
+            <span class="text-[15px] sm:text-[16px]">GHS 0</span>
           </div>
 
           <div class="flex items-center justify-between">
-            <span class="text-[15px] sm:text-[17px]">Subtotal</span>
-            <span class="text-[15px] sm:text-[17px]">{{
+            <span class="text-[15px] sm:text-[16px]">Subtotal</span>
+            <span class="text-[15px] sm:text-[16px]">{{
               cartItem.subtotal | currency: 'GHS ' : 'symbol' : '1.2-2'
               }}</span>
           </div>
 
           <div class="flex items-center justify-between mt-3">
-            <span class="text-[15px] sm:text-[17px] products-font font-bold">Grand Total</span>
-            <span class="text-[15px] sm:text-[17px] products-font font-bold">{{
+            <span class="text-[15px] sm:text-[16px] products-font font-bold">Grand Total</span>
+            <span class="text-[15px] sm:text-[16px] products-font font-bold">{{
               cartItem.subtotal | currency: 'GHS ' : 'symbol' : '1.2-2'
               }}</span>
           </div>
@@ -151,7 +179,7 @@
 
         <div class="flex justify-center">
           <a routerLink=""
-            class="text-[15px] sm:text-[17px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2.5 text-white rounded-lg">Proceed
+            class="text-[15px] sm:text-[16px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-8 py-3 text-white rounded-lg">Proceed
             to Checkout</a>
         </div>
 
@@ -160,27 +188,11 @@
             <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" stroke="#171717" stroke-width="1.5"
               stroke-linecap="round" stroke-linejoin="round" />
           </svg>
-          <span class="text-[15px] sm:text-[17px]">Resume Shopping</span>
+          <span class="text-[15px] sm:text-[16px]">Resume Shopping</span>
         </a>
       </div>
     </div>
-
-    <button [disabled]="isClearingCart()"
-      class="flex items-center justify-center text-[15px] sm:text-[17px] rounded-lg px-3.75 py-2.5 mx-auto mt-16 bg-red-600 text-white hover:bg-red-800 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60"
-      (click)="clearCart()" [disabled]="isClearingCart()">
-      @if(isClearingCart()){
-      <svg class="shrink-0 animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="32"
-          stroke-dashoffset="12" />
-      </svg>
-      }@else {
-      Clear Cart
-      }
-    </button>
   </div>
-
-
   }
   } @else {
   <app-skeleton-loader [skeletonType]="'cart-items'" />

@@ -3,17 +3,17 @@
     <!-- Header Actions -->
     <div class="flex items-center justify-end gap-2.5 sm:gap-3.75 shrink-0">
         <button
-            class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 border border-[#171717] hover:bg-[#171717] hover:text-white transition-colors duration-200 ease-in rounded-lg">
+            class="text-[15px] sm:text-[16px] px-5 py-3 sm:py-2 border border-[#171717] hover:bg-[#171717] hover:text-white transition-colors duration-200 ease-in rounded-lg">
             Cancel
         </button>
         @if(step() === 'images') {
         <button (click)="uploadImages()" [disabled]="isUploadingImages() || selectedFiles.length === 0"
-            class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed">
+            class="text-[15px] sm:text-[16px] px-5 py-3 sm:py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed">
             {{ isUploadingImages() ? 'Saving...' : 'Save' }}
         </button>
         } @else {
         <button
-            class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg opacity-40 cursor-not-allowed">
+            class="text-[15px] sm:text-[16px] px-5 py-3 sm:py-2 bg-[#171717] text-white rounded-lg opacity-40 cursor-not-allowed">
             Save
         </button>
         }
@@ -136,40 +136,40 @@
 
                 <!-- Product Name -->
                 <div class="mb-6 sm:mb-7">
-                    <label for="product-name" class="block mb-1.25 text-[15px] sm:text-[17px]">Product Name</label>
+                    <label for="product-name" class="block mb-1.25 text-[15px] sm:text-[16px]">Product Name</label>
                     <input type="text" id="product-name" placeholder="Enter product name" [(ngModel)]="productForm.name"
-                        class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                        class="text-[15px] sm:text-[16px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[16px]">
                 </div>
 
                 <!-- Description -->
                 <div class="mb-6 sm:mb-7">
                     <label for="product-description"
-                        class="block mb-1.25 text-[15px] sm:text-[17px]">Description</label>
+                        class="block mb-1.25 text-[15px] sm:text-[16px]">Description</label>
                     <textarea id="product-description" placeholder="Create a description of your product"
                         [(ngModel)]="productForm.description"
-                        class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px] w-full h-28 sm:h-33.5 resize-none"></textarea>
+                        class="text-[15px] sm:text-[16px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 focus:outline-none placeholder:text-[15px] sm:placeholder:text-[16px] w-full h-28 sm:h-33.5 resize-none"></textarea>
                 </div>
 
                 <!-- Price + Stock -->
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
                     <div class="flex-1">
-                        <label for="product-price" class="block mb-1.25 text-[15px] sm:text-[17px]">Price <span
+                        <label for="product-price" class="block mb-1.25 text-[15px] sm:text-[16px]">Price <span
                                 class="text-[#17171766] text-[13px]">(GHS)</span></label>
                         <input type="number" id="product-price" placeholder="0.00" min="0"
                             [(ngModel)]="productForm.price"
-                            class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                            class="text-[15px] sm:text-[16px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[16px]">
                     </div>
                     <div class="flex-1">
-                        <label for="in-stock" class="block mb-1.25 text-[15px] sm:text-[17px]">Stock Quantity</label>
+                        <label for="in-stock" class="block mb-1.25 text-[15px] sm:text-[16px]">Stock Quantity</label>
                         <input type="number" id="in-stock" placeholder="Enter amount available" min="0"
                             [(ngModel)]="productForm.stockQuantity"
-                            class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                            class="text-[15px] sm:text-[16px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[16px]">
                     </div>
                 </div>
 
                 <div class="mb-6 sm:mb-7">
                     <div class="flex items-center justify-between mb-1.25">
-                        <span class="text-[15px] sm:text-[17px]">Attributes</span>
+                        <span class="text-[15px] sm:text-[16px]">Attributes</span>
                         <button (click)="addAttribute()"
                             class="text-[15px] text-[#1B5DD7] hover:opacity-70 transition-opacity duration-150">
                             + Add attribute
@@ -181,9 +181,9 @@
                         @for(attr of attributes; track $index; let i = $index) {
                         <div class="flex items-center gap-2">
                             <input type="text" placeholder="Key (e.g. material)" [(ngModel)]="attr.name"
-                                class="text-[15px] sm:text-[17px] flex-1 border border-[#17171733] rounded-lg py-2.5 px-4 focus:outline-none placeholder:text-[17px]">
+                                class="text-[15px] sm:text-[16px] flex-1 border border-[#17171733] rounded-lg py-2.5 px-4 focus:outline-none placeholder:text-[16px]">
                             <input type="text" placeholder="Value (e.g. Cotton)" [(ngModel)]="attr.value"
-                                class="text-[15px] sm:text-[17px] flex-1 border border-[#17171733] rounded-lg py-2.5 px-4 focus:outline-none placeholder:text-[17px]">
+                                class="text-[15px] sm:text-[16px] flex-1 border border-[#17171733] rounded-lg py-2.5 px-4 focus:outline-none placeholder:text-[16px]">
                             @if(attributes.length > 1) {
                             <button (click)="removeAttribute(i)"
                                 class="shrink-0 text-[#17171766] hover:text-red-500 transition-colors duration-150">
@@ -200,19 +200,19 @@
 
                 <!-- Has Variants -->
                 <div class="mb-6 sm:mb-7">
-                    <span class="block mb-1.25 text-[15px] sm:text-[17px]">Product Variants</span>
+                    <span class="block mb-1.25 text-[15px] sm:text-[16px]">Product Variants</span>
                     <p class="text-[13px] text-[#17171766] mb-2.5">Does this product come in different sizes, colours,
                         etc.?</p>
                     <div class="flex items-center gap-2.5">
                         <button (click)="productForm.hasVariants = true"
-                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[17px] transition-colors duration-150"
+                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[16px] transition-colors duration-150"
                             [class]="productForm.hasVariants
         ? 'border-[#171717] bg-[#171717] text-white'
         : 'border-[#17171733] text-[#171717]'">
                             Yes
                         </button>
                         <button (click)="productForm.hasVariants = false"
-                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[17px] transition-colors duration-150"
+                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[16px] transition-colors duration-150"
                             [class]="!productForm.hasVariants
         ? 'border-[#171717] bg-[#171717] text-white'
         : 'border-[#17171733] text-[#171717]'">
@@ -223,19 +223,19 @@
 
                 <!-- Pre-Order -->
                 <div class="mb-6 sm:mb-7">
-                    <span class="block mb-1.25 text-[15px] sm:text-[17px]">Pre-Order</span>
+                    <span class="block mb-1.25 text-[15px] sm:text-[16px]">Pre-Order</span>
                     <p class="text-[13px] text-[#17171766] mb-2.5">Allow customers to order before the product is
                         available?</p>
                     <div class="flex items-center gap-2.5 mb-4">
                         <button (click)="productForm.isPreOrder = true"
-                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[17px] transition-colors duration-150"
+                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[16px] transition-colors duration-150"
                             [class]="productForm.isPreOrder
         ? 'border-[#171717] bg-[#171717] text-white'
         : 'border-[#17171733] text-[#171717]'">
                             Yes
                         </button>
                         <button (click)="productForm.isPreOrder = false"
-                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[17px] transition-colors duration-150"
+                            class="flex-1 py-2.5 rounded-[10px] border text-[15px] sm:text-[16px] transition-colors duration-150"
                             [class]="!productForm.isPreOrder
         ? 'border-[#171717] bg-[#171717] text-white'
         : 'border-[#17171733] text-[#171717]'">
@@ -247,19 +247,19 @@
                     @if(productForm.isPreOrder) {
                     <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mt-3" [@fadeInOut]>
                         <div class="flex-1">
-                            <label for="pre-order-days" class="block mb-1.25 text-[15px] sm:text-[17px]">Pre-Order
+                            <label for="pre-order-days" class="block mb-1.25 text-[15px] sm:text-[16px]">Pre-Order
                                 Days</label>
                             <input type="number" id="pre-order-days" placeholder="e.g. 30" min="1"
                                 [(ngModel)]="productForm.preOrderDays"
-                                class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                                class="text-[15px] sm:text-[16px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[16px]">
                             <p class="text-[12px] text-[#17171766] mt-1">How many days until the product is ready</p>
                         </div>
                         <div class="flex-1">
-                            <label for="min-preorder-qty" class="block mb-1.25 text-[15px] sm:text-[17px]">Min.
+                            <label for="min-preorder-qty" class="block mb-1.25 text-[15px] sm:text-[16px]">Min.
                                 Pre-Order Quantity</label>
                             <input type="number" id="min-preorder-qty" placeholder="e.g. 1" min="1"
                                 [(ngModel)]="productForm.minPreOrderQuantity"
-                                class="text-[15px] sm:text-[17px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[17px]">
+                                class="text-[15px] sm:text-[16px] block border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5 w-full focus:outline-none placeholder:text-[15px] sm:placeholder:text-[16px]">
                             <p class="text-[12px] text-[#17171766] mt-1">Minimum units a customer must pre-order</p>
                         </div>
                     </div>
@@ -269,9 +269,9 @@
                 <!-- Category + Subcategory -->
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
                     <div class="relative flex-1" appClickOutside (clickOutside)="isCategoryOpen = false">
-                        <span class="block mb-1.25 text-[15px] sm:text-[17px]">Product Category</span>
+                        <span class="block mb-1.25 text-[15px] sm:text-[16px]">Product Category</span>
                         <button (click)="isCategoryOpen = !isCategoryOpen"
-                            class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[17px] border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5">
+                            class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-[#17171733] rounded-lg py-2.5 sm:py-2.75 px-4 sm:px-5">
                             <span [class]="selectedCategory ? 'text-[#171717]' : 'text-[#17171766]'">
                                 {{selectedCategory?.name || 'Select a category'}}
                             </span>
@@ -313,7 +313,7 @@
 
                 <!-- Continue -->
                 <button (click)="submitDetails(buildPayload())" [disabled]="isSubmittingDetails() || !isFormValid"
-                    class="text-base sm:text-xl px-3 sm:px-3.5 py-1.5 sm:py-2 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed">
+                    class="text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] text-white rounded-lg hover:opacity-80 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed">
                     {{ isSubmittingDetails() ? 'Saving...' : 'Continue' }}
                 </button>
             </div>
@@ -329,7 +329,7 @@
                             stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
-                <p class="text-[17px] font-medium">Product details saved!</p>
+                <p class="text-[16px] font-medium">Product details saved!</p>
                 <p class="text-[14px] text-[#17171799]">Now upload your product images using the panel on the left.</p>
             </div>
             }

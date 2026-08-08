@@ -19,8 +19,8 @@
                     @for(period of periods; track period){
                     <button (click)="selectedPeriod = period"
                         [class]="(selectedPeriod === period
-                            ? 'transition-colors duration-130 ease-in text-[13px] sm:text-[16px] px-1.25 py-0.75 rounded-md bg-[#FBFCFF]'
-                            : 'transition-colors duration-130 ease-in text-[13px] sm:text-[16px] px-1.25 py-0.75 rounded-md text-[#6B6B6B]')">
+                            ? 'transition-colors duration-130 ease-in text-[13px] sm:text-[15px] px-1.25 py-0.75 rounded-md bg-[#FBFCFF]'
+                            : 'transition-colors duration-130 ease-in text-[13px] sm:text-[15px] px-1.25 py-0.75 rounded-md text-[#6B6B6B]')">
                         {{ period }}
                     </button>
                     }
@@ -43,11 +43,11 @@
             <h2 class="text-[20px] sm:text-[24px] products-font text-[#000000]">Products</h2>
             <div class="flex items-center gap-2 sm:gap-3.75">
                 <button (click)="navigateToProductsPage()"
-                    class="text-[15px] sm:text-[20px] transition-opacity duration-150 ease-in px-3 py-1.5 sm:px-3.75 sm:py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
+                    class="text-[15px] sm:text-[16px] px-5 py-3 transition-opacity duration-150 ease-in sm:px-3.75 sm:py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
                     View More
                 </button>
                 <button (click)="navigateToAddNewProduct()"
-                    class="text-[15px] sm:text-[20px] transition-opacity duration-150 ease-in px-3 py-1.5 sm:px-3.75 sm:py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
+                    class="text-[15px] sm:text-[16px] px-5 py-3 transition-opacity duration-150 ease-in sm:px-3.75 sm:py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
                     Add Product
                 </button>
             </div>
@@ -60,14 +60,13 @@
         <div class="flex flex-col mt-10 items-center justify-center">
             <p class="text-[18px] sm:text-[20px] text-[#D92D20] mb-2">Failed to fetch products.</p>
             <button (click)="fetchVendorProductsListings()"
-                class="text-[18px] sm:text-[20px] transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg bg-[#171717] text-white hover:opacity-80">
+                class="text-[15px] sm:text-[16px] px-5 py-3 transition-opacity duration-150 ease-in rounded-lg bg-[#171717] text-white hover:opacity-80">
                 Retry
             </button>
         </div>
 
         }@else {
 
-        <!-- Desktop/tablet table -->
         <table class="hidden md:table w-full border-separate border-spacing-y-2.5">
             <tbody>
                 @for(product of fetchedProducts; track product){
@@ -114,7 +113,6 @@
             </tbody>
         </table>
 
-        <!-- Mobile card list -->
         <div class="flex md:hidden flex-col gap-3">
             @for(product of fetchedProducts; track product){
             <div class="bg-[#FBFCFF] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-3">

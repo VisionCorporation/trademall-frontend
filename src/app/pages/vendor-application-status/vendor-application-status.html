@@ -54,24 +54,24 @@
 
     </div>
     @if(user.vendorStatus === 'pending') {
-    <p class="mb-7.5 text-lg sm:text-[23px] text-center">Your Application is Pending Approval</p>
+    <p class="mb-7.5 text-lg sm:text-[22px] text-center">Your Application is Pending Approval</p>
     <a routerLink="/"
-        class="text-[17px] text-center sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">Return
+        class="ttext-center text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">Return
         Home</a>
     }@else if(user.vendorStatus==='rejected'){
-    <p class="mb-7.5 text-lg sm:text-[23px] text-center">Your Application was Rejected</p>
+    <p class="mb-7.5 text-lg sm:text-[22px] text-center">Your Application was Rejected</p>
     <div class="flex gap-5">
         <a routerLink="/"
-            class="text-[17px] text-center sm:text-[20px] text-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 rounded-lg">Return
+            class="text-center text-[15px] sm:text-[16px] px-5 py-3 text-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in rounded-lg">Return
             Home</a>
         <a routerLink="/customer/signup"
-            class="text-[17px] text-center sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">Register
+            class="text-center text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">Register
             as Customer</a>
     </div>
     }@else {
-    <p class="mb-7.5 text-lg sm:text-[23px] text-center">Your Application has been Approved</p>
+    <p class="mb-7.5 text-lg sm:text-[22px] text-center">Your Application has been Approved</p>
     <a routerLink="/vendor/overview"
-        class="text-[17px] text-center sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">View
+        class="text-center text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">View
         Vendor Dashboard</a>
     }
     <p class="logo mt-24.75 text-[25px] sm:text-[32px] transition-colors duration-300 w-fit text-[#171717]">

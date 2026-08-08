@@ -1,7 +1,7 @@
 <section class="bg-[#F4F4F4] h-full rounded-[20px] py-5 px-4 sm:py-7.5 sm:px-8.75 flex flex-col">
 
     <div #filterTabsRef
-        class="flex items-center gap-2 sm:gap-2.5 pb-3 sm:pb-3.75 border-b border-[#6B6B6B99] shrink-0 overflow-x-auto scrollbar-hide">
+        class="flex items-center gap-2 sm:gap-4 pb-3 sm:pb-3.75 border-b border-[#6B6B6B99] shrink-0 overflow-x-auto scrollbar-hide">
         @for(filter of ordersFilters; track filter){
         <button [attr.data-filter]="filter.value" (click)="selectFilter(filter.value)"
             [style.color]="(selectedFilter === filter.value || hoveredFilter === filter.value) ? filter.activeColor : '#6B6B6B99'"
@@ -65,7 +65,7 @@
             </svg>
             }
             }
-            <span class="text-[15px] sm:text-[17px]">{{ filter.label }}</span>
+            <span class="text-[15px] sm:text-[16px]">{{ filter.label }}</span>
         </button>
         }
     </div>
@@ -95,7 +95,7 @@
 
         <div class="relative" appClickOutside (clickOutside)="isSelectOpen = false">
             <button
-                class="flex items-center justify-between w-full sm:w-auto gap-2 bg-[#171717] text-white rounded-lg px-2.5 py-1.25"
+                class="flex items-center justify-between w-full sm:w-auto gap-2 h-9.25 bg-[#171717] text-white rounded-lg px-2.5 py-1.25"
                 (click)="isSelectOpen = !isSelectOpen">
                 <span>{{ selectedPeriod }}</span>
                 <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isSelectOpen" width="20"

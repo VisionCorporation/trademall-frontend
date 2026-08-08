@@ -66,7 +66,7 @@
 
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-7.5">
         <button
-          class="w-full sm:w-auto text-base sm:text-[20px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg">
+          class="w-full sm:w-auto text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
           Add to Cart
         </button>
         <div class="flex items-center gap-1.25 py-2 px-3.5 cursor-pointer"
@@ -79,7 +79,7 @@
               [attr.stroke]="wishlistedIds.has(product._id) ? '#26C34D' : '#000'" stroke-width="1.5"
               stroke-linecap="round" />
           </svg>
-          <span class="text-base sm:text-xl">Add to Wishlist</span>
+          <span class="text-[15px] sm:text-[16px]">Add to Wishlist</span>
         </div>
       </div>
     </div>
@@ -89,7 +89,7 @@
     <div class="flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2">
       @for (button of buttons; track button.value) {
       <button [class]="
-                'text-[16px] sm:text-[20px] lg:text-[24px] mb-3 sm:mb-5 shrink-0 transition-all duration-300 ease-in-out ' +
+                'text-[16px] sm:text-[20px] mb-3 sm:mb-5 shrink-0 transition-all duration-300 ease-in-out ' +
                 (button.value === activeButton
                   ? 'text-[#2E790E] underline underline-offset-4'
                   : 'text-[#17171733] hover:text-[#2E790E] hover:underline hover:underline-offset-4')
@@ -100,19 +100,19 @@
     </div>
     @if (activeButton === 'about-product') {
     <div class="bg-[#F4F4F4] p-5 sm:p-7.5 rounded-[20px] text-[#333333] mb-5 leading-6" [@fadeInOut]>
-      <h3 class="light-header text-[25px] sm:text-[30px] mb-5">About Product</h3>
-      <p class="text-[18px] sm:text-[20px]">{{ product.description }}</p>
+      <h3 class="light-header text-[20px] mb-5">About Product</h3>
+      <p class="text-[17px]">{{ product.description }}</p>
     </div>
     }
     @if (activeButton === 'product-details') {
     <div class="bg-[#F4F4F4] rounded-[20px] p-5 sm:p-7.5" [@fadeInOut]>
-      <h3 class="light-header text-[25px] sm:text-[30px] mb-5">Product Details</h3>
+      <h3 class="light-header text-[20px] mb-5">Product Details</h3>
       <table class="w-full text-sm sm:text-base">
         <tbody>
           @for (spec of specifications; track $index) {
           <tr class="border-t border-[#17171733]">
-            <td class="py-1 w-[50%] text-[18px] sm:text-[20px]">{{ spec.label }}</td>
-            <td class="py-1 w-[50%] text-[18px] sm:text-[20px]">{{ spec.value }}</td>
+            <td class="py-1 w-[50%] text-[18px]">{{ spec.label }}</td>
+            <td class="py-1 w-[50%] text-[18px]">{{ spec.value }}</td>
           </tr>
           }
         </tbody>
