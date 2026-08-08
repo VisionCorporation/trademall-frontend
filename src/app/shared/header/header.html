@@ -102,18 +102,18 @@
 
           @if (isDropdownOpen) {
           <div [@fadeInOut] appClickOutside (clickOutside)="closeDropdown()"
-            class="absolute flex flex-col gap-2 top-full right-0 px-5 py-7 mt-2 w-62.5 rounded-[20px] bg-[#FAF7F2] border border-[#E8DFD0] text-[14px] z-50">
+            class="absolute flex flex-col gap-1 top-full right-0 px-3 py-5 mt-2 w-50 rounded-[20px] bg-[#FAF7F2] border border-[#E8DFD0] text-[14px] z-50">
             @if (user.userType === 'customer') {
             @for (item of customerDropdown; track item.label) {
             <a [routerLink]="item.url" (click)="closeDropdown()"
-              class="px-3.5 py-1.5 text-xl rounded-lg hover:bg-[#F0E8D8] transition-colors duration-150 ease-in text-[#171717]">
+              class="px-3.5 py-1.5 text-lg rounded-lg hover:bg-[#F0E8D8] transition-colors duration-150 ease-in text-[#171717]">
               {{ item.label }}
             </a>
             }
             } @else if (user.userType === 'vendor') {
             @for (item of vendorDropdown; track item.label) {
             <a routerLink="" (click)="closeDropdown()"
-              class="px-3.5 py-1.5 text-xl rounded-lg hover:bg-[#F0E8D8] transition-colors duration-150 ease-in text-[#171717]">
+              class="px-3.5 py-1.5 text-lg rounded-lg hover:bg-[#F0E8D8] transition-colors duration-150 ease-in text-[#171717]">
               {{ item.label }}
             </a>
             }
