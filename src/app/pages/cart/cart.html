@@ -2,7 +2,7 @@
   <app-header />
 
   @if (!isCartItemsLoading()) {
-  @if (cartSummary?.data?.cart?.isEmpty) {
+  @if (cartSummary()?.data?.cart?.isEmpty) {
   <div class="h-[80vh] flex items-center justify-center flex-col gap-7 sm:gap-10 px-5 md:px-12 2xl:px-0" [@fadeInOut]>
     <div class="bg-[#F7F7F7] p-10 sm:p-12.5 rounded-full">
       <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,24 +28,38 @@
   </div>
   } @else {
   <div class="mt-8 md:mt-12.5 w-full px-4 md:px-12 2xl:px-0 mb-20 md:mb-37.5" [@fadeInOut]>
+    <div class="my-10 sm:my-11.75 flex items-center gap-1.5 sm:gap-3 text-[#17171780] text-sm sm:text-[17px] flex-wrap">
+      <a (click)="goToHome()" class="cursor-pointer hover:text-black transition-colors duration-300 ease-in-out">
+        Home
+      </a>
+      @if (view() === 'cart') {
+      <span class="shrink-0">›</span>
+      <a class="text-black">
+        Cart
+      </a>
+      }
+    </div>
+
     <h1 class="text-[32px] md:text-[48px] mb-5 md:mb-7.5">Cart</h1>
 
-    <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
+    <div class="flex flex-col lg:flex-row gap-8 lg:gap-10 lg:items-start">
       <div class="flex-1">
-        @for (cartItem of cartSummary?.data?.cart?.vendorGroups; track $index) {
-        @for (vendorGroupItem of cartItem.items; track $index) {
-        <div class="flex items-center justify-between pb-4 lg:pb-5 mb-4 lg:mb-5 border-b border-[#17171733]">
+        @for (vendorGroup of cartSummary()?.data?.cart?.vendorGroups; track vendorGroup.vendorId) {
+
+        @for (item of vendorGroup.items; track item._id) {
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 lg:pb-5 mb-4 lg:mb-5 border-b border-[#17171733] gap-3 sm:gap-0">
           <div class="flex items-center gap-3 flex-1 min-w-0">
-            @if (isRemoving(vendorGroupItem._id)) {
+            @if (isRemoving(item._id)) {
             <svg class="shrink-0 animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="32"
                 stroke-dashoffset="12" />
             </svg>
             } @else {
-            <button (click)="removeFromCart(vendorGroupItem._id)"
+            <button (click)="removeFromCart(item._id)"
               class="shrink-0 hover:text-red-500 hover:scale-105 transition-all duration-150"
-              aria-label="Remove {{ vendorGroupItem?.productName }} from cart">
+              aria-label="Remove {{ item.productName }} from cart">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="cursor-pointer"
                 xmlns="http://www.w3.org/2000/svg">
                 <path d="M19 5L5 19M5 5L19 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -56,34 +70,59 @@
 
             <div
               class="bg-[#E6E6E880] w-14 h-14 md:w-17.5 md:h-17.5 p-2 rounded-md shrink-0 flex items-center justify-center">
-              <img [ngSrc]="vendorGroupItem?.productImage ?? ''" [alt]="vendorGroupItem?.productName" width="70"
-                height="70" />
+              <img [ngSrc]="item.productImage" [alt]="item.productName" width="70" height="70" />
             </div>
 
-            <p class="text-[15px] sm:text-[17px] truncate">{{ vendorGroupItem?.productName }}</p>
+            <div class="min-w-0">
+              <span class="text-[#26C34D] text-[15px]">{{ vendorGroup.businessName }}</span>
+              <p class="text-[15px] sm:text-[18px] truncate">{{ item.productName }}</p>
+              <span>
+                {{ item.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+              </span>
+            </div>
           </div>
 
-          <div class="flex items-center gap-2">
-            <span class=" ml-4 shrink-0">
-              {{ vendorGroupItem?.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
-            </span>
+          <div
+            class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-4 pl-8 sm:pl-0">
+            <div class="flex items-center gap-2 border border-[#17171733] rounded-md w-fit">
+              <button (click)="decrementQuantity(item)" [disabled]="item.quantity <= 1 || isUpdatingQuantity(item._id)"
+                class="border-r border-[#17171733] w-8 h-8 flex items-center justify-center text-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#C9F1B9] rounded-tl-md rounded-bl-md transition-colors duration-150"
+                aria-label="Decrease quantity">
+                −
+              </button>
 
-            <span>x{{ vendorGroupItem?.quantity }}</span>
-            <span>{{
-              vendorGroupItem?.lineTotal | currency: 'GHS ' : 'symbol' : '1.2-2'
-              }}</span>
+              @if (isUpdatingQuantity(item._id)) {
+              <svg class="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="32"
+                  stroke-dashoffset="12" />
+              </svg>
+              } @else {
+              <span class="w-6 text-center text-[15px]">{{ item.quantity }}</span>
+              }
+
+              <button (click)="incrementQuantity(item)"
+                [disabled]="isUpdatingQuantity(item._id) || item.quantity >= (item.productId?.stockQuantity || 9999)"
+                class="border-l border-[#17171733] w-8 h-8 flex items-center justify-center text-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#C9F1B9] rounded-tr-md rounded-br-md transition-colors duration-150"
+                aria-label="Increase quantity">
+                +
+              </button>
+            </div>
+
+            <span class="text-[14px] sm:text-[16px] shrink-0"><span>Item Total:</span> {{ item.lineTotal | currency:
+              'GHS ' : 'symbol' : '1.2-2' }}</span>
           </div>
         </div>
         }
         }
       </div>
 
-      <div class="hidden lg:block lg:h-auto lg:w-px bg-[#17171733]"></div>
+      <div class="hidden lg:block lg:h-auto lg:w-px bg-[#17171733] lg:self-stretch"></div>
 
-      <div class="lg:w-80 lg:shrink-0">
+      <div class="lg:w-80 lg:shrink-0 lg:sticky lg:top-32">
         <h2 class="text-2xl products-font mb-3.75">Cart Total</h2>
         <div class="flex flex-col gap-2.5 mb-8 md:mb-10">
-          @for (cartItem of cartSummary?.data?.cart?.vendorGroups; track $index) {
+          @for (cartItem of cartSummary()?.data?.cart?.vendorGroups; track $index) {
           <div class="flex items-center justify-between">
             <span class="text-[15px] sm:text-[17px]">Vendor Dividend</span>
             <span class="text-[15px] sm:text-[17px]">GHS 0</span>
