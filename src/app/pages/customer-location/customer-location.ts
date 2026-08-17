@@ -8,7 +8,7 @@ import { ToastService } from '../../services/toast/toast.service';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { finalize } from 'rxjs';
 import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
-import { REGIONS } from '../../data/address.constant';
+import { REGIONS } from '../../data/constants/address.constant';
 
 @Component({
   selector: 'app-customer-location',
