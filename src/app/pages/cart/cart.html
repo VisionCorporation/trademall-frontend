@@ -44,8 +44,6 @@
 
     <div class="flex flex-col lg:flex-row gap-8 lg:gap-10 lg:items-start">
       <div class="flex-1">
-
-        <!-- New: item count + Clear Cart, replacing the old bottom button -->
         <div class="flex items-center justify-between mb-5">
           <span class="text-[15px] text-[#17171780]">
             {{ cartSummary()?.data?.cart?.itemCount }} item{{ (cartSummary()?.data?.cart?.itemCount ?? 0) === 1 ? '' :
@@ -129,8 +127,7 @@
               <span class="w-6 text-center text-[15px]">{{ item.quantity }}</span>
               }
 
-              <button (click)="incrementQuantity(item)"
-                [disabled]="isUpdatingQuantity(item._id) || item.quantity >= (item.productId?.stockQuantity || 9999)"
+              <button (click)="incrementQuantity(item)" [disabled]="isUpdatingQuantity(item._id)"
                 class="border-l border-[#17171733] w-8 h-8 flex items-center justify-center text-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#C9F1B9] rounded-tr-md rounded-br-md transition-colors duration-150"
                 aria-label="Increase quantity">
                 +

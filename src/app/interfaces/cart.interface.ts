@@ -1,18 +1,6 @@
-export interface CartProductImage {
-  url: string;
-  isMain: boolean;
-  _id: string;
-  uploadedAt: string;
-}
-
 export interface CartProductId {
   _id: string;
   name: string;
-  images: CartProductImage[];
-  isVisible: boolean;
-  status: string;
-  stockQuantity: number;
-  vendor: string;
 }
 
 export interface CartItem {
@@ -31,7 +19,6 @@ export interface CartItem {
 
 export interface VendorGroup {
   vendorId: string;
-  vendorName: string;
   businessName: string;
   subtotal: number;
   items: CartItem[];
