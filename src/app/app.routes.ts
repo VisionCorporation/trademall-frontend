@@ -7,6 +7,7 @@ import { VendorDashboardOverview } from './pages/vendor-dashboard/vendor-dashboa
 import { VendorDashboardOrders } from './pages/vendor-dashboard/vendor-dashboard-orders/vendor-dashboard-orders';
 import { VendorAddProduct } from './pages/vendor-dashboard/vendor-add-product/vendor-add-product';
 import { vendorApprovalGuard } from './guards/authorization/vendor-approval/vendor-approval-guard';
+import { VendorStore } from './pages/vendor-dashboard/vendor-store/vendor-store/vendor-store';
 
 export const routes: Routes = [
   {
@@ -70,6 +71,7 @@ export const routes: Routes = [
       { path: 'overview', component: VendorDashboardOverview },
       { path: 'orders', component: VendorDashboardOrders },
       { path: 'products', component: VendorProducts },
+      { path: 'store', component: VendorStore },
       { path: 'add-product', component: VendorAddProduct },
     ],
     canActivate: [authGuard, vendorGuard, vendorApprovalGuard],

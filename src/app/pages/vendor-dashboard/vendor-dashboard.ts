@@ -29,7 +29,7 @@ export class VendorDashboard implements OnInit {
         return segments[segments.length - 1];
       })
     ).subscribe(segment => {
-      this.headerTitle.set(this.routeTitleMap[segment] || 'Overview');
+      this.headerTitle.set(this.routeTitleMap[segment] || '');
     });
   }
 

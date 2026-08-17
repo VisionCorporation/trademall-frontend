@@ -1,8 +1,9 @@
 export const NAV_ITEMS = [
-    { label: 'Overview', route: '/vendor/overview', icon: 'overview', activeColor: '#26C34D' },
-    { label: 'Orders', route: '/vendor/orders', icon: 'orders', activeColor: '#FF860D' },
+    { label: 'Overview', route: '/vendor/overview', icon: 'overview', activeColor: '#136B2C' },
+    { label: 'Orders', route: '/vendor/orders', icon: 'orders', activeColor: '#984B00' },
     { label: 'Products', route: '/vendor/products', icon: 'products', activeColor: '#1B5DD7' },
-    { label: 'Reports', route: '/vendor/reports', icon: 'reports', activeColor: '#FBBB0D' },
+    { label: 'Reports', route: '/vendor/reports', icon: 'reports', activeColor: '#7C5900' },
+    { label: 'Store', route: '/vendor/store', icon: 'store', activeColor: '#6D3FCE' },
 ];
 
 export const ROUTE_TITLE_MAP: Record<string, string> = {

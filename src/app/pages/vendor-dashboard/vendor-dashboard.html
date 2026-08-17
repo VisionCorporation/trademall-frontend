@@ -26,7 +26,8 @@
         <div class="flex flex-col gap-3 flex-1">
             @for (item of navItems; track item.route) {
             <a [routerLink]="item.route" routerLinkActive #rla="routerLinkActive"
-                [style.color]="rla.isActive ? item.activeColor : '#6B6B6B'" (click)="drawerOpen = false" class="flex items-center gap-3 hover:bg-[#E8E8E8] px-3.75 py-2.5
+                [style.background-color]="rla.isActive ? '#E8E8E8' : ''"
+                [style.color]="rla.isActive ? item.activeColor : '#595959'" (click)="drawerOpen = false" class="flex items-center gap-3 hover:bg-[#E8E8E8] px-3.75 py-2.5
                        rounded-lg transition-colors duration-150 ease-in">
 
                 @switch (item.icon) {
@@ -93,6 +94,22 @@
                     <path d="M14.1665 14.1665V9.1665" stroke="white" stroke-width="1.5" stroke-linecap="round" />
                 </svg>
                 }
+                @case ('store') {
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M3.3335 8.3335V13.3335C3.3335 15.3572 3.3335 16.369 3.9609 16.9963C4.58829 17.6237 5.60013 17.6237 7.62376 17.6237"
+                        fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    <path
+                        d="M16.6668 8.3335V13.3335C16.6668 15.3572 16.6668 16.369 16.0394 16.9963C15.412 17.6237 14.4002 17.6237 12.3765 17.6237"
+                        fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    <path
+                        d="M1.6665 6.66683C1.6665 5.90107 1.87621 5.24894 2.30923 4.24468L2.83426 3.02637C3.24151 2.08188 3.44514 1.60963 3.83717 1.33823C4.2292 1.06683 4.74326 1.06683 5.77138 1.06683H14.229C15.2571 1.06683 15.7712 1.06683 16.1632 1.33823C16.5552 1.60963 16.7589 2.08188 17.1661 3.02637L17.6911 4.24468C18.1242 5.24894 18.3335 5.90107 18.3335 6.66683C18.3335 8.16158 17.2054 9.3335 15.8335 9.3335C14.4615 9.3335 13.3335 8.16158 13.3335 6.66683C13.3335 8.16158 12.2054 9.3335 10.8335 9.3335C10.1668 9.3335 9.5335 9.06683 9.16683 8.66683C8.80016 9.06683 8.16683 9.3335 7.5 9.3335C6.12805 9.3335 5 8.16158 5 6.66683C5 8.16158 3.87195 9.3335 2.5 9.3335C2.19 9.3335 1.90423 9.27016 1.6665 9.15516"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                        d="M8.3335 17.5V13.75C8.3335 13.0567 8.90016 12.5 9.5835 12.5H10.4168C11.1001 12.5 11.6668 13.0567 11.6668 13.75V17.5"
+                        stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                }
                 }
 
                 <span class="text-[18px]">{{ item.label }}</span>
@@ -103,7 +120,8 @@
         <!-- Settings + Logout inside drawer -->
         <div class="flex flex-col gap-3 pt-5 border-t border-[#E5E5E5]">
             <a routerLink="/vendor/settings" routerLinkActive #rla="routerLinkActive"
-                [style.color]="rla.isActive ? '#00BDFB' : '#6B6B6B'" (click)="drawerOpen = false" class="flex items-center gap-3 hover:bg-[#E8E8E8] px-3.75 py-2.5
+                [style.background-color]="rla.isActive ? '#E8E8E8' : ''"
+                [style.color]="rla.isActive ? '#00BDFB' : '#595959'" (click)="drawerOpen = false" class="flex items-center gap-3 hover:bg-[#E8E8E8] px-3.75 py-2.5
                        rounded-lg transition-colors duration-150 ease-in">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -147,7 +165,8 @@
             <div class="flex flex-col mt-10 gap-5">
                 @for (item of navItems; track item.route) {
                 <a [routerLink]="item.route" routerLinkActive #rla="routerLinkActive"
-                    [style.color]="rla.isActive ? item.activeColor : '#6B6B6B'" class="flex items-center gap-2.5 hover:bg-[#E8E8E8] px-3.75 py-1.25
+                    [style.background-color]="rla.isActive ? '#E8E8E8' : ''"
+                    [style.color]="rla.isActive ? item.activeColor : '#595959'" class="flex items-center gap-2.5 hover:bg-[#E8E8E8] px-3.75 py-1.25
                            rounded-tl-lg rounded-bl-lg transition-colors duration-150 ease-in">
 
                     @switch (item.icon) {
@@ -215,6 +234,22 @@
                         <path d="M5.8335 14.1668V10.8335" stroke="white" stroke-width="1.5" stroke-linecap="round" />
                         <path d="M10 14.1668V5.8335" stroke="white" stroke-width="1.5" stroke-linecap="round" />
                         <path d="M14.1665 14.1665V9.1665" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                    }
+                    @case ('store') {
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M3.3335 8.3335V13.3335C3.3335 15.3572 3.3335 16.369 3.9609 16.9963C4.58829 17.6237 5.60013 17.6237 7.62376 17.6237"
+                            fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <path
+                            d="M16.6668 8.3335V13.3335C16.6668 15.3572 16.6668 16.369 16.0394 16.9963C15.412 17.6237 14.4002 17.6237 12.3765 17.6237"
+                            fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <path
+                            d="M1.6665 6.66683C1.6665 5.90107 1.87621 5.24894 2.30923 4.24468L2.83426 3.02637C3.24151 2.08188 3.44514 1.60963 3.83717 1.33823C4.2292 1.06683 4.74326 1.06683 5.77138 1.06683H14.229C15.2571 1.06683 15.7712 1.06683 16.1632 1.33823C16.5552 1.60963 16.7589 2.08188 17.1661 3.02637L17.6911 4.24468C18.1242 5.24894 18.3335 5.90107 18.3335 6.66683C18.3335 8.16158 17.2054 9.3335 15.8335 9.3335C14.4615 9.3335 13.3335 8.16158 13.3335 6.66683C13.3335 8.16158 12.2054 9.3335 10.8335 9.3335C10.1668 9.3335 9.5335 9.06683 9.16683 8.66683C8.80016 9.06683 8.16683 9.3335 7.5 9.3335C6.12805 9.3335 5 8.16158 5 6.66683C5 8.16158 3.87195 9.3335 2.5 9.3335C2.19 9.3335 1.90423 9.27016 1.6665 9.15516"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M8.3335 17.5V13.75C8.3335 13.0567 8.90016 12.5 9.5835 12.5H10.4168C11.1001 12.5 11.6668 13.0567 11.6668 13.75V17.5"
+                            stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                     }
                     }
