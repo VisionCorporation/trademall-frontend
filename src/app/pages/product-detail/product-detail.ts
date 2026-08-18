@@ -46,12 +46,20 @@ export class ProductDetail implements OnInit {
   public isLoading = signal(true);
   public isVendorProductsLoading = signal(false);
   public isReviewsLoading = signal(false);
+  public isTryingAgain = signal(false)
   public totalPagesArray: number[] = [];
   public activeButton = 'about-product';
   public buttons = buttons;
   public reviews: any;
+  public errorMessage = ''
+  public showButton = true
 
   ngOnInit(): void {
+    this.fetchProductDetails()
+  }
+
+  public fetchProductDetails() {
+    this.isTryingAgain.set(true)
     this.route.paramMap.subscribe((params) => {
       const slug = params.get('slug');
 
@@ -68,11 +76,19 @@ export class ProductDetail implements OnInit {
             this.vendorId = response.data.vendor._id;
             this.isLoading.set(false);
             this.fetchVendorProducts();
+            this.isTryingAgain.set(false)
           },
           error: (err) => {
-            this.toastService.error('An error occurred while fetching product details. Try again');
+            if (err.error.message) {
+              this.errorMessage = err.error.message
+            }
+            if (err.status === 404) {
+              this.showButton = false
+            }
+            this.toastService.error(err.error.message ? err.error.message : 'An error occurred while fetching product details. Try again')
             console.error('Failed to fetch product', err);
             this.isLoading.set(false);
+            this.isTryingAgain.set(false)
           },
         });
       }
