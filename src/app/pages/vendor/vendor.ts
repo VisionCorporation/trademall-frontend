@@ -12,6 +12,7 @@ import { SkeletonLoader } from "../../shared/skeleton-loader/skeleton-loader";
 import { BUTTONS } from '../../data/constants/vendor-page.constant';
 import { VENDOR_FAQS } from '../../data/constants/vendor-page.faqs.constant';
 import { slideDown } from '../../animations/expand.animation';
+import { VendorStore } from '../../services/vendor-store/vendor-store';
 
 @Component({
   selector: 'app-vendor',
@@ -21,7 +22,7 @@ import { slideDown } from '../../animations/expand.animation';
   animations: [staggerProducts, slideDown],
 })
 export class Vendor {
-  private productService = inject(Products);
+  private vendorStoreService = inject(VendorStore);
   private readonly route = inject(ActivatedRoute);
   public vendorData: VendorProductsResponse | null = null;
   public vendorInfo: VendorInfo | null = null;
@@ -41,7 +42,7 @@ export class Vendor {
     const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
-      this.productService.getVendorProductsById(id).subscribe({
+      this.vendorStoreService.getVendorProductsById(id).subscribe({
         next: (response) => {
           this.vendorData = response;
           this.vendorInfo = response.vendor

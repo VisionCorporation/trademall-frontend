@@ -6,7 +6,6 @@ import {
   RootCategoryResponse,
   CategoryListResponse,
 } from '../../interfaces/categories.interface';
-import { VendorProductsResponse } from '../../interfaces/vendor.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -34,15 +33,6 @@ export class Products {
 
   public getProductBySlug(slug: string): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}/products/${slug}/`);
-  }
-
-  public getVendorProductsById(
-    vendorId: string,
-    currentPage?: number,
-  ): Observable<VendorProductsResponse> {
-    return this.http.get<VendorProductsResponse>(
-      `${environment.apiBaseUrl}/products/vendor/${vendorId}?page=${currentPage}`,
-    );
   }
 
   public getFeaturedProducts(): Observable<FeaturedProductsResponse> {

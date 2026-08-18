@@ -14,6 +14,7 @@ import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { buttons } from '../../data/constants/product-details.constant';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { Reviews } from '../../services/reviews/reviews';
+import { VendorStore } from '../../services/vendor-store/vendor-store';
 
 @Component({
   selector: 'app-product-detail',
@@ -34,6 +35,7 @@ import { Reviews } from '../../services/reviews/reviews';
 export class ProductDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly productService = inject(Products);
+  private readonly vendorStoreService = inject(VendorStore);
   private readonly toastService = inject(ToastService);
   private readonly reviewService = inject(Reviews);
   public wishlistedIds = new Set<string>();
@@ -118,7 +120,7 @@ export class ProductDetail implements OnInit {
 
   private fetchVendorProducts(currentPage = 1) {
     this.isVendorProductsLoading.set(true);
-    this.productService.getVendorProductsById(this.vendorId, currentPage).subscribe({
+    this.vendorStoreService.getVendorProductsById(this.vendorId, currentPage).subscribe({
       next: (response) => {
         this.vendorProductsDetails = response.data;
         this.vendorInfo = response.vendor;
