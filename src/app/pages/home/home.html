@@ -1,10 +1,10 @@
-<div class="max-w-7xl mx-auto pt-20 md:pt-24">
+<div class="max-w-310 mx-auto pt-20 md:pt-24">
   <app-header />
 
   <section
     class="grid grid-cols-1 lg:grid-cols-2 gap-7 lg:gap-40 items-center mt-16 sm:mt-20 mb-20 sm:mb-25 px-5 md:px-12 2xl:px-0">
     <div>
-      <h1 class="uppercase leading-[0.95] text-balance text-[clamp(2.5rem,8vw,8rem)]">
+      <h1 class="uppercase leading-[0.95] text-balance text-[clamp(2.5rem,8vw,7rem)]">
         Quality Finds,
         <br class="hidden sm:block" />
         One Click Away.
@@ -43,7 +43,7 @@
 
 <app-featured-categories />
 
-<section class="mt-25 md:mt-37.5 max-w-7xl mx-auto px-5 md:px-12 2xl:px-0 lg:mb-68.5">
+<section class="mt-25 md:mt-37.5 max-w-310 mx-auto px-5 md:px-12 2xl:px-0 lg:mb-68.5">
   <div
     class="relative bg-[#F0B718] rounded-[20px] overflow-visible flex flex-col lg:flex-row lg:items-center py-12 px-6 sm:py-16 sm:px-12 lg:py-27.25 lg:px-15">
     <div class="relative z-10 w-full lg:max-w-[55%]">
@@ -74,7 +74,7 @@
 </section>
 
 <section class="mt-25 md:mt-37.5 mb-28.75">
-  <div class="max-w-7xl mx-auto px-5 md:px-12 2xl:px-0">
+  <div class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0">
     @if(!hasFeaturedProductFailed()) {
     <h2 class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none ">
       Featured Products
@@ -86,7 +86,7 @@
   </div>
 
   @if (isFeaturedProductsLoading()) {
-  <div class="max-w-7xl mx-auto pl-5 md:pl-12 2xl:pl-0">
+  <div class="max-w-310 mx-auto pl-5 md:pl-12 2xl:pl-0">
     <app-skeleton-loader skeletonType="product" />
   </div>
   } @else {
@@ -100,7 +100,7 @@
   </div>
   }@else {
   <div
-    class="max-w-7xl mx-auto px-5 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2"
+    class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2"
     [@staggerProducts]>
     @for (featuredProduct of featuredProducts; track featuredProduct._id) {
     <app-product-card [product]="featuredProduct" />
@@ -110,7 +110,7 @@
   }
 </section>
 
-<section class="mt-20 md:mt-37.5 mb-28.75 max-w-7xl mx-auto px-5 md:px-12 2xl:px-0">
+<section class="mt-20 md:mt-37.5 mb-28.75 max-w-310 mx-auto px-5 md:px-12 2xl:px-0">
   <h2 class="text-[50px] lg:text-[80px] 2xl:text-[96px] leading-11 sm:leading-none mb-10 sm:mb-17.5">
     Common Questions
   </h2>
