@@ -52,6 +52,7 @@ export interface ProductDetails {
   metaDescription: string;
   metaKeywords: string[];
   category: ProductCategory;
+  store: StoreDetails
   vendor: ProductVendor;
   availability: 'in_stock' | 'out_of_stock' | 'pre_order';
   isPreOrder: boolean;
@@ -62,6 +63,12 @@ export interface ProductDetails {
   updatedAt: string;
   relatedProducts: ProductDetails[];
   breadcrumbs: ProductBreadcrumb[];
+}
+
+interface StoreDetails {
+  _id: string;
+  name: string
+  subdomain: string
 }
 
 export interface ProductCardInterface {
@@ -75,6 +82,7 @@ export interface ProductCardInterface {
   metaDescription: string;
   images: ProductImage[];
   category: ProductCategory;
+  store: StoreDetails
   vendor: ProductVendor;
   stockQuantity: number;
   rating: number;

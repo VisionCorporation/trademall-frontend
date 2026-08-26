@@ -1,3 +1,5 @@
+import { VendorStatus, VendorType } from "../types/vendor.type";
+
 export interface VendorProduct {
   _id: string;
   name: string;
@@ -38,15 +40,6 @@ export interface VendorProduct {
   __v: number;
 }
 
-export interface VendorInfo {
-  _id: string;
-  name: string;
-  businessName: string;
-  vendorStatus: string;
-  isVerified: boolean;
-  dateOfJoining: string;
-}
-
 export interface VendorPagination {
   currentPage: number;
   limit: number;
@@ -56,7 +49,36 @@ export interface VendorPagination {
 
 export interface VendorProductsResponse {
   success: boolean;
-  vendor: VendorInfo;
   pagination: VendorPagination;
   data: VendorProduct[];
+}
+
+export interface StoreResponse {
+  success: boolean;
+  store: Store;
+  vendor: Vendor;
+}
+
+export interface Store {
+  name: string;
+  subdomain: string;
+  phoneNumber: string;
+  region: string;
+  city: string;
+  description: string;
+  shippingPolicy: string;
+  returnPolicy: string;
+  termsAndConditions: string;
+  logo: string | null;
+  banner: string | null;
+  rating: number;
+  reviewCount: number;
+}
+
+export interface Vendor {
+  _id: string;
+  vendorStatus: VendorStatus;
+  vendorType: VendorType;
+  isVerified: boolean;
+  dateOfJoining: string;
 }

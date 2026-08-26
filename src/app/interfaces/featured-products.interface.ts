@@ -17,6 +17,12 @@ interface ProductVendor {
   businessName: string;
 }
 
+interface StoreDetails {
+  _id: string;
+  name: string
+  subdomain: string
+}
+
 interface FeaturedProduct {
   _id: string;
   name: string;
@@ -34,6 +40,7 @@ interface FeaturedProduct {
   isPreOrder: boolean;
   preOrderDays: number;
   preOrderShippingFee: number;
+  store: StoreDetails
   minPreOrderQuantity: number;
   rating: number;
   reviewCount: number;
