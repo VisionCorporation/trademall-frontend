@@ -99,13 +99,13 @@
       }
     </div>
     @if (activeButton === 'about-product') {
-    <div class="bg-[#F4F4F4] p-5 sm:p-7.5 rounded-[20px] text-[#333333] mb-5 leading-6" [@fadeInOut]>
+    <div class="bg-[#F4F4F4] p-5 sm:p-7.5 rounded-[20px] text-[#333333] mb-5 leading-6">
       <h3 class="light-header text-[20px] mb-5">About Product</h3>
       <p class="text-[17px]">{{ product.description }}</p>
     </div>
     }
     @if (activeButton === 'product-details') {
-    <div class="bg-[#F4F4F4] rounded-[20px] p-5 sm:p-7.5" [@fadeInOut]>
+    <div class="bg-[#F4F4F4] rounded-[20px] p-5 sm:p-7.5">
       <h3 class="light-header text-[20px] mb-5">Product Details</h3>
       <table class="w-full text-sm sm:text-base">
         <tbody>
@@ -192,11 +192,7 @@
       </div>
       <div class="p-2.5 lg:p-3.75">
         <p class="text-base lg:text-xl truncate max-w-[15ch]">{{ vendorProduct.name }}</p>
-        <div class="flex items-center justify-between mt-0.5">
-          <a class="text-[#2E790E] text-[11px] lg:text-[13px] hover:underline truncate max-w-[12ch]"
-            [routerLink]="['/products/vendor', vendorInfo?._id]" (click)="$event.stopPropagation()">
-            {{ vendorInfo?.businessName }}
-          </a>
+        <div class="flex items-center justify-end mt-0.5">
           <span class="text-xs lg:text-sm">{{
             vendorProduct.price | currency: 'GHS ' : 'symbol' : '1.2-2'
             }}</span>
