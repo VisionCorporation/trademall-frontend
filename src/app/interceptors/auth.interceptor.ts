@@ -17,7 +17,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       const isCartCheck = req.url.includes('/cart');
 
       if (error.status === 401 && !isSessionCheck && !isLoginRequest && !isCartCheck) {
-        router.navigate(['/login']);
+        const returnUrl = router.url;
+
+        router.navigate(['/login'], {
+          queryParams: returnUrl !== '/login' ? { returnUrl } : {},
+        });
         toast.error('You need to login first to access this.');
       }
 
