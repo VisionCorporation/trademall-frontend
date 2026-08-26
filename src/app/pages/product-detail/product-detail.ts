@@ -37,6 +37,8 @@ export class ProductDetail implements OnInit {
     private readonly vendorStoreService = inject(VendorStore);
     private readonly toastService = inject(ToastService);
     private readonly reviewService = inject(Reviews);
+    public selectedImage: string | null = null;
+    public selectedImageIndex = 0;
     public wishlistedIds = new Set<string>();
     public product: ProductDetails | null = null;
     public vendorProductsDetails: VendorProduct[] = [];
@@ -54,6 +56,35 @@ export class ProductDetail implements OnInit {
 
     ngOnInit(): void {
         this.fetchProductDetails()
+    }
+
+    private setDefaultSelectedImage(): void {
+        if (!this.product?.images?.length) {
+            this.selectedImage = null;
+            this.selectedImageIndex = 0;
+            return;
+        }
+        const mainIndex = this.product.images.findIndex((img) => img.isMain);
+        this.selectedImageIndex = mainIndex !== -1 ? mainIndex : 0;
+        this.selectedImage = this.product.images[this.selectedImageIndex].url;
+    }
+
+    public selectImage(index: number): void {
+        if (!this.product) return;
+        this.selectedImageIndex = index;
+        this.selectedImage = this.product.images[index].url;
+    }
+
+    public showPrevImage(): void {
+        if (!this.product?.images?.length) return;
+        const newIndex = (this.selectedImageIndex - 1 + this.product.images.length) % this.product.images.length;
+        this.selectImage(newIndex);
+    }
+
+    public showNextImage(): void {
+        if (!this.product?.images?.length) return;
+        const newIndex = (this.selectedImageIndex + 1) % this.product.images.length;
+        this.selectImage(newIndex);
     }
 
     public fetchProductDetails() {
@@ -74,6 +105,7 @@ export class ProductDetail implements OnInit {
                         this.isLoading.set(false);
                         this.fetchVendorProducts();
                         this.isTryingAgain.set(false)
+                        this.setDefaultSelectedImage()
                     },
                     error: (err) => {
                         if (err.error.message) {
