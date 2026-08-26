@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { VendorProductsResponse } from '../../interfaces/vendor.interface';
+import { StoreResponse, VendorProductsResponse } from '../../interfaces/vendor.interface';
 import { environment } from '../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -9,6 +9,10 @@ import { Observable } from 'rxjs';
 })
 export class VendorStore {
   private http = inject(HttpClient);
+
+  public getPublicStorePage(subdoamin: string): Observable<StoreResponse> {
+    return this.http.get<StoreResponse>(`${environment.apiBaseUrl}/stores/${subdoamin}`)
+  }
 
   public getVendorProductsById(
     vendorId: string,
