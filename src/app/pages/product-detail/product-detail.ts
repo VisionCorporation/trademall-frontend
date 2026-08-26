@@ -50,7 +50,7 @@ export class ProductDetail implements OnInit {
     public isReviewsLoading = signal(false);
     public isTryingAgain = signal(false)
     public totalPagesArray: number[] = [];
-    public activeButton = 'about-product';
+    public activeButton = 'description';
     public buttons = buttons;
     public reviews: any;
     public errorMessage = ''
