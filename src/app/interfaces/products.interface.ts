@@ -1,6 +1,8 @@
 export interface ProductImage {
   url: string;
+  publicId: string;
   isMain: boolean;
+  uploadedAt: string;
   _id: string;
 }
 
