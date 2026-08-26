@@ -26,11 +26,8 @@ export interface ProductCategory {
 
 export interface ProductVendor {
   _id: string;
-  name: string;
   businessName: string;
-  email: string;
-  vendorStatus: string;
-  isVerified: boolean;
+  subdomain: string
 }
 
 export interface ProductDetails {
@@ -54,6 +51,7 @@ export interface ProductDetails {
   metaDescription: string;
   metaKeywords: string[];
   category: ProductCategory;
+  breadcrumbs: ProductBreadcrumb[];
   store: StoreDetails
   vendor: ProductVendor;
   availability: 'in_stock' | 'out_of_stock' | 'pre_order';
@@ -63,8 +61,7 @@ export interface ProductDetails {
   minPreOrderQuantity: number | null;
   createdAt: string;
   updatedAt: string;
-  relatedProducts: ProductDetails[];
-  breadcrumbs: ProductBreadcrumb[];
+  hasVariants: boolean
 }
 
 interface StoreDetails {
