@@ -38,6 +38,8 @@ export class ProductDetail implements OnInit {
     private readonly toastService = inject(ToastService);
     private readonly reviewService = inject(Reviews);
     public selectedImage: string | null = null;
+    public readonly starIndices = [0, 1, 2, 3, 4];
+    public readonly starGradientUid = Math.random().toString(36).slice(2, 9);
     public selectedImageIndex = 0;
     public wishlistedIds = new Set<string>();
     public product: ProductDetails | null = null;
@@ -53,6 +55,7 @@ export class ProductDetail implements OnInit {
     public reviews: any;
     public errorMessage = ''
     public showButton = true
+    public quantity = 1;
 
     ngOnInit(): void {
         this.fetchProductDetails()
@@ -85,6 +88,24 @@ export class ProductDetail implements OnInit {
         if (!this.product?.images?.length) return;
         const newIndex = (this.selectedImageIndex + 1) % this.product.images.length;
         this.selectImage(newIndex);
+    }
+
+    public starFillPercent(index: number, rating: number): number {
+        const diff = rating - index;
+        return Math.round(Math.min(Math.max(diff, 0), 1) * 100);
+    }
+
+    public decrementQuantity(): void {
+        if (this.quantity > 1) {
+            this.quantity--;
+        }
+    }
+
+    public incrementQuantity(): void {
+        const maxStock = this.product?.stockQuantity ?? Infinity;
+        if (this.quantity < maxStock) {
+            this.quantity++;
+        }
     }
 
     public fetchProductDetails() {

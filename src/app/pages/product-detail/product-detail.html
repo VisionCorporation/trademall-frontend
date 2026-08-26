@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto pt-20 md:pt-24">
+<div class="max-w-310 mx-auto pt-20 md:pt-24">
   <app-header />
 
   @if (!isLoading()) {
@@ -9,31 +9,35 @@
       [productName]="product.name" />
   </div>
 
-  <div class="border-b border-[#17171730] mt-7 mb-10"></div>
-
   <section
-    class="flex flex-col lg:flex-row items-start justify-center mb-15 lg:mb-37.5 gap-10 lg:gap-16 px-5 md:px-12 2xl:px-0">
+    class="flex flex-col lg:flex-row items-start justify-center mt-10 mb-15 lg:mb-37.5 gap-10 lg:gap-16 px-5 md:px-12 2xl:px-0">
     <div class="w-full lg:w-[50%]">
       <div class="flex flex-col gap-5">
         @if (product && selectedImage) {
         <div class="relative">
+          <span
+            class="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-white rounded-2xl py-0.5 px-2.5 sm:py-1 sm:px-3.5 text-xs sm:text-base text-[#171717] border border-[#17171733]">{{selectedImageIndex
+            +
+            1}}/{{product.images.length}}</span>
           <img [ngSrc]="selectedImage" width="800" height="536" priority [alt]="product.name"
-            class="rounded-3xl w-full border border-[#17171714]" />
+            class="rounded-2xl sm:rounded-3xl border border-[#17171714] w-full h-auto" />
 
           @if (product.images.length > 1) {
           <button
-            class="absolute left-5 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-colors duration-200 cursor-pointer"
+            class="absolute left-2 sm:left-5 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-md transition-colors duration-200 cursor-pointer"
             (click)="showPrevImage()" aria-label="Previous image">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+              class="sm:w-4.5 sm:h-4.5">
               <path d="M12.5 15.8332L6.66667 9.99984L12.5 4.1665" stroke="#171717" stroke-width="1.5"
                 stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
 
           <button
-            class="absolute right-5 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md transition-colors duration-200 cursor-pointer"
+            class="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-md transition-colors duration-200 cursor-pointer"
             (click)="showNextImage()" aria-label="Next image">
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+              class="sm:w-4.5 sm:h-4.5">
               <path d="M7.5 4.1665L13.3333 9.99984L7.5 15.8332" stroke="#171717" stroke-width="1.5"
                 stroke-linecap="round" stroke-linejoin="round" />
             </svg>
@@ -42,9 +46,10 @@
         </div>
 
         @if (product.images.length > 1) {
-        <div class="flex items-center justify-center gap-3.75 sm:gap-7">
+        <div class="flex items-center gap-2.5 sm:gap-3.5 lg:gap-4.5 overflow-x-auto pb-1 sm:justify-center">
           @for (image of product.images; track image._id) {
-          <button class="w-20.5 h-20 rounded-lg overflow-hidden border-2 transition-colors duration-200 cursor-pointer"
+          <button
+            class="w-16 h-16 sm:w-18 sm:h-18 lg:w-22 lg:h-22 shrink-0 rounded-lg overflow-hidden border-2 transition-colors duration-200 cursor-pointer"
             [class]="selectedImageIndex === $index ? 'border-[#26C34D]' : 'border-[#17171733]'"
             (click)="selectImage($index)">
             <img [ngSrc]="image.url" width="82" height="80" [alt]="product.name" class="w-full h-full object-cover" />
@@ -56,53 +61,105 @@
       </div>
     </div>
 
-    <div class=" w-full lg:w-[50%]">
-      <h1 class="products-font text-xl sm:text-2xl text-[#000000] mb-2.75">
-        {{ product.name }}
-      </h1>
-      <div class="flex items-center justify-between mb-7.5">
-        <div class="flex items-center gap-2.5">
-          <div class="bg-[#D1D1D1B2] rounded-sm py-0.75 px-1.25 text-sm sm:text-base flex items-center gap-1.25">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
-                fill="#F0B718" />
-            </svg>
-            {{ product.rating }}
-          </div>
+    <div class="w-full lg:w-[50%]">
+      <div class="mb-3.5 text-sm sm:text-base lg:text-lg">
+        @if (product.stockQuantity <= product.lowStockThreshold){ <span class="text-[#D92D20]">Limited Stock. Buy
+          Now</span>
+          }
+          @else if(product.stockQuantity > product.lowStockThreshold) {
+          <span class="text-[#26C34D]">Available in stock</span>
+          }
+      </div>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-6.25">
+        <h1 class="products-font text-xl sm:text-[25px] lg:text-[27px] text-[#000000] leading-tight sm:leading-7">
+          {{ product.name }}
+        </h1>
 
-          <span class="bg-[#D1D1D1B2] rounded-sm px-1.25 py-0.75 text-sm sm:text-base">{{
-            product.category.name
-            }}</span>
-        </div>
-        <div class="flex flex-col">
-          <span class="text-[#17171780]">sold by</span>
-          <a class="text-base sm:text-[20px] text-[#2E790E] hover:underline truncate max-w-[15ch]"
-            [routerLink]="['/products/vendor', product.vendor._id]">{{ product.vendor.businessName }}</a>
+        <div class="shrink-0">
+          <span class="text-[#17171780] text-sm sm:text-base">starts from</span>
+          <p class="text-[#FF860D] text-lg sm:text-xl lg:text-2xl products-font text-nowrap">
+            <span>GHS </span>
+            @if (product.discount > 0) {
+            <span class="line-through text-[#1717174D] mr-2 text-base sm:text-xl">{{
+              product.price | currency: '' : ''
+              }}</span>
+            }
+            <span>{{ product.effectivePrice | currency: '' : '' }}</span>
+          </p>
         </div>
       </div>
-      @if (product.discount > 0) {
-      <span class="text-[#1B5DD7] text-base sm:text-[22px] block mb-2.5">{{ product.discount }}% Off Promo</span>
-      }
-      <p class="text-[#FF860D] text-xl sm:text-2xl products-font">
-        <span>GHS </span>
+
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 sm:justify-between mb-5">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div class="rounded-sm py-0.75 px-1.25 text-sm sm:text-base flex items-center gap-1.25">
+            <div class="flex items-center gap-0.5">
+              @for (i of starIndices; track i) {
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="sm:w-5 sm:h-5">
+                <defs>
+                  <linearGradient [attr.id]="'star-fill-' + starGradientUid + '-' + i" x1="0" y1="0" x2="1" y2="0">
+                    <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="#F0B718" />
+                    <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="transparent" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                  [attr.fill]="'url(#star-fill-' + starGradientUid + '-' + i + ')'" stroke="#F0B71880"
+                  stroke-width="1.5" stroke-linejoin="round" />
+              </svg>
+              }
+            </div>
+            <span class="ml-1">{{ product.rating }}</span>
+          </div>
+
+          <span class="bg-green-100 text-green-900 rounded-sm px-1.25 py-0.75 text-sm sm:text-base">
+            {{ product.category.name }}
+          </span>
+
+          <div class="flex flex-col sm:ml-5">
+            <span class="text-[#17171780] leading-tight sm:leading-2 text-sm sm:text-base">sold by</span>
+            <a class="text-sm sm:text-base lg:text-[20px] text-[#2E790E] truncate max-w-[15ch]"
+              [routerLink]="['/products/vendor', product.vendor._id]">{{ product.vendor.businessName }}</a>
+          </div>
+        </div>
+
         @if (product.discount > 0) {
-        <span class="line-through text-[#1717174D] mr-2 text-xl">{{
-          product.price | currency: '' : ''
-          }}</span>
+        <span class="text-[#1B5DD7] text-sm sm:text-base lg:text-[20px]">{{ product.discount }}% Off Promo</span>
         }
-        <span>{{ product.effectivePrice | currency: '' : '' }}</span>
-      </p>
+      </div>
+
+      <p class="text-base sm:text-[18px] text-[#374151] leading-relaxed">{{product.description}}</p>
+
+      <div class="border-b border-[#17171733] mt-7"></div>
 
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-7.5">
-        <button
-          class="w-full sm:w-auto text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
-          Add to Cart
-        </button>
+        <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+          <div class="flex items-center border border-[#17171733] rounded-lg overflow-hidden shrink-0">
+            <button
+              class="px-3.5 sm:px-5 py-2.5 sm:py-3 text-[#374151] border-r border-[#17171733] rounded-tl-md rounded-bl-md text-lg hover:bg-[#C9F1B9] transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent cursor-pointer"
+              [disabled]="quantity <= 1" (click)="decrementQuantity()" aria-label="Decrease quantity">
+              −
+            </button>
+            <span class="px-3 sm:px-4 py-2.5 sm:py-3 min-w-10 text-center text-[15px] sm:text-[16px]">{{ quantity
+              }}</span>
+            <button
+              class="px-3.5 sm:px-5 py-2.5 sm:py-3 text-[#374151] border-l border-[#17171733] rounded-tr-md rounded-br-md text-lg hover:bg-[#C9F1B9] transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent cursor-pointer"
+              [disabled]="product.stockQuantity !== undefined && quantity >= product.stockQuantity"
+              (click)="incrementQuantity()" aria-label="Increase quantity">
+              +
+            </button>
+          </div>
+
+          <button
+            class="flex-1 sm:flex-none text-[15px] sm:text-[16px] px-5 py-2.5 sm:py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
+            Add to Cart
+          </button>
+        </div>
+
         <div class="flex items-center gap-1.25 py-2 px-3.5 cursor-pointer"
           (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-            class="hover:scale-110 transition-transform duration-300 shrink-0">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            class="sm:w-6 sm:h-6 hover:scale-110 transition-transform duration-300 shrink-0">
             <path
               d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
               [attr.fill]="wishlistedIds.has(product._id) ? '#26C34D' : '#FBFCFF'"
@@ -116,23 +173,21 @@
   </section>
 
   <div class="mb-25 px-5 md:px-12 2xl:px-0">
-    <div class="flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2">
+    <div
+      class="relative flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-gray-300 mb-8">
       @for (button of buttons; track button.value) {
-      <button [class]="
-                'text-[16px] sm:text-[20px] mb-3 sm:mb-5 shrink-0 transition-all duration-300 ease-in-out ' +
-                (button.value === activeButton
-                  ? 'text-[#2E790E] underline underline-offset-4'
-                  : 'text-[#17171733] hover:text-[#2E790E] hover:underline hover:underline-offset-4')
-              " (click)="switchButtons(button.value, product._id)">
+      <button class="relative text-[16px] pb-3 products-font shrink-0 transition-colors duration-100 ease-in-out"
+        [class]="button.value === activeButton ? 'text-[#2E790E]' : 'text-[#4b5563] hover:text-[#171717]'"
+        (click)="switchButtons(button.value, product._id)">
         {{ button.label }}
+        @if (button.value === activeButton) {
+        <span class="absolute left-0 right-0 -bottom-2 h-0.5 bg-[#2E790E]"></span>
+        }
       </button>
       }
     </div>
     @if (activeButton === 'about-product') {
-    <div class="bg-[#F4F4F4] p-5 sm:p-7.5 rounded-[20px] text-[#333333] mb-5 leading-6">
-      <h3 class="light-header text-[20px] mb-5">About Product</h3>
-      <p class="text-[17px]">{{ product.description }}</p>
-    </div>
+    <p class="text-[18px] text-[#374151]">{{ product.description }}</p>
     }
     @if (activeButton === 'product-details') {
     <div class="bg-[#F4F4F4] rounded-[20px] p-5 sm:p-7.5">
