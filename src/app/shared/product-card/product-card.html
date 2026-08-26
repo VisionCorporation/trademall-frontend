@@ -1,5 +1,4 @@
-<div
-  class="bg-[#F4F4F4] rounded-2xl shrink-0 snap-end hover:scale-105 transition-transform duration-300 cursor-pointer"
+<div class="bg-[#F4F4F4] rounded-2xl shrink-0 snap-end hover:scale-105 transition-transform duration-300 cursor-pointer"
   [routerLink]="['/products', product.slug]">
   <div class="relative rounded-2xl mt-1.25 mb-3.75">
     <span
@@ -21,8 +20,8 @@
     <p class="text-base lg:text-xl truncate max-w-[15ch]">{{ product.name }}</p>
     <div class="flex items-center justify-between mt-0.5">
       <a class="text-[#2E790E] text-[11px] lg:text-[13px] hover:underline truncate max-w-[12ch]"
-        [routerLink]="['/products/vendor', product.vendor._id]" (click)="$event.stopPropagation()">
-        {{ product.vendor.businessName }}
+        [routerLink]="['/products/vendor', product.vendor]" (click)="$event.stopPropagation()">
+        {{ product.store.name }}
       </a>
       <span class="text-xs lg:text-sm">{{
         product.price | currency: 'GHS ' : 'symbol' : '1.2-2'

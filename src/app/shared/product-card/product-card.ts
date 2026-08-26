@@ -3,7 +3,7 @@ import { CartState } from '../../services/cart/cart-state';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { Wishlist } from '../../services/wishlist/wishlist';
-import { ProductCardInterface } from '../../interfaces/products.interface';
+import { ProductCardInterface, ProductDetails } from '../../interfaces/products.interface';
 
 @Component({
   selector: 'app-product-card',
@@ -12,7 +12,7 @@ import { ProductCardInterface } from '../../interfaces/products.interface';
   styleUrl: './product-card.css',
 })
 export class ProductCard {
-  @Input() product!: ProductCardInterface | FeaturedProduct
+  @Input() product!: ProductCardInterface | FeaturedProduct | ProductDetails
 
   public cartStateService = inject(CartState);
   public wishlistService = inject(Wishlist)
