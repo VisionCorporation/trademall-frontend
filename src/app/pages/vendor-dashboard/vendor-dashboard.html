@@ -1,16 +1,12 @@
 <section class="px-5 lg:px-12.5 py-6 lg:py-10 h-screen flex flex-col overflow-hidden">
-
-    <!-- ─── DRAWER OVERLAY (mobile + tablet) ─── -->
     <div class="lg:hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
         [class.opacity-0]="!drawerOpen" [class.pointer-events-none]="!drawerOpen" (click)="drawerOpen = false">
     </div>
 
-    <!-- ─── DRAWER (mobile + tablet) ─── -->
     <div class="lg:hidden fixed top-0 left-0 h-full w-full max-w-[320px] bg-white z-50 flex flex-col
                 px-5 py-8 transition-transform duration-300 ease-in-out shadow-xl"
         [class.-translate-x-full]="!drawerOpen">
 
-        <!-- Close button -->
         <div class="flex items-center justify-between mb-10">
             <a routerLink="/" (click)="drawerOpen = false"
                 class="logo text-[25px] transition-colors duration-300 w-fit leading-8">
@@ -122,7 +118,6 @@
             }
         </div>
 
-        <!-- Settings + Logout inside drawer -->
         <div class="flex flex-col gap-3 pt-5 border-t border-[#E5E5E5]">
             <a routerLink="/vendor/settings" routerLinkActive #rla="routerLinkActive"
                 [style.background-color]="rla.isActive ? '#E8E8E8' : ''"
@@ -159,8 +154,6 @@
     </div>
 
     <div class="flex flex-1 min-h-0">
-
-        <!-- ─── SIDEBAR (desktop only) ─── -->
         <div class="hidden lg:flex flex-col h-full w-50 shrink-0">
 
             <a routerLink="/" class="logo text-[25px] sm:text-[32px] transition-colors duration-300 w-fit leading-8">
@@ -298,14 +291,11 @@
             </div>
         </div>
 
-        <!-- ─── MAIN CONTENT ─── -->
         <div class="flex-1 min-w-0">
 
-            <!-- Topbar -->
             <div class="flex items-center justify-between mb-5">
                 <div class="flex items-center gap-4">
 
-                    <!-- Hamburger (mobile + tablet) -->
                     <button (click)="drawerOpen = true"
                         class="lg:hidden p-1.5 -ml-1.5 rounded-lg transition-colors duration-150 text-gray-700 hover:text-gray-900">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
