@@ -30,7 +30,6 @@ export class Header implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private toastService = inject(ToastService);
-
   public user: any;
   public sessionLoaded = false;
   public isDropdownOpen = false;
@@ -38,11 +37,12 @@ export class Header implements OnInit {
   public customerDropdown = CustomerDropdown;
   public vendorDropdown = VendorDropdown;
   @Input() transparent = false;
-  isScrolled = false;
+  public isScrolled = false;
+  public isModalOpen = false;
 
   @ViewChild('header') header!: ElementRef;
   @ViewChild('dropdownRef', { static: true })
-  dropdownRef!: ElementRef<HTMLElement>;
+  public dropdownRef!: ElementRef<HTMLElement>;
 
   ngOnInit() {
     this.loginService.user$.subscribe((user) => {
@@ -118,5 +118,13 @@ export class Header implements OnInit {
       const headerHeight = this.header.nativeElement.offsetHeight;
       this.isScrolled = window.scrollY > (heroHeight - headerHeight);
     }
+  }
+
+  public openModal(): void {
+    this.isModalOpen = true;
+  }
+
+  public closeModal(): void {
+    this.isModalOpen = false;
   }
 }

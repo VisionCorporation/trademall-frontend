@@ -1,5 +1,5 @@
 <section #header
-  [class]="'fixed top-0 left-0 right-0 z-50 py-4 md:py-7.5 transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-transparent' : 'bg-white')">
+  [class]="'fixed top-0 left-0 right-0 z-50 py-4 transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-transparent' : 'bg-white')">
   <div class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex items-center justify-between">
 
     <a routerLink="/"
@@ -11,93 +11,94 @@
       <ol class="flex items-center justify-center gap-5">
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'relative inline-block text-[15px] sm:text-[18px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
-            About Us
+            [class]="'relative inline-block text-[17px] transition-colors duration-300 group hover:text-[#171717] ' + (transparent && !isScrolled ? 'text-white' : 'text-[#374151]')">
+            Shop
             <span
-              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
+              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#374151]')"></span>
           </a>
         </li>
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'relative inline-block text-[15px] sm:text-[18px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
-            Contact Us
+            [class]="'relative inline-block text-[17px] transition-colors duration-300 group hover:text-[#374151] ' + (transparent && !isScrolled ? 'text-white' : 'text-[#374151]')">
+            About
             <span
-              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
+              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#374151]')"></span>
           </a>
         </li>
         <li class="px-3.5 py-2">
           <a routerLink=""
-            [class]="'relative inline-block text-[15px] sm:text-[18px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+            [class]="'relative inline-block text-[17px] transition-colors duration-300 group hover:text-[#374151] ' + (transparent && !isScrolled ? 'text-white' : 'text-[#374151]')">
+            Contact
+            <span
+              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#374151]')"></span>
+          </a>
+        </li>
+        <li class="px-3.5 py-2">
+          <a routerLink=""
+            [class]="'relative inline-block text-[17px] transition-colors duration-300 group hover:text-[#374151] ' + (transparent && !isScrolled ? 'text-white' : 'text-[#374151]')">
             FAQs
             <span
-              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#171717]')"></span>
+              [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#374151]')"></span>
           </a>
         </li>
       </ol>
     </nav>
 
-    <div>
+    <div class="flex items-center gap-8 mr-4 lg:mr-0">
+      <form>
+        <div class="hidden lg:block relative">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-search-icon lucide-search absolute left-3 top-1/2 -translate-y-1/2">
+            <path d="m21 21-4.34-4.34" />
+            <circle cx="11" cy="11" r="8" />
+          </svg>
+          <input type="search" placeholder="Search products..."
+            class="w-75 pl-10 pr-4 py-2 border-2 border-gray-300 placeholder:text-[15px] rounded-lg transition-all text-sm" />
+        </div>
+      </form>
+
+      <div class="relative block lg:hidden mr-6 cursor-pointer" (click)="openModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#374151"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-search-icon lucide-search absolute left-3 top-1/2 -translate-y-1/2">
+          <path d="m21 21-4.34-4.34" />
+          <circle cx="11" cy="11" r="8" />
+        </svg>
+      </div>
+
+      <a routerLink="/cart" class="relative">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+          [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#374151'" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart">
+          <circle cx="8" cy="21" r="1" />
+          <circle cx="19" cy="21" r="1" />
+          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+        </svg>
+
+        @if (cartItemCount >= 0) {
+        <span
+          [class]="'absolute -top-2 -right-3 text-[11px] w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-white text-[#374151]' : 'bg-[#374151] text-white')">
+          {{ cartItemCount > 99 ? '99+' : cartItemCount }}
+        </span>
+        }
+      </a>
+
       @if (!sessionLoaded) {
       <div class="w-9.25 lg:w-62.5 h-9.25 lg:h-12.5 skeleton-shimmer rounded-md"></div>
       } @else if (!isLoggedIn) {
       <div class="lg:flex items-center justify-center gap-8.5 hidden">
         <a routerLink="/login"
-          [class]="'text-[15px] sm:text-[16px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">Log
+          [class]="'text-[15px] sm:text-[16px] px-5 py-3 transition-opacity duration-150 ease-in rounded-lg ' + (transparent && !isScrolled ? 'bg-white text-[#171717] hover:opacity-80' : 'bg-[#171717] text-white hover:opacity-80')">Log
           In</a>
-        <a routerLink="/user-type"
-          [class]="'text-[15px] sm:text-[16px] px-5 py-3 transition-opacity duration-150 ease-in rounded-lg ' + (transparent && !isScrolled ? 'bg-white text-[#171717] hover:opacity-80' : 'bg-[#171717] text-white hover:opacity-80')">
-          Create an account
-        </a>
       </div>
       } @else {
-      <div class="flex items-center justify-center lg:gap-10">
-        <a routerLink="/cart" class="relative">
-          <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M33.333 66.6667L69.6668 63.6388C81.0355 62.6917 83.5876 60.2083 84.8476 48.8704L87.4997 25"
-              [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#171717'" stroke-width="6"
-              stroke-linecap="round" />
-            <path d="M25 25H91.6667" [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#171717'" stroke-width="6"
-              stroke-linecap="round" />
-            <path
-              d="M25.0003 91.6667C29.6027 91.6667 33.3337 87.9357 33.3337 83.3333C33.3337 78.731 29.6027 75 25.0003 75C20.398 75 16.667 78.731 16.667 83.3333C16.667 87.9357 20.398 91.6667 25.0003 91.6667Z"
-              [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#171717'" stroke-width="6" />
-            <path
-              d="M70.8333 91.6667C75.4357 91.6667 79.1667 87.9357 79.1667 83.3333C79.1667 78.731 75.4357 75 70.8333 75C66.231 75 62.5 78.731 62.5 83.3333C62.5 87.9357 66.231 91.6667 70.8333 91.6667Z"
-              [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#171717'" stroke-width="6" />
-            <path d="M33.333 83.3334H62.4997" [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#171717'"
-              stroke-width="6" stroke-linecap="round" />
-            <path
-              d="M8.33301 8.33337H12.358C16.2942 8.33337 19.7253 10.9358 20.6799 14.6456L33.0768 62.8188C33.7033 65.2534 33.1672 67.8321 31.6173 69.84L27.6335 75"
-              [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#171717'" stroke-width="6"
-              stroke-linecap="round" />
-          </svg>
-
-          @if (cartItemCount >= 0) {
-          <span
-            [class]="'absolute -top-2 -right-2 text-[11px] w-5 h-5 rounded-full flex items-center justify-center transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-white text-[#171717]' : 'bg-[#171717] text-white')">
-            {{ cartItemCount > 99 ? '99+' : cartItemCount }}
-          </span>
-          }
-        </a>
-
+      <div class="hidden lg:flex items-center justify-center lg:gap-10">
         <div class="relative inline-block" #dropdownRef (click)="$event.stopPropagation()">
-          <div class="lg:flex items-center gap-3 hidden">
-            <div
-              [class]="'cursor-pointer initials w-13 h-13 rounded-full flex items-center justify-center text-xl transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-white text-[#171717]' : 'bg-[#171717] text-white')"
-              (click)="toggleDropdown($event)">
-              {{ userInitials }}
-            </div>
-
-            <div class="flex flex-col">
-              <span
-                [class]="'text-[16px] transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
-                {{ userName }}
-              </span>
-              <span
-                [class]="'text-[15px] truncate max-w-[15ch] -mt-1 transition-colors duration-300 ' + (transparent && !isScrolled ? 'text-white/60' : 'text-[#17171799]')">
-                {{ userEmail }}
-              </span>
-            </div>
+          <div
+            [class]="'cursor-pointer initials w-11 h-11 rounded-full flex items-center justify-center text-lg transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-white text-[#171717]' : 'bg-[#171717] text-white')"
+            (click)="toggleDropdown($event)">
+            {{ userInitials }}
           </div>
 
           @if (isDropdownOpen) {
@@ -141,3 +142,34 @@
     </div>
   </div>
 </section>
+
+@if (isModalOpen) {
+<div class="fixed inset-0 lg:hidden bg-black/50 z-50 flex items-start justify-center pt-24" (click)="closeModal()">
+  <div class="bg-white rounded-lg max-w-2xl w-full mx-4 p-6" (click)="$event.stopPropagation()">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl products-font text-[#111827]">Search Products</h2>
+      <div class="text-gray-500 hover:text-gray-700 cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" (click)="closeModal()" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-x-icon lucide-x">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </div>
+    </div>
+    <form class="relative">
+      <input type="search" placeholder="Search for products..."
+        class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg" />
+
+      <button type="submit"
+        class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-emerald-700 hover:text-emerald-900">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-search-icon lucide-search absolute left-3 top-1/2 -translate-y-1/2">
+          <path d="m21 21-4.34-4.34" />
+          <circle cx="11" cy="11" r="8" />
+        </svg></button>
+    </form>
+  </div>
+</div>
+}
