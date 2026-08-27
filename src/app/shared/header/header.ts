@@ -7,6 +7,7 @@ import {
   OnInit,
   ChangeDetectorRef,
   Input,
+  signal,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
@@ -39,9 +40,9 @@ export class Header implements OnInit {
   public vendorDropdown: HeaderSection[] = VENDOR_DROPDOWN;
   @Input() transparent = false;
   public isScrolled = false;
-  public isModalOpen = false;
+  public isModalOpen = signal(false);
   public isModalVisible = false;
-  public isMenuOpen = false
+  public isMenuOpen = signal(false)
   public isProfileMenuOpen = false;
   public desktopMenuItems: HeaderSection[] = DESKTOP_MENU_ITEMS
   public menuItems: HeaderSection[] = MOBILE_MENU_ITEMS
@@ -50,6 +51,12 @@ export class Header implements OnInit {
   @ViewChild('header') header!: ElementRef;
   @ViewChild('dropdownRef', { static: true })
   public dropdownRef!: ElementRef<HTMLElement>;
+  @ViewChild('searchInput')
+  set searchInput(input: ElementRef<HTMLInputElement> | undefined) {
+    if (input) {
+      setTimeout(() => input.nativeElement.focus());
+    }
+  }
 
   ngOnInit() {
     this.loginService.user$.subscribe((user) => {
@@ -128,7 +135,7 @@ export class Header implements OnInit {
   }
 
   public openModal(): void {
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
     document.body.style.overflow = 'hidden';
     this.cdr.markForCheck();
 
@@ -146,18 +153,18 @@ export class Header implements OnInit {
     this.cdr.markForCheck();
 
     setTimeout(() => {
-      this.isModalOpen = false;
+      this.isModalOpen.set(false);
       this.cdr.markForCheck();
     }, 200);
   }
 
   public openMenu(): void {
-    this.isMenuOpen = true;
+    this.isMenuOpen.set(true);
     document.body.style.overflow = 'hidden';
   }
 
   public closeMenu(): void {
-    this.isMenuOpen = false;
+    this.isMenuOpen.set(false);
     this.isProfileMenuOpen = false
     document.body.style.overflow = '';
   }
