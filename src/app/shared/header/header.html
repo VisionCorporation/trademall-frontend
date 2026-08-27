@@ -2,10 +2,23 @@
   [class]="'fixed top-0 left-0 right-0 z-50 py-4 transition-colors duration-300 ' + (transparent && !isScrolled ? 'bg-transparent' : 'bg-white')">
   <div class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex items-center justify-between">
 
-    <a routerLink="/"
-      [class]="'logo text-[25px] sm:text-[32px] transition-colors duration-300 w-fit ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
-      trademall
-    </a>
+    <div class="flex items-center gap-4">
+      <button (click)="openMenu()"
+        class="lg:hidden p-1.5 -ml-1.5 rounded-lg transition-colors duration-150 text-gray-700 hover:text-gray-900">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-menu-icon lucide-menu">
+          <path d="M4 5h16" />
+          <path d="M4 12h16" />
+          <path d="M4 19h16" />
+        </svg>
+      </button>
+
+      <a routerLink="/"
+        [class]="'logo text-[25px] sm:text-[32px] transition-colors duration-300 w-fit ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
+        trademall
+      </a>
+    </div>
 
     <nav class="hidden lg:block">
       <ol class="flex items-center justify-center gap-5">
@@ -143,12 +156,40 @@
   </div>
 </section>
 
+
+
+<div class="lg:hidden fixed inset-0 bg-black/50 z-60 transition-opacity duration-300" [class.opacity-0]="!isMenuOpen"
+  [class.pointer-events-none]="!isMenuOpen" (click)="closeMenu()">
+</div>
+
+<div class="lg:hidden fixed top-0 left-0 h-full w-full max-w-[320px] bg-white z-70 flex flex-col
+            px-5 py-5 transition-transform duration-300 ease-in-out shadow-xl" [class.-translate-x-full]="!isMenuOpen">
+
+  <div class="flex items-center justify-between mb-10">
+    <a routerLink="/" (click)="closeMenu()"
+      class="logo text-[25px] transition-colors duration-300 w-fit leading-8">
+      trademall
+    </a>
+
+    <button (click)="closeMenu()"
+      class="transition-colors duration-150 text-gray-700 hover:text-gray-900 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-x-icon lucide-x">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- rest of your mobile menu content -->
+</div>
+
 @if (isModalOpen) {
 <div
   class="fixed inset-0 lg:hidden z-50 flex items-start justify-center pt-24 transition-colors duration-200 ease-in-out"
   [class]="isModalVisible ? 'bg-black/50' : 'bg-black/0'" (click)="closeModal()">
-  <div
-    class="bg-white rounded-lg max-w-2xl w-full mx-4 p-6 transition-all duration-200 ease-in-out"
+  <div class="bg-white rounded-lg max-w-2xl w-full mx-4 p-6 transition-all duration-200 ease-in-out"
     [class]="isModalVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2'"
     (click)="$event.stopPropagation()">
     <div class="flex items-center justify-between mb-4">

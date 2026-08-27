@@ -40,6 +40,7 @@ export class Header implements OnInit {
   public isScrolled = false;
   public isModalOpen = false;
   public isModalVisible = false;
+  public isMenuOpen = false
 
   @ViewChild('header') header!: ElementRef;
   @ViewChild('dropdownRef', { static: true })
@@ -145,4 +146,13 @@ export class Header implements OnInit {
     }, 200);
   }
 
+  public openMenu(): void {
+    this.isMenuOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  public closeMenu(): void {
+    this.isMenuOpen = false;
+    document.body.style.overflow = '';
+  }
 }
