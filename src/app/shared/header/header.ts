@@ -12,10 +12,10 @@ import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { ToastService } from '../../services/toast/toast.service';
-import { CustomerDropdown, VendorDropdown } from '../../data/constants/dropdown.constant';
 import { Cart as CartService } from '../../services/cart/cart';
 import { CartResponse } from '../../interfaces/cart.interface';
 import { ClickOutside } from '../../directives/click-outside/click-outside';
+import { CUSTOMER_DROPDOWN, DESKTOP_MENU_ITEMS, MOBILE_MENU_ITEMS, PROFILE_MENU_ITEMS, VENDOR_DROPDOWN } from '../../data/header.constants';
 
 @Component({
   selector: 'app-header',
@@ -34,13 +34,17 @@ export class Header implements OnInit {
   public sessionLoaded = false;
   public isDropdownOpen = false;
   public cartItemCount = 0;
-  public customerDropdown = CustomerDropdown;
-  public vendorDropdown = VendorDropdown;
+  public customerDropdown = CUSTOMER_DROPDOWN;
+  public vendorDropdown = VENDOR_DROPDOWN;
   @Input() transparent = false;
   public isScrolled = false;
   public isModalOpen = false;
   public isModalVisible = false;
   public isMenuOpen = false
+  public isProfileMenuOpen = false;
+  public desktopMenuItems = DESKTOP_MENU_ITEMS
+  public menuItems = MOBILE_MENU_ITEMS
+  public profileMenuItems = PROFILE_MENU_ITEMS
 
   @ViewChild('header') header!: ElementRef;
   @ViewChild('dropdownRef', { static: true })
@@ -154,5 +158,9 @@ export class Header implements OnInit {
   public closeMenu(): void {
     this.isMenuOpen = false;
     document.body.style.overflow = '';
+  }
+
+  public toggleProfileMenu(): void {
+    this.isProfileMenuOpen = !this.isProfileMenuOpen;
   }
 }
