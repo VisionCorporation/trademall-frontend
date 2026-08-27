@@ -15,7 +15,8 @@ import { ToastService } from '../../services/toast/toast.service';
 import { Cart as CartService } from '../../services/cart/cart';
 import { CartResponse } from '../../interfaces/cart.interface';
 import { ClickOutside } from '../../directives/click-outside/click-outside';
-import { CUSTOMER_DROPDOWN, DESKTOP_MENU_ITEMS, MOBILE_MENU_ITEMS, PROFILE_MENU_ITEMS, VENDOR_DROPDOWN } from '../../data/header.constants';
+import { CUSTOMER_DROPDOWN, DESKTOP_MENU_ITEMS, MOBILE_MENU_ITEMS, PROFILE_MENU_ITEMS, VENDOR_DROPDOWN } from '../../data/constants/header.constants';
+import { HeaderSection } from '../../interfaces/header.interface';
 
 @Component({
   selector: 'app-header',
@@ -34,17 +35,17 @@ export class Header implements OnInit {
   public sessionLoaded = false;
   public isDropdownOpen = false;
   public cartItemCount = 0;
-  public customerDropdown = CUSTOMER_DROPDOWN;
-  public vendorDropdown = VENDOR_DROPDOWN;
+  public customerDropdown: HeaderSection[] = CUSTOMER_DROPDOWN;
+  public vendorDropdown: HeaderSection[] = VENDOR_DROPDOWN;
   @Input() transparent = false;
   public isScrolled = false;
   public isModalOpen = false;
   public isModalVisible = false;
   public isMenuOpen = false
   public isProfileMenuOpen = false;
-  public desktopMenuItems = DESKTOP_MENU_ITEMS
-  public menuItems = MOBILE_MENU_ITEMS
-  public profileMenuItems = PROFILE_MENU_ITEMS
+  public desktopMenuItems: HeaderSection[] = DESKTOP_MENU_ITEMS
+  public menuItems: HeaderSection[] = MOBILE_MENU_ITEMS
+  public profileMenuItems: HeaderSection[] = PROFILE_MENU_ITEMS
 
   @ViewChild('header') header!: ElementRef;
   @ViewChild('dropdownRef', { static: true })
