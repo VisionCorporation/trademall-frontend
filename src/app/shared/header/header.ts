@@ -39,6 +39,7 @@ export class Header implements OnInit {
   @Input() transparent = false;
   public isScrolled = false;
   public isModalOpen = false;
+  public isModalVisible = false;
 
   @ViewChild('header') header!: ElementRef;
   @ViewChild('dropdownRef', { static: true })
@@ -122,9 +123,26 @@ export class Header implements OnInit {
 
   public openModal(): void {
     this.isModalOpen = true;
+    document.body.style.overflow = 'hidden';
+    this.cdr.markForCheck();
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.isModalVisible = true;
+        this.cdr.markForCheck();
+      });
+    });
   }
 
   public closeModal(): void {
-    this.isModalOpen = false;
+    this.isModalVisible = false;
+    document.body.style.overflow = '';
+    this.cdr.markForCheck();
+
+    setTimeout(() => {
+      this.isModalOpen = false;
+      this.cdr.markForCheck();
+    }, 200);
   }
+
 }
