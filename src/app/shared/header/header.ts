@@ -157,6 +157,7 @@ export class Header implements OnInit {
 
   public closeMenu(): void {
     this.isMenuOpen = false;
+    this.isProfileMenuOpen = false
     document.body.style.overflow = '';
   }
 
