@@ -76,7 +76,7 @@
       </a>
 
       @if (!sessionLoaded) {
-      <div class="lg:w-21.25 lg:h-12 skeleton-shimmer rounded-md"></div>
+      <div class="hidden lg:w-21.25 lg:h-12 skeleton-shimmer rounded-md"></div>
       } @else if (!isLoggedIn) {
       <div class="lg:flex items-center justify-center gap-8.5 hidden">
         <a routerLink="/login"
