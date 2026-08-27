@@ -1,31 +1,116 @@
-<section
-  class="bg-[#171717] pt-12 pb-4 lg:pt-20 lg:pb-5 rounded-tr-[20px] rounded-tl-[20px] px-5 md:px-12 lg:px-0 text-white"
->
-  <div class="text-white flex flex-wrap items-center justify-center gap-2 lg:gap-5 list-none">
-    <li class="py-2 px-3.5">
-      <a class="text-lg lg:text-2xl cursor-pointer hover:opacity-70 transition-opacity duration-150"
-        >About Us</a
-      >
-    </li>
-    <li class="py-2 px-3.5">
-      <a class="text-lg lg:text-2xl cursor-pointer hover:opacity-70 transition-opacity duration-150"
-        >Contact Us</a
-      >
-    </li>
-    <li class="py-2 px-3.5">
-      <a class="text-lg lg:text-2xl cursor-pointer hover:opacity-70 transition-opacity duration-150"
-        >FAQs</a
-      >
-    </li>
-  </div>
-  <p
-    class="text-white text-center mt-7 lg:mt-10 text-[13px] lg:text-[14px] max-w-xs md:max-w-lg lg:max-w-132 mx-auto leading-relaxed"
-  >
-    Follow Vision Corporation, the creators of Trademall, to see how we're using technology to
-    empower communities, support vendors and drive ecommerce development
-  </p>
+<section class="bg-[#171717] pt-12 pb-4 lg:pt-20 lg:pb-5 text-white">
+  <div class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0">
+    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10 lg:gap-16">
 
-  <p class="text-center text-[15px] sm:text-base mt-12">
-    ©{{ currentYear }} TradeMall | All rights reserved.
-  </p>
+      <div class="flex flex-col gap-5  shrink-0 ">
+        <a routerLink="/" class="logo text-[25px] sm:text-[32px] text-white w-fit leading-8">trademall</a>
+
+        <p class="text-[#9CA3AF] text-sm ">Shop Quality Products From Trusted Vendors.</p>
+
+        <div class="flex items-center gap-3">
+          <a href="#" aria-label="Instagram"
+            class="w-10 h-10 rounded-full bg-[#262626] flex items-center justify-center hover:bg-[#26C34D] transition-colors duration-200 group">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round"
+              class="group-hover:stroke-white transition-colors duration-200">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <path d="M16 11.37a4 4 0 1 1-7.914 1.173A4 4 0 0 1 16 11.37Z" />
+              <path d="M17.5 6.5h.01" />
+            </svg>
+          </a>
+          <a href="#" aria-label="Facebook"
+            class="w-10 h-10 rounded-full bg-[#262626] flex items-center justify-center hover:bg-[#26C34D] transition-colors duration-200 group">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round"
+              class="group-hover:stroke-white transition-colors duration-200">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg>
+          </a>
+          <a href="#" aria-label="X"
+            class="w-10 h-10 rounded-full bg-[#262626] flex items-center justify-center hover:bg-[#26C34D] transition-colors duration-200 group">
+            <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+              aria-label="X (formerly Twitter)">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="border-t border-[#2E2E2E] pt-4 flex flex-col gap-3">
+          <a href="tel:+233561251006"
+            class="flex items-center gap-2.5 text-[#9CA3AF] hover:text-[#26C34D] transition-colors duration-200">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+            <span class="text-sm">+233561251006</span>
+          </a>
+          <a href="mailto:info@visioncorporation.africa"
+            class="flex items-center gap-2.5 text-[#9CA3AF] hover:text-[#26C34D] transition-colors duration-200">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m22 7-10 5L2 7" />
+            </svg>
+            <span class="text-sm truncate">info&#64;visioncorporation.africa</span>
+          </a>
+          <div class="flex items-center gap-2.5 text-[#9CA3AF]">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" class="shrink-0">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span class="text-sm">Sekondi-Takoradi, Ghana</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-2 lg:gap-1">
+        @for (section of footerSections; track section.title) {
+        <div class="border-b border-[#2E2E2E] lg:border-none">
+          <button
+            class="w-full flex items-center justify-between py-4 lg:py-0 lg:pointer-events-none lg:cursor-default cursor-pointer"
+            (click)="toggleSection(section.title)">
+            <h3 class="font-semibold text-lg products-font text-nowrap">{{ section.title }}</h3>
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"
+              class="lg:hidden shrink-0 transition-transform duration-300"
+              [class.rotate-180]="openSection === section.title">
+              <path d="M5 7.5L10 12.5L15 7.5" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div class="grid transition-[grid-template-rows] duration-300 ease-in-out lg:grid-rows-[1fr]!"
+            [class]="openSection === section.title ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
+            <div class="overflow-hidden">
+              <ul class="flex flex-col gap-3.5 lg:gap-4 pb-4 lg:pb-0 lg:pt-5">
+                @for (link of section.links; track link.label) {
+                <li class="w-fit">
+                  <a [routerLink]="link.url"
+                    class="flex items-center gap-1.5 text-[#9CA3AF] hover:text-white transition-colors duration-200 cursor-pointer">
+                    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" class="shrink-0">
+                      <path d="M7.5 5L12.5 10L7.5 15" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    </svg>
+                    <span class="text-sm lg:text-base">{{ link.label }}</span>
+                  </a>
+                </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div
+      class="border-t border-[#2E2E2E] mt-10 lg:mt-14 pt-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-[#9CA3AF] text-xs sm:text-sm text-center sm:text-left">
+        © {{ currentYear }} TradeMall, a <a href="https://visioncorporation.africa/" target="_blank"
+          class="text-white">Vision Corporation</a> company. All rights reserved.
+      </p>
+    </div>
+  </div>
 </section>
