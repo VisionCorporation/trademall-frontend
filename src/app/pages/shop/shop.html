@@ -1,6 +1,46 @@
 <section class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 mt-20 lg:mt-24 mb-20">
     <app-header />
 
+    @if (!isLoading() && searchQuery && products().length === 0 && !hasError()) {
+    <div class="flex flex-col items-center justify-center pt-40 pb-30 text-center max-w-xl mx-auto">
+        <div class="w-30 sm:w-40 h-30 sm:h-40 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none"
+                stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+                <path d="M8 11h6"></path>
+            </svg>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] mb-3 products-font">
+            No Products Found
+        </h2>
+
+        <p class="text-[#374151] text-base sm:text-lg leading-relaxed mb-6">
+            We couldn't find any products matching <span class="products-font">"{{ searchQuery }}"</span>. Try a
+            different keyword or check your spelling.
+        </p>
+
+        <div class="text-sm text-[#6B7280] leading-relaxed mb-8">
+            Popular searches:
+            <div class="mt-3 flex flex-wrap justify-center gap-2">
+                @for (suggestion of popularSearches; track suggestion) {
+                <button (click)="searchFor(suggestion)"
+                    class="px-3 py-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-150 cursor-pointer">
+                    {{ suggestion }}
+                </button>
+                }
+            </div>
+        </div>
+
+        <a routerLink="/shop"
+            class="text-[15px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
+            Browse All Products
+        </a>
+
+    </div>
+    }
+
     @if (searchValidationError()) {
     <div class="flex flex-col items-center justify-center pt-40 pb-30 text-center max-w-lg mx-auto">
         <div class="w-30 sm:w-40 h-30 sm:h-40 rounded-full bg-red-50 flex items-center justify-center mb-6">
@@ -31,10 +71,10 @@
     </div>
     }
 
-    @if(searchQuery){
+    @if(!isLoading() && searchQuery && products().length > 0){
     <h1 class="text-[30px] sm:text-[40px] mb-8 products-font italic">Search Results for <span>"{{searchQuery}}"</span>
     </h1>
-    }@else if(!searchQuery && !searchValidationError()) {
+    }@else if(!isLoading() && !searchQuery && !searchValidationError()) {
     <h1 class="text-[30px] sm:text-[40px] mb-8 products-font italic">All Products</h1>
     }
 

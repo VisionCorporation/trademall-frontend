@@ -7,11 +7,12 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Newsletter } from '../../shared/newsletter/newsletter';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { POPULAR_SEARCHES } from '../../data/constants/shop.constant';
 
 @Component({
   selector: 'app-shop',
-  imports: [ProductCard, SkeletonLoader, Header, Footer, Newsletter],
+  imports: [ProductCard, SkeletonLoader, Header, Footer, Newsletter, RouterLink],
   templateUrl: './shop.html',
   styleUrl: './shop.css',
 })
@@ -19,6 +20,8 @@ export class Shop implements OnInit, OnDestroy {
   private readonly productsService = inject(ProductsService);
   private readonly toastService = inject(ToastService);
   private readonly route = inject(ActivatedRoute);
+  public readonly router = inject(Router)
+  public popularSearches = POPULAR_SEARCHES
   public searchValidationError = signal(false);
   public searchQuery: string | null = null;
   public products = signal<Product[]>([]);
@@ -107,5 +110,11 @@ export class Shop implements OnInit, OnDestroy {
 
   public retryLoad(): void {
     this.loadProducts(this.currentPage() === 1 ? 1 : this.currentPage());
+  }
+
+  public searchFor(term: string) {
+    this.router.navigate(['/shop'], {
+      queryParams: { q: term }
+    })
   }
 }
