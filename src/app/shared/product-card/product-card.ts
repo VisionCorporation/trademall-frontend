@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { Wishlist } from '../../services/wishlist/wishlist';
 import { ProductCardInterface, ProductDetails } from '../../interfaces/products.interface';
+import { Product } from '../../interfaces/all-products.interface';
 
 @Component({
   selector: 'app-product-card',
@@ -12,7 +13,7 @@ import { ProductCardInterface, ProductDetails } from '../../interfaces/products.
   styleUrl: './product-card.css',
 })
 export class ProductCard {
-  @Input() product!: ProductCardInterface | FeaturedProduct | ProductDetails
+  @Input() product!: ProductCardInterface | FeaturedProduct | ProductDetails | Product
   @Input() layout: 'grid' | 'carousel' = 'grid';
   public cartStateService = inject(CartState);
   public wishlistService = inject(Wishlist)

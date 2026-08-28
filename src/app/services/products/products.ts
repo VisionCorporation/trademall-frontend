@@ -6,6 +6,7 @@ import {
   RootCategoryResponse,
   CategoryListResponse,
 } from '../../interfaces/categories.interface';
+import { ProductsResponse } from '../../interfaces/all-products.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -37,5 +38,9 @@ export class Products {
 
   public getFeaturedProducts(): Observable<FeaturedProductsResponse> {
     return this.http.get<FeaturedProductsResponse>(`${environment.apiBaseUrl}/products/featured`);
+  }
+
+  public getAllProducts(currentPage: number): Observable<ProductsResponse> {
+    return this.http.get<ProductsResponse>(`${environment.apiBaseUrl}/products?page=${currentPage}`);
   }
 }
