@@ -24,9 +24,9 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" [@staggerProducts]>
     <div class="flex flex-col gap-4">
       @for (category of leftCategories; track category._id) {
-      <div class="relative rounded-[20px] overflow-hidden bg-black hover:scale-105 transition-transform duration-300">
+      <a [routerLink]="['/categories', category.slug]" class="relative rounded-[20px] overflow-hidden group bg-black">
         <img [ngSrc]="category.image ?? ''" [alt]="category.name" fill
-          class="absolute inset-0 w-full h-full object-cover opacity-70" />
+          class="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-500 group-hover:scale-110" />
 
         <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"></div>
         <div class="relative z-10 p-7 sm:p-10 flex flex-col justify-between">
@@ -41,14 +41,15 @@
             Explore
           </a>
         </div>
-      </div>
+      </a>
       }
     </div>
 
     @if (centerCategory) {
-    <div class="relative rounded-[20px] overflow-hidden bg-black hover:scale-105 transition-transform duration-300">
+    <a [routerLink]="['/categories', centerCategory.slug]"
+      class="relative rounded-[20px] overflow-hidden group bg-black">
       <img [src]="centerCategory.image" [alt]="centerCategory.name"
-        class="absolute inset-0 w-full h-full object-cover opacity-70" />
+        class="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-500 group-hover:scale-110" />
       <div class="relative z-10 p-7 sm:p-10 flex flex-col justify-between">
         <div>
           <h3 class="light-header text-white text-[28px] sm:text-[36px] font-semibold leading-tight mb-3.75">
@@ -61,15 +62,15 @@
           Explore
         </a>
       </div>
-    </div>
+    </a>
     }
 
     @if (rightCategory) {
     <div class="flex flex-col gap-4">
-      <div
-        class="relative rounded-[20px] overflow-hidden bg-black flex-1 hover:scale-105 transition-transform duration-300">
+      <a [routerLink]="['/categories', rightCategory.slug]"
+        class="relative rounded-[20px] overflow-hidden group bg-black flex-1">
         <img [src]="rightCategory.image" [alt]="rightCategory.name"
-          class="absolute inset-0 w-full h-full object-cover opacity-70" />
+          class="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-500 group-hover:scale-110" />
         <div class="relative z-10 p-7 sm:p-10 flex flex-col justify-between">
           <div>
             <h3 class="light-header text-white text-[28px] sm:text-[36px] font-semibold leading-tight mb-3.75">
@@ -82,7 +83,7 @@
             Explore
           </a>
         </div>
-      </div>
+      </a>
 
       <div class="flex lg:justify-end">
         <a routerLink="/categories"

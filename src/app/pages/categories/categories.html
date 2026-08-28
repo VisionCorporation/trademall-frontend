@@ -15,9 +15,10 @@
   <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-5 md:px-12 2xl:px-0 mb-15"
     [@staggerProducts]="categories.length">
     @for (category of categories; track category._id) {
-    <div
-      class="relative w-full rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col hover:scale-105 transition-transform duration-300 overflow-hidden">
-      <img [ngSrc]="category.image ?? ''" fill alt="{{ category.name }}" class="object-cover object-center rounded-2xl"
+    <a [routerLink]="['/categories', category.slug]"
+      class="relative w-full rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col overflow-hidden group">
+      <img [ngSrc]="category.image ?? ''" fill alt="{{ category.name }}"
+        class="object-cover object-center rounded-2xl transition-transform duration-500 group-hover:scale-110"
         priority />
 
       <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"></div>
@@ -30,7 +31,7 @@
           Explore
         </a>
       </div>
-    </div>
+    </a>
     }
   </section>
 
