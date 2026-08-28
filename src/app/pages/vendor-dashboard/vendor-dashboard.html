@@ -1,11 +1,11 @@
 <section class="px-5 lg:px-12.5 py-6 lg:py-10 h-screen flex flex-col overflow-hidden">
-    <div class="lg:hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
-        [class.opacity-0]="!drawerOpen" [class.pointer-events-none]="!drawerOpen" (click)="drawerOpen = false">
+    <div class="lg:hidden fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none transition-opacity duration-300"
+        [class.opacity-100]="drawerOpen" [class.pointer-events-auto]="drawerOpen" (click)="drawerOpen = false">
     </div>
 
     <div class="lg:hidden fixed top-0 left-0 h-full w-full max-w-[320px] bg-white z-50 flex flex-col
-                px-5 py-8 transition-transform duration-300 ease-in-out shadow-xl"
-        [class.-translate-x-full]="!drawerOpen">
+            px-5 py-8 -translate-x-full transition-transform duration-300 ease-in-out shadow-xl"
+        [class.translate-x-0]="drawerOpen">
 
         <div class="flex items-center justify-between mb-10">
             <a routerLink="/" (click)="drawerOpen = false"
