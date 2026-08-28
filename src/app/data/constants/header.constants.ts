@@ -1,12 +1,12 @@
 export const DESKTOP_MENU_ITEMS = [
-    { label: 'Shop', url: '' },
+    { label: 'Shop', url: '/shop' },
     { label: 'About', url: '' },
     { label: 'Contact', url: '' },
     { label: 'FAQs', url: '' },
 ]
 
 export const MOBILE_MENU_ITEMS = [
-    { label: 'Shop', url: '' },
+    { label: 'Shop', url: '/shop' },
     { label: 'Categories', url: '/categories' },
     { label: 'About', url: '' },
     { label: 'Contact', url: '' },

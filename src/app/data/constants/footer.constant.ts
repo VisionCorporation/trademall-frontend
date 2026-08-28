@@ -2,7 +2,7 @@ export const FOOTER_LINKS = [
     {
         title: 'Marketplace',
         links: [
-            { label: 'All Products', url: '' },
+            { label: 'All Products', url: '/shop' },
             { label: 'Categories', url: '/categories' },
             { label: 'Best Sellers', url: '' },
             { label: 'New Arrivals', url: '' },
