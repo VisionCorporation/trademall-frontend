@@ -92,10 +92,20 @@ label {
 }
 
 input:focus,
-textarea:focus, select:focus {
+textarea:focus,
+select:focus {
   outline: none;
   box-shadow: 0 0 0 2px #2e790e5d;
   border-color: #2e790e9b;
+  transition:
+    border-color 0.24s ease-in-out,
+    box-shadow 0.24s ease-in-out;
+}
+
+.tranparent-header-search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #ffffff80;
+  border-color: #ffffff;
   transition:
     border-color 0.24s ease-in-out,
     box-shadow 0.24s ease-in-out;
