@@ -1,0 +1,1 @@
+export const POPULAR_SEARCHES = ["Bag", "Phone", "Shoe", "TV", "Laptop", "Monitor", "Mouse"]
