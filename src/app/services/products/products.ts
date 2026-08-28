@@ -43,4 +43,19 @@ export class Products {
   public getAllProducts(currentPage: number): Observable<ProductsResponse> {
     return this.http.get<ProductsResponse>(`${environment.apiBaseUrl}/products?page=${currentPage}`);
   }
+
+  public searchProduct(
+    query: string,
+    currentPage: number
+  ): Observable<ProductsResponse> {
+    return this.http.get<ProductsResponse>(
+      `${environment.apiBaseUrl}/products/search`,
+      {
+        params: {
+          q: query,
+          page: currentPage,
+        },
+      }
+    );
+  }
 }
