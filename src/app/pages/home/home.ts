@@ -6,7 +6,6 @@ import { Footer } from '../../shared/footer/footer';
 import { FeaturedCategories } from '../../shared/featured-categories/featured-categories';
 import { Products } from '../../services/products/products';
 import { ToastService } from '../../services/toast/toast.service';
-import { CurrencyPipe } from '@angular/common';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { COMMONQUESTIONS } from '../../data/constants/common-questions.constant';
@@ -14,6 +13,7 @@ import { slideDown } from '../../animations/expand.animation';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { CartState } from '../../services/cart/cart-state';
 import { ProductCard } from '../../shared/product-card/product-card';
+import { HeroCarousel } from '../hero-carousel/hero-carousel/hero-carousel';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +24,7 @@ import { ProductCard } from '../../shared/product-card/product-card';
     Footer,
     FeaturedCategories,
     SkeletonLoader,
-    ProductCard
+    ProductCard, HeroCarousel
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -45,9 +45,7 @@ export class Home {
 
   ngOnInit() {
     this.isFeaturedProductsLoading.set(true);
-
     this.cartState.loadCart();
-
     this.fetchFeaturedProducts();
   }
 
