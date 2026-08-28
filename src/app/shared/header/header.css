@@ -1,0 +1,7 @@
+.placeholder-transparent-header::placeholder {
+  color: rgba(255, 255, 255, 255);
+}
+
+.placeholder-solid-header::placeholder {
+  color: #9CA3AF;
+}

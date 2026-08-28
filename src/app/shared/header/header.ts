@@ -128,9 +128,7 @@ export class Header implements OnInit {
   @HostListener('window:scroll')
   onScroll() {
     if (this.transparent) {
-      const heroHeight = document.getElementById('vendor-hero')?.clientHeight ?? 320;
-      const headerHeight = this.header.nativeElement.offsetHeight;
-      this.isScrolled = window.scrollY > (heroHeight - headerHeight);
+      this.isScrolled = window.scrollY > 60;
     }
   }
 
