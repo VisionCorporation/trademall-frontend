@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
-import { HERO_SECTION_DATA } from '../../../data/constants/home.constant';
-import { HeroSlide } from '../../../interfaces/home.interface';
+import { HERO_SECTION_DATA } from '../../data/constants/home.constant';
+import { HeroSlide } from '../../interfaces/home.interface';
 
 @Component({
   selector: 'app-hero-carousel',
