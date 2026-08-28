@@ -1,4 +1,5 @@
-<div class="bg-[#F4F4F4] rounded-2xl shrink-0 snap-start w-52 sm:w-64 lg:w-70.75 cursor-pointer"
+<div
+  [class]="'bg-[#F4F4F4] rounded-2xl cursor-pointer ' + (layout === 'carousel' ? 'shrink-0 snap-start w-52 sm:w-64 lg:w-70.75' : 'w-full')"
   [routerLink]="['/products', product.slug]">
   <div class="relative rounded-2xl mt-1.25 mb-3.75 overflow-hidden group">
     <span
@@ -17,7 +18,7 @@
       class="w-[95%] mx-auto h-52 object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105" />
   </div>
   <div class="p-2.5 lg:p-3.75">
-   <p class="text-base leading-5 mb-3 line-clamp-2 min-h-10">{{ product.name }}</p>
+    <p class="text-base leading-5 mb-3 line-clamp-2 min-h-10">{{ product.name }}</p>
     <div class="flex items-center justify-between mt-0.5">
       <a class="text-[#2E790E] text-[13px] lg:text-[16px] hover:underline"
         [routerLink]="['/products/vendor', product.vendor]" (click)="$event.stopPropagation()">

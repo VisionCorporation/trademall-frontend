@@ -13,7 +13,7 @@ import { ProductCardInterface, ProductDetails } from '../../interfaces/products.
 })
 export class ProductCard {
   @Input() product!: ProductCardInterface | FeaturedProduct | ProductDetails
-
+  @Input() layout: 'grid' | 'carousel' = 'grid';
   public cartStateService = inject(CartState);
   public wishlistService = inject(Wishlist)
 }
