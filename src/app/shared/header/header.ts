@@ -18,10 +18,11 @@ import { CartResponse } from '../../interfaces/cart.interface';
 import { ClickOutside } from '../../directives/click-outside/click-outside';
 import { CUSTOMER_DROPDOWN, DESKTOP_MENU_ITEMS, MOBILE_MENU_ITEMS, PROFILE_MENU_ITEMS, VENDOR_DROPDOWN } from '../../data/constants/header.constants';
 import { HeaderSection } from '../../interfaces/header.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, ClickOutside],
+  imports: [RouterLink, ClickOutside, FormsModule],
   templateUrl: './header.html',
   styleUrl: './header.css',
   animations: [fadeInOutAnimation],
@@ -40,6 +41,7 @@ export class Header implements OnInit {
   public vendorDropdown: HeaderSection[] = VENDOR_DROPDOWN;
   @Input() transparent = false;
   public isScrolled = false;
+  public searchQuery = '';
   public isModalOpen = signal(false);
   public isModalVisible = false;
   public isMenuOpen = signal(false)
@@ -169,5 +171,21 @@ export class Header implements OnInit {
 
   public toggleProfileMenu(): void {
     this.isProfileMenuOpen = !this.isProfileMenuOpen;
+  }
+
+  public onSearchSubmit(query: string): void {
+    const searchTerm = query.trim();
+
+    if (searchTerm.length < 2) {
+      this.toastService.error("Search query must be at least 2 characters")
+      return
+    }
+    this.router.navigate(['/shop'], {
+      queryParams: { q: searchTerm }
+    });
+
+    this.searchQuery = ''
+
+    this.closeModal();
   }
 }

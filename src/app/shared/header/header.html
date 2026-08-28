@@ -36,7 +36,7 @@
     </nav>
 
     <div class="flex items-center gap-8 mr-4 lg:mr-0">
-      <form>
+      <form (ngSubmit)="onSearchSubmit(searchQuery)">
         <div class="hidden lg:block relative">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
             [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#9CA3AF'" stroke-width="2" stroke-linecap="round"
@@ -45,8 +45,8 @@
             <path d="m21 21-4.34-4.34" />
             <circle cx="11" cy="11" r="8" />
           </svg>
-          <input type="text" placeholder="Search products..."
-            [class]="'w-75 pl-10 pr-4 py-2 border-2 rounded-lg transition-all text-sm placeholder:text-[15px] ' + (transparent && !isScrolled ? 'border-white/40 bg-white/10 text-white placeholder-transparent-header' : 'border-gray-300 bg-white text-[#171717] placeholder-solid-header')" />
+          <input type="text" name="search" autocomplete="off" [(ngModel)]="searchQuery" placeholder="Search products..."
+            [class]="'w-75 pl-10 pr-4 py-2 border-2 rounded-lg transition-all text-sm placeholder:text-[15px] ' + (transparent && !isScrolled ? 'border-white/40 bg-white/10 input-tranparent-header tranparent-header-search-input placeholder-transparent-header' : 'border-gray-300 bg-white input-solid-header placeholder-solid-header')" />
         </div>
       </form>
 
@@ -266,9 +266,9 @@
         </svg>
       </div>
     </div>
-    <form class="relative">
-      <input #searchInput type="text" placeholder="Search for products..."
-        class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg" />
+    <form (ngSubmit)="onSearchSubmit(searchQuery)" class="relative">
+      <input #searchInput type="text" name="search" autocomplete="off" [(ngModel)]="searchQuery"
+        placeholder="Search for products..." class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg" />
 
       <button type="submit"
         class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center text-emerald-700 hover:text-emerald-900">

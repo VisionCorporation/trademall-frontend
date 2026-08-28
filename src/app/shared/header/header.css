@@ -5,3 +5,11 @@
 .placeholder-solid-header::placeholder {
   color: #9CA3AF;
 }
+
+.input-tranparent-header {
+  color: rgba(255, 255, 255, 255);
+}
+
+.input-solid-header {
+  color: #171717;
+}
