@@ -1,6 +1,42 @@
 <section class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 mt-20 lg:mt-24 mb-20">
     <app-header />
-    <h1 class="text-[30px] sm:text-[40px] mb-8">Shop</h1>
+
+    @if (searchValidationError()) {
+    <div class="flex flex-col items-center justify-center pt-40 pb-30 text-center max-w-lg mx-auto">
+        <div class="w-30 sm:w-40 h-30 sm:h-40 rounded-full bg-red-50 flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none"
+                stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+                <path d="M11 8v4"></path>
+                <path d="M11 16h.01"></path>
+            </svg>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] mb-3 products-font">
+            Search Query Too Short
+        </h2>
+
+        <p class="text-[#374151] text-base sm:text-lg leading-relaxed mb-6">
+            Please enter at least 2 characters to search for products.
+        </p>
+
+        <div class="px-5 py-4 text-sm text-[#4B5563]">
+            Try searching for:
+            <span class="font-medium">Phone</span>,
+            <span class="font-medium">Laptop</span>,
+            <span class="font-medium">Shoe</span>,
+            <span class="font-medium">Bags</span> etc.
+        </div>
+    </div>
+    }
+
+    @if(searchQuery){
+    <h1 class="text-[30px] sm:text-[40px] mb-8 products-font italic">Search Results for <span>"{{searchQuery}}"</span>
+    </h1>
+    }@else if(!searchQuery && !searchValidationError()) {
+    <h1 class="text-[30px] sm:text-[40px] mb-8 products-font italic">All Products</h1>
+    }
 
     @if (isLoading()) {
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
@@ -33,7 +69,7 @@
     </div>
     }
 
-    @if (hasError()) {
+    @if (hasError() && products().length > 0) {
     <div class="flex flex-col items-center gap-3 py-8">
         <p class="text-red-500">Failed to load more products.</p>
         <button (click)="retryLoad()"
@@ -43,7 +79,7 @@
     </div>
     }
 
-    @if (!hasMore) {
+    @if (!hasMore && products().length > 0) {
     <p class="text-center text-[#374151] py-12">
         That's all for now. Check back soon for new arrivals!
     </p>

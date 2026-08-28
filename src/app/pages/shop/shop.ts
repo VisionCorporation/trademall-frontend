@@ -7,6 +7,7 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Newsletter } from '../../shared/newsletter/newsletter';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-shop',
@@ -17,7 +18,9 @@ import { Newsletter } from '../../shared/newsletter/newsletter';
 export class Shop implements OnInit, OnDestroy {
   private readonly productsService = inject(ProductsService);
   private readonly toastService = inject(ToastService);
-
+  private readonly route = inject(ActivatedRoute);
+  public searchValidationError = signal(false);
+  public searchQuery: string | null = null;
   public products = signal<Product[]>([]);
   public currentPage = signal(1);
   public totalPages = signal(1);
@@ -34,7 +37,19 @@ export class Shop implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadProducts(1);
+    this.route.queryParams.subscribe((params) => {
+      this.searchQuery = params['q']?.trim() ?? null;
+
+      if (this.searchQuery && this.searchQuery.length < 2) {
+        this.searchValidationError.set(true);
+        this.products.set([]);
+        this.searchQuery = ""
+        return;
+      }
+
+      this.searchValidationError.set(false);
+      this.loadProducts(1);
+    });
   }
 
   ngOnDestroy(): void {
@@ -56,11 +71,18 @@ export class Shop implements OnInit, OnDestroy {
   }
 
   private loadProducts(page: number): void {
+    const query = this.searchQuery?.trim() ?? '';
+
+    const request$ = query
+      ? this.productsService.searchProduct(query, page)
+      : this.productsService.getAllProducts(page);
+
     const isFirstPage = page === 1;
     isFirstPage ? this.isLoading.set(true) : this.isLoadingMore.set(true);
     this.hasError.set(false);
 
-    this.productsService.getAllProducts(page).subscribe({
+
+    request$.subscribe({
       next: (res) => {
         this.products.set(isFirstPage ? res.data : [...this.products(), ...res.data]);
         this.currentPage.set(res.pagination.currentPage);
