@@ -13,7 +13,7 @@ import { slideDown } from '../../animations/expand.animation';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { CartState } from '../../services/cart/cart-state';
 import { ProductCard } from '../../shared/product-card/product-card';
-import { HeroCarousel } from '../hero-carousel/hero-carousel/hero-carousel';
+import { HeroCarousel } from '../hero-carousel/hero-carousel';
 
 @Component({
   selector: 'app-home',
