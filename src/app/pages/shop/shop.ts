@@ -1,0 +1,89 @@
+import { Component, ElementRef, OnInit, OnDestroy, ViewChild, inject, signal } from '@angular/core';
+import { Products as ProductsService } from '../../services/products/products';
+import { ToastService } from '../../services/toast/toast.service';
+import { ProductCard } from '../../shared/product-card/product-card';
+import { Product } from '../../interfaces/all-products.interface';
+import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
+import { Header } from '../../shared/header/header';
+import { Footer } from '../../shared/footer/footer';
+import { Newsletter } from '../../shared/newsletter/newsletter';
+
+@Component({
+  selector: 'app-shop',
+  imports: [ProductCard, SkeletonLoader, Header, Footer, Newsletter],
+  templateUrl: './shop.html',
+  styleUrl: './shop.css',
+})
+export class Shop implements OnInit, OnDestroy {
+  private readonly productsService = inject(ProductsService);
+  private readonly toastService = inject(ToastService);
+
+  public products = signal<Product[]>([]);
+  public currentPage = signal(1);
+  public totalPages = signal(1);
+  public isLoading = signal(false);
+  public isLoadingMore = signal(false);
+  public hasError = signal(false);
+  public totalResults = signal(0);
+
+  @ViewChild('scrollSentinel') scrollSentinel!: ElementRef<HTMLDivElement>;
+  private observer?: IntersectionObserver;
+
+  public get hasMore(): boolean {
+    return this.currentPage() < this.totalPages();
+  }
+
+  ngOnInit(): void {
+    this.loadProducts(1);
+  }
+
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
+  }
+
+  private setupObserver(): void {
+    if (this.observer || !this.scrollSentinel) return;
+
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && this.hasMore && !this.isLoadingMore() && !this.isLoading()) {
+          setTimeout(() => this.loadProducts(this.currentPage() + 1));
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    this.observer.observe(this.scrollSentinel.nativeElement);
+  }
+
+  private loadProducts(page: number): void {
+    const isFirstPage = page === 1;
+    isFirstPage ? this.isLoading.set(true) : this.isLoadingMore.set(true);
+    this.hasError.set(false);
+
+    this.productsService.getAllProducts(page).subscribe({
+      next: (res) => {
+        this.products.set(isFirstPage ? res.data : [...this.products(), ...res.data]);
+        this.currentPage.set(res.pagination.currentPage);
+        this.totalPages.set(res.pagination.totalPages);
+        this.totalResults.set(res.pagination.totalResults);
+        isFirstPage ? this.isLoading.set(false) : this.isLoadingMore.set(false);
+
+        if (isFirstPage) {
+          setTimeout(() => this.setupObserver());
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load products', err);
+        this.hasError.set(true);
+        isFirstPage ? this.isLoading.set(false) : this.isLoadingMore.set(false);
+        if (!isFirstPage) {
+          this.toastService.error('Failed to load more products');
+        }
+      },
+    });
+  }
+
+  public retryLoad(): void {
+    this.loadProducts(this.currentPage() === 1 ? 1 : this.currentPage());
+  }
+}

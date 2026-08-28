@@ -1,0 +1,55 @@
+<section class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 mt-20 lg:mt-24 mb-20">
+    <app-header />
+    <h1 class="text-[30px] sm:text-[40px] mb-8">Shop</h1>
+
+    @if (isLoading()) {
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
+        <app-skeleton-loader skeletonType="product" />
+    </div>
+    } @else if (hasError() && products.length === 0) {
+    <div class="flex flex-col items-center gap-3 py-16">
+        <p class="text-lg text-red-500">Failed to load products.</p>
+        <button (click)="retryLoad()"
+            class="bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-4 py-2 text-white rounded-lg">
+            Try Again
+        </button>
+    </div>
+    } @else {
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
+        @for (product of products(); track product._id) {
+        <app-product-card [product]="product" />
+        }
+    </div>
+
+    <div #scrollSentinel class="h-1"></div>
+
+    @if (isLoadingMore()) {
+    <div class="flex flex-col items-center justify-center py-8">
+        <svg class="animate-spin" width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#374151" stroke-width="2" stroke-dasharray="32"
+                stroke-dashoffset="12" />
+        </svg>
+        <span class="text-[#374151] py-1">Loading more...</span>
+    </div>
+    }
+
+    @if (hasError()) {
+    <div class="flex flex-col items-center gap-3 py-8">
+        <p class="text-red-500">Failed to load more products.</p>
+        <button (click)="retryLoad()"
+            class="border border-[#171717] hover:bg-[#171717] hover:text-white transition-colors duration-200 px-4 py-2 rounded-lg text-sm">
+            Try Again
+        </button>
+    </div>
+    }
+
+    @if (!hasMore) {
+    <p class="text-center text-[#374151] py-12">
+        That's all for now. Check back soon for new arrivals!
+    </p>
+    }
+    }
+
+    <app-newsletter />
+</section>
+<app-footer />
