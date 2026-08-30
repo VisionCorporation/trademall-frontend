@@ -69,4 +69,8 @@ export class Categories implements OnInit {
     this.fetchCategories(pageNumber);
     this.currentPage = pageNumber;
   }
+
+  public getSearchValue(value: Event) {
+    console.log(value)
+  }
 }

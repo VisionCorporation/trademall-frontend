@@ -1,76 +1,78 @@
 <div class="max-w-310 mx-auto pt-20 md:pt-24">
   <app-header />
-  <app-search-bar placeholder="Search categories..." />
+  <main>
+    <app-search-bar placeholder="Search categories..." (searchValue)="getSearchValue($any($event))" />
 
-  @if (categories.length > 0 && !isLoading()) {
-  <div class="px-5 md:px-12 2xl:px-0 mt-10 sm:mt-14">
-    <h2 class="text-[30px] sm:text-[40px] lg:text-[60px] text-left">
-      Shop by Category
-    </h2>
-    <p class="text-base sm:text-[18px] text-left text-[#374151] mb-10">
-      Explore our wide range of categories and find exactly what you're looking for.
-    </p>
-  </div>
+    @if (categories.length > 0 && !isLoading()) {
+    <div class="px-5 md:px-12 2xl:px-0 mt-10 sm:mt-14">
+      <h1 class="text-[30px] sm:text-[40px] lg:text-[60px] text-left">
+        Shop by Category
+      </h1>
+      <p class="text-base sm:text-[18px] text-left text-[#374151] mb-10">
+        Explore our wide range of categories and find exactly what you're looking for.
+      </p>
+    </div>
 
-  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-5 md:px-12 2xl:px-0 mb-15"
-    [@staggerProducts]="categories.length">
-    @for (category of categories; track category._id) {
-    <a [routerLink]="['/categories', category.slug]"
-      class="relative w-full rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col overflow-hidden group">
-      <img [ngSrc]="category.image ?? ''" fill alt="{{ category.name }}"
-        class="object-cover object-center rounded-2xl transition-transform duration-500 group-hover:scale-110"
-        priority />
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-5 md:px-12 2xl:px-0 mb-15"
+      [@staggerProducts]="categories.length">
+      @for (category of categories; track category._id) {
+      <a [routerLink]="['/categories', category.slug]"
+        class="relative w-full rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col overflow-hidden group">
+        <img [ngSrc]="category.image ?? ''" fill alt="{{ category.name }}"
+          class="object-cover object-center rounded-2xl transition-transform duration-500 group-hover:scale-110"
+          priority />
 
-      <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"></div>
+        <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"></div>
 
-      <div class="relative z-10 flex flex-col items-start h-full">
-        <h1 class="text-[26px] sm:text-4xl light-header mb-3.75">{{ category.name }}</h1>
-        <p class="text-[15px] mb-6.25">{{ category.description }}</p>
-        <a class="text-[20px] bg-white hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-[#171717] rounded-lg"
-          [routerLink]="['/categories', category.slug]">
-          Explore
-        </a>
-      </div>
-    </a>
-    }
-  </section>
+        <div class="relative z-10 flex flex-col items-start h-full">
+          <h2 class="text-[26px] sm:text-4xl light-header mb-3.75">{{ category.name }}</h2>
+          <p class="text-[15px] mb-6.25">{{ category.description }}</p>
+          <a class="text-[20px] bg-white hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-[#171717] rounded-lg"
+            [routerLink]="['/categories', category.slug]">
+            Explore
+          </a>
+        </div>
+      </a>
+      }
+    </section>
 
-  <div class="flex items-center justify-center mb-37.5 gap-3.75 flex-wrap">
-    <button [disabled]="currentPage <= 1" [class.cursor-not-allowed]="currentPage <= 1"
-      class="flex items-center justify-center gap-1.25 border border-[#171717] px-3.5 py-2 rounded-lg text-xl hover:bg-[#171717] hover:text-white transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent disabled:hover:text-[#171717]"
-      (click)="goToPreviousCategories()">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" stroke="currentColor" stroke-width="1.5"
-          stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-      <span class="hidden sm:inline">Previous</span>
-    </button>
+    <div class="flex items-center justify-center mb-37.5 gap-3.75 flex-wrap">
+      <button [disabled]="currentPage <= 1" [class.cursor-not-allowed]="currentPage <= 1"
+        class="flex items-center justify-center gap-1.25 border border-[#171717] text-[15px] sm:text-[16px] px-4 py-3.5 rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent disabled:hover:text-[#171717]"
+        (click)="goToPreviousCategories()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span class="hidden sm:inline">Previous</span>
+      </button>
 
-    <div class="flex items-center justify-center gap-2 flex-wrap">
-      @for (page of totalPagesArray; track $index) {
-      <span class="text-[18px] rounded-sm flex items-center justify-center w-10.25 h-10.25 py-2.75 px-4.25 border"
-        [class]="
+      <div class="flex items-center justify-center gap-2 flex-wrap">
+        @for (page of totalPagesArray; track $index) {
+        <span class="text-[18px] rounded-sm flex items-center justify-center w-10.25 h-10.25 py-2.75 px-4.25 border"
+          [class]="
               page === currentPage
                 ? 'bg-[#E4FFDA] border-[#E4FFDA] text-[#26C34D] cursor-not-allowed pointer-events-none'
                 : 'border-[#A8A8A8] text-[#A8A8A8] cursor-pointer'
             " (click)="goToPage(page)">{{ page }}</span>
-      }
-    </div>
+        }
+      </div>
 
-    <button [disabled]="currentPage >= totalPages" [class.cursor-not-allowed]="currentPage >= totalPages"
-      class="flex items-center justify-center gap-1.25 border border-[#171717] px-3.5 py-2 rounded-lg text-xl hover:bg-[#171717] hover:text-white transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent disabled:hover:text-[#171717]"
-      (click)="goToNextCategories()">
-      <span class="hidden sm:inline">Next</span>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M9 18L14.2929 12.7071C14.6262 12.3738 14.7929 12.2071 14.7929 12C14.7929 11.7929 14.6262 11.6262 14.2929 11.2929L9 6"
-          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </button>
-  </div>
-  } @else if (isLoading()) {
-  <app-skeleton-loader skeletonType="categories" />
-  }
+      <button [disabled]="currentPage >= totalPages" [class.cursor-not-allowed]="currentPage >= totalPages"
+        class="flex items-center justify-center gap-1.25 border border-[#171717] text-[15px] sm:text-[16px] px-4 py-3.5 rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent disabled:hover:text-[#171717]"
+        (click)="goToNextCategories()">
+        <span class="hidden sm:inline">Next</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M9 18L14.2929 12.7071C14.6262 12.3738 14.7929 12.2071 14.7929 12C14.7929 11.7929 14.6262 11.6262 14.2929 11.2929L9 6"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+    } @else if (isLoading()) {
+    <app-skeleton-loader skeletonType="categories" />
+    }
+  </main>
 </div>
 
 <app-newsletter />

@@ -21,7 +21,8 @@
     <p class="text-base leading-5 mb-3 line-clamp-2 min-h-10">{{ product.name }}</p>
     <div class="flex items-center justify-between mt-0.5">
       <a class="text-[#2E790E] text-[13px] lg:text-[16px] hover:underline"
-        [routerLink]="['/products/vendor', product.vendor]" (click)="$event.stopPropagation()">
+        [routerLink]="['/products/vendor', product.vendor]" (click)="$event.stopPropagation()"
+        [attr.aria-label]="'Visit ' + product.store.name + ' store'">
         {{ product.store.name }}
       </a>
       <span class="text-lg">{{
