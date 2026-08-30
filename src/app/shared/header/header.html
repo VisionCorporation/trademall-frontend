@@ -14,9 +14,12 @@
         </svg>
       </button>
 
-      <a routerLink="/"
-        [class]="'logo text-[25px] sm:text-[32px] transition-colors duration-300 w-fit ' + (transparent && !isScrolled ? 'text-white' : 'text-[#171717]')">
-        trademall
+      <a routerLink="/">
+        @if(transparent && !isScrolled){
+        <img ngSrc="assets/images/logo-white.png" width="100" height="100" priority alt="logo" class="lg:w-35" />
+        }@else{
+        <img ngSrc="assets/images/logo-black.png" width="100" height="100" priority alt="logo" class="lg:w-35" />
+        }
       </a>
     </div>
 
@@ -25,7 +28,7 @@
         @for(desktopMenuItem of desktopMenuItems; track desktopMenuItem.label){
         <li class="px-3.5 py-2">
           <a [routerLink]="desktopMenuItem.url"
-            [class]="'relative inline-block text-[17px] transition-colors duration-300 group hover:text-[#171717] ' + (transparent && !isScrolled ? 'text-white' : 'text-[#374151]')">
+            [class]="'relative inline-block text-[17px] transition-colors duration-300 group ' + (transparent && !isScrolled ? 'text-white hover:text-[#ffffff]' : 'text-[#374151] hover:text-[#374151]')">
             {{desktopMenuItem.label}}
             <span
               [class]="'absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 w-0 group-hover:w-full transition-all duration-300 ease-out ' + (transparent && !isScrolled ? 'bg-white' : 'bg-[#374151]')"></span>
@@ -146,8 +149,8 @@
   [class.translate-x-0]="isMenuOpen()">
 
   <div class="flex items-center justify-between mb-5 px-3.5">
-    <a routerLink="/" (click)="closeMenu()" class="logo text-[25px] transition-colors duration-300 w-fit leading-8">
-      trademall
+    <a routerLink="/" (click)="closeMenu()">
+      <img ngSrc="assets/images/logo-black.png" width="100" height="100" priority alt="logo" class="lg:w-35" />
     </a>
 
     <button (click)="closeMenu()"
