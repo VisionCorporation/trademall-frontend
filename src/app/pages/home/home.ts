@@ -14,6 +14,7 @@ import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { CartState } from '../../services/cart/cart-state';
 import { ProductCard } from '../../shared/product-card/product-card';
 import { HeroCarousel } from '../hero-carousel/hero-carousel';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,7 @@ import { HeroCarousel } from '../hero-carousel/hero-carousel';
     Footer,
     FeaturedCategories,
     SkeletonLoader,
-    ProductCard, HeroCarousel
+    ProductCard, HeroCarousel, NgOptimizedImage
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',

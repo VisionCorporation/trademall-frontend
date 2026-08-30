@@ -3,11 +3,11 @@
   <div class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex items-center justify-between">
 
     <div class="flex items-center gap-4">
-      <button (click)="openMenu()"
+      <button (click)="openMenu()" aria-label="Open menu"
         class="lg:hidden p-1.5 -ml-1.5 rounded-lg transition-colors duration-150 text-gray-700 hover:text-gray-900">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
           [attr.stroke]="transparent && !isScrolled ? '#ffffff' : '#374151'" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round" class="lucide lucide-menu-icon lucide-menu">
+          stroke-linejoin="round" class="lucide lucide-menu-icon lucide-menu" aria-hidden="true">
           <path d="M4 5h16" />
           <path d="M4 12h16" />
           <path d="M4 19h16" />
@@ -153,11 +153,11 @@
       <img ngSrc="assets/images/logo-black.png" width="100" height="100" priority alt="logo" class="lg:w-35" />
     </a>
 
-    <button (click)="closeMenu()"
+    <button (click)="closeMenu()" aria-label="Close menu"
       class="transition-colors duration-150 text-gray-700 hover:text-gray-900 cursor-pointer">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="lucide lucide-x-icon lucide-x">
+        class="lucide lucide-x-icon lucide-x" aria-hidden="true">
         <path d="M18 6 6 18" />
         <path d="m6 6 12 12" />
       </svg>

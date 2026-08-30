@@ -38,12 +38,12 @@
     </div>
 
     <div class="lg:hidden w-full mt-10 flex justify-center">
-      <img src="assets/images/vendor-section-image.jpg" alt="Woman shopping online"
+      <img ngSrc="assets/images/vendor-section-image.jpg" alt="Woman shopping online" width="800" height="800"
         class="w-full rounded-[20px] object-cover shadow-lg" />
     </div>
 
     <div class="hidden lg:block absolute right-30 top-37.5 bottom-0">
-      <img src="assets/images/vendor-section-image.jpg" alt="Woman shopping online"
+      <img ngSrc="assets/images/vendor-section-image.jpg" alt="Woman shopping online" width="468" height="470"
         class="w-117 h-117.5 object-cover object-center rounded-[20px] rotate-13 shadow-2xl" />
     </div>
   </div>
@@ -103,14 +103,15 @@
           class="transition-all duration-300 light-header text-[#1E1E1E] leading-tight">
           {{ question.question }}
         </h3>
-        <button class="shrink-0 ml-4">
+        <button class="shrink-0 ml-4" [attr.aria-expanded]="openQuestion === question.question"
+          [attr.aria-label]="(openQuestion === question.question ? 'Collapse' : 'Expand') + ' ' + question.question">
           @if (openQuestion === question.question) {
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M15.8337 4.16656L4.16705 15.8332M4.16705 4.16656L15.8337 15.8332" stroke="#1E1E1E"
               stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
           } @else {
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M9.99998 3.33333V16.6667M16.6666 10H3.33331" stroke="#1E1E1E" stroke-width="1.5"
               stroke-linecap="round" stroke-linejoin="round" />
           </svg>

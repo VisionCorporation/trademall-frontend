@@ -55,12 +55,21 @@
         </svg>
     </button>
 
-    <div class="absolute z-20 bottom-30 left-1/2 -translate-x-1/2 flex items-center gap-2">
-        @for (slide of slides; track slide.title; let i = $index) {
-        <button (click)="goTo(i)" class="h-2 rounded-full transition-all duration-300 cursor-pointer"
-            [class]="currentIndex === i ? 'w-8 bg-white' : 'w-2 bg-white/50 hover:bg-white/75'"
-            [attr.aria-label]="'Go to slide ' + (i + 1)">
-        </button>
-        }
-    </div>
+    <div class="absolute z-20 bottom-30 left-1/2 -translate-x-1/2 flex items-center  -space-x-2">
+  @for (slide of slides; track slide.title; let i = $index) {
+    <button
+      (click)="goTo(i)"
+      class="flex items-center justify-center w-12 h-12 cursor-pointer"
+      [attr.aria-label]="'Go to slide ' + (i + 1)"
+    >
+      <span
+        class="h-2 rounded-full transition-all duration-300"
+        [class]="currentIndex === i
+          ? 'w-8 bg-white'
+          : 'w-2 bg-white/50 hover:bg-white/75'"
+      >
+      </span>
+    </button>
+  }
+</div>
 </section>
