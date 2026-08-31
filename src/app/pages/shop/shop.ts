@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, OnDestroy, ViewChild, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, ViewChild, inject, signal, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Products as ProductsService } from '../../services/products/products';
 import { ToastService } from '../../services/toast/toast.service';
 import { ProductCard } from '../../shared/product-card/product-card';
@@ -17,6 +18,7 @@ import { POPULAR_SEARCHES } from '../../data/constants/shop.constant';
   styleUrl: './shop.css',
 })
 export class Shop implements OnInit, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
   private readonly productsService = inject(ProductsService);
   private readonly toastService = inject(ToastService);
   private readonly route = inject(ActivatedRoute);
@@ -60,6 +62,7 @@ export class Shop implements OnInit, OnDestroy {
   }
 
   private setupObserver(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     if (this.observer || !this.scrollSentinel) return;
 
     this.observer = new IntersectionObserver(
