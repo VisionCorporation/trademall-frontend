@@ -1,16 +1,18 @@
 {
   "buildCommand": "npm run build",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "https://trademall-backend.onrender.com/api/v1/$1"
+      "source": "/api/(.*)",
+      "destination": "https://trademall-backend.onrender.com/api/v1/$1"
     },
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/api"
     }
-  ]
+  ],
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "dist/trademall/**"
+    }
+  }
 }
