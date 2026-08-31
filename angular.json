@@ -27,7 +27,9 @@
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": []
+              "allowedHosts": [
+                "trademall-frontend.vercel.app"
+              ]
             },
             "ssr": {
               "entry": "src/server.ts"
