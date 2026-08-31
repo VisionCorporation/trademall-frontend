@@ -1,16 +1,17 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { timer } from 'rxjs';
 import { map, takeWhile, shareReplay } from 'rxjs/operators';
-import { SignupService } from '../signup/signup.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CountdownTimerService {
-  private readonly signupService = inject(SignupService);
+  private readonly platformId = inject(PLATFORM_ID);
+
   public start(key: string, durationInSeconds: number) {
     const now = Date.now();
-    const storedExpiry = localStorage.getItem(key);
+    const storedExpiry = isPlatformBrowser(this.platformId) ? localStorage.getItem(key) : null;
 
     let expiryTime: number;
 
@@ -18,7 +19,9 @@ export class CountdownTimerService {
       expiryTime = parseInt(storedExpiry, 10);
     } else {
       expiryTime = now + durationInSeconds * 1000;
-      localStorage.setItem(key, expiryTime.toString());
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem(key, expiryTime.toString());
+      }
     }
 
     const timer$ = timer(0, 1000).pipe(
@@ -33,7 +36,9 @@ export class CountdownTimerService {
   }
 
   public clear(key: string): void {
-    localStorage.removeItem(key);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(key);
+    }
   }
 
   private formatTime(seconds: number): string {

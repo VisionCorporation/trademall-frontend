@@ -1,11 +1,12 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { LoginData } from '../../interfaces/login.interface';
 import { ToastService } from '../../services/toast/toast.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import { ToastService } from '../../services/toast/toast.service';
   styleUrl: './login.css',
 })
 export class Login {
+  private readonly platformId = inject(PLATFORM_ID);
   private readonly fb = inject(FormBuilder);
   public readonly signupService = inject(SignupService);
   private readonly loginService = inject(LoginService);
@@ -42,11 +44,14 @@ export class Login {
   }
 
   private hasVisitedVendorApplicationStatus(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
     return localStorage.getItem(this.vendorApplicationStatusVisitedKey) === 'true';
   }
 
   private markVendorApplicationStatusVisited(): void {
-    localStorage.setItem(this.vendorApplicationStatusVisitedKey, 'true');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.vendorApplicationStatusVisitedKey, 'true');
+    }
   }
 
   public onSubmit(): void {
