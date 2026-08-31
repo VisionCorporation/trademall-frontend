@@ -4,11 +4,10 @@ import { NAV_ITEMS, ROUTE_TITLE_MAP } from '../../data/constants/vendor-dashbaor
 import { LoginService } from '../../services/login/login.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { filter, map } from 'rxjs';
-import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-vendor-dashboard',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, NgOptimizedImage],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './vendor-dashboard.html',
   styleUrl: './vendor-dashboard.css',
 })
