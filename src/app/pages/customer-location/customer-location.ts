@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Address } from '../../services/address/address';
@@ -9,6 +9,7 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { finalize } from 'rxjs';
 import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
 import { REGIONS } from '../../data/constants/address.constant';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-customer-location',
@@ -17,6 +18,7 @@ import { REGIONS } from '../../data/constants/address.constant';
   styleUrl: './customer-location.css',
 })
 export class CustomerLocation {
+  private platformId = inject(PLATFORM_ID);
   private readonly addressService = inject(Address);
   private readonly toastService = inject(ToastService);
   private readonly DEFAULT_PHONE_PREFIX = '+233 ';
@@ -180,10 +182,12 @@ export class CustomerLocation {
   }
 
   private scrollToTop(): void {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
   }
 
   public onPhoneInput(event: Event): void {

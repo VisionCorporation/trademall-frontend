@@ -7,6 +7,7 @@ import {
   ElementRef,
   OnInit,
   AfterViewInit,
+  PLATFORM_ID,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -19,6 +20,7 @@ import { ToastService } from '../../services/toast/toast.service';
 import { environment } from '../../../environments/environment';
 import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
 import { otpControls, steps } from '../../data/constants/signup.constant';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-customer-signup',
@@ -27,6 +29,7 @@ import { otpControls, steps } from '../../data/constants/signup.constant';
   styleUrl: './customer-signup.css',
 })
 export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
+  private platformId = inject(PLATFORM_ID);
   public signupService = inject(SignupService);
   private toastService = inject(ToastService);
   private subscription = new Subscription();
@@ -132,7 +135,9 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
     if (this.signupService.signingWithGoogle$.value) return;
 
     this.signupService.signingWithGoogle$.next(true);
-    window.location.href = `${environment.apiBaseUrl}/user/google`;
+    if (isPlatformBrowser(this.platformId)) {
+      window.location.href = `${environment.apiBaseUrl}/user/google`;
+    }
   }
 
   public registerCustomer(): void {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Products } from '../../services/products/products';
@@ -10,6 +10,7 @@ import { Newsletter } from '../../shared/newsletter/newsletter';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { NgOptimizedImage } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-categories',
@@ -25,6 +26,7 @@ export class Categories implements OnInit {
   public isLoading = signal(true);
   public currentPage = 1;
   public totalPagesArray: number[] = [];
+  private platformId = inject(PLATFORM_ID);
 
   ngOnInit() {
     this.fetchCategories(this.currentPage);
@@ -48,7 +50,10 @@ export class Categories implements OnInit {
   public goToPreviousCategories(): void {
     if (this.currentPage <= 1) return;
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     this.isLoading.set(true);
     this.currentPage--;
     this.fetchCategories(this.currentPage);
@@ -57,14 +62,20 @@ export class Categories implements OnInit {
   public goToNextCategories(): void {
     if (this.currentPage >= this.totalPages) return;
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     this.isLoading.set(true);
     this.currentPage++;
     this.fetchCategories(this.currentPage);
   }
 
   public goToPage(pageNumber: number) {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
     this.isLoading.set(true);
     this.fetchCategories(pageNumber);
     this.currentPage = pageNumber;

@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, inject, PLATFORM_ID, QueryList, ViewChildren } from '@angular/core';
 import { SignupService } from '../../services/signup/signup.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { Observable, Subscription } from 'rxjs';
@@ -14,6 +14,7 @@ import { environment } from '../../../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-vendor-signup',
@@ -22,6 +23,7 @@ import { InputErrorMessage } from '../../shared/input-error-message/input-error-
   styleUrl: './vendor-signup.css',
 })
 export class VendorSignup {
+  private platformId = inject(PLATFORM_ID);
   public signupService = inject(SignupService);
   private toastService = inject(ToastService);
   private subscription = new Subscription();
@@ -127,7 +129,9 @@ export class VendorSignup {
     if (this.signupService.signingWithGoogle$.value) return;
 
     this.signupService.signingWithGoogle$.next(true);
-    window.location.href = `${environment.apiBaseUrl}/user/google`;
+    if (isPlatformBrowser(this.platformId)) {
+      window.location.href = `${environment.apiBaseUrl}/user/google`;
+    }
   }
 
   public onProceed() {
