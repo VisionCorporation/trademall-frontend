@@ -34,6 +34,6 @@ export const appConfig: ApplicationConfig = {
       }),
       withPreloading(PreloadAllModules),
     ),
-    provideAnimations(), provideClientHydration(withEventReplay()),
+    provideAnimations(),
   ],
 };
