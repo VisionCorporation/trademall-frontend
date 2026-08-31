@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "node generate-env.js && ng build --configuration production",
+    "start": "node -r dotenv/config ./node_modules/@angular/cli/bin/ng.js serve",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "serve:ssr:trademall": "node dist/trademall/server/server.mjs"
   },
   "prettier": {
     "printWidth": 100,
@@ -28,8 +29,11 @@
     "@angular/core": "20.3.19",
     "@angular/forms": "20.3.19",
     "@angular/platform-browser": "20.3.19",
+    "@angular/platform-server": "20.3.19",
     "@angular/router": "20.3.19",
+    "@angular/ssr": "^20.3.19",
     "@tailwindcss/postcss": "^4.1.18",
+    "express": "^5.1.0",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.18",
@@ -39,7 +43,10 @@
     "@angular/build": "20.3.19",
     "@angular/cli": "20.3.19",
     "@angular/compiler-cli": "20.3.19",
+    "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.17.19",
+    "dotenv": "^17.4.2",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
