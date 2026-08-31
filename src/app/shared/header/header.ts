@@ -8,6 +8,7 @@ import {
   ChangeDetectorRef,
   Input,
   signal,
+  PLATFORM_ID,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
@@ -19,16 +20,17 @@ import { ClickOutside } from '../../directives/click-outside/click-outside';
 import { CUSTOMER_DROPDOWN, DESKTOP_MENU_ITEMS, MOBILE_MENU_ITEMS, PROFILE_MENU_ITEMS, VENDOR_DROPDOWN } from '../../data/constants/header.constants';
 import { HeaderSection } from '../../interfaces/header.interface';
 import { FormsModule } from '@angular/forms';
-import { NgOptimizedImage } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, ClickOutside, FormsModule, NgOptimizedImage],
+  imports: [RouterLink, ClickOutside, FormsModule],
   templateUrl: './header.html',
   styleUrl: './header.css',
   animations: [fadeInOutAnimation],
 })
 export class Header implements OnInit {
+  private platformId = inject(PLATFORM_ID);
   private readonly loginService = inject(LoginService);
   private readonly cartService = inject(CartService);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -130,11 +132,12 @@ export class Header implements OnInit {
 
   @HostListener('window:scroll')
   onScroll() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     if (this.transparent) {
       this.isScrolled = window.scrollY > 60;
     }
   }
-
   public openModal(): void {
     this.isModalOpen.set(true);
     document.body.style.overflow = 'hidden';
