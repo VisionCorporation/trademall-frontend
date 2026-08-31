@@ -116,7 +116,7 @@ export class ProductDetail implements OnInit {
         this.seoService.updatePageSeo({
             title: this.product.metaTitle,
             description: this.product.metaDescription,
-            url: `https://trademall.shop/products/${this.product.slug}`,
+            url: `https://trademall-frontend.vercel.app/products/${this.product.slug}`,
             image: this.product.images?.[0]?.url ?? ''
         });
     }
