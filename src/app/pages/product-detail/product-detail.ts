@@ -14,6 +14,7 @@ import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { buttons } from '../../data/constants/product-details.constant';
 import { Reviews } from '../../services/reviews/reviews';
 import { VendorStore } from '../../services/vendor-store/vendor-store';
+import { Seo } from '../../services/seo/seo';
 
 @Component({
     selector: 'app-product-detail',
@@ -37,6 +38,7 @@ export class ProductDetail implements OnInit {
     private readonly vendorStoreService = inject(VendorStore);
     private readonly toastService = inject(ToastService);
     private readonly reviewService = inject(Reviews);
+    private readonly seoService = inject(Seo);
     public selectedImage: string | null = null;
     public readonly starIndices = [0, 1, 2, 3, 4];
     public readonly starGradientUid = Math.random().toString(36).slice(2, 9);
@@ -108,6 +110,17 @@ export class ProductDetail implements OnInit {
         }
     }
 
+    private updateSeo(): void {
+        if (!this.product) return;
+
+        this.seoService.updatePageSeo({
+            title: this.product.metaTitle,
+            description: this.product.metaDescription,
+            url: `https://trademall.shop/products/${this.product.slug}`,
+            image: this.product.images?.[0]?.url ?? ''
+        });
+    }
+
     public fetchProductDetails() {
         this.isTryingAgain.set(true)
         this.route.paramMap.subscribe((params) => {
@@ -122,6 +135,7 @@ export class ProductDetail implements OnInit {
                 this.productService.getProductBySlug(slug).subscribe({
                     next: (response) => {
                         this.product = response.data;
+                        this.updateSeo();
                         this.vendorId = response.data.vendor._id;
                         this.isLoading.set(false);
                         this.fetchVendorProducts();

@@ -15,6 +15,7 @@ import { CartState } from '../../services/cart/cart-state';
 import { ProductCard } from '../../shared/product-card/product-card';
 import { HeroCarousel } from '../hero-carousel/hero-carousel';
 import { NgOptimizedImage } from '@angular/common';
+import { Seo } from '../../services/seo/seo';
 
 @Component({
   selector: 'app-home',
@@ -34,6 +35,7 @@ import { NgOptimizedImage } from '@angular/common';
 export class Home {
   private readonly productsService = inject(Products);
   private readonly toastService = inject(ToastService);
+  private readonly seoService = inject(Seo);
   public featuredProducts: FeaturedProduct[] = [];
   public wishlistedIds = new Set<string>();
   public isFeaturedProductsLoading = signal(false);
@@ -43,6 +45,15 @@ export class Home {
   public cartQuantities = signal<Record<string, number>>({});
   private readonly cartState = inject(CartState);
   public hasFeaturedProductFailed = signal(false);
+
+  constructor() {
+    this.seoService.updatePageSeo({
+      title: 'TradeMall | Shop Products from Trusted Sellers',
+      description: 'Shop a wide range of products from trusted sellers on TradeMall. Discover great products, compare options, and enjoy a convenient online shopping experience.',
+      url: 'https://trademall-frontend.vercel.app/',
+      image: ''
+    });
+  }
 
   ngOnInit() {
     this.isFeaturedProductsLoading.set(true);
