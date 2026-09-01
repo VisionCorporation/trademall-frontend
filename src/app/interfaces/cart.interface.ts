@@ -49,12 +49,19 @@ export interface PriceSnapshot {
   effectivePrice: number;
 }
 
+export interface GuestCartDisplayInfo {
+  productImage: string;
+  vendorId: string;
+  businessName: string;
+}
+
 export interface GuestCartItem {
   productId: string;
   quantity: number;
   priceSnapshot: PriceSnapshot;
+  displayInfo: GuestCartDisplayInfo;
 }
 
 export interface GuestCartStorage {
-    guestCartItems: GuestCartItem[];
+  guestCartItems: GuestCartItem[];
 }
