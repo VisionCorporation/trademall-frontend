@@ -1,12 +1,16 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter, take } from 'rxjs/operators';
 import { Router, RouterLink } from '@angular/router';
 import { Header } from '../../shared/header/header';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { Cart as cart } from '../../services/cart/cart';
+import { LoginService } from '../../services/login/login.service';
 import { CartResponse, CartItem } from '../../interfaces/cart.interface';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ToastService } from '../../services/toast/toast.service';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
+import { GuestCart } from '../../services/guest-cart/guest-cart';
 
 @Component({
   selector: 'app-cart',
@@ -17,7 +21,10 @@ import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 })
 export class Cart implements OnInit {
   private readonly cartService = inject(cart);
+  private readonly guestCartService = inject(GuestCart);
+  private readonly loginService = inject(LoginService);
   private readonly toastService = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
 
   public cartSummary = signal<CartResponse | null>(null);
   public isCartItemsLoading = signal(false);
@@ -29,12 +36,26 @@ export class Cart implements OnInit {
   public view = signal<'home' | 'cart'>('cart');
   private readonly router = inject(Router);
 
+  private get isLoggedIn(): boolean {
+    return this.loginService.isLoggedIn();
+  }
+
   ngOnInit(): void {
-    this.fetchCartSummary();
+    this.loginService.sessionLoaded$
+      .pipe(filter(Boolean), take(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.fetchCartSummary());
   }
 
   private fetchCartSummary(silent = false) {
     if (!silent) this.isCartItemsLoading.set(true);
+
+    if (!this.isLoggedIn) {
+      this.cartSummary.set(this.guestCartService.toCartResponse());
+      this.syncHeaderCount();
+      if (!silent) this.isCartItemsLoading.set(false);
+      return;
+    }
+
     this.cartService.getCartSummary().subscribe({
       next: (data) => {
         this.cartSummary.set(data as CartResponse);
@@ -68,6 +89,14 @@ export class Cart implements OnInit {
 
   private changeQuantity(item: CartItem, newQuantity: number) {
     this.setUpdating(item._id, true);
+
+    if (!this.isLoggedIn) {
+      this.guestCartService.updateItemQuantity(item.productId._id, newQuantity);
+      this.patchItemQuantity(item._id, newQuantity);
+      this.setUpdating(item._id, false);
+      this.syncHeaderCount();
+      return;
+    }
 
     this.cartService.updateCartItem(item.productId._id, newQuantity).subscribe({
       next: () => {
@@ -137,13 +166,22 @@ export class Cart implements OnInit {
   public removeFromCart(itemId: string) {
     this.setRemoving(itemId, true);
 
+    if (!this.isLoggedIn) {
+      this.guestCartService.removeItem(itemId);
+      this.toastService.success('Product removed from cart successfully.');
+      this.removeItemLocally(itemId);
+      this.setRemoving(itemId, false);
+      this.syncHeaderCount();
+      return;
+    }
+
     this.cartService.removeFromCart(itemId).subscribe({
       next: () => {
         this.toastService.success('Product removed from cart successfully.');
         this.removeItemLocally(itemId);
         this.setRemoving(itemId, false);
         this.syncHeaderCount();
-        this.fetchCartSummary(true); 
+        this.fetchCartSummary(true);
       },
       error: () => {
         this.toastService.error('Failed to remove product from cart. Please try again.');
@@ -165,7 +203,7 @@ export class Cart implements OnInit {
           subtotal: items.reduce((sum, i) => sum + i.lineTotal, 0),
         };
       })
-      .filter((group) => group.items.length > 0); 
+      .filter((group) => group.items.length > 0);
 
     const itemCount = vendorGroups.reduce((sum, g) => sum + g.items.length, 0);
 
@@ -192,13 +230,23 @@ export class Cart implements OnInit {
     }
 
     this.isClearingCart.set(true);
+
+    if (!this.isLoggedIn) {
+      this.guestCartService.clearCart();
+      this.toastService.success('Cart cleared successfully.');
+      this.clearCartLocally();
+      this.isClearingCart.set(false);
+      this.syncHeaderCount();
+      return;
+    }
+
     this.cartService.clearCart().subscribe({
       next: () => {
         this.toastService.success('Cart cleared successfully.');
         this.clearCartLocally();
         this.isClearingCart.set(false);
         this.syncHeaderCount();
-        this.fetchCartSummary(true); 
+        this.fetchCartSummary(true);
       },
       error: () => {
         this.toastService.error('Failed to clear cart. Please try again.');
