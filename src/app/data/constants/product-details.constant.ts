@@ -1,11 +1,11 @@
 export const buttons = [
   {
-    label: 'Description',
-    value: 'description',
+    label: 'Vendor Info',
+    value: 'vendor-info',
   },
   {
-    label: 'Details',
-    value: 'details',
+    label: 'Product Details',
+    value: 'product-details',
   },
   {
     label: 'Reviews',

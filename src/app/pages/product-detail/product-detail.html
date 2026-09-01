@@ -78,7 +78,7 @@
 
           <div class="shrink-0">
             <span class="text-[#374151] text-sm sm:text-base">starts from</span>
-           <p class="text-[#A8520C] text-lg sm:text-xl lg:text-2xl products-font text-nowrap">
+            <p class="text-[#A8520C] text-lg sm:text-xl lg:text-2xl products-font text-nowrap">
               <span>GHS </span>
               @if (product.discount > 0) {
               <span class="line-through text-gray-600 mr-2 text-base">
@@ -189,10 +189,10 @@
         </button>
         }
       </div>
-      @if (activeButton === 'description') {
-      <p class="text-base sm:text-[18px] text-[#374151]">{{ product.description }}</p>
+      @if (activeButton === 'vendor-info') {
+
       }
-      @if (activeButton === 'details') {
+      @if (activeButton === 'product-details') {
       <div class="bg-[#F4F4F4] rounded-[20px] p-5 sm:p-7.5">
         <table class="w-full text-sm sm:text-base">
           <tbody>
