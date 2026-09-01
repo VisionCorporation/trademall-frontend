@@ -5,7 +5,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Wishlist } from '../../services/wishlist/wishlist';
 import { ProductCardInterface, ProductDetails } from '../../interfaces/products.interface';
 import { Product } from '../../interfaces/all-products.interface';
-import { PriceSnapshot } from '../../interfaces/cart.interface';
+import { GuestCartDisplayInfo, PriceSnapshot } from '../../interfaces/cart.interface';
 
 @Component({
   selector: 'app-product-card',
@@ -29,7 +29,15 @@ export class ProductCard {
     };
   }
 
+  public get displayInfo(): GuestCartDisplayInfo {
+    return {
+      productImage: this.product.images?.[0]?.url ?? '',
+      vendorId: (this.product as any).vendor ?? '',
+      businessName: this.product.store?.name ?? '',
+    };
+  }
+
   public addToCart(): void {
-    this.cartStateService.addToCart(this.product._id, 1, this.priceSnapshot);
+    this.cartStateService.addToCart(this.product._id, 1, this.priceSnapshot, this.displayInfo);
   }
 }
