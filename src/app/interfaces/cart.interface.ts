@@ -41,3 +41,20 @@ export interface CartResponse {
   status: string;
   data: CartData;
 }
+
+export interface PriceSnapshot {
+  productName: string;
+  price: number;
+  salePrice: number | null;
+  effectivePrice: number;
+}
+
+export interface GuestCartItem {
+  productId: string;
+  quantity: number;
+  priceSnapshot: PriceSnapshot;
+}
+
+export interface GuestCartStorage {
+    guestCartItems: GuestCartItem[];
+}
