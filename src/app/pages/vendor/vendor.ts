@@ -10,6 +10,7 @@ import { Newsletter } from '../../shared/newsletter/newsletter';
 import { SkeletonLoader } from "../../shared/skeleton-loader/skeleton-loader";
 import { BUTTONS, DEFAULT_HERO_IMAGE } from '../../data/constants/vendor-page.constant';
 import { VendorStore } from '../../services/vendor-store/vendor-store';
+import { Seo } from '../../services/seo/seo';
 
 @Component({
   selector: 'app-vendor',
@@ -21,6 +22,7 @@ import { VendorStore } from '../../services/vendor-store/vendor-store';
 export class Vendor {
   private vendorStoreService = inject(VendorStore);
   private readonly route = inject(ActivatedRoute);
+  private readonly seoService = inject(Seo);
   public vendorStoreData: StoreResponse | null = null
   public vendorProducts: VendorProductsResponse | null = null
   public wishlistedIds = new Set<string>();
@@ -44,12 +46,21 @@ export class Vendor {
     this.isStoreLoading.set(true);
     this.storeError.set(false);
 
+    const id = this.route.snapshot.paramMap.get('id');
+
     this.vendorStoreService.getPublicStorePage('nastrade').subscribe({
       next: (res) => {
         this.vendorStoreData = res;
         this.heroImageLoaded = true;
         this.heroImage = res.store.banner ?? DEFAULT_HERO_IMAGE;
         this.isStoreLoading.set(false);
+
+        this.seoService.updatePageSeo({
+          title: `${res.store.name} | TradeMall`,
+          description: `Shop ${res.store.name} on TradeMall — ${res.store.description}.`,
+          url: `https://trademall-frontend.vercel.app/products/vendor/${id}`,
+          image: res.store.banner ?? res.store.logo ?? 'https://trademall-frontend.vercel.app/assets/og-default.jpg'
+        });
       },
       error: (err) => {
         this.toastService.error('Failed to fetch store data')
