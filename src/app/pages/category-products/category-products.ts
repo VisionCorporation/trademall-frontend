@@ -54,7 +54,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.cartState.loadCart();
+    this.cartState.initCart()
     const slug = this.route.snapshot.paramMap.get('slug');
 
     let filterSlug: string | undefined;
