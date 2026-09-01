@@ -11,6 +11,7 @@ import { SearchBar } from '../../shared/search-bar/search-bar';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { NgOptimizedImage } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
+import { Seo } from '../../services/seo/seo';
 
 @Component({
   selector: 'app-categories',
@@ -20,6 +21,7 @@ import { isPlatformBrowser } from '@angular/common';
   animations: [staggerProducts, fadeInOutAnimation],
 })
 export class Categories implements OnInit {
+  private readonly seoService = inject(Seo);
   private categoryService = inject(Products);
   public categories: RootCategory[] = [];
   public totalPages = 0;
@@ -27,6 +29,15 @@ export class Categories implements OnInit {
   public currentPage = 1;
   public totalPagesArray: number[] = [];
   private platformId = inject(PLATFORM_ID);
+
+  constructor() {
+    this.seoService.updatePageSeo({
+      title: 'Shop by Category | Electronics, Fashion & More | TradeMall',
+      description: "Browse various categories on TradeMall — electronics, computing, beauty care, fashion, home essentials, and more from trusted sellers across Ghana.",
+      url: 'https://trademall-frontend.vercel.app/categories',
+      image: ''
+    });
+  }
 
   ngOnInit() {
     this.fetchCategories(this.currentPage);
@@ -75,7 +86,7 @@ export class Categories implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    
+
     this.isLoading.set(true);
     this.fetchCategories(pageNumber);
     this.currentPage = pageNumber;
