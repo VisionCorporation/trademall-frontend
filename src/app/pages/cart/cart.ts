@@ -143,7 +143,7 @@ export class Cart implements OnInit {
         this.removeItemLocally(itemId);
         this.setRemoving(itemId, false);
         this.syncHeaderCount();
-        this.fetchCartSummary(true); // background reconcile
+        this.fetchCartSummary(true); 
       },
       error: () => {
         this.toastService.error('Failed to remove product from cart. Please try again.');
@@ -198,7 +198,7 @@ export class Cart implements OnInit {
         this.clearCartLocally();
         this.isClearingCart.set(false);
         this.syncHeaderCount();
-        this.fetchCartSummary(true); // background reconcile
+        this.fetchCartSummary(true); 
       },
       error: () => {
         this.toastService.error('Failed to clear cart. Please try again.');
