@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { CartResponse } from '../../interfaces/cart.interface';
+import { CartResponse, GuestCartItem } from '../../interfaces/cart.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +39,9 @@ export class Cart {
     return this.http.delete(`${environment.apiBaseUrl}/cart`).pipe(
       tap(() => this.cartCountSubject.next(0))
     );
+  }
+
+  public mergeGuestCart(guestCartItems: GuestCartItem[]) {
+    return this.http.post<CartResponse>(`${environment.apiBaseUrl}/cart/merge`, { guestCartItems });
   }
 }
