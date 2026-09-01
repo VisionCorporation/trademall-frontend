@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import {
   RootCategoryResponse,
   CategoryListResponse,
+  CategoryProductsResponse,
 } from '../../interfaces/categories.interface';
 import { ProductsResponse } from '../../interfaces/all-products.interface';
 
@@ -28,8 +29,8 @@ export class Products {
     );
   }
 
-  public getProductsByCategory(categorySlug: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}/products/category/${categorySlug}/`);
+  public getProductsByCategory(categorySlug: string): Observable<CategoryProductsResponse> {
+    return this.http.get<CategoryProductsResponse>(`${environment.apiBaseUrl}/products/category/${categorySlug}/`);
   }
 
   public getProductBySlug(slug: string): Observable<any> {
