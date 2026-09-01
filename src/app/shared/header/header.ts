@@ -20,11 +20,11 @@ import { ClickOutside } from '../../directives/click-outside/click-outside';
 import { CUSTOMER_DROPDOWN, DESKTOP_MENU_ITEMS, MOBILE_MENU_ITEMS, PROFILE_MENU_ITEMS, VENDOR_DROPDOWN } from '../../data/constants/header.constants';
 import { HeaderSection } from '../../interfaces/header.interface';
 import { FormsModule } from '@angular/forms';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, ClickOutside, FormsModule],
+  imports: [RouterLink, ClickOutside, FormsModule, NgOptimizedImage],
   templateUrl: './header.html',
   styleUrl: './header.css',
   animations: [fadeInOutAnimation],
