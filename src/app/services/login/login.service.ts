@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { LoginData } from '../../interfaces/login.interface';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -13,6 +13,7 @@ export class LoginService {
   public user$ = this.userSubject.asObservable();
   private sessionLoadedSubject = new BehaviorSubject<boolean>(false);
   public sessionLoaded$ = this.sessionLoadedSubject.asObservable();
+  public loginSuccess$ = new Subject<void>();
 
   constructor() {
     this.restoreSession();
@@ -35,6 +36,7 @@ export class LoginService {
     return this.http.post<any>(`${environment.apiBaseUrl}/user/login`, loginData).pipe(
       tap((response) => {
         this.userSubject.next(response.user);
+        this.loginSuccess$.next();
       }),
     );
   }
