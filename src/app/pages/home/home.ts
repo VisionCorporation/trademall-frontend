@@ -57,7 +57,7 @@ export class Home {
 
   ngOnInit() {
     this.isFeaturedProductsLoading.set(true);
-    this.cartState.loadCart();
+    this.cartState.initCart()
     this.fetchFeaturedProducts();
   }
 
