@@ -1,6 +1,6 @@
 import { Injectable, inject, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
-import { GuestCartItem, GuestCartStorage, PriceSnapshot } from "../../interfaces/cart.interface";
+import { CartItem, GuestCartItem, GuestCartStorage, PriceSnapshot, GuestCartDisplayInfo, CartResponse } from "../../interfaces/cart.interface";
 
 @Injectable({ providedIn: 'root' })
 export class GuestCart {
@@ -33,21 +33,67 @@ export class GuestCart {
         return this.readCart().guestCartItems.find(i => i.productId === productId);
     }
 
-    public addItem(productId: string, quantity: number, priceSnapshot: PriceSnapshot): GuestCartStorage {
+    public addItem(productId: string, quantity: number, priceSnapshot: PriceSnapshot, displayInfo: GuestCartDisplayInfo): GuestCartStorage {
         const cart = this.readCart();
         const existing = cart.guestCartItems.find(i => i.productId === productId);
 
         if (existing) {
             existing.quantity += quantity;
             existing.priceSnapshot = priceSnapshot;
+            existing.displayInfo = displayInfo;
         } else {
-            cart.guestCartItems.push({ productId, quantity, priceSnapshot });
+            cart.guestCartItems.push({ productId, quantity, priceSnapshot, displayInfo });
         }
 
         this.writeCart(cart);
         return cart;
     }
 
+    public toCartResponse(): CartResponse {
+        const items = this.readCart().guestCartItems;
+
+        const groupsByVendor = new Map<string, CartItem[]>();
+
+        for (const item of items) {
+            const lineTotal = item.priceSnapshot.effectivePrice * item.quantity;
+
+            const cartItem = {
+                _id: item.productId,
+                productId: { _id: item.productId },
+                productName: item.priceSnapshot.productName,
+                productImage: item.displayInfo.productImage,
+                price: item.priceSnapshot.effectivePrice,
+                quantity: item.quantity,
+                lineTotal,
+            } as CartItem;
+
+            const group = groupsByVendor.get(item.displayInfo.vendorId) ?? [];
+            group.push(cartItem);
+            groupsByVendor.set(item.displayInfo.vendorId, group);
+        }
+
+        const vendorGroups = Array.from(groupsByVendor.entries()).map(([vendorId, groupItems]) => ({
+            vendorId,
+            businessName: items.find(i => i.displayInfo.vendorId === vendorId)?.displayInfo.businessName ?? '',
+            items: groupItems,
+            subtotal: groupItems.reduce((sum, i) => sum + i.lineTotal, 0),
+        }));
+
+        const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+
+        return {
+            success: true,
+            message: '',
+            data: {
+                cart: {
+                    vendorGroups,
+                    itemCount,
+                    items: itemCount,
+                    isEmpty: items.length === 0,
+                },
+            },
+        } as unknown as CartResponse;
+    }
     public updateItemQuantity(productId: string, quantity: number): GuestCartStorage {
         const cart = this.readCart();
         const item = cart.guestCartItems.find(i => i.productId === productId);
@@ -59,7 +105,12 @@ export class GuestCart {
     public removeItem(productId: string): GuestCartStorage {
         const cart = this.readCart();
         cart.guestCartItems = cart.guestCartItems.filter(i => i.productId !== productId);
-        this.writeCart(cart);
+        if (this.readCart().guestCartItems.length === 1) {
+            this.clearCart()
+        } else {
+            this.writeCart(cart);
+        }
+
         return cart;
     }
 
