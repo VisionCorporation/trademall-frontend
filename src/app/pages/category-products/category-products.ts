@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, signal, Renderer2 } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal, Renderer2, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Products } from '../../services/products/products';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
@@ -11,6 +11,8 @@ import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { SearchBar } from '../../shared/search-bar/search-bar';
 import { CartState } from '../../services/cart/cart-state';
 import { ProductCard } from '../../shared/product-card/product-card';
+import { Seo } from '../../services/seo/seo';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-category-products',
@@ -20,6 +22,7 @@ import { ProductCard } from '../../shared/product-card/product-card';
   animations: [staggerProducts, fadeInOutAnimation, smoothCollapse],
 })
 export class CategoryProducts implements OnInit, OnDestroy {
+  private readonly seoService = inject(Seo);
   public allProducts: ProductDetails[] = [];
   public isProductsLoading = signal(true);
   public isSubCategoriesLoading = signal(true);
@@ -34,13 +37,15 @@ export class CategoryProducts implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly renderer = inject(Renderer2);
   private readonly cartState = inject(CartState);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly document = inject(DOCUMENT);
 
   public set isFilterOpen(value: boolean) {
     this._isFilterOpen = value;
     if (value) {
-      this.renderer.addClass(document.body, 'overflow-hidden');
+      this.renderer.addClass(this.document.body, 'overflow-hidden');
     } else {
-      this.renderer.removeClass(document.body, 'overflow-hidden');
+      this.renderer.removeClass(this.document.body, 'overflow-hidden');
     }
   }
 
@@ -51,8 +56,12 @@ export class CategoryProducts implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.cartState.loadCart();
     const slug = this.route.snapshot.paramMap.get('slug');
-    const filterSlug = history.state?.filter;
-    history.replaceState({}, '');
+
+    let filterSlug: string | undefined;
+    if (isPlatformBrowser(this.platformId)) {
+      filterSlug = history.state?.filter;
+      history.replaceState({}, '');
+    }
 
     if (!slug) return;
 
@@ -61,6 +70,13 @@ export class CategoryProducts implements OnInit, OnDestroy {
         this.categoryName = category.parent.name;
         this.subCategories = category.data;
         this.isSubCategoriesLoading.set(false);
+
+        this.seoService.updatePageSeo({
+          title: `${this.categoryName} | TradeMall`,
+          description: `Shop ${this.categoryName} products from trusted sellers on TradeMall. Compare options and enjoy convenient delivery across Ghana.`,
+          url: `https://trademall-frontend.vercel.app/categories/${slug}`,
+          image: ''
+        });
       }
     });
 
@@ -82,7 +98,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.renderer.removeClass(document.body, 'overflow-hidden');
+    this.renderer.removeClass(this.document.body, 'overflow-hidden');
   }
 
   public onCategoryChange(slug: string, event: Event): void {
