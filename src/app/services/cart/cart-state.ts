@@ -1,7 +1,7 @@
 import { DestroyRef, inject, Injectable, signal } from "@angular/core";
 import { Cart } from "./cart";
 import { ToastService } from "../toast/toast.service";
-import { CartResponse, PriceSnapshot } from "../../interfaces/cart.interface";
+import { CartResponse, GuestCartDisplayInfo, PriceSnapshot } from "../../interfaces/cart.interface";
 import { GuestCart } from "../guest-cart/guest-cart";
 import { LoginService } from "../login/login.service";
 import { filter, take } from "rxjs";
@@ -90,16 +90,16 @@ export class CartState {
         });
     }
 
-    public addToCart(productId: string, quantity = 1, priceSnapshot?: PriceSnapshot): void {
+    public addToCart(productId: string, quantity = 1, priceSnapshot?: PriceSnapshot, displayInfo?: GuestCartDisplayInfo): void {
         this.setLoading(productId, 'adding');
 
         if (!this.isLoggedIn) {
-            if (!priceSnapshot) {
+            if (!priceSnapshot || !displayInfo) {
                 this.toastService.error('Missing product info for guest cart');
                 this.setLoading(productId, null);
                 return;
             }
-            this.guestCartService.addItem(productId, quantity, priceSnapshot);
+            this.guestCartService.addItem(productId, quantity, priceSnapshot, displayInfo);
             this.cartQuantities.set({
                 ...this.cartQuantities(),
                 [productId]: { quantity: this.getCartQuantity(productId) + quantity, itemId: '' }
