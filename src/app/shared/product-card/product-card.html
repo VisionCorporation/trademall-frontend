@@ -70,7 +70,7 @@
       } @else {
       <button [disabled]="cartStateService.isProductAddingToCart(product._id)"
         class="border border-[#171717] px-2.5 lg:px-3.5 py-1.5 lg:py-2 rounded-lg text-[13px] hover:bg-[#171717] hover:text-white transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60"
-        (click)="cartStateService.addToCart(product._id); $event.stopPropagation()">
+         (click)="addToCart(); $event.stopPropagation()">
         @if (cartStateService.isProductAddingToCart(product._id)) {
         <svg class="shrink-0 animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="32"
