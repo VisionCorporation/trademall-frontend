@@ -61,7 +61,7 @@ export const routes: Routes = [
   {
     path: 'cart',
     loadComponent: () => import('./pages/cart/cart').then((m) => m.Cart),
-    canActivate: [authGuard, customerGuard],
+    canActivate: [],
   },
   {
     path: 'vendor-application-status',
