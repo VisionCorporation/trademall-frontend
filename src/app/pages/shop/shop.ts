@@ -3,13 +3,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { Products as ProductsService } from '../../services/products/products';
 import { ToastService } from '../../services/toast/toast.service';
 import { ProductCard } from '../../shared/product-card/product-card';
-import { Product } from '../../interfaces/all-products.interface';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { POPULAR_SEARCHES } from '../../data/constants/shop.constant';
+import { ProductCardInterface } from '../../interfaces/product-card.interface';
 
 @Component({
   selector: 'app-shop',
@@ -26,7 +26,7 @@ export class Shop implements OnInit, OnDestroy {
   public popularSearches = POPULAR_SEARCHES
   public searchValidationError = signal(false);
   public searchQuery: string | null = null;
-  public products = signal<Product[]>([]);
+  public products = signal<ProductCardInterface[]>([]);
   public currentPage = signal(1);
   public totalPages = signal(1);
   public isLoading = signal(false);
