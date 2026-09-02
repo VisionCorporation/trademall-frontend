@@ -5,9 +5,8 @@ import { Observable } from 'rxjs';
 import {
   RootCategoryResponse,
   CategoryListResponse,
-  CategoryProductsResponse,
 } from '../../interfaces/categories.interface';
-import { ProductsResponse } from '../../interfaces/all-products.interface';
+import { AllProductsResponse, CategoryProductsResponse, FeaturedProductsResponse } from '../../interfaces/product-card.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -41,15 +40,15 @@ export class Products {
     return this.http.get<FeaturedProductsResponse>(`${environment.apiBaseUrl}/products/featured`);
   }
 
-  public getAllProducts(currentPage: number): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(`${environment.apiBaseUrl}/products?page=${currentPage}`);
+  public getAllProducts(currentPage: number): Observable<AllProductsResponse> {
+    return this.http.get<AllProductsResponse>(`${environment.apiBaseUrl}/products?page=${currentPage}`);
   }
 
   public searchProduct(
     query: string,
     currentPage: number
-  ): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(
+  ): Observable<AllProductsResponse> {
+    return this.http.get<AllProductsResponse>(
       `${environment.apiBaseUrl}/products/search`,
       {
         params: {
