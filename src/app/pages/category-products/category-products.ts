@@ -4,7 +4,6 @@ import { Products } from '../../services/products/products';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
-import { ProductDetails } from '../../interfaces/products.interface';
 import { smoothCollapse, staggerProducts } from '../../animations/smooth-collapse.animations';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
@@ -13,6 +12,7 @@ import { CartState } from '../../services/cart/cart-state';
 import { ProductCard } from '../../shared/product-card/product-card';
 import { Seo } from '../../services/seo/seo';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { ProductCardInterface } from '../../interfaces/product-card.interface';
 
 @Component({
   selector: 'app-category-products',
@@ -23,12 +23,12 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 })
 export class CategoryProducts implements OnInit, OnDestroy {
   private readonly seoService = inject(Seo);
-  public allProducts: ProductDetails[] = [];
+  public allProducts: ProductCardInterface[] = [];
   public isProductsLoading = signal(true);
   public isSubCategoriesLoading = signal(true);
   public openCategorySlug: string | null = null;
   public selectedCategorySlugs: string[] = [];
-  public selectedCategoryProducts: ProductDetails[] = [];
+  public selectedCategoryProducts: ProductCardInterface[] = [];
   public subCategories: any[] = [];
   public categoryName = '';
   private _isFilterOpen = false;
@@ -82,7 +82,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
 
     this.productService.getProductsByCategory(slug).subscribe({
       next: (products) => {
-        this.allProducts = products.data;
+        this.allProducts = products.products;
         this.isProductsLoading.set(false);
 
         if (filterSlug) {
@@ -156,7 +156,7 @@ export class CategoryProducts implements OnInit, OnDestroy {
     this.filterProductsLocally();
   }
 
-  public get displayedProducts(): ProductDetails[] {
+  public get displayedProducts(): ProductCardInterface[] {
     return this.selectedCategorySlugs.length > 0 ? this.selectedCategoryProducts : this.allProducts;
   }
 

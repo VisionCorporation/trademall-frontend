@@ -91,7 +91,7 @@
         @if(displayedProducts.length > 0){
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75"
           [@staggerProducts]="selectedCategoryProducts.length">
-          @for (product of displayedProducts; track product._id) {
+          @for (product of displayedProducts; track product.id) {
           <app-product-card [product]="product" />
           }
         </div>
