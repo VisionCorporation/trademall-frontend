@@ -108,7 +108,7 @@
                 [class.pointer-events-none]="
                   !(canResend$ | async) || (signupService.isResending$ | async)
                 "
-                [class.text-[#2E790E]]="canResend$ | async"
+                [class.text-[#00a751]]="canResend$ | async"
                 (click)="resendOtp()"
               >
                 {{ (signupService.isResending$ | async) ? 'Resending...' : 'Resend' }}
@@ -249,7 +249,7 @@
       class="absolute bottom-7 md:bottom-auto md:top-14.5 text-center lg:right-12.5 text-[17px] md:text-xl z-10 px-4"
     >
       Already have an account?
-      <a class="text-[#2E790E] py-3 px-3" routerLink="/login">Log In</a>
+      <a class="text-[#00a751] py-3 px-3" routerLink="/login">Log In</a>
     </p>
   </div>
 </section>
