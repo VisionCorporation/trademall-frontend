@@ -1,5 +1,3 @@
-import { ProductDetails } from "./products.interface";
-
 export interface RootCategory {
   _id: string;
   name: string;
@@ -46,19 +44,4 @@ export interface CategoryListResponse {
   parent: CategoryParent;
   totalResults: number;
   data: Category[];
-}
-
-export interface CategoryProductsInfo {
-  name: string;
-  slug: string;
-  description: string;
-  includeSubcategories: boolean;
-  selectedSubcategories: string[];
-}
-
-export interface CategoryProductsResponse {
-  success: boolean;
-  category: CategoryProductsInfo;
-  pagination: Pagination;
-  data: ProductDetails[];
 }
