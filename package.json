@@ -1,6 +1,7 @@
 {
   "name": "trademall",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "node -r dotenv/config ./node_modules/@angular/cli/bin/ng.js serve",
