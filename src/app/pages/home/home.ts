@@ -51,7 +51,7 @@ export class Home {
       title: 'TradeMall | Shop Products from Trusted Sellers',
       description: 'Shop a wide range of products from trusted sellers on TradeMall. Discover great products, compare options, and enjoy a convenient online shopping experience.',
       url: 'https://trademall-frontend.vercel.app/',
-      image: ''
+      image: 'https://trademall-frontend.vercel.app/assets/images/og-home.jpeg',
     });
   }
 
