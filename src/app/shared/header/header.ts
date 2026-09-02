@@ -15,7 +15,6 @@ import { LoginService } from '../../services/login/login.service';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { ToastService } from '../../services/toast/toast.service';
 import { Cart as CartService } from '../../services/cart/cart';
-import { CartResponse } from '../../interfaces/cart.interface';
 import { ClickOutside } from '../../directives/click-outside/click-outside';
 import { CUSTOMER_DROPDOWN, DESKTOP_MENU_ITEMS, MOBILE_MENU_ITEMS, PROFILE_MENU_ITEMS, VENDOR_DROPDOWN } from '../../data/constants/header.constants';
 import { HeaderSection } from '../../interfaces/header.interface';
@@ -66,11 +65,7 @@ export class Header implements OnInit {
   ngOnInit() {
     this.loginService.user$.subscribe((user) => {
       this.user = user;
-      if (user) {
-        this.fetchCartCount();
-      } else {
-        this.cartService.updateCartCount(0);
-      }
+      // cart count is owned by CartState/Cart service; don't touch it here
       this.cdr.detectChanges();
     });
 
@@ -82,20 +77,6 @@ export class Header implements OnInit {
     this.cartService.cartCount$.subscribe((count) => {
       this.cartItemCount = count;
       this.cdr.detectChanges();
-    });
-  }
-
-  private fetchCartCount(): void {
-    this.cartService.getCartSummary().subscribe({
-      next: (data: CartResponse) => {
-        const count = data?.data?.cart?.vendorGroups?.reduce(
-          (total, group) => total + group.items.reduce((sum, item) => sum + item.quantity, 0), 0
-        ) ?? 0;
-        this.cartService.updateCartCount(count);
-      },
-      error: () => {
-        this.cartService.updateCartCount(0);
-      },
     });
   }
 
