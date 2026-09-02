@@ -9,12 +9,13 @@ import { Breadcrumb } from '../../shared/breadcrumb/breadcrumb';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Newsletter } from '../../shared/newsletter/newsletter';
-import { VendorProduct } from '../../interfaces/vendor.interface';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { buttons } from '../../data/constants/product-details.constant';
 import { Reviews } from '../../services/reviews/reviews';
 import { VendorStore } from '../../services/vendor-store/vendor-store';
 import { Seo } from '../../services/seo/seo';
+import { ProductCard } from '../../shared/product-card/product-card';
+import { ProductCardInterface } from '../../interfaces/product-card.interface';
 
 @Component({
     selector: 'app-product-detail',
@@ -27,6 +28,7 @@ import { Seo } from '../../services/seo/seo';
         Footer,
         NgOptimizedImage,
         Newsletter,
+        ProductCard
     ],
     templateUrl: './product-detail.html',
     styleUrl: './product-detail.css',
@@ -45,7 +47,7 @@ export class ProductDetail implements OnInit {
     public selectedImageIndex = 0;
     public wishlistedIds = new Set<string>();
     public product: ProductDetails | null = null;
-    public vendorProductsDetails: VendorProduct[] = [];
+    public vendorProductsDetails: ProductCardInterface[] = [];
     public vendorId = '';
     public isLoading = signal(true);
     public isVendorProductsLoading = signal(false);
