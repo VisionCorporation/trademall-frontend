@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { StoreResponse, VendorProductsResponse } from '../../interfaces/vendor.interface';
+import { StoreResponse } from '../../interfaces/vendor.interface';
 import { environment } from '../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { VendorProductsResponse } from '../../interfaces/product-card.interface';
 
 @Injectable({
   providedIn: 'root',
