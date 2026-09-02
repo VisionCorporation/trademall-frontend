@@ -10,9 +10,6 @@ export function getApiBaseUrl(): string {
   const isBrowser = typeof window !== 'undefined';
 
   if (isBrowser) {
-    if (window.location.hostname === 'localhost') {
-      return 'https://trademall-backend.onrender.com/api/v1';
-    }
     return '/api';
   }
 
