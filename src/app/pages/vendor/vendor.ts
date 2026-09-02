@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
-import { StoreResponse, VendorProductsResponse } from '../../interfaces/vendor.interface';
+import { StoreResponse } from '../../interfaces/vendor.interface';
 import { CurrencyPipe, DatePipe, NgOptimizedImage } from '@angular/common';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { ToastService } from '../../services/toast/toast.service';
@@ -11,10 +11,12 @@ import { SkeletonLoader } from "../../shared/skeleton-loader/skeleton-loader";
 import { BUTTONS, DEFAULT_HERO_IMAGE } from '../../data/constants/vendor-page.constant';
 import { VendorStore } from '../../services/vendor-store/vendor-store';
 import { Seo } from '../../services/seo/seo';
+import { VendorProductsResponse } from '../../interfaces/product-card.interface';
+import { ProductCard } from '../../shared/product-card/product-card';
 
 @Component({
   selector: 'app-vendor',
-  imports: [Header, Footer, DatePipe, RouterLink, CurrencyPipe, Newsletter, SkeletonLoader, NgOptimizedImage],
+  imports: [Header, Footer, DatePipe, Newsletter, SkeletonLoader, NgOptimizedImage, ProductCard],
   templateUrl: './vendor.html',
   styleUrl: './vendor.css',
   animations: [staggerProducts],
