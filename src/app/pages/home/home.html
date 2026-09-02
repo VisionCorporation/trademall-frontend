@@ -78,7 +78,7 @@
   <div
     class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2"
     [@staggerProducts]>
-    @for (featuredProduct of featuredProducts; track featuredProduct._id) {
+    @for (featuredProduct of featuredProducts; track featuredProduct.id) {
     <app-product-card [product]="featuredProduct" layout="carousel" />
     }
   </div>

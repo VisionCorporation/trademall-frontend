@@ -16,6 +16,7 @@ import { ProductCard } from '../../shared/product-card/product-card';
 import { HeroCarousel } from '../hero-carousel/hero-carousel';
 import { NgOptimizedImage } from '@angular/common';
 import { Seo } from '../../services/seo/seo';
+import { ProductCardInterface } from '../../interfaces/product-card.interface';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,7 @@ export class Home {
   private readonly productsService = inject(Products);
   private readonly toastService = inject(ToastService);
   private readonly seoService = inject(Seo);
-  public featuredProducts: FeaturedProduct[] = [];
+  public featuredProducts: ProductCardInterface[] = [];
   public wishlistedIds = new Set<string>();
   public isFeaturedProductsLoading = signal(false);
   public readonly commonQuestions = COMMONQUESTIONS;
