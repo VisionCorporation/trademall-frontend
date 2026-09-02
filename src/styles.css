@@ -95,8 +95,8 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #2e790e5d;
-  border-color: #2e790e9b;
+  box-shadow: 0 0 0 2px #00a7515d;
+  border-color: #00a7519b;
   transition:
     border-color 0.24s ease-in-out,
     box-shadow 0.24s ease-in-out;
@@ -147,12 +147,12 @@ select {
 }
 
 .custom-radio:checked {
-  background-color: #2e790e;
+  background-color: #00a751;
   border: none;
 }
 
 .custom-radio:focus-visible {
-  outline: 2px solid #2e790e;
+  outline: 2px solid #00a751;
   outline-offset: 2px;
 }
 
@@ -177,7 +177,7 @@ select {
 .checkmark {
   width: 23px;
   height: 23px;
-  background-color: #2e790e;
+  background-color: #00a751;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -242,7 +242,7 @@ select {
 }
 
 .step.active {
-  color: #2e790e;
+  color: #00a751;
 }
 
 .circle {
@@ -259,7 +259,7 @@ select {
 }
 
 .step.active .circle {
-  background: #2e790e;
+  background: #00a751;
 }
 
 .line {
