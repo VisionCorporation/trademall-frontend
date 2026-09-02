@@ -35,7 +35,7 @@ export class Categories implements OnInit {
       title: 'Shop by Category | Electronics, Fashion & More | TradeMall',
       description: "Browse various categories on TradeMall — electronics, computing, beauty care, fashion, home essentials, and more from trusted sellers across Ghana.",
       url: 'https://trademall-frontend.vercel.app/categories',
-      image: ''
+      image: 'https://trademall-frontend.vercel.app/assets/images/og-default.jpeg'
     });
   }
 
