@@ -15,8 +15,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (isPlatformServer(platformId)) {
     const request = inject(REQUEST, { optional: true });
-    console.log('[SSR DEBUG] request exists:', !!request);
-    console.log('[SSR DEBUG] cookie header:', request?.headers.get('cookie'));
     const cookieHeader = request?.headers.get('cookie');
     if (cookieHeader) {
       cloned = cloned.clone({ setHeaders: { cookie: cookieHeader } });
