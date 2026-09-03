@@ -49,12 +49,12 @@
   </div>
 
   <div class="p-3.5 lg:p-4 flex flex-col gap-2.5">
-    <p class="text-[13.5px] lg:text-[15px] font-medium leading-snug text-gray-900 line-clamp-2 min-h-9 lg:min-h-10">
+    <p class="text-[13.5px] lg:text-[15px] font-medium leading-snug text-gray-900  line-clamp-1">
       {{ product.name }}
     </p>
 
     <div class="flex items-start sm:items-center justify-between flex-col sm:flex-row gap-2">
-      <div class="flex items-center gap-1.5 flex-wrap justify-end">
+      <div class="flex items-center gap-1.5 flex-wrap justify-start">
         @if (product.discount > 0) {
         <span class="bg-[#FEE2E2] text-[#B3261E] text-[10px] font-semibold px-1.5 py-0.5 rounded">
           -{{ product.discount }}%
@@ -70,19 +70,19 @@
         </p>
       </div>
 
-      <a class="w-fit inline-flex items-center gap-1 text-[12px] lg:text-[13px] font-medium text-[#15803D] hover:underline truncate"
-        [routerLink]="['/products/vendor', product.vendor]" (click)="$event.stopPropagation()"
-        [attr.aria-label]="'Visit ' + product.store.name + ' store'">
+      <span class="w-fit inline-flex items-center gap-1 text-[12px] lg:text-[13px] font-medium text-[#15803D]">
         <div class="flex flex-col">
           <span class="text-[9px] uppercase tracking-wide text-gray-400">Sold by</span>
-          <a class="text-[12px] lg:text-[13px] font-medium text-[#15803D] hover:underline truncate" ...>
+          <a [routerLink]="['/products/vendor', product.vendor]" (click)="$event.stopPropagation()"
+            [attr.aria-label]="'Visit ' + product.store.name + ' store'"
+            class="text-[12px] lg:text-[13px] font-medium text-[#15803D] hover:underline truncate">
             {{ product.store.name }}
           </a>
         </div>
-      </a>
+      </span>
     </div>
 
-    <div class="flex items-center gap-1.5">
+    <div class="flex items-center flex-wrap gap-1.5">
       <div class="flex items-center gap-0.5">
         @for (i of starIndices; track i) {
         <svg width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -99,7 +99,7 @@
         </svg>
         }
       </div>
-      <span class="text-sm text-[#737373]">
+      <span class="text-[11px] sm:text-sm text-[#737373]">
         {{ product.rating | number:'1.1-1' }}
         ({{ product.reviewCount }})
       </span>
