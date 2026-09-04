@@ -21,3 +21,12 @@ export const HERO_SECTION_DATA = [
         image: 'assets/images/become-a-vendor.webp',
     },
 ];
+
+export const MARQUEE_ITEMS = [
+    'TradeMall',
+    'Trusted by 10,000+ Buyers',
+    'TradeMall',
+    'Verified Vendors',
+    'TradeMall',
+    'Secure Payments',
+];
