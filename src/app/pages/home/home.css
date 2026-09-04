@@ -1,44 +1,63 @@
 .marquee-container {
   overflow: hidden;
-  white-space: nowrap;
   width: 100%;
   background: #00a751;
-  color: white;
-  padding: 20px 0;
+  padding: 16px 0;
 }
 
 .marquee-track {
   display: flex;
+  width: max-content;
+  animation: marqueeScroll 60s linear infinite;
+  will-change: transform;
 }
 
-.marquee-content {
-  display: inline-block;
+.marquee-group {
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
-  animation: scrollText 8s linear infinite;
+  gap: 0.4em;
+  padding-right: 0.4em;
 }
 
-@keyframes scrollText {
+.marquee-text,
+.marquee-dot {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@keyframes marqueeScroll {
   from {
-    transform: translateX(0%);
+    transform: translateX(0);
   }
+
   to {
-    transform: translateX(-100%);
+    transform: translateX(-50%);
   }
 }
 
 @media (min-width: 640px) {
-  .marquee-content {
-    animation-duration: 10s;
-  }
   .marquee-container {
-    padding: 45px 0;
+    padding: 28px 0;
+  }
+
+  .marquee-track {
+    animation-duration: 38s;
   }
 }
 
 @media (min-width: 1024px) {
-  .marquee-content {
-    animation-duration: 15s;
+  .marquee-container {
+    padding: 45px 0;
+  }
+
+  .marquee-track {
+    animation-duration: 50s;
   }
 }
 
-
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}

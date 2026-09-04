@@ -5,15 +5,30 @@
 
 <div class="marquee-container">
   <div class="marquee-track">
-    <h2
-      class="marquee-content uppercase text-[80px] sm:text-[150px] md:text-[200px] lg:text-[300px] text-white leading-[0.85] m-0">
-      TradeMall&nbsp;TradeMall&nbsp;TradeMall&nbsp;TradeMall&nbsp;
-    </h2>
-    <h2
-      class="marquee-content uppercase text-[80px] sm:text-[150px] md:text-[200px] lg:text-[300px] text-white leading-[0.85] m-0"
-      aria-hidden="true">
-      TradeMall&nbsp;TradeMall&nbsp;TradeMall&nbsp;TradeMall&nbsp;
-    </h2>
+    <div class="marquee-group">
+      @for (item of expandedItems; track $index; let last = $last) {
+      <h2
+        class="marquee-text uppercase text-[120px] md:text-[180px] lg:text-[280px] text-white leading-[0.85] m-0">
+        {{ item }}
+      </h2>
+      @if (!last) {
+      <span class="marquee-dot text-[120px] md:text-[180px] lg:text-[280px] text-white/50"
+        aria-hidden="true">✦</span>
+      }
+      }
+    </div>
+    <div class="marquee-group" aria-hidden="true">
+      @for (item of expandedItems; track $index; let last = $last) {
+      <h2
+        class="marquee-text uppercase text-[120px] md:text-[180px] lg:text-[280px] text-white leading-[0.85] m-0">
+        {{ item }}
+      </h2>
+      @if (!last) {
+      <span class="marquee-dot text-[120px] md:text-[180px] lg:text-[280px] text-white/50"
+        aria-hidden="true">✦</span>
+      }
+      }
+    </div>
   </div>
 </div>
 

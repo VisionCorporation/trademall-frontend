@@ -17,6 +17,7 @@ import { HeroCarousel } from '../hero-carousel/hero-carousel';
 import { NgOptimizedImage } from '@angular/common';
 import { Seo } from '../../services/seo/seo';
 import { ProductCardInterface } from '../../interfaces/product-card.interface';
+import { MARQUEE_ITEMS } from '../../data/constants/home.constant';
 
 @Component({
   selector: 'app-home',
@@ -46,6 +47,8 @@ export class Home {
   public cartQuantities = signal<Record<string, number>>({});
   private readonly cartState = inject(CartState);
   public hasFeaturedProductFailed = signal(false);
+  public items: string[] = MARQUEE_ITEMS;
+  public repeat = 2;
 
   constructor() {
     this.seoService.updatePageSeo({
@@ -78,5 +81,9 @@ export class Home {
 
   public toggleQuestion(question: string) {
     this.openQuestion = this.openQuestion === question ? null : question;
+  }
+
+  public get expandedItems(): string[] {
+    return Array.from({ length: this.repeat }, () => this.items).flat();
   }
 }
