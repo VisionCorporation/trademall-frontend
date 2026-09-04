@@ -256,7 +256,7 @@
       </div>
 
       <div
-        class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2"
+        class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 scroll-pl-5 md:scroll-pl-12 2xl:scroll-pl-0"
         [@staggerProducts]>
         @for (vendorProduct of vendorProductsDetails; track vendorProduct.id) {
         <app-product-card [product]="vendorProduct" layout="carousel" />
