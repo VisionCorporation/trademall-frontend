@@ -3,8 +3,6 @@ import { CartState } from '../../services/cart/cart-state';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Wishlist } from '../../services/wishlist/wishlist';
-// import { ProductCardInterface, ProductDetails } from '../../interfaces/products.interface';
-// import { Product } from '../../interfaces/all-products.interface';
 import { GuestCartDisplayInfo, PriceSnapshot } from '../../interfaces/cart.interface';
 import { ProductCardInterface } from '../../interfaces/product-card.interface';
 
