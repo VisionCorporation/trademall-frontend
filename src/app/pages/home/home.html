@@ -19,7 +19,7 @@
 
 <app-featured-categories />
 
-<section class="mt-25 md:mt-37.5 max-w-310 mx-auto px-5 md:px-12 2xl:px-0 lg:mb-68.5">
+<section class="mt-25 md:mt-37.5 max-w-310 mx-auto px-3 md:px-12 2xl:px-0 lg:mb-68.5">
   <div
     class="relative bg-[#F0B718] rounded-[20px] overflow-visible flex flex-col lg:flex-row lg:items-center py-12 px-6 sm:py-16 sm:px-12 lg:py-27.25 lg:px-15">
     <div class="relative z-10 w-full lg:max-w-[55%]">
@@ -50,7 +50,7 @@
 </section>
 
 <section class="mt-25 md:mt-37.5 mb-28.75">
-  <div class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0">
+  <div class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0">
     @if(!hasFeaturedProductFailed()) {
     <h2 class="text-[30px] sm:text-[40px] lg:text-[60px] text-left">
       Featured Products
@@ -76,7 +76,7 @@
   </div>
   }@else {
   <div
-    class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 scroll-pl-5 md:scroll-pl-12 2xl:scroll-pl-0"
+    class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 scroll-pl-3 md:scroll-pl-12 2xl:scroll-pl-0"
     [@staggerProducts]>
     @for (featuredProduct of featuredProducts; track featuredProduct.id) {
     <app-product-card [product]="featuredProduct" layout="carousel" />
@@ -86,7 +86,7 @@
   }
 </section>
 
-<section class="mt-20 md:mt-37.5 mb-28.75 max-w-310 mx-auto px-5 md:px-12 2xl:px-0">
+<section class="mt-20 md:mt-37.5 mb-28.75 max-w-310 mx-auto px-3 md:px-12 2xl:px-0">
   <h2 class="text-[30px] sm:text-[40px] lg:text-[60px] text-left">
     Common Questions
   </h2>

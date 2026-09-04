@@ -4,14 +4,14 @@
 
     @if (!isLoading()) {
     @if (product) {
-    <div class="mt-5 px-5 md:px-12 2xl:px-0">
+    <div class="mt-5 px-3 md:px-12 2xl:px-0">
       <app-breadcrumb [categoryName]="product.breadcrumbs[0].name" [categorySlug]="product.breadcrumbs[0].slug"
         [subCategoryName]="product.breadcrumbs[1].name" [subCategorySlug]="product.breadcrumbs[1].slug"
         [productName]="product.name" />
     </div>
 
     <section
-      class="flex flex-col lg:flex-row items-start justify-center mt-10 mb-15 lg:mb-37.5 gap-10 lg:gap-16 px-5 md:px-12 2xl:px-0">
+      class="flex flex-col lg:flex-row items-start justify-center mt-10 mb-15 lg:mb-37.5 gap-10 lg:gap-16 px-3 md:px-12 2xl:px-0">
       <div class="w-full lg:w-[50%]">
         <div class="flex flex-col gap-5">
           @if (product && selectedImage) {
@@ -175,7 +175,7 @@
       </div>
     </section>
 
-    <div class="mb-25 px-5 md:px-12 2xl:px-0">
+    <div class="mb-25 px-3 md:px-12 2xl:px-0">
       <div
         class="relative flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-gray-300 mb-8">
         @for (button of buttons; track button.value) {
@@ -248,7 +248,7 @@
     </div>
     } @else if (vendorProductsDetails.length > 0) {
     <div class="mt-25 md:mt-37.5 mb-28.75">
-      <div class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 mb-3 sm:mb-4">
+      <div class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 mb-3 sm:mb-4">
         <h2 class="text-[30px] sm:text-[40px] text-left">From the same vendor</h2>
         <p class="text-base sm:text-[18px] text-left text-[#374151]">
           Explore more items from this vendor and find your next favorite.
@@ -256,7 +256,7 @@
       </div>
 
       <div
-        class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 scroll-pl-5 md:scroll-pl-12 2xl:scroll-pl-0"
+        class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 scroll-pl-3 md:scroll-pl-12 2xl:scroll-pl-0"
         [@staggerProducts]>
         @for (vendorProduct of vendorProductsDetails; track vendorProduct.id) {
         <app-product-card [product]="vendorProduct" layout="carousel" />

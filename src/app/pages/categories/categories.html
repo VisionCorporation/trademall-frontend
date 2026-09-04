@@ -4,7 +4,7 @@
     <app-search-bar placeholder="Search categories..." (searchValue)="getSearchValue($any($event))" />
 
     @if (categories.length > 0 && !isLoading()) {
-    <div class="px-5 md:px-12 2xl:px-0 mt-10 sm:mt-14">
+    <div class="px-3 md:px-12 2xl:px-0 mt-10 sm:mt-14">
       <h1 class="text-[30px] sm:text-[40px] lg:text-[60px] text-left">
         Shop by Category
       </h1>
@@ -13,7 +13,7 @@
       </p>
     </div>
 
-    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-5 md:px-12 2xl:px-0 mb-15"
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-3 md:px-12 2xl:px-0 mb-15"
       [@staggerProducts]="categories.length">
       @for (category of categories; track category._id) {
       <a [routerLink]="['/categories', category.slug]"
