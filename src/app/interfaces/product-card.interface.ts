@@ -1,7 +1,3 @@
-interface Vendor {
-    _id: string;
-}
-
 interface Store {
     _id: string;
     name: string;
@@ -40,7 +36,7 @@ export interface ProductCardInterface {
     images: Image[];
     category: Category;
     store: Store;
-    vendor: Vendor;
+    vendor: string;
     stockQuantity: number;
     availability: 'in_stock' | 'out_of_stock' | 'pre_order';
     reviewCount: number;
