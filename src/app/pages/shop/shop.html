@@ -1,4 +1,4 @@
-<section class="max-w-310 mx-auto px-5 md:px-12 2xl:px-0 mt-20 lg:mt-24 mb-20">
+<section class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 mt-20 lg:mt-24 mb-20">
     <app-header />
 
     @if (!isLoading() && searchQuery && products().length === 0 && !hasError()) {
@@ -91,7 +91,7 @@
         </button>
     </div>
     } @else {
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-3.75">
         @for (product of products(); track product.id) {
         <app-product-card [product]="product" />
         }
