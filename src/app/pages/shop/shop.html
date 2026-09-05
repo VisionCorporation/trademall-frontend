@@ -1,51 +1,86 @@
-<section class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 mt-20 lg:mt-24 mb-20">
-    <app-header />
+<app-header />
+<section class="bg-[#00a751] text-white mt-20 lg:mt-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <div class="max-w-3xl">
+            <h1 class="text-3xl sm:text-5xl font-bold tracking-tight products-font">
+                Shop with confidence, every time
+            </h1>
+            <p class="mt-4 text-white/90 leading-relaxed">
+                Browse products from trusted sellers across every category, including electronics &amp; gadgets, phones
+                &amp; accessories, computing, fashion &amp; apparel, and more.
+            </p>
 
-    @if (!isLoading() && searchQuery && products().length === 0 && !hasError()) {
-    <div class="flex flex-col items-center justify-center pt-40 pb-30 text-center max-w-xl mx-auto">
-        <div class="w-30 sm:w-40 h-30 sm:h-40 rounded-full bg-gray-100 flex items-center justify-center mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none"
-                stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                @for (tag of heroSectionTags; track $index) {
+                <div
+                    class="flex items-center gap-2 text-sm font-medium rounded-full bg-white/15 border border-white/25 px-3 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-[15px]">
+                    @if(tag==='Verified vendors') {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-badge-check">
+                        <path
+                            d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                        <path d="m16 9-5.5 5.5L8 12" />
+                    </svg>
+                    }@else if(tag==='Quality products') {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-check">
+                        <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    }@else if(tag==='Secure payments') {
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-lock">
+                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    }
+                    {{tag}}
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 mb-20">
+    @if (!isLoading() && searchQuery && products().length === 0 && !hasErrorProducts()) {
+    <div
+        class="flex flex-col items-center justify-center pt-24 sm:pt-32 pb-20 sm:pb-24 text-center max-w-lg mx-auto px-4">
+        <div class="w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-2xl bg-[#F4F4F4] flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="82" height="82" viewBox="0 0 24 24" fill="none"
+                stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.3-4.3"></path>
                 <path d="M8 11h6"></path>
             </svg>
         </div>
-
-        <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] mb-3 products-font">
-            No Products Found
+        <h2 class="text-2xl sm:text-3xl font-semibold text-[#111827] mb-3 products-font">
+            No products found
         </h2>
 
-        <p class="text-[#374151] text-base sm:text-lg leading-relaxed mb-6">
-            We couldn't find any products matching <span class="products-font">"{{ searchQuery }}"</span>. Try a
-            different keyword or check your spelling.
+        <p class="text-[#6B7280] text-base leading-relaxed mb-8">
+            We couldn't find any matches for <span class="text-[#171717] font-medium products-font">"{{ searchQuery
+                }}"</span>.
+            Try a different keyword, check your spelling, or browse the full catalog instead.
         </p>
 
-        <div class="text-sm text-[#6B7280] leading-relaxed mb-8">
-            Popular searches:
-            <div class="mt-3 flex flex-wrap justify-center gap-2">
-                @for (suggestion of popularSearches; track $index) {
-                <button (click)="searchFor(suggestion)"
-                    class="px-3 py-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-150 cursor-pointer">
-                    {{ suggestion }}
-                </button>
-                }
-            </div>
+        <div class="flex flex-col sm:flex-row items-center gap-3">
+            <a routerLink="/shop"
+                class="w-full sm:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] hover:bg-[#00a751] transition-colors duration-200 text-white rounded-lg">
+                Browse all products
+            </a>
         </div>
-
-        <a routerLink="/shop"
-            class="text-[15px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
-            Browse All Products
-        </a>
-
     </div>
     }
 
     @if (searchValidationError()) {
-    <div class="flex flex-col items-center justify-center pt-40 pb-30 text-center max-w-lg mx-auto">
-        <div class="w-30 sm:w-40 h-30 sm:h-40 rounded-full bg-red-50 flex items-center justify-center mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none"
-                stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div
+        class="flex flex-col items-center justify-center pt-24 sm:pt-32 pb-20 sm:pb-24 text-center max-w-lg mx-auto px-4">
+        <div class="w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-2xl bg-red-50 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none"
+                stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.3-4.3"></path>
                 <path d="M11 8v4"></path>
@@ -54,76 +89,256 @@
         </div>
 
         <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] mb-3 products-font">
-            Search Query Too Short
+            Search query too short
         </h2>
 
-        <p class="text-[#374151] text-base sm:text-lg leading-relaxed mb-6">
+        <p class="text-[#6B7280] text-base leading-relaxed">
             Please enter at least 2 characters to search for products.
         </p>
+    </div>
+    }
 
-        <div class="px-5 py-4 text-sm text-[#4B5563]">
-            Try searching for:
-            <span class="font-medium">Phone</span>,
-            <span class="font-medium">Laptop</span>,
-            <span class="font-medium">Shoe</span>,
-            <span class="font-medium">Bags</span> etc.
+    @if (!searchValidationError() && !(!isLoading() && searchQuery && products().length === 0 && !hasErrorProducts())) {
+
+    <div class="flex items-center justify-between mb-6 lg:mb-8 mt-10">
+        <button type="button" (click)="toggleMobileFilters()"
+            class="lg:hidden inline-flex items-center gap-2 text-sm font-medium border border-gray-300 rounded-lg px-3.5 py-2 hover:border-[#171717] transition-colors duration-150">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="6" x2="20" y2="6" />
+                <line x1="7" y1="12" x2="17" y2="12" />
+                <line x1="10" y1="18" x2="14" y2="18" />
+            </svg>
+            Filters
+            @if (selectedCategorySlugs.length > 0) {
+            <span
+                class="bg-[#00a751] text-white text-[11px] leading-none rounded-full w-4.5 h-4.5 flex items-center justify-center">
+                {{ selectedCategorySlugs.length }}
+            </span>
+            }
+        </button>
+
+        <div class="lg:hidden block">
+            <label for="sort-mobile" class="mr-2 text-sm text-[#374151] sr-only">Sort by:</label>
+            <select id="sort-mobile" [(ngModel)]="selectedSortOption" (change)="onSortChange()"
+                class="w-auto border border-gray-300 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#171717] focus:border-[#171717]">
+                @for (option of sortOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+                }
+            </select>
         </div>
     </div>
-    }
 
-    @if(!isLoading() && searchQuery && products().length > 0){
-    <h1 class="text-[30px] sm:text-[40px] mb-8 products-font italic">Search Results for <span>"{{searchQuery}}"</span>
-    </h1>
-    }@else if(!isLoading() && !searchQuery && !searchValidationError()) {
-    <h1 class="text-[30px] sm:text-[40px] mb-8 products-font italic">All Products</h1>
-    }
+    <div class="flex gap-8 xl:gap-10 items-start">
+        <aside class="hidden lg:block w-full lg:max-w-57.5 xl:max-w-65 shrink-0 sticky top-28 self-start">
+            @if (isCategoriesLoading()) {
+            <app-skeleton-loader skeletonType="sub-categories" />
+            }
+            @else if (hasErrorCategories() && categories().length === 0) {
+            <div class="flex flex-col items-center gap-3 py-16">
+                <p class="text-lg text-red-500">Failed to load categories.</p>
+                <button (click)="retryLoadCategories()"
+                    class="bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-4 py-2 text-white rounded-lg">
+                    Try Again
+                </button>
+            </div>
+            } @else if (categories().length > 0) {
+            <div class="bg-white border border-gray-300 rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="products-font text-[18px]">Categories</h2>
+                    @if (selectedCategorySlugs.length > 0) {
+                    <button type="button" (click)="clearCategoryFilters()"
+                        class="text-xs text-[#00a751] font-medium hover:underline">
+                        Clear
+                    </button>
+                    }
+                </div>
+                <div [@fadeInOut] class="flex flex-col gap-1 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1">
+                    @for (category of categories(); track category._id) {
+                    <label [for]="category.slug"
+                        class="custom-checkbox flex items-center gap-2 py-1.5 px-1.5 rounded-lg cursor-pointer text-[14.5px] leading-5 hover:bg-gray-50 transition-colors duration-150">
+                        <input type="checkbox" [id]="category.slug"
+                            [checked]="selectedCategorySlugs.includes(category.slug)"
+                            (change)="onCategoryChange(category.slug, $event)" />
+                        <span class="checkmark shrink-0">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 13L10 18L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-[14.5px]">{{ category.name }}</span>
+                    </label>
+                    }
+                </div>
+            </div>
+            }
+        </aside>
 
-    @if (isLoading()) {
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.75">
-        <app-skeleton-loader skeletonType="product" />
-    </div>
-    } @else if (hasError() && products.length === 0) {
-    <div class="flex flex-col items-center gap-3 py-16">
-        <p class="text-lg text-red-500">Failed to load products.</p>
-        <button (click)="retryLoad()"
-            class="bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-4 py-2 text-white rounded-lg">
-            Try Again
-        </button>
-    </div>
-    } @else {
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-3.75">
-        @for (product of products(); track product.id) {
-        <app-product-card [product]="product" />
+        @if (isMobileFiltersOpen()) {
+        <div class="fixed inset-0 z-50 lg:hidden">
+            <div class="absolute inset-0 bg-black/40" (click)="closeMobileFilters()"></div>
+
+            <div [@fadeInOut] class="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white flex flex-col">
+                <div class="flex items-center justify-between px-5 py-4 border-b border-[#EEEEEE]">
+                    <h2 class="products-font text-[18px]">Filters</h2>
+                    <button type="button" (click)="closeMobileFilters()" aria-label="Close filters"
+                        class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-150">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto px-5 py-4">
+                    @if (isCategoriesLoading()) {
+                    <app-skeleton-loader skeletonType="sub-categories" />
+                    }
+                    @else if (hasErrorCategories() && categories().length === 0) {
+                    <div class="flex flex-col items-center gap-3 py-16">
+                        <p class="text-lg text-red-500">Failed to load categories.</p>
+                        <button (click)="retryLoadCategories()"
+                            class="bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-4 py-2 text-white rounded-lg">
+                            Try Again
+                        </button>
+                    </div>
+                    } @else if (categories().length > 0) {
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-medium text-[#374151] products-font">Categories</h3>
+                        @if (selectedCategorySlugs.length > 0) {
+                        <button type="button" (click)="clearCategoryFilters()"
+                            class="text-xs text-[#00a751] font-medium hover:underline">
+                            Clear all
+                        </button>
+                        }
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        @for (category of categories(); track category._id) {
+                        <label [for]="category.slug + '-mobile'"
+                            class="custom-checkbox flex items-center gap-2 py-2 px-1.5 rounded-lg cursor-pointer text-[15px] leading-5 hover:bg-gray-50 transition-colors duration-150">
+                            <input type="checkbox" [id]="category.slug + '-mobile'"
+                                [checked]="selectedCategorySlugs.includes(category.slug)"
+                                (change)="onCategoryChange(category.slug, $event)" />
+                            <span class="checkmark shrink-0">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M5 13L10 18L19 7" />
+                                </svg>
+                            </span>
+                            <span class="text-[15px]">{{ category.name }}</span>
+                        </label>
+                        }
+                    </div>
+                    }
+                </div>
+
+                @if(!hasErrorProducts() && products().length > 0) {
+                <div class="px-5 py-4 border-t border-[#EEEEEE]">
+                    <button type="button" (click)="closeMobileFilters()"
+                        class="w-full bg-[#171717] hover:opacity-85 transition-opacity duration-150 text-white text-[15px] font-medium py-3 rounded-lg">
+                        Show {{ products().length }} {{ products().length === 1 ? 'result' : 'results' }}
+                    </button>
+                </div>
+                }
+            </div>
+        </div>
         }
+
+        <div class="flex-1 min-w-0">
+            @if (isLoading()) {
+            <app-skeleton-loader skeletonType="product" />
+            } @else if (hasErrorProducts() && products().length === 0) {
+            <div class="flex flex-col items-center gap-3 py-16">
+                <p class="text-lg text-red-500">Failed to load products.</p>
+                <button (click)="retryLoad()"
+                    class="bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-4 py-2 text-white rounded-lg">
+                    Try Again
+                </button>
+            </div>
+            } @else if (products().length > 0) {
+            @if (!isLoading()) {
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border border-gray-300 p-4 sm:p-5 rounded-2xl mb-7">
+                <div>
+                    @if (searchQuery || selectedCategorySlugs.length > 0) {
+                    <div class="flex flex-wrap gap-1.5">
+                        @if (searchQuery) {
+                        <span class="text-[#6B7280] text-sm sm:text-base flex items-center gap-2">
+                            Search results for <span class="text-[#374151] products-font">"{{ searchQuery }}"</span>
+                            <button type="button" (click)="clearSearch()"
+                                class="text-[#6B7280] hover:text-red-500 transition-colors duration-150 leading-none"
+                                aria-label="Clear search">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 5L5 19M5 5L19 19" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </button>
+                        </span>
+                        }
+                        @for (slug of selectedCategorySlugs; track slug) {
+                        <span class="text-[#6B7280] text-sm sm:text-base">
+                            {{ getCategoryName(slug) }}
+                        </span>
+                        }
+                    </div>
+                    } @else {
+                    <span class="text-[#6B7280] text-sm sm:text-base">
+                        All Products
+                    </span>
+                    }
+                    <p class="text-[#374151] text-sm sm:text-base"> Showing
+                        <span class="products-font">{{products().length}}</span> of <span
+                            class="products-font">{{totalResults()}}</span> {{ totalResults() === 1 ? 'product' :
+                        'products' }}
+                    </p>
+                </div>
+                <div class="w-full sm:w-auto hidden lg:block">
+                    <label for="sort-desktop" class="mr-2 text-sm text-[#374151]">Sort by:</label>
+                    <select id="sort-desktop" [(ngModel)]="selectedSortOption" (change)="onSortChange()"
+                        class="w-auto border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#171717] focus:border-[#171717]">
+                        @for (option of sortOptions; track option.value) {
+                        <option [value]="option.value">{{ option.label }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            }
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                @for (product of sortedProducts(); track product.id) {
+                <app-product-card [product]="product" />
+                }
+            </div>
+
+            <div #scrollSentinel class="h-1"></div>
+
+            @if (isLoadingMore()) {
+            <div class="flex flex-col items-center justify-center py-8">
+                <svg class="animate-spin" width="28" height="28" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="#374151" stroke-width="2" stroke-dasharray="32"
+                        stroke-dashoffset="12" />
+                </svg>
+                <span class="text-[#374151] py-1">Loading more...</span>
+            </div>
+            }
+
+            @if (hasErrorProducts() && products().length > 0) {
+            <div class="flex flex-col items-center gap-3 py-8">
+                <p class="text-red-500">Failed to load more products.</p>
+                <button (click)="retryLoad()"
+                    class="border border-[#171717] hover:bg-[#171717] hover:text-white transition-colors duration-200 px-4 py-2 rounded-lg text-sm">
+                    Try Again
+                </button>
+            </div>
+            }
+
+            @if (!hasMore && products().length > 0) {
+            <p class="text-center text-[#374151] py-12">
+                That's all for now. Check back soon for new arrivals!
+            </p>
+            }
+            }
+        </div>
     </div>
-
-    <div #scrollSentinel class="h-1"></div>
-
-    @if (isLoadingMore()) {
-    <div class="flex flex-col items-center justify-center py-8">
-        <svg class="animate-spin" width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="#374151" stroke-width="2" stroke-dasharray="32"
-                stroke-dashoffset="12" />
-        </svg>
-        <span class="text-[#374151] py-1">Loading more...</span>
-    </div>
-    }
-
-    @if (hasError() && products().length > 0) {
-    <div class="flex flex-col items-center gap-3 py-8">
-        <p class="text-red-500">Failed to load more products.</p>
-        <button (click)="retryLoad()"
-            class="border border-[#171717] hover:bg-[#171717] hover:text-white transition-colors duration-200 px-4 py-2 rounded-lg text-sm">
-            Try Again
-        </button>
-    </div>
-    }
-
-    @if (!hasMore && products().length > 0) {
-    <p class="text-center text-[#374151] py-12">
-        That's all for now. Check back soon for new arrivals!
-    </p>
-    }
     }
 
     <app-newsletter />
