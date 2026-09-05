@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
@@ -40,22 +40,32 @@ export class Products {
     return this.http.get<FeaturedProductsResponse>(`${environment.apiBaseUrl}/products/featured`);
   }
 
-  public getAllProducts(currentPage: number): Observable<AllProductsResponse> {
-    return this.http.get<AllProductsResponse>(`${environment.apiBaseUrl}/products?page=${currentPage}`);
+  public getAllProducts(currentPage: number, category?: string[]): Observable<AllProductsResponse> {
+    let params = new HttpParams().set('page', currentPage);
+
+    if (category?.length) {
+      params = params.set('category', category.join(','));
+    }
+
+    return this.http.get<AllProductsResponse>(`${environment.apiBaseUrl}/products`, { params });
   }
 
   public searchProduct(
     query: string,
-    currentPage: number
+    currentPage: number,
+    category?: string[]
   ): Observable<AllProductsResponse> {
+    let params = new HttpParams()
+      .set('q', query)
+      .set('page', currentPage);
+
+    if (category?.length) {
+      params = params.set('category', category.join(','));
+    }
+
     return this.http.get<AllProductsResponse>(
       `${environment.apiBaseUrl}/products/search`,
-      {
-        params: {
-          q: query,
-          page: currentPage,
-        },
-      }
+      { params }
     );
   }
 }
