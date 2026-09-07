@@ -45,7 +45,7 @@
       </svg>
     </button>
 
-    <img [src]="product.images[0]?.url" alt="{{ product.name }}"
+    <img [src]="product.images[0]?.url" [title]="product.name" alt="{{ product.name }}" width="100" height="100"
       class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
   </div>
 
