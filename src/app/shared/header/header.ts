@@ -10,7 +10,7 @@ import {
   signal,
   PLATFORM_ID,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { ToastService } from '../../services/toast/toast.service';
@@ -23,7 +23,7 @@ import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, ClickOutside, FormsModule, NgOptimizedImage],
+  imports: [RouterLink, ClickOutside, FormsModule, NgOptimizedImage, RouterLinkActive],
   templateUrl: './header.html',
   styleUrl: './header.css',
   animations: [fadeInOutAnimation],
@@ -49,7 +49,7 @@ export class Header implements OnInit {
   public isMenuOpen = signal(false)
   public isProfileMenuOpen = false;
   public desktopMenuItems: HeaderSection[] = DESKTOP_MENU_ITEMS
-  public menuItems: HeaderSection[] = MOBILE_MENU_ITEMS
+  public mobileMenuItems: HeaderSection[] = MOBILE_MENU_ITEMS
   public profileMenuItems: HeaderSection[] = PROFILE_MENU_ITEMS
 
   @ViewChild('header') header!: ElementRef;
