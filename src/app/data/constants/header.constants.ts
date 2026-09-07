@@ -1,17 +1,17 @@
 export const DESKTOP_MENU_ITEMS = [
     { label: 'Shop', url: '/shop' },
-    { label: 'About', url: '' },
-    { label: 'Contact', url: '' },
-    { label: 'FAQs', url: '' },
+    { label: 'About', url: '/about' },
+    { label: 'Contact', url: '/contact' },
+    { label: 'FAQs', url: '/faqs' },
 ]
 
 export const MOBILE_MENU_ITEMS = [
     { label: 'Shop', url: '/shop' },
     { label: 'Categories', url: '/categories' },
-    { label: 'About', url: '' },
-    { label: 'Contact', url: '' },
-    { label: 'FAQs', url: '' },
-    { label: 'Track Order', url: '' },
+    { label: 'About', url: '/about' },
+    { label: 'Contact', url: '/contact' },
+    { label: 'FAQs', url: '/faqs' },
+    { label: 'Track Order', url: '/track-order' },
 ]
 
 export const PROFILE_MENU_ITEMS = [
