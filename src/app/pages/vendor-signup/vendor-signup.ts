@@ -164,18 +164,12 @@ export class VendorSignup {
     this.signupService.nextStep();
   }
 
-  public formatPhoneNumber(): void {
-    this.signupService.formatPhoneNumber();
+  public onPhoneInput(event: Event) {
+    this.signupService.onPhoneInput(event)
   }
 
-  public onPhoneNumberInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = input.value;
-
-    if (!value.startsWith('+233 ')) {
-      input.value = '+233 ';
-      this.signupService.personalForm.get('phoneNumber')?.setValue('+233 ', { emitEvent: false });
-    }
+  public onPhoneKeydown(event: KeyboardEvent) {
+    this.signupService.onPhoneKeydown(event)
   }
 
   public onOtpInput(event: Event, index: number): void {
