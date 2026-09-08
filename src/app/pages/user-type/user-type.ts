@@ -2,10 +2,11 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { UserTypes } from '../../data/constants/user-type.constant';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-user-type',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, NgOptimizedImage],
   templateUrl: './user-type.html',
   styleUrl: './user-type.css',
 })
@@ -15,7 +16,7 @@ export class UserType implements AfterViewInit {
   private router = inject(Router);
 
   public userTypeForm = this.fb.group({
-    userType: [''],
+    userType: ['customer'],
   });
 
   ngAfterViewInit(): void {

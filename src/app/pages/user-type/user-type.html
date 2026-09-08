@@ -1,44 +1,115 @@
-<section class="relative bg-[#E3E8E1] min-h-screen py-10 md:py-18.75 px-5 md:px-12 lg:px-37.5">
-  <h1 class="uppercase text-[36px] md:text-[48px] lg:text-[64px] max-w-full lg:max-w-59 leading-none mb-2.5 text-[#171717]">
-    Welcome to trademall
-  </h1>
-  <p class="text-[18px] md:text-[24px] text-[#171717] mb-7">Select a user type to continue</p>
-
-  <form [formGroup]="userTypeForm" (ngSubmit)="onSubmit()" class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-    <div class="flex flex-col sm:flex-row items-center gap-5 md:gap-10">
-      @for (userType of userTypes; track userType.value) {
-        <div
-          class="user-type-card bg-white w-full sm:w-60 md:w-76 h-60 md:h-76 rounded-2xl p-5 md:p-7.5 cursor-pointer"
-          (click)="selectUserType(userType.value)"
-        >
-          <input
-            type="radio"
-            formControlName="userType"
-            [value]="userType.value"
-            [id]="userType.value"
-            class="custom-radio cursor-pointer"
-          />
-          <h2 class="uppercase text-[24px] md:text-[32px]">{{ userType.name }}</h2>
-        </div>
-      }
+<main>
+  <section class="relative bg-[#E3E8E1] min-h-screen overflow-hidden py-10 md:py-16 px-5 md:px-12 lg:px-20 xl:px-32">
+    <div class="absolute inset-0 opacity-[0.07] pointer-events-none"
+      style="background-image: radial-gradient(#171717 1.5px, transparent 1.5px); background-size: 28px 28px;">
     </div>
 
-    <button
-      [disabled]="userTypeForm.get('userType')?.value === ''"
-      class="w-full sm:w-[60%] mx-auto flex items-center justify-center gap-3 lg:w-auto text-[15px] md:text-[17px] bg-[#171717] hover:opacity-80 transition-opacity duration-200 ease-in px-3.75 py-3 text-white rounded-lg disabled:cursor-not-allowed disabled:opacity-60 text-nowrap"
-      [class.cursor-not-allowed]="userTypeForm.get('userType')?.value === ''"
-    >
-      Create an account
-    </button>
-  </form>
+    <a routerLink="/">
+      <img ngSrc="assets/images/logo-black.png" title="logo" width="566" height="171" priority alt="logo"
+        class="w-20 md:w-24 h-auto mb-10 md:mb-14 relative z-10" />
+    </a>
 
-  <p class="mt-5 text-[#7F7E83] text-[14px] md:text-[15px]">
-    By Clicking on "Create an account", you agree to our
-    <span class="text-[#00a751] cursor-pointer">Terms and Conditions</span>
-  </p>
+    <div class="relative z-10 max-w-4xl">
+      <span class="inline-block text-xs sm:text-sm tracking-[0.2em] uppercase text-[#00a751] font-medium mb-4">
+        Get Started
+      </span>
+      <h1 class="text-[36px] md:text-[48px] lg:text-[56px] leading-[1.05] mb-3 text-[#171717] products-font">
+        Welcome to trademall
+      </h1>
+      <p class="text-[17px] md:text-[20px] text-[#374151] mb-10">
+        Tell us how you'd like to use trademall to get started
+      </p>
 
-  <p class="mt-8 lg:mt-0 lg:absolute lg:bottom-auto lg:top-14.5 text-center lg:right-12.5 text-[16px] md:text-xl z-10">
-    Already have an account?
-    <a class="text-[#00a751] py-3 px-3" routerLink="/login">Log In</a>
-  </p>
-</section>
+      <form [formGroup]="userTypeForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 max-w-2xl">
+          @for (userType of userTypes; track userType.value) {
+          <label [for]="userType.value"
+            class="relative bg-white rounded-2xl p-6 md:p-7 cursor-pointer border-2 transition-all duration-200 flex flex-col gap-4"
+            [class]="userTypeForm.get('userType')?.value === userType.value
+      ? 'border-[#00a751] shadow-md'
+      : 'border-transparent hover:border-[#17171733]'">
+
+            <input type="radio" formControlName="userType" [value]="userType.value" [id]="userType.value"
+              class="sr-only" />
+
+            <div class="flex items-center justify-between">
+              <div
+                class="w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-colors duration-200"
+                [class]="userTypeForm.get('userType')?.value === userType.value ? 'bg-[#00a751]' : 'bg-[#F7F7F7]'">
+                @if (userType.value === 'vendor') {
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M3 9L4.5 4.5H19.5L21 9M3 9C3 10.1046 3.89543 11 5 11C6.10457 11 7 10.1046 7 9C7 10.1046 7.89543 11 9 11C10.1046 11 11 10.1046 11 9C11 10.1046 11.8954 11 13 11C14.1046 11 15 10.1046 15 9C15 10.1046 15.8954 11 17 11C18.1046 11 19 10.1046 19 9C19 10.1046 19.8954 11 21 11C21 9 21 9 21 9M4 11V18.5C4 19.0523 4.44772 19.5 5 19.5H19C19.5523 19.5 20 19.0523 20 18.5V11"
+                    [attr.stroke]="userTypeForm.get('userType')?.value === userType.value ? 'white' : '#171717'"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M9 19.5V15C9 14.4477 9.44772 14 10 14H14C14.5523 14 15 14.4477 15 15V19.5"
+                    [attr.stroke]="userTypeForm.get('userType')?.value === userType.value ? 'white' : '#171717'"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                } @else {
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M6 6H4C3.44772 6 3 6.44772 3 7V8C3 12.4183 6.58172 16 11 16H13C17.4183 16 21 12.4183 21 8V7C21 6.44772 20.5523 6 20 6H18"
+                    [attr.stroke]="userTypeForm.get('userType')?.value === userType.value ? 'white' : '#171717'"
+                    stroke-width="1.5" stroke-linecap="round" />
+                  <path d="M6 6V4C6 3.44772 6.44772 3 7 3H17C17.5523 3 18 3.44772 18 4V6H6Z"
+                    [attr.stroke]="userTypeForm.get('userType')?.value === userType.value ? 'white' : '#171717'"
+                    stroke-width="1.5" stroke-linejoin="round" />
+                  <path d="M9 20H15M12 16V20" stroke-width="1.5" stroke-linecap="round"
+                    [attr.stroke]="userTypeForm.get('userType')?.value === userType.value ? 'white' : '#171717'" />
+                </svg>
+                }
+              </div>
+
+              <div
+                class="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors duration-200"
+                [class]="userTypeForm.get('userType')?.value === userType.value ? 'border-[#00a751] bg-[#00a751]' : 'border-[#17171733]'">
+                @if (userTypeForm.get('userType')?.value === userType.value) {
+                <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 10L8 14L16 6" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                }
+              </div>
+            </div>
+
+            <div>
+              <h2 class="text-[20px] md:text-[22px] products-font text-[#171717] mb-1">{{ userType.name }}</h2>
+              <p class="text-sm text-[#6B7280] leading-relaxed">
+                @if (userType.value === 'vendor') {
+                Set up your store and start selling to customers across Ghana.
+                } @else {
+                Shop from trusted vendors and get items delivered to you.
+                }
+              </p>
+            </div>
+          </label>
+          }
+        </div>
+
+        <div class="max-w-2xl">
+          <p class="text-[#7F7E83] text-[13px] md:text-[14px] mb-5">
+            By clicking "Create an account", you agree to our
+            <span class="text-[#00a751] cursor-pointer hover:underline">Terms and Conditions</span>
+          </p>
+
+          <button [disabled]="userTypeForm.get('userType')?.value === ''"
+            class="w-full sm:w-auto flex items-center justify-center gap-2.5 text-[15px] md:text-[16px] font-medium bg-[#171717] hover:opacity-85 transition-opacity duration-200 ease-in px-8 py-3.5 text-white rounded-xl disabled:cursor-not-allowed disabled:opacity-50"
+            [class.cursor-not-allowed]="userTypeForm.get('userType')?.value === ''">
+            Continue
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 4.1665L13.3333 9.99984L7.5 15.8332" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <p
+      class="mt-10 lg:mt-0 relative z-10 lg:absolute lg:top-10 text-center lg:right-12 xl:right-20 text-[15px] md:text-lg">
+      Already have an account?
+      <a class="text-[#00a751] font-medium hover:underline" routerLink="/login">Log In</a>
+    </p>
+  </section>
+</main>
