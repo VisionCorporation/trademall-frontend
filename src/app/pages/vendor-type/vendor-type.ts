@@ -5,11 +5,11 @@ import { VendorTypes } from '../../data/constants/vendor-type.constant';
 import { SignupService } from '../../services/signup/signup.service';
 import { VendorSignupData } from '../../interfaces/signup.interface';
 import { ToastService } from '../../services/toast/toast.service';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-vendor-type',
-  imports: [ReactiveFormsModule, RouterLink, AsyncPipe],
+  imports: [ReactiveFormsModule, RouterLink, AsyncPipe, NgOptimizedImage],
   templateUrl: './vendor-type.html',
   styleUrl: './vendor-type.css',
 })
@@ -21,7 +21,7 @@ export class VendorType {
   private router = inject(Router);
 
   public vendorTypeForm = this.fb.group({
-    vendorType: [''],
+    vendorType: ['individual'],
   });
 
   ngAfterViewInit(): void {
