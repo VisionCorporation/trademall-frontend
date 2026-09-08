@@ -114,19 +114,32 @@ export class SignupService {
     return this.http.post<string>(`${environment.apiBaseUrl}/user/resend-otp`, { email });
   }
 
-  public formatPhoneNumber(): void {
-    const control = this.personalForm.get('phoneNumber');
-    if (control) {
-      let value = control.value;
-      if (value && value.startsWith('+233')) {
-        const cleaned = value.replace(/\s/g, '');
-        if (cleaned.startsWith('+233')) {
-          const digits = cleaned.substring(4);
-          const formatted = digits.replace(/(\d{3})(?=\d)/g, '$1 ');
-          value = '+233 ' + formatted;
-          control.setValue(value, { emitEvent: false });
-        }
-      }
+  public onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const rawValue = input.value;
+
+    let digitsAfterPrefix = rawValue.replace('+233', '').replace(/\D/g, '');
+
+    if (digitsAfterPrefix.startsWith('0')) {
+      digitsAfterPrefix = digitsAfterPrefix.substring(1);
+    }
+
+    digitsAfterPrefix = digitsAfterPrefix.substring(0, 9);
+
+    let formatted = '+233';
+    if (digitsAfterPrefix.length > 0) formatted += ' ' + digitsAfterPrefix.substring(0, 3);
+    if (digitsAfterPrefix.length > 3) formatted += ' ' + digitsAfterPrefix.substring(3, 6);
+    if (digitsAfterPrefix.length > 6) formatted += ' ' + digitsAfterPrefix.substring(6, 9);
+
+    this.personalForm.get('phoneNumber')?.setValue(formatted, { emitEvent: false });
+    input.value = formatted;
+    input.setSelectionRange(formatted.length, formatted.length);
+  }
+
+  public onPhoneKeydown(event: KeyboardEvent): void {
+    const input = event.target as HTMLInputElement;
+    if (event.key === 'Backspace' && (input.selectionStart ?? 0) <= 5) {
+      event.preventDefault();
     }
   }
 
