@@ -33,8 +33,6 @@ export interface Vendor {
 export interface VendorDetailedInfoResponse {
   success: boolean;
   vendor: VendorDetailedInfo;
-  productId: string;
-  productName: string;
 }
 
 export interface VendorDetailedInfo {
