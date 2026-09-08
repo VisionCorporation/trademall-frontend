@@ -29,3 +29,26 @@ export interface Vendor {
   isVerified: boolean;
   dateOfJoining: string;
 }
+
+export interface VendorDetailedInfoResponse {
+  success: boolean;
+  vendor: VendorDetailedInfo;
+  productId: string;
+  productName: string;
+}
+
+export interface VendorDetailedInfo {
+  _id: string;
+  rating: number;
+  reviewCount: number;
+  businessName: string;
+  subdomain: string;
+  location: VendorLocation;
+}
+
+export interface VendorLocation {
+  city: string;
+  digitalAddress: string;
+  physicalAddress: string;
+  region: string;
+}
