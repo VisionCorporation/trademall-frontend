@@ -16,7 +16,7 @@
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-15 gap-5 px-3 md:px-12 2xl:px-0 mb-15"
       [@staggerProducts]="categories.length">
       @for (category of categories; track category._id) {
-      <a [routerLink]="['/categories', category.slug]"
+      <a [routerLink]="['/shop']" [queryParams]="{ category: category.slug }"
         class="relative w-full rounded-2xl py-6 sm:py-7.5 px-5 sm:px-10 text-white flex flex-col overflow-hidden group">
         <img [ngSrc]="category.image ?? ''" fill alt="{{ category.name }}"
           class="object-cover object-center rounded-2xl transition-transform duration-500 group-hover:scale-110"
