@@ -13,7 +13,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
 import { Observable, Subscription } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { OtpSuccessResponse, SignupData } from '../../interfaces/signup.interface';
 import { CountdownTimerService } from '../../services/countdown-timer/coutdown-timer.service';
 import { ToastService } from '../../services/toast/toast.service';
@@ -24,7 +24,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-customer-signup',
-  imports: [RouterLink, ReactiveFormsModule, AsyncPipe, InputErrorMessage],
+  imports: [RouterLink, ReactiveFormsModule, AsyncPipe, InputErrorMessage, NgOptimizedImage],
   templateUrl: './customer-signup.html',
   styleUrl: './customer-signup.css',
 })
@@ -38,6 +38,8 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
   public canResend$!: Observable<boolean>;
   private readonly countdownTimerService = inject(CountdownTimerService);
   private TIMER_KEY = 'otp_expiry';
+  public showPassword = false;
+  public showConfirmPassword = false
   private router = inject(Router);
   public steps = steps;
   public otpControls = otpControls;
@@ -182,18 +184,12 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
     this.signupService.nextStep();
   }
 
-  public formatPhoneNumber(): void {
-    this.signupService.formatPhoneNumber();
+  public onPhoneInput(event: Event) {
+    this.signupService.onPhoneInput(event)
   }
 
-  public onPhoneNumberInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = input.value;
-
-    if (!value.startsWith('+233 ')) {
-      input.value = '+233 ';
-      this.signupService.personalForm.get('phoneNumber')?.setValue('+233 ', { emitEvent: false });
-    }
+  public onPhoneKeydown(event: KeyboardEvent) {
+    this.signupService.onPhoneKeydown(event)
   }
 
   public onOtpInput(event: Event, index: number): void {
