@@ -18,6 +18,7 @@ import { ProductCard } from '../../shared/product-card/product-card';
 import { ProductCardInterface } from '../../interfaces/product-card.interface';
 import { GuestCartDisplayInfo, PriceSnapshot } from '../../interfaces/cart.interface';
 import { CartState } from '../../services/cart/cart-state';
+import { VendorDetailedInfoResponse } from '../../interfaces/vendor.interface';
 
 @Component({
     selector: 'app-product-detail',
@@ -52,12 +53,14 @@ export class ProductDetail implements OnInit {
     public product: ProductDetails | null = null;
     public vendorProductsDetails: ProductCardInterface[] = [];
     public vendorId = '';
+    public vendorDetailedInfo: VendorDetailedInfoResponse | null = null;
     public isLoading = signal(true);
+    public vendorDetailedInfoLoading = signal(false)
     public isVendorProductsLoading = signal(false);
     public isReviewsLoading = signal(false);
     public isTryingAgain = signal(false)
     public totalPagesArray: number[] = [];
-    public activeButton = 'description';
+    public activeButton = 'vendor-info';
     public buttons = buttons;
     public reviews: any;
     public errorMessage = ''
@@ -172,6 +175,7 @@ export class ProductDetail implements OnInit {
                     next: (response) => {
                         this.product = response.data;
                         this.updateSeo();
+                        this.fetchVendorDetailedInfo(response.data._id)
                         this.vendorId = response.data.vendor._id;
                         this.isLoading.set(false);
                         this.fetchVendorProducts();
@@ -208,12 +212,27 @@ export class ProductDetail implements OnInit {
         }
     }
 
+    private fetchVendorDetailedInfo(productId: string) {
+        this.vendorDetailedInfoLoading.set(true)
+
+        this.vendorStoreService.getDetailedVendorInfoForAProduct(productId).subscribe({
+            next: (res) => {
+                this.vendorDetailedInfo = res
+                this.vendorDetailedInfoLoading.set(false)
+            },
+            error: (err) => {
+                this.toastService.error(err.error.message)
+                console.error('Failed to fetch vendor info', err);
+                this.vendorDetailedInfoLoading.set(false)
+            }
+        })
+    }
+
     private fetchReviews(productId: string) {
         this.isReviewsLoading.set(true);
         this.reviewService.getReviewsForAProduct(productId).subscribe({
             next: (response) => {
                 this.reviews = response.data;
-                console.log(this.reviews);
                 this.isReviewsLoading.set(false);
             },
             error: (err) => {

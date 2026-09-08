@@ -90,13 +90,13 @@
             <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient [attr.id]="'star-fill-' + starGradientUid + '-' + i" x1="0" y1="0" x2="1" y2="0">
-                  <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="#F0B718" />
+                  <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="#D89E12" />
                   <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="transparent" />
                 </linearGradient>
               </defs>
               <path
                 d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
-                [attr.fill]="'url(#star-fill-' + starGradientUid + '-' + i + ')'" stroke="#F0B71880" stroke-width="1.5"
+                [attr.fill]="'url(#star-fill-' + starGradientUid + '-' + i + ')'" stroke="#D89E12" stroke-width="1.5"
                 stroke-linejoin="round" />
             </svg>
             }
@@ -174,24 +174,129 @@
 
     <div class="mb-24 px-3 md:px-12 2xl:px-0">
       <div
-        class="relative flex items-center gap-6 sm:gap-8 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-[#E5E7EB] mb-8">
+        class="relative flex items-center gap-6 sm:gap-8 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-gray-300 mb-8">
         @for (button of buttons; track button.value) {
         <button
-          class="relative text-[15px] sm:text-[16px] pb-3 products-font shrink-0 transition-colors duration-150 ease-in-out cursor-pointer"
-          [class]="button.value === activeButton ? 'text-[#00a751] font-medium' : 'text-[#6B7280] hover:text-[#171717]'"
+          class="relative text-[15px] sm:text-[16px] pb-3 shrink-0 transition-colors duration-100 ease-in-out cursor-pointer"
+          [class]="button.value === activeButton ? 'text-[#00a751]' : 'text-[#4b5563] hover:text-[#171717]'"
           (click)="switchButtons(button.value, product._id)">
           {{ button.label }}
           @if (button.value === activeButton) {
-          <span class="absolute left-0 right-0 -bottom-0.5 h-0.5 bg-[#00a751] rounded-full"></span>
+          <span class="absolute left-0 right-0 -bottom-2 h-0.5 bg-[#00a751]"></span>
           }
         </button>
         }
       </div>
-      @if (activeButton === 'vendor-info') {
 
+      @if (activeButton === 'vendor-info') {
+      @if (vendorDetailedInfoLoading()) {
+      <div class="bg-[#FAFAFA] rounded-2xl p-5 sm:p-8 border border-gray-300 skeleton-shimmer">
+        <div class="h-7 w-48 bg-gray-400/70 rounded mb-3"></div>
+        <div class="h-5 w-32 bg-gray-400/70 rounded mb-6"></div>
+        <div class="h-4 w-full max-w-md bg-gray-400/70 rounded mb-2"></div>
+        <div class="h-4 w-full max-w-sm bg-gray-400/70 rounded"></div>
+      </div>
+      } @else if (vendorDetailedInfo) {
+      <div class="bg-[#FAFAFA] rounded-2xl p-5 sm:p-8 border border-gray-300">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-[#17171714]">
+          <div>
+            <h3 class="products-font text-xl sm:text-2xl text-[#0A0A0A] mb-1.5">
+              {{ vendorDetailedInfo.vendor.businessName }}
+            </h3>
+            <div class="flex items-center gap-1.5">
+              @for (i of starIndices; track i) {
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient [attr.id]="'vendor-star-fill-' + starGradientUid + '-' + i" x1="0" y1="0" x2="1"
+                    y2="0">
+                    <stop [attr.offset]="starFillPercent(i, vendorDetailedInfo.vendor.rating) + '%'"
+                      stop-color="#D89E12" />
+                    <stop [attr.offset]="starFillPercent(i, vendorDetailedInfo.vendor.rating) + '%'"
+                      stop-color="transparent" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                  [attr.fill]="'url(#vendor-star-fill-' + starGradientUid + '-' + i + ')'" stroke="#D89E12"
+                  stroke-width="1.5" stroke-linejoin="round" />
+              </svg>
+              }
+              <span class="text-sm text-[#374151] ml-1">
+                {{ vendorDetailedInfo.vendor.rating }}
+                <span class="text-[#9CA3AF]">
+                  ({{ vendorDetailedInfo.vendor.reviewCount }} review{{ vendorDetailedInfo.vendor.reviewCount === 1 ? ''
+                  : 's' }})
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <a [routerLink]="['/products/vendor', vendorDetailedInfo.vendor._id]"
+            class="text-[15px] shrink-0 px-5 py-3.5 rounded-lg bg-[#171717] hover:opacity-85 transition-opacity duration-150 ease-in text-white cursor-pointer text-center">
+            Visit Store
+          </a>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div class="flex items-start gap-3">
+            <div
+              class="w-9 h-9 rounded-full bg-white border border-gray-300 flex items-center justify-center shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 21C16 17 20 13.4183 20 9C20 4.58172 16.4183 1 12 1C7.58172 1 4 4.58172 4 9C4 13.4183 8 17 12 21Z"
+                  stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="12" cy="9" r="2.5" stroke="#171717" stroke-width="1.5" />
+              </svg>
+            </div>
+            <div>
+              <span class="text-xs text-[#9CA3AF] block mb-0.5">City / Region</span>
+              <p class="text-[15px] text-[#171717] font-medium">
+                {{ vendorDetailedInfo.vendor.location.city }}, {{ vendorDetailedInfo.vendor.location.region }}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div
+              class="w-9 h-9 rounded-full bg-white border border-gray-300 flex items-center justify-center shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="18" height="17" rx="2" stroke="#171717" stroke-width="1.5" />
+                <path d="M3 9H21" stroke="#171717" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M7.5 2.5V5.5M16.5 2.5V5.5" stroke="#171717" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div>
+              <span class="text-xs text-[#9CA3AF] block mb-0.5">Physical Address</span>
+              <p class="text-[15px] text-[#171717] font-medium leading-snug">
+                {{ vendorDetailedInfo.vendor.location.physicalAddress }}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 sm:col-span-2">
+            <div
+              class="w-9 h-9 rounded-full bg-white border border-gray-300 flex items-center justify-center shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="7" height="7" rx="1" stroke="#171717" stroke-width="1.5" />
+                <rect x="14" y="3" width="7" height="7" rx="1" stroke="#171717" stroke-width="1.5" />
+                <rect x="3" y="14" width="7" height="7" rx="1" stroke="#171717" stroke-width="1.5" />
+                <path d="M14 17H21M17.5 14V21" stroke="#171717" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div>
+              <span class="text-xs text-[#9CA3AF] block mb-0.5">Digital Address</span>
+              <p class="text-[15px] text-[#171717] font-medium">
+                {{ vendorDetailedInfo.vendor.location.digitalAddress }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
       }
       @if (activeButton === 'product-details') {
-      <div class="bg-[#FAFAFA] rounded-2xl p-5 sm:p-8 border border-[#17171708]">
+      <div class="bg-[#FAFAFA] rounded-2xl p-5 sm:p-8 border border-gray-300">
         <table class="w-full text-sm sm:text-base">
           <tbody>
             @for (spec of specifications; track $index) {
