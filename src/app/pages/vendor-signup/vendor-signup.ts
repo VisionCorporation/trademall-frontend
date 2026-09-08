@@ -12,13 +12,13 @@ import {
 } from '../../interfaces/signup.interface';
 import { environment } from '../../../environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-vendor-signup',
-  imports: [RouterLink, ReactiveFormsModule, AsyncPipe, InputErrorMessage],
+  imports: [RouterLink, ReactiveFormsModule, AsyncPipe, InputErrorMessage, NgOptimizedImage],
   templateUrl: './vendor-signup.html',
   styleUrl: './vendor-signup.css',
 })
@@ -35,6 +35,8 @@ export class VendorSignup {
   private router = inject(Router);
   public steps = steps;
   public otpControls = otpControls;
+  public showPassword = false;
+  public showConfirmPassword = false;
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
