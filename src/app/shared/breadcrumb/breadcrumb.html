@@ -9,7 +9,7 @@
   </button>
 
   @if (categoryName()) {
-  <a [routerLink]="['/categories', categorySlug()]"
+  <a [routerLink]="['/shop']" [queryParams]="{ category: categorySlug() }"
     class="text-[#374151] hover:text-[#171717] transition-colors duration-150 truncate max-w-[10ch] sm:max-w-none">
     {{ categoryName() }}
   </a>
@@ -17,7 +17,7 @@
 
   @if (subCategoryName()) {
   <span class="shrink-0">›</span>
-  <a [routerLink]="['/categories', categorySlug()]" [state]="{ filter: subCategorySlug() }"
+  <a [routerLink]="['/shop']" [queryParams]="{ category: categorySlug() }"
     class="text-[#374151] hover:text-[#171717] transition-colors duration-150 truncate max-w-[10ch] sm:max-w-none">
     {{ subCategoryName() }}
   </a>
