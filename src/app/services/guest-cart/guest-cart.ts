@@ -6,7 +6,7 @@ import { CartItem, GuestCartItem, GuestCartStorage, PriceSnapshot, GuestCartDisp
 export class GuestCart {
     public GUEST_CART_KEY = 'guestCart';
     private readonly platformId = inject(PLATFORM_ID);
-    private readonly isBrowser = isPlatformBrowser(this.platformId);
+    public readonly isBrowser = isPlatformBrowser(this.platformId);
 
     private readCart(): GuestCartStorage {
         if (!this.isBrowser) return { guestCartItems: [] };
