@@ -11,34 +11,33 @@
     </div>
 
     <section
-      class="flex flex-col lg:flex-row items-start justify-center mt-10 mb-15 lg:mb-37.5 gap-10 lg:gap-16 px-3 md:px-12 2xl:px-0">
-      <div class="w-full lg:w-[50%]">
-        <div class="flex flex-col gap-5">
+      class="flex flex-col lg:flex-row items-start justify-center mt-8 mb-16 lg:mb-24 gap-8 lg:gap-14 px-3 md:px-12 2xl:px-0">
+
+      <div class="w-full lg:w-[48%] lg:sticky lg:top-28">
+        <div class="flex flex-col gap-4">
           @if (product && selectedImage) {
-          <div class="relative">
+          <div class="relative rounded-3xl overflow-hidden bg-[#F7F7F7] border border-[#17171710] shadow-sm">
             <span
-              class="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-white rounded-2xl py-0.5 px-2.5 sm:py-1 sm:px-3.5 text-xs sm:text-base text-[#171717] border border-[#17171733]">{{selectedImageIndex
-              +
-              1}}/{{product.images.length}}</span>
+              class="absolute bottom-3 right-3 z-10 bg-white/90 backdrop-blur-sm rounded-full py-1 px-3.5 text-xs sm:text-sm font-medium text-[#171717] shadow-sm">
+              {{ selectedImageIndex + 1 }} / {{ product.images.length }}
+            </span>
+
             <img [ngSrc]="selectedImage" width="800" height="536" priority [alt]="product.name"
-              class="rounded-2xl sm:rounded-3xl border border-[#17171714] w-full h-auto" />
+              class="w-full h-full object-cover object-top aspect-square" />
 
             @if (product.images.length > 1) {
             <button
-              class="absolute left-2 sm:left-5 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-md transition-colors duration-200 cursor-pointer"
+              class="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center shadow-md transition-all duration-200 cursor-pointer hover:scale-105"
               (click)="showPrevImage()" aria-label="Previous image">
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-                class="sm:w-4.5 sm:h-4.5">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12.5 15.8332L6.66667 9.99984L12.5 4.1665" stroke="#171717" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </button>
-
             <button
-              class="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-md transition-colors duration-200 cursor-pointer"
+              class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white w-9 h-9 sm:w-11 sm:h-11 rounded-full flex items-center justify-center shadow-md transition-all duration-200 cursor-pointer hover:scale-105"
               (click)="showNextImage()" aria-label="Next image">
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-                class="sm:w-4.5 sm:h-4.5">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.5 4.1665L13.3333 9.99984L7.5 15.8332" stroke="#171717" stroke-width="1.5"
                   stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -47,11 +46,11 @@
           </div>
 
           @if (product.images.length > 1) {
-          <div class="flex items-center gap-2.5 sm:gap-3.5 lg:gap-4.5 overflow-x-auto pb-1 justify-center">
+          <div class="flex items-center justify-center gap-3 overflow-x-auto pb-1 scrollbar-hide">
             @for (image of product.images; track image._id) {
             <button
-              class="w-16 h-16 sm:w-18 sm:h-18 lg:w-22 lg:h-22 shrink-0 rounded-lg overflow-hidden border-2 transition-colors duration-200 cursor-pointer"
-              [class]="selectedImageIndex === $index ? 'border-[#26C34D]' : 'border-[#17171733]'"
+              class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200 cursor-pointer"
+              [class]="selectedImageIndex === $index ? 'border-[#26C34D] shadow-sm' : 'border-[#17171733] opacity-70 hover:opacity-100'"
               (click)="selectImage($index)">
               <img [ngSrc]="image.url" width="82" height="80" [alt]="product.name" class="w-full h-full object-cover" />
             </button>
@@ -62,129 +61,128 @@
         </div>
       </div>
 
-      <div class="w-full lg:w-[50%]">
-        <div class="mb-3.5 text-sm sm:text-base lg:text-lg">
-          @if (product.stockQuantity <= product.lowStockThreshold){ <span class="text-[#D92D20]">Limited Stock. Buy
-            Now</span>
+      <div class="w-full lg:w-[52%]">
+        <div class="flex items-center gap-2 mb-3">
+          @if (product.stockQuantity <= product.lowStockThreshold) { <span
+            class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-[#D92D20] bg-[#FEF2F2] px-3 py-1 rounded-full">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#D92D20]"></span>
+            Limited Stock — Buy Now
+            </span>
+            } @else {
+            <span
+              class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-[#15803D] bg-[#F0FDF4] px-3 py-1 rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#15803D]"></span>
+              Available in stock
+            </span>
             }
-            @else if(product.stockQuantity > product.lowStockThreshold) {
-            <span class="text-[#15803D]">Available in stock</span>
-            }
-        </div>
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-6.25">
-          <h1 class="products-font text-xl sm:text-[25px] lg:text-[27px] text-[#000000] leading-tight sm:leading-7">
-            {{ product.name }}
-          </h1>
-
-          <div class="shrink-0">
-            <span class="text-[#374151] text-sm sm:text-base">starts from</span>
-            <p class="text-[#A8520C] text-lg sm:text-xl lg:text-2xl products-font text-nowrap">
-              <span>GHS </span>
-              @if (product.discount > 0) {
-              <span class="line-through text-gray-600 mr-2 text-base">
-                {{ product.price | currency: '' : '' }}
-              </span>
-              }
-              <span>{{ product.effectivePrice | currency: '' : '' }}</span>
-            </p>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 sm:justify-between mb-5">
-          <div class="flex flex-wrap items-center gap-2.5">
-            <div class="rounded-sm py-0.75 px-1.25 text-sm sm:text-base flex items-center gap-1.25">
-              <div class="flex items-center gap-0.5">
-                @for (i of starIndices; track i) {
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-                  class="sm:w-5 sm:h-5">
-                  <defs>
-                    <linearGradient [attr.id]="'star-fill-' + starGradientUid + '-' + i" x1="0" y1="0" x2="1" y2="0">
-                      <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="#F0B718" />
-                      <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="transparent" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
-                    [attr.fill]="'url(#star-fill-' + starGradientUid + '-' + i + ')'" stroke="#F0B71880"
-                    stroke-width="1.5" stroke-linejoin="round" />
-                </svg>
-                }
-              </div>
-              <span class="ml-1">{{ product.rating }}</span>
-            </div>
-
-            <span class="bg-green-100 text-green-900 rounded-sm px-1.25 py-0.75 text-sm sm:text-base">
+            <span class="text-xs sm:text-sm font-medium text-[#065F46] bg-[#ECFDF5] px-3 py-1 rounded-full">
               {{ product.category.name }}
             </span>
-
-            <div class="flex flex-col sm:ml-5">
-              <span class="text-[#4B5563] leading-tight sm:leading-2 text-sm sm:text-base">
-                sold by
-              </span>
-              <a class="text-sm sm:text-base lg:text-[20px] text-[#00a751] truncate max-w-[15ch]"
-                [routerLink]="['/products/vendor', product.vendor._id]">{{ product.vendor.businessName }}</a>
-            </div>
-          </div>
-
-          @if (product.discount > 0) {
-          <span class="text-[#1B5DD7] text-sm sm:text-base lg:text-[20px]">{{ product.discount }}% Off Promo</span>
-          }
         </div>
 
-        <p class="text-base sm:text-[18px] text-[#374151] leading-relaxed">{{product.description}}</p>
+        <h1 class="products-font text-2xl sm:text-[28px] lg:text-[32px] text-[#0A0A0A] leading-tight mb-4">
+          {{ product.name }}
+        </h1>
 
-        <div class="border-b border-[#17171733] mt-7"></div>
+        <div class="flex items-center gap-4 mb-5 flex-wrap">
+          <div class="flex items-center gap-1">
+            @for (i of starIndices; track i) {
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient [attr.id]="'star-fill-' + starGradientUid + '-' + i" x1="0" y1="0" x2="1" y2="0">
+                  <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="#F0B718" />
+                  <stop [attr.offset]="starFillPercent(i, product.rating) + '%'" stop-color="transparent" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                [attr.fill]="'url(#star-fill-' + starGradientUid + '-' + i + ')'" stroke="#F0B71880" stroke-width="1.5"
+                stroke-linejoin="round" />
+            </svg>
+            }
+            <span class="ml-1 text-sm sm:text-base font-medium text-[#374151]">{{ product.rating }}</span>
+          </div>
 
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-7.5">
-          <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
-            <div class="flex items-center border border-[#17171733] rounded-lg overflow-hidden shrink-0">
-              <button
-                class="px-3.5 sm:px-5 py-2.5 sm:py-3 text-[#374151] border-r border-[#17171733] rounded-tl-md rounded-bl-md text-lg hover:bg-[#C9F1B9] transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent cursor-pointer"
-                [disabled]="quantity <= 1" (click)="decrementQuantity()" aria-label="Decrease quantity">
-                −
-              </button>
-              <span class="px-3 sm:px-4 py-2.5 sm:py-3 min-w-10 text-center text-[15px] sm:text-[16px]">{{ quantity
-                }}</span>
-              <button
-                class="px-3.5 sm:px-5 py-2.5 sm:py-3 text-[#374151] border-l border-[#17171733] rounded-tr-md rounded-br-md text-lg hover:bg-[#C9F1B9] transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent cursor-pointer"
-                [disabled]="product.stockQuantity !== undefined && quantity >= product.stockQuantity"
-                (click)="incrementQuantity()" aria-label="Increase quantity">
-                +
-              </button>
+          <div class="h-4 w-px bg-[#17171733]"></div>
+
+          <div class="flex flex-col">
+            <span class="text-[#9CA3AF] text-xs">sold by</span>
+            <a class="text-sm sm:text-base font-medium text-[#00a751] hover:underline truncate max-w-[18ch]"
+              [routerLink]="['/products/vendor', product.vendor._id]">{{ product.vendor.businessName }}</a>
+          </div>
+        </div>
+
+        <div class="bg-[#FAFAFA] rounded-2xl p-5 mb-6">
+          <div class="flex items-end justify-between flex-wrap gap-2">
+            <div>
+              <span class="text-[#6B7280] text-xs sm:text-sm">Starts from</span>
+              <p class="text-[#A8520C] products-font text-2xl sm:text-3xl leading-none mt-1">
+                <span class="text-lg align-top">GH₵ </span>{{ product.effectivePrice | currency: '' : '' }}
+              </p>
             </div>
+            @if (product.discount > 0) {
+            <div class="text-right">
+              <span class="line-through text-gray-400 text-sm block">GH₵ {{ product.price | currency: '' : '' }}</span>
+              <span class="text-[#1B5DD7] text-sm font-medium">{{ product.discount }}% Off</span>
+            </div>
+            }
+          </div>
+        </div>
 
+        <p class="text-[15px] sm:text-[17px] text-[#4B5563] leading-relaxed mb-8">{{ product.description }}</p>
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+          <div class="flex items-center border border-[#E5E7EB] rounded-xl overflow-hidden shrink-0 bg-white">
             <button
-              class="flex-1 sm:flex-none text-[15px] sm:text-[16px] px-5 py-2.5 sm:py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
-              Add to Cart
+              class="w-11 h-12 flex items-center justify-center text-[#374151] text-lg hover:bg-[#F3F4F6] transition-colors duration-150 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              [disabled]="quantity <= 1" (click)="decrementQuantity()" aria-label="Decrease quantity">
+              −
+            </button>
+            <span class="w-12 text-center text-[15px] font-medium">{{ quantity }}</span>
+            <button
+              class="w-11 h-12 flex items-center justify-center text-[#374151] text-lg hover:bg-[#F3F4F6] transition-colors duration-150 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              [disabled]="quantity >= product.stockQuantity" (click)="incrementQuantity()"
+              aria-label="Increase quantity">
+              +
             </button>
           </div>
 
-          <div class="flex items-center gap-1.25 py-2 px-3.5 cursor-pointer"
-            (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-              class="sm:w-6 sm:h-6 hover:scale-110 transition-transform duration-300 shrink-0">
+          <button [disabled]="product.stockQuantity === 0 || isAddingToCart()" (click)="addToCart(product)"
+            class="flex-1 text-[15px] sm:text-[16px] font-medium px-5 py-3.5 bg-[#171717] hover:opacity-85 transition-opacity duration-150 ease-in text-white rounded-xl disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+            {{ product.stockQuantity === 0 ? 'Out of Stock' : (isAddingToCart() ? 'Adding...' : 'Add to Cart') }}
+          </button>
+
+          <button (click)="$event.stopPropagation(); toggleWishlist(product._id, product.name)"
+            class="flex items-center justify-center gap-1.5 py-3.5 px-4 border border-[#E5E7EB] rounded-xl cursor-pointer hover:bg-[#F9FAFB] transition-colors duration-150 shrink-0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+              class="hover:scale-110 transition-transform duration-300 shrink-0">
               <path
                 d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
                 [attr.fill]="wishlistedIds.has(product._id) ? '#26C34D' : '#FBFCFF'"
                 [attr.stroke]="wishlistedIds.has(product._id) ? '#26C34D' : '#000'" stroke-width="1.5"
                 stroke-linecap="round" />
             </svg>
-            <span class="text-[15px] sm:text-[16px]">Add to Wishlist</span>
-          </div>
+            <span class="text-sm hidden sm:inline">Wishlist</span>
+          </button>
         </div>
+
+        @if (product.stockQuantity > 0 && product.stockQuantity <= product.lowStockThreshold) { <p
+          class="text-xs text-[#D92D20] mt-2.5">Only {{ product.stockQuantity }} left in stock</p>
+          }
       </div>
     </section>
 
-    <div class="mb-25 px-3 md:px-12 2xl:px-0">
+    <div class="mb-24 px-3 md:px-12 2xl:px-0">
       <div
-        class="relative flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-gray-300 mb-8">
+        class="relative flex items-center gap-6 sm:gap-8 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-[#E5E7EB] mb-8">
         @for (button of buttons; track button.value) {
-        <button class="relative text-[16px] pb-3 products-font shrink-0 transition-colors duration-100 ease-in-out"
-          [class]="button.value === activeButton ? 'text-[#00a751]' : 'text-[#4b5563] hover:text-[#171717]'"
+        <button
+          class="relative text-[15px] sm:text-[16px] pb-3 products-font shrink-0 transition-colors duration-150 ease-in-out cursor-pointer"
+          [class]="button.value === activeButton ? 'text-[#00a751] font-medium' : 'text-[#6B7280] hover:text-[#171717]'"
           (click)="switchButtons(button.value, product._id)">
           {{ button.label }}
           @if (button.value === activeButton) {
-          <span class="absolute left-0 right-0 -bottom-2 h-0.5 bg-[#00a751]"></span>
+          <span class="absolute left-0 right-0 -bottom-0.5 h-0.5 bg-[#00a751] rounded-full"></span>
           }
         </button>
         }
@@ -193,41 +191,51 @@
 
       }
       @if (activeButton === 'product-details') {
-      <div class="bg-[#F4F4F4] rounded-[20px] p-5 sm:p-7.5">
+      <div class="bg-[#FAFAFA] rounded-2xl p-5 sm:p-8 border border-[#17171708]">
         <table class="w-full text-sm sm:text-base">
           <tbody>
             @for (spec of specifications; track $index) {
-            <tr class="border-t border-[#17171733] first:border-t-0">
-              <td class="py-2 w-[50%] text-base sm:text-[18px] text-[#374151]">{{ spec.label }}</td>
-              <td class="py-2 w-[50%] text-base sm:text-[18px] text-[#374151]">{{ spec.value }}</td>
+            <tr class="border-t border-[#17171714] first:border-t-0">
+              <td class="py-3 w-[45%] text-[#6B7280]">{{ spec.label }}</td>
+              <td class="py-3 w-[55%] text-[#171717] font-medium">{{ spec.value }}</td>
             </tr>
             }
           </tbody>
         </table>
       </div>
       }
+
       @if (activeButton === 'reviews') {
       @if (isReviewsLoading()) {
-      <div>Loading Reviews...</div>
+      <div class="flex items-center gap-2 text-[#6B7280] py-8">
+        <svg class="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="32"
+            stroke-dashoffset="12" />
+        </svg>
+        Loading reviews...
+      </div>
       }
       }
     </div>
     } @else {
-    <div class="flex flex-col items-center justify-center h-screen mx-1">
-      <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="12" y1="8" x2="12" y2="12" />
-        <line x1="12" y1="16" x2="12.01" y2="16" />
-      </svg>
-      <h2 class="text-3xl mt-3">Ooops</h2>
-      <p class="text-lg my-3 text-center text-red-500 leading-5">
-        {{errorMessage ? errorMessage: 'An error occurred while fetching product details. Try again'}}
+    <div class="flex flex-col items-center justify-center py-37.5 mx-4 text-center">
+      <div class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="#F7F7F7"
+          stroke="#AAAAAA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      </div>
+      <h3 class="text-lg sm:text-[32px] text-[#171717] mt-6 mb-2 light-header">Oops, something went wrong</h3>
+      <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md mb-7">
+        {{ errorMessage ? errorMessage : 'An error occurred while fetching product details. Try again.' }}
       </p>
-      @if(showButton){
+      @if (showButton) {
       <button (click)="fetchProductDetails()" [disabled]="isTryingAgain()"
-        class="text-[15px] sm:text-[16px] px-5 py-3 mt-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">
-        {{isTryingAgain() ? 'Trying...': 'Try again'}}
+        class="text-[15px] sm:text-[16px] px-6 py-3 mt-4 bg-[#171717] hover:opacity-85 transition-opacity duration-150 ease-in text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+        {{ isTryingAgain() ? 'Trying...' : 'Try again' }}
       </button>
       }
     </div>
@@ -248,13 +256,12 @@
     </div>
     } @else if (vendorProductsDetails.length > 0) {
     <div class="mt-25 md:mt-37.5 mb-28.75">
-      <div class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 mb-3 sm:mb-4">
-        <h2 class="text-[30px] sm:text-[40px] text-left">From the same vendor</h2>
-        <p class="text-base sm:text-[18px] text-left text-[#374151]">
+      <div class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 mb-4">
+        <h2 class="text-[28px] sm:text-[36px] products-font text-left">From the same vendor</h2>
+        <p class="text-base sm:text-[17px] text-left text-[#6B7280]">
           Explore more items from this vendor and find your next favorite.
         </p>
       </div>
-
       <div
         class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 scroll-pl-3 md:scroll-pl-12 2xl:scroll-pl-0"
         [@staggerProducts]>
@@ -262,14 +269,11 @@
         <app-product-card [product]="vendorProduct" layout="carousel" />
         }
       </div>
-
     </div>
     }
     }
   </main>
 </div>
-
-
 
 <div class="max-w-310 mx-auto">
   <app-newsletter />

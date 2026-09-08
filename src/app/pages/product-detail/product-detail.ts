@@ -16,6 +16,8 @@ import { VendorStore } from '../../services/vendor-store/vendor-store';
 import { Seo } from '../../services/seo/seo';
 import { ProductCard } from '../../shared/product-card/product-card';
 import { ProductCardInterface } from '../../interfaces/product-card.interface';
+import { GuestCartDisplayInfo, PriceSnapshot } from '../../interfaces/cart.interface';
+import { CartState } from '../../services/cart/cart-state';
 
 @Component({
     selector: 'app-product-detail',
@@ -41,6 +43,7 @@ export class ProductDetail implements OnInit {
     private readonly toastService = inject(ToastService);
     private readonly reviewService = inject(Reviews);
     private readonly seoService = inject(Seo);
+    public readonly cartState = inject(CartState);
     public selectedImage: string | null = null;
     public readonly starIndices = [0, 1, 2, 3, 4];
     public readonly starGradientUid = Math.random().toString(36).slice(2, 9);
@@ -106,10 +109,41 @@ export class ProductDetail implements OnInit {
     }
 
     public incrementQuantity(): void {
-        const maxStock = this.product?.stockQuantity ?? Infinity;
+        const maxStock = this.product?.stockQuantity ?? 0;
         if (this.quantity < maxStock) {
             this.quantity++;
         }
+    }
+
+    public addToCart(product: ProductDetails): void {
+        if (product.stockQuantity <= 0) {
+            this.toastService.error('This product is out of stock');
+            return;
+        }
+
+        const safeQuantity = Math.min(this.quantity, product.stockQuantity);
+        if (safeQuantity !== this.quantity) {
+            this.quantity = safeQuantity;
+        }
+
+        const priceSnapshot: PriceSnapshot = {
+            productName: product.name,
+            effectivePrice: product.effectivePrice,
+            price: product.price,
+            salePrice: product.salePrice
+        };
+
+        const displayInfo: GuestCartDisplayInfo = {
+            productImage: product.images?.[0]?.url ?? '',
+            vendorId: product.vendor._id,
+            businessName: product.vendor.businessName,
+        };
+
+        this.cartState.addToCart(product._id, safeQuantity, priceSnapshot, displayInfo);
+    }
+
+    public isAddingToCart(): boolean {
+        return this.product ? this.cartState.isAdding(this.product._id) : false;
     }
 
     private updateSeo(): void {
