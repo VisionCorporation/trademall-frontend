@@ -52,48 +52,63 @@ export class GuestCart {
     public toCartResponse(): CartResponse {
         const items = this.readCart().guestCartItems;
 
+        const normalizeVendorId = (vendorId: unknown): string =>
+            typeof vendorId === 'string' ? vendorId : (vendorId as { _id: string })?._id ?? '';
+
         const groupsByVendor = new Map<string, CartItem[]>();
+        const vendorNames = new Map<string, string>();
 
         for (const item of items) {
+            const vendorId = normalizeVendorId(item.displayInfo.vendorId);
             const lineTotal = item.priceSnapshot.effectivePrice * item.quantity;
 
             const cartItem = {
                 _id: item.productId,
-                productId: { _id: item.productId },
+                productId: { _id: item.productId, name: item.priceSnapshot.productName },
                 productName: item.priceSnapshot.productName,
                 productImage: item.displayInfo.productImage,
-                price: item.priceSnapshot.effectivePrice,
                 quantity: item.quantity,
+                price: item.priceSnapshot.effectivePrice,
                 lineTotal,
+                isPreOrder: false,
+                priceChanged: false,
+                isAvailable: true,
+                unavailabilityReason: null,
             } as CartItem;
 
-            const group = groupsByVendor.get(item.displayInfo.vendorId) ?? [];
+            const group = groupsByVendor.get(vendorId) ?? [];
             group.push(cartItem);
-            groupsByVendor.set(item.displayInfo.vendorId, group);
+            groupsByVendor.set(vendorId, group);
+
+            if (!vendorNames.has(vendorId)) {
+                vendorNames.set(vendorId, item.displayInfo.businessName ?? '');
+            }
         }
 
         const vendorGroups = Array.from(groupsByVendor.entries()).map(([vendorId, groupItems]) => ({
             vendorId,
-            businessName: items.find(i => i.displayInfo.vendorId === vendorId)?.displayInfo.businessName ?? '',
+            businessName: vendorNames.get(vendorId) ?? '',
             items: groupItems,
             subtotal: groupItems.reduce((sum, i) => sum + i.lineTotal, 0),
         }));
 
-        const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
+        const itemCount = items.length;
 
         return {
-            success: true,
-            message: '',
+            status: 'success',
             data: {
                 cart: {
+                    items: itemCount,
                     vendorGroups,
                     itemCount,
-                    items: itemCount,
+                    unavailableItemCount: 0,
+                    hasPriceChanges: false,
                     isEmpty: items.length === 0,
                 },
             },
         } as unknown as CartResponse;
     }
+
     public updateItemQuantity(productId: string, quantity: number): GuestCartStorage {
         const cart = this.readCart();
         const item = cart.guestCartItems.find(i => i.productId === productId);
