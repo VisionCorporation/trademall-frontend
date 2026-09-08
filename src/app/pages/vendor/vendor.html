@@ -116,9 +116,10 @@
 
       <div class="mt-15">
         <div
-          class="relative flex items-center gap-3 sm:gap-5 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-gray-300 mb-8">
+          class="relative flex items-center gap-6 sm:gap-8 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-gray-300 mb-8">
           @for (button of buttons; track button.value) {
-          <button class="relative text-[16px] pb-3 products-font shrink-0 transition-colors duration-100 ease-in-out"
+          <button
+            class="relative text-[15px] sm:text-[16px] pb-3 shrink-0 transition-colors duration-100 ease-in-out cursor-pointer"
             [class]="button.value === activeTab ? 'text-[#00a751]' : 'text-[#4b5563] hover:text-[#171717]'"
             (click)="switchButtons(button.value)">
             {{ button.label }}
