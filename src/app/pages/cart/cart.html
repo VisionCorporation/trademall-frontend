@@ -1,8 +1,11 @@
 <div class="max-w-310 mx-auto pt-20 md:pt-24">
   <app-header />
 
-  @if (!isCartItemsLoading()) {
-  @if (cartSummary()?.data?.cart?.isEmpty) {
+  @if (isCartItemsLoading()) {
+  <app-skeleton-loader [skeletonType]="'cart-items'" />
+  }@else if (!cartSummary()) {
+  <app-skeleton-loader [skeletonType]="'cart-items'" />
+  }@else if (cartSummary()?.data?.cart?.isEmpty) {
   <div class="h-[80vh] flex items-center justify-center flex-col gap-7 sm:gap-10 px-3 md:px-12 2xl:px-0" [@fadeInOut]>
     <div class="bg-[#F7F7F7] p-10 sm:p-12.5 rounded-full">
       <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +29,7 @@
       class="text-[15px] sm:text-[16px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-8 py-3 text-white rounded-lg">Discover
       Products</a>
   </div>
-  } @else {
+  }@else {
   <div class="mt-8 md:mt-12.5 w-full px-4 md:px-12 2xl:px-0 mb-20 md:mb-37.5" [@fadeInOut]>
     <div class="my-10 sm:my-11.75 flex items-center gap-1.5 sm:gap-3 text-[#17171780] text-sm sm:text-[17px] flex-wrap">
       <a (click)="goToHome()" class="cursor-pointer hover:text-black transition-colors duration-300 ease-in-out">
@@ -96,7 +99,8 @@
 
             <div
               class="bg-[#E6E6E880] w-14 h-14 md:w-17.5 md:h-17.5 p-2 rounded-md shrink-0 flex items-center justify-center">
-              <img [ngSrc]="item.productImage" [alt]="item.productName" width="70" height="70" />
+              <img [ngSrc]="item.productImage" [alt]="item.productName" width="70" height="70"
+                class="w-full h-full object-cover" />
             </div>
 
             <div class="min-w-0">
@@ -190,8 +194,5 @@
       </div>
     </div>
   </div>
-  }
-  } @else {
-  <app-skeleton-loader [skeletonType]="'cart-items'" />
   }
 </div>

@@ -25,9 +25,8 @@ export class Cart implements OnInit {
   private readonly loginService = inject(LoginService);
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
-
+  public isCartItemsLoading = signal(true);
   public cartSummary = signal<CartResponse | null>(null);
-  public isCartItemsLoading = signal(false);
   public isClearingCart = signal(false);
   public removingFromCartIds = signal(new Set<string>());
   public updatingQuantityIds = signal(new Set<string>());
@@ -47,15 +46,19 @@ export class Cart implements OnInit {
   }
 
   private fetchCartSummary(silent = false) {
-    if (!silent) this.isCartItemsLoading.set(true);
-
     if (!this.isLoggedIn) {
+      if (!this.guestCartService.isBrowser) {
+        return;
+      }
+      if (!silent) this.isCartItemsLoading.set(true);
       this.cartSummary.set(this.guestCartService.toCartResponse());
+       console.log('Cart summary fetched:', this.cartSummary());
       this.syncHeaderCount();
       if (!silent) this.isCartItemsLoading.set(false);
       return;
     }
 
+    if (!silent) this.isCartItemsLoading.set(true);
     this.cartService.getCartSummary().subscribe({
       next: (data) => {
         this.cartSummary.set(data as CartResponse);
