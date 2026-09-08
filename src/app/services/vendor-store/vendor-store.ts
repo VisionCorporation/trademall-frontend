@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { StoreResponse } from '../../interfaces/vendor.interface';
+import { StoreResponse, VendorDetailedInfoResponse } from '../../interfaces/vendor.interface';
 import { environment } from '../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -21,6 +21,12 @@ export class VendorStore {
   ): Observable<VendorProductsResponse> {
     return this.http.get<VendorProductsResponse>(
       `${environment.apiBaseUrl}/products/vendor/${vendorId}?page=${currentPage}`,
+    );
+  }
+
+  public getDetailedVendorInfoForAProduct(productId: string): Observable<VendorDetailedInfoResponse> {
+    return this.http.get<VendorDetailedInfoResponse>(
+      `${environment.apiBaseUrl}/products/${productId}/vendor`,
     );
   }
 }
