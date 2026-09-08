@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
@@ -10,7 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, AsyncPipe, RouterLink],
+  imports: [ReactiveFormsModule, AsyncPipe, RouterLink, NgOptimizedImage],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -22,6 +22,7 @@ export class Login {
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  public showPassword = false;
   private readonly vendorApplicationStatusVisitedKey = 'vendorApplicationStatusVisited';
 
   public loginForm = this.fb.group({
