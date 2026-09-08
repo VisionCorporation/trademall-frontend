@@ -48,27 +48,29 @@
     @if (!isLoading() && searchQuery && products().length === 0 && !hasErrorProducts()) {
     <div
         class="flex flex-col items-center justify-center pt-24 sm:pt-32 pb-20 sm:pb-24 text-center max-w-lg mx-auto px-4">
-        <div class="w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-2xl bg-[#F4F4F4] flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="82" height="82" viewBox="0 0 24 24" fill="none"
-                stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.3-4.3"></path>
-                <path d="M8 11h6"></path>
+        <div class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M20 26.6667L40 15L60 26.6667M20 26.6667L40 38.3333M20 26.6667V53.3333L40 65M60 26.6667L40 38.3333M60 26.6667V53.3333L40 65M40 38.3333V65"
+                    stroke="#AAAAAA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                <circle cx="58" cy="58" r="14" fill="#F7F7F7" stroke="#AAAAAA" stroke-width="3" />
+                <path d="M67.5 67.5L73.3333 73.3333" stroke="#AAAAAA" stroke-width="3.5" stroke-linecap="round" />
             </svg>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-semibold text-[#111827] mb-3 products-font">
-            No products found
-        </h2>
 
-        <p class="text-[#6B7280] text-base leading-relaxed mb-8">
-            We couldn't find any matches for <span class="text-[#171717] font-medium products-font">"{{ searchQuery
+        <h3 class="text-lg sm:text-[32px] text-[#171717] mt-6 mb-2 light-header">
+            No Products Found
+        </h3>
+
+        <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md mb-7">
+            We couldn't find any matches for <span class="text-[#171717]">"{{ searchQuery
                 }}"</span>.
             Try a different keyword, check your spelling, or browse the full catalog instead.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center gap-3">
             <a routerLink="/shop"
-                class="w-full sm:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] hover:bg-[#00a751] transition-colors duration-200 text-white rounded-lg">
+                class="w-full sm:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 text-white rounded-lg">
                 Browse all products
             </a>
         </div>
@@ -78,8 +80,8 @@
     @if (searchValidationError()) {
     <div
         class="flex flex-col items-center justify-center pt-24 sm:pt-32 pb-20 sm:pb-24 text-center max-w-lg mx-auto px-4">
-        <div class="w-28 h-28 sm:w-32 sm:h-32 mb-8 rounded-2xl bg-red-50 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none"
+        <div class="bg-red-50 w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none"
                 stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.3-4.3"></path>
@@ -88,11 +90,11 @@
             </svg>
         </div>
 
-        <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] mb-3 products-font">
+        <h3 class="text-lg sm:text-[32px] text-[#171717] mt-6 mb-2 light-header">
             Search query too short
-        </h2>
+        </h3>
 
-        <p class="text-[#6B7280] text-base leading-relaxed">
+        <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md mb-7">
             Please enter at least 2 characters to search for products.
         </p>
     </div>
@@ -336,6 +338,33 @@
                 That's all for now. Check back soon for new arrivals!
             </p>
             }
+            }@else if(!hasErrorProducts() && products().length === 0) {
+            <div class="flex flex-col items-center justify-center py-14 px-4 text-center" [@fadeInOut]>
+                <div class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full">
+                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M20 26.6667L40 15L60 26.6667M20 26.6667L40 38.3333M20 26.6667V53.3333L40 65M60 26.6667L40 38.3333M60 26.6667V53.3333L40 65M40 38.3333V65"
+                            stroke="#AAAAAA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="58" cy="58" r="14" fill="#F7F7F7" stroke="#AAAAAA" stroke-width="3" />
+                        <path d="M67.5 67.5L73.3333 73.3333" stroke="#AAAAAA" stroke-width="3.5"
+                            stroke-linecap="round" />
+                    </svg>
+                </div>
+
+                <h3 class="text-lg sm:text-[32px] text-[#171717] mt-6 mb-2 light-header">
+                    No Products Found
+                </h3>
+
+                <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md mb-7">
+                    We couldn't find any items in this category right now. Try browsing another category or check back
+                    later.
+                </p>
+
+                <a routerLink="/categories"
+                    class="text-[15px] sm:text-[16px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-8 py-3 text-white rounded-lg">
+                    Browse All Categories
+                </a>
+            </div>
             }
         </div>
     </div>
