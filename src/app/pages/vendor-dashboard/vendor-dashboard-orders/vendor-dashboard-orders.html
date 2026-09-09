@@ -1,15 +1,14 @@
-<section class="bg-[#F4F4F4] h-full rounded-[20px] py-5 px-4 sm:py-7.5 sm:px-8.75 flex flex-col">
+<section class="bg-[#F4F4F4] h-full rounded-[20px] pt-5 px-4 sm:pt-7.5 sm:px-8.75 flex flex-col">
 
-    <div #filterTabsRef
-        class="flex items-center gap-2 sm:gap-4 pb-3 sm:pb-3.75 border-b border-[#6B6B6B99] shrink-0 overflow-x-auto scrollbar-hide">
+    <div #filterTabsRef class="flex items-center gap-2 shrink-0 overflow-x-auto scrollbar-hide">
         @for(filter of ordersFilters; track filter){
         <button [attr.data-filter]="filter.value" (click)="selectFilter(filter.value)"
-            [style.color]="(selectedFilter === filter.value || hoveredFilter === filter.value) ? filter.activeColor : '#6B6B6B99'"
-            (mouseenter)="hoveredFilter = filter.value" (mouseleave)="hoveredFilter = null"
-            class="flex items-center gap-0.5 transition-colors duration-150 ease-in shrink-0">
+            class="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-150 ease-in shrink-0 cursor-pointer"
+            [class]="selectedFilter === filter.value ? 'bg-white shadow-sm' : 'hover:bg-white/60'"
+            [style.color]="selectedFilter === filter.value ? filter.activeColor : '#6B6B6B'">
             @switch (filter.value) {
             @case ('all-orders') {
-            <svg width="19" height="19" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="17" height="17" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5 10.625H10" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
                 <path d="M5 8.125H7.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
                 <path
@@ -18,7 +17,7 @@
             </svg>
             }
             @case ('delivered') {
-            <svg width="19" height="19" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="17" height="17" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M9.36279 4.38477C9.36279 4.38477 9.67529 4.69727 9.98779 5.32227C9.98779 5.32227 10.9804 3.75977 11.8628 3.44727"
                     stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
@@ -35,7 +34,7 @@
             </svg>
             }
             @case ('unfulfilled') {
-            <svg width="19" height="19" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="17" height="17" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M6.24678 1.26313C4.68524 1.19702 3.47883 1.37691 3.47883 1.37691C2.71704 1.43138 1.25716 1.85845 1.25718 4.35263C1.25719 6.82561 1.24103 9.87436 1.25718 11.0897C1.25718 11.8323 1.71694 13.5644 3.30829 13.6572C5.24256 13.77 8.72671 13.794 10.3253 13.6572C10.7532 13.633 12.1779 13.2971 12.3582 11.747C12.545 10.1412 12.5078 9.02523 12.5078 8.75961"
                     stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
@@ -49,7 +48,7 @@
             </svg>
             }
             @case ('rejected') {
-            <svg width="19" height="19" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="17" height="17" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M6.24678 1.26313C4.68524 1.19702 3.47883 1.37691 3.47883 1.37691C2.71704 1.43138 1.25716 1.85845 1.25718 4.35263C1.25719 6.82561 1.24103 9.87436 1.25718 11.0897C1.25718 11.8323 1.71694 13.5644 3.30829 13.6572C5.24256 13.77 8.72671 13.794 10.3253 13.6572C10.7532 13.633 12.1779 13.2971 12.3582 11.747C12.545 10.1412 12.5078 9.02523 12.5078 8.75961"
                     stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
@@ -65,41 +64,36 @@
             </svg>
             }
             }
-            <span class="text-[15px] sm:text-[16px]">{{ filter.label }}</span>
+            <span class="text-[14px] sm:text-[15px] font-medium">{{ filter.label }}</span>
         </button>
         }
     </div>
 
-    <div class="mt-5 sm:mt-7.5 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2.5">
-        <div
-            class="flex items-center gap-1.25 border-2 border-[#6A6A6B] rounded-lg px-2.5 py-1.25 focus-within:border-2 focus-within:border-[#00a751] flex-1 sm:flex-none sm:max-w-max">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_1172_2632)">
-                    <path d="M10.5 10.5L12.375 12.375" stroke="#6A6A6B" stroke-width="1.5" stroke-linejoin="round" />
-                    <path
-                        d="M12.3249 13.8939C11.8917 13.4606 11.8917 12.7582 12.3249 12.3249C12.7582 11.8917 13.4606 11.8917 13.8939 12.3249L16.1751 14.6061C16.6083 15.0394 16.6083 15.7418 16.1751 16.1751C15.7418 16.6083 15.0394 16.6083 14.6061 16.1751L12.3249 13.8939Z"
-                        fill="#6A6A6B" stroke="#6A6A6B" stroke-width="1.5" stroke-linecap="round" />
-                    <path
-                        d="M12 6.75C12 3.8505 9.64949 1.5 6.75 1.5C3.8505 1.5 1.5 3.8505 1.5 6.75C1.5 9.64949 3.8505 12 6.75 12C9.64949 12 12 9.64949 12 6.75Z"
-                        stroke="#6A6A6B" stroke-width="1.5" stroke-linejoin="round" />
-                </g>
-                <defs>
-                    <clipPath id="clip0_1172_2632">
-                        <rect width="18" height="18" fill="white" />
-                    </clipPath>
-                </defs>
+    <div class="mt-5 sm:mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+        <div class="relative w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-search-icon lucide-search absolute left-3 top-1/2 -translate-y-1/2">
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
             </svg>
-            <input type="search" placeholder="Search Orders"
-                class="w-full placeholder:text-[#6A6A6B] placeholder:text-[15px] no-focus-style" />
+
+            <input type="text" name="search" autocomplete="off" placeholder="Search orders..."
+                class="w-full max-w-100 pl-10 pr-4 py-2 border-2 rounded-lg transition-all text-sm placeholder:text-[15px] border-gray-300 bg-white input-solid-header placeholder-solid-header" />
         </div>
 
         <div class="relative" appClickOutside (clickOutside)="isSelectOpen = false">
             <button
-                class="flex items-center justify-between w-full sm:w-auto gap-2 h-9.25 bg-[#171717] text-white rounded-lg px-2.5 py-1.25"
+                class="flex items-center justify-between w-full gap-3 h-10.5 bg-[#171717] text-white rounded-xl px-3.5 py-2.5 cursor-pointer hover:opacity-85 transition-opacity duration-150"
                 (click)="isSelectOpen = !isSelectOpen">
-                <span>{{ selectedPeriod }}</span>
-                <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isSelectOpen" width="20"
-                    height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                <span class="text-[14px] sm:text-[15px] font-medium whitespace-nowrap shrink-0">
+                    {{ selectedPeriod }}
+                </span>
+
+                <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isSelectOpen" width="18"
+                    height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+
                     <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5" stroke="#FBFCFF"
                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
@@ -107,68 +101,107 @@
 
             @if(isSelectOpen){
             <div [@fadeInOut]
-                class="absolute top-full left-0 mt-1 bg-[#171717] text-white rounded-lg overflow-hidden z-10 min-w-full">
+                class="absolute top-full left-0 mt-1.5 bg-[#171717] text-white rounded-xl overflow-hidden z-10 min-w-full shadow-lg">
+
                 @for(period of orderPeriods; track period){
-                <button class="w-full text-left px-3 py-2 text-[15px] hover:bg-white/10 transition-colors duration-150"
+                <button
+                    class="w-full text-left px-4 py-2.5 text-[14px] sm:text-[15px] whitespace-nowrap hover:bg-white/10 transition-colors duration-150 cursor-pointer"
                     [class.bg-white/10]="selectedPeriod === period.label" (click)="selectPeriod(period)">
                     {{ period.label }}
                 </button>
                 }
             </div>
             }
+
         </div>
     </div>
 
-    <div class="flex-1 overflow-y-auto scrollbar-hide mt-5 sm:mt-7.5">
-
-        <!-- Desktop/Tablet table (sm and up) -->
+    <div class="flex-1 overflow-y-auto scrollbar-hide mt-5 sm:mt-8 pb-7">
         <table class="hidden md:table w-full border-collapse">
             <thead class="sticky top-0 bg-[#F4F4F4]">
                 <tr class="text-left">
-                    <th class="text-[13px] sm:text-[15px] pb-2.5 pr-2">Order No.</th>
-                    <th class="text-[13px] sm:text-[15px] pb-2.5 pr-2">Total</th>
-                    <th class="text-[13px] sm:text-[15px] pb-2.5 pr-2 hidden md:table-cell">Customer</th>
-                    <th class="text-[13px] sm:text-[15px] pb-2.5 pr-2">Status</th>
-                    <th class="text-[13px] sm:text-[15px] pb-2.5 hidden md:table-cell">Order Date</th>
+                    <th class="text-[13px] font-medium text-[#6B7280] pb-3 pr-2">Order No.</th>
+                    <th class="text-[13px] font-medium text-[#6B7280] pb-3 pr-2">Total</th>
+                    <th class="text-[13px] font-medium text-[#6B7280] pb-3 pr-2 hidden md:table-cell">Customer</th>
+                    <th class="text-[13px] font-medium text-[#6B7280] pb-3 pr-2">Status</th>
+                    <th class="text-[13px] font-medium text-[#6B7280] pb-3 hidden md:table-cell">Order Date</th>
                 </tr>
             </thead>
             <tbody>
                 @for(order of filteredOrders(); track order){
-                <tr class="border-b border-[#D4D4D4] last:border-b-0">
-                    <td class="py-3 pr-2 text-sm sm:text-base">{{ order.orderNumber }}</td>
-                    <td class="py-3 pr-2 text-sm sm:text-base">{{ order.total }}</td>
-                    <td class="py-3 pr-2 text-sm sm:text-base hidden md:table-cell">{{ order.customer }}</td>
-                    <td class="py-3 pr-2">
-                        <span class="text-[13px] sm:text-[15px] px-2 py-1 sm:px-2.5 sm:py-1.25 rounded-lg"
+                <tr class="border-b border-[#E5E7EB] last:border-b-0 hover:bg-white/60 transition-colors duration-150">
+                    <td class="py-3.5 pr-2 text-sm sm:text-[15px] font-medium text-[#171717]">{{ order.orderNumber }}
+                    </td>
+                    <td class="py-3.5 pr-2 text-sm sm:text-[15px] text-[#171717]">{{ order.total }}</td>
+                    <td class="py-3.5 pr-2 text-sm sm:text-[15px] text-[#6B7280] hidden md:table-cell">{{ order.customer
+                        }}</td>
+                    <td class="py-3.5 pr-2">
+                        <span class="inline-flex items-center gap-1.5 text-[13px] font-medium px-2.5 py-1 rounded-full"
                             [style.color]="statusConfig[order.status].color"
-                            [style.backgroundColor]="statusConfig[order.status].bgColor"
-                            [style.border]="'1px solid ' + statusConfig[order.status].color">
+                            [style.background-color]="statusConfig[order.status].bgColor">
+                            <span class="w-1.5 h-1.5 rounded-full"
+                                [style.background-color]="statusConfig[order.status].color"></span>
                             {{ statusConfig[order.status].label }}
                         </span>
                     </td>
-                    <td class="py-3 text-sm sm:text-base hidden md:table-cell">{{ order.date }}</td>
+                    <td class="py-3.5 text-sm sm:text-[15px] text-[#6B7280] hidden md:table-cell">{{ order.date }}</td>
                 </tr>
                 }
             </tbody>
         </table>
 
-        <!-- Mobile card list -->
-        <div class="md:hidden flex flex-col divide-y divide-[#D4D4D4]">
+        @if(filteredOrders().length === 0){
+        <div class="hidden md:flex flex-col items-center justify-center gap-2 py-16 text-center">
+            <p class="text-base text-[#6B7280]">No orders found for the selected filter.</p>
+        </div>
+        }
+
+        <div class="md:hidden flex flex-col gap-2.5">
             @for(order of filteredOrders(); track order){
-            <div class="py-3 flex items-center justify-between gap-3">
+            <div class="bg-white rounded-xl p-3.5 flex items-center justify-between gap-3 border border-[#17171708]">
                 <div class="flex flex-col gap-0.5 min-w-0">
-                    <span class="text-[13px] text-[#6B6B6B]">{{ order.orderNumber }}</span>
-                    <span class="text-sm font-medium truncate">{{ order.customer }}</span>
-                    <span class="text-[13px] text-[#6B6B6B]">{{ order.date }}</span>
+                    <span class="text-[13px] font-medium text-[#171717]">{{ order.orderNumber }}</span>
+                    <span class="text-sm text-[#6B7280] truncate">{{ order.customer }}</span>
+                    <span class="text-[12px] text-[#9CA3AF]">{{ order.date }}</span>
                 </div>
-                <div class="flex flex-col items-end gap-1 shrink-0">
-                    <span class="text-sm font-medium">{{ order.total }}</span>
-                    <span class="text-[12px] px-2 py-0.5 rounded-lg" [style.color]="statusConfig[order.status].color"
-                        [style.backgroundColor]="statusConfig[order.status].bgColor"
-                        [style.border]="'1px solid ' + statusConfig[order.status].color">
+                <div class="flex flex-col items-end gap-1.5 shrink-0">
+                    <span class="text-sm font-medium text-[#171717]">{{ order.total }}</span>
+                    <span class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full"
+                        [style.color]="statusConfig[order.status].color"
+                        [style.background-color]="statusConfig[order.status].bgColor">
+                        <span class="w-1.5 h-1.5 rounded-full"
+                            [style.background-color]="statusConfig[order.status].color"></span>
                         {{ statusConfig[order.status].label }}
                     </span>
                 </div>
+            </div>
+            }
+
+            @if(filteredOrders().length === 0){
+            <div class="flex flex-col items-center justify-center gap-4 flex-1 text-center">
+                <div class="bg-[#F7F7F7] p-8 sm:p-12.5 rounded-full">
+                    <svg width="70" height="70" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="sm:w-25 sm:h-25">
+                        <g clip-path="url(#clip0_460_983b)">
+                            <path
+                                d="M12.4269 8.33338C14.1147 8.21529 15.1775 9.39622 16.2797 10.5033L44.44 38.6932L84.7885 79.0416L85.4823 79.7354C88.0164 82.3089 88.3707 84.5034 86.555 86.3486C84.7393 88.1938 82.3233 87.8691 79.991 85.2956C78.3967 83.5341 76.7926 83.2438 74.4209 83.3914C58.872 84.3509 43.3034 84.2426 27.7446 83.6128C25.1318 83.5046 22.5042 83.7703 19.9013 83.2093C13.726 81.8808 10.0306 78.2051 9.07605 72.0298C8.03289 65.4363 8.4413 58.7837 8.584 52.1508C8.61844 50.2712 9.40081 48.49 10.1044 46.7382C12.7911 40.0512 15.4186 33.3347 18.1741 26.6723C18.8778 24.9796 18.6662 23.8331 17.3229 22.5784C14.6953 20.1181 12.176 17.525 9.69112 14.9072C8.48558 13.7066 8.02797 12.2403 8.8251 10.6116C9.12263 9.91068 9.62677 9.31712 10.2703 8.91008C10.9138 8.50304 11.6661 8.30187 12.4269 8.33338ZM50.0002 55.7133C49.7371 55.3087 49.4513 54.9194 49.1441 54.5471C41.5615 46.9547 33.9593 39.3869 26.4111 31.7601C25.2351 30.5742 24.7037 30.6235 24.0985 32.2128C22.4009 36.6413 20.595 41.0353 18.8335 45.4441C17.6378 48.4358 17.6476 48.5982 20.9149 48.3965C27.2673 48.0274 32.9899 49.0607 37.1182 54.5127C37.4241 54.904 37.8189 55.2167 38.27 55.4247C38.721 55.6326 39.2152 55.7299 39.7114 55.7084C42.9786 55.7035 46.2459 55.7133 50.0002 55.7133Z"
+                                fill="#AAAAAA" />
+                            <path
+                                d="M48.2886 11.8417C53.8488 12.1517 59.4336 11.4185 64.9742 12.3633C68.9893 13.0472 72.1286 15.0253 74.2937 18.5287C75.7304 21.0119 76.9535 23.6128 77.9496 26.3032C80.1737 31.7748 81.9894 37.4236 84.6022 42.7033C88.3369 50.2957 88.0909 58.2326 87.653 66.2678C87.5545 68.0638 87.4118 69.8648 87.1904 71.646C86.969 73.4272 86.2408 73.5256 85.0352 72.2758C82.9292 70.096 80.7593 67.9753 78.6385 65.8299C74.0854 61.3096 69.5568 56.7843 65.0529 52.2541C63.4193 50.6057 63.5767 50.03 65.7467 49.2673C68.8565 48.1898 72.0548 48.4604 75.2532 48.4407C78.4515 48.421 78.481 48.3521 77.3346 45.4884C74.6627 38.885 71.858 32.3308 69.3485 25.6536C67.7395 21.3383 64.8364 19.5276 60.3734 19.5817C51.605 19.685 42.8366 19.6604 34.0731 19.7441C33.6283 19.7832 33.1802 19.7246 32.7603 19.5725C32.3405 19.4203 31.9589 19.1783 31.6424 18.8633C30.8403 18.0416 29.9743 17.2789 29.2165 16.403C28.5375 15.6305 27.1105 15.04 27.4648 13.9427C27.8732 12.6929 29.433 12.6388 30.6041 12.4223C36.4842 11.389 42.4036 12.132 48.2886 11.8417Z"
+                                fill="#AAAAAA" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_460_983b">
+                                <rect width="79.5406" height="79.1667" fill="white"
+                                    transform="translate(8.33301 8.33337)" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </div>
+
+                <h3 class="text-lg sm:text-[32px] text-[#171717] mt-6 light-header">No orders found</h3>
+                <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md">No orders found for the selected filter.
+                </p>
             </div>
             }
         </div>

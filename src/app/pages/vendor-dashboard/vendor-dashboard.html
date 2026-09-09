@@ -1,39 +1,38 @@
-<section class="px-5 lg:px-12.5 py-6 lg:py-10 h-screen flex flex-col overflow-hidden">
+<section class="px-4 sm:px-5 lg:px-8 h-screen flex flex-col overflow-hidden bg-[#FAFAFA]">
     <div class="lg:hidden fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none transition-opacity duration-300"
         [class.opacity-100]="drawerOpen" [class.pointer-events-auto]="drawerOpen" (click)="drawerOpen = false">
     </div>
 
-    <div class="lg:hidden fixed top-0 left-0 h-full w-full max-w-[320px] bg-white z-50 flex flex-col
-            px-5 py-8 -translate-x-full transition-transform duration-300 ease-in-out shadow-xl"
+    <div class="lg:hidden fixed top-0 left-0 h-full w-full max-w-75 bg-white z-50 flex flex-col
+            px-5 py-7 -translate-x-full transition-transform duration-300 ease-in-out shadow-xl"
         [class.translate-x-0]="drawerOpen">
 
-        <div class="flex items-center justify-between mb-10">
+        <div class="flex items-center justify-between mb-9">
             <a routerLink="/" (click)="drawerOpen = false">
                 <img ngSrc="assets/images/logo-black.png" title="logo" width="566" height="171" priority alt="logo"
-                    class="w-24 lg:w-32 h-auto" />
+                    class="w-20 h-auto" />
             </a>
 
             <button (click)="drawerOpen = false"
-                class="transition-colors duration-150 text-gray-700 hover:text-gray-900 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-x-icon lucide-x">
+                class="w-9 h-9 flex items-center justify-center rounded-full transition-colors duration-150 text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#171717] cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 6 6 18" />
                     <path d="m6 6 12 12" />
                 </svg>
             </button>
         </div>
 
-        <div class="flex flex-col gap-3 flex-1">
+        <div class="flex flex-col gap-1.5 flex-1">
             @for (item of navItems; track item.route) {
             <a [routerLink]="item.route" routerLinkActive #rla="routerLinkActive"
-                [style.background-color]="rla.isActive ? '#E8E8E8' : ''"
-                [style.color]="rla.isActive ? item.activeColor : '#595959'" (click)="drawerOpen = false" class="flex items-center gap-3 hover:bg-[#E8E8E8] px-3.75 py-2.5
-                       rounded-lg transition-colors duration-150 ease-in">
+                [style.background-color]="rla.isActive ? '#F3F4F6' : ''"
+                [style.color]="rla.isActive ? item.activeColor : '#6B7280'" (click)="drawerOpen = false"
+                class="flex items-center gap-3 hover:bg-[#F3F4F6] px-4 py-3 rounded-xl transition-colors duration-150 ease-in cursor-pointer">
 
                 @switch (item.icon) {
                 @case ('overview') {
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="19" height="19" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M1.6665 4.99984C1.6665 3.42849 1.6665 2.64281 2.15466 2.15466C2.64281 1.6665 3.42849 1.6665 4.99984 1.6665C6.57119 1.6665 7.35686 1.6665 7.84502 2.15466C8.33317 2.64281 8.33317 3.42849 8.33317 4.99984V6.6665C8.33317 8.23785 8.33317 9.02353 7.84502 9.51168C7.35686 9.99984 6.57119 9.99984 4.99984 9.99984C3.42849 9.99984 2.64281 9.99984 2.15466 9.51168C1.6665 9.02353 1.6665 8.23785 1.6665 6.6665V4.99984Z"
                         fill="currentColor" stroke="currentColor" />
@@ -49,7 +48,7 @@
                 </svg>
                 }
                 @case ('orders') {
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="19" height="19" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.6665 13.3333L13.9333 12.7277C16.207 12.5383 16.7174 12.0417 16.9694 9.77408L17.4998 5"
                         fill="currentColor" />
                     <path d="M6.6665 13.3333L13.9333 12.7277C16.207 12.5383 16.7174 12.0417 16.9694 9.77408L17.4998 5"
@@ -69,7 +68,7 @@
                 </svg>
                 }
                 @case ('products') {
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="19" height="19" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M2.0835 6.25V11.25C2.0835 14.3927 2.0835 15.9641 3.0598 16.9403C4.03612 17.9167 5.60746 17.9167 8.75016 17.9167H11.2502C14.3928 17.9167 15.9642 17.9167 16.9405 16.9403C17.9168 15.9641 17.9168 14.3927 17.9168 11.25V6.25"
                         fill="currentColor" />
@@ -86,7 +85,7 @@
                 </svg>
                 }
                 @case ('reports') {
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="19" height="19" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M2.0835 10.0002C2.0835 6.26821 2.0835 4.40224 3.24286 3.24286C4.40224 2.0835 6.26821 2.0835 10.0002 2.0835C13.7321 2.0835 15.5981 2.0835 16.7575 3.24286C17.9168 4.40224 17.9168 6.26821 17.9168 10.0002C17.9168 13.7321 17.9168 15.5981 16.7575 16.7575C15.5981 17.9168 13.7321 17.9168 10.0002 17.9168C6.26821 17.9168 4.40224 17.9168 3.24286 16.7575C2.0835 15.5981 2.0835 13.7321 2.0835 10.0002Z"
                         fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -96,7 +95,7 @@
                 </svg>
                 }
                 @case ('store') {
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="19" height="19" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M3.3335 8.3335V13.3335C3.3335 15.3572 3.3335 16.369 3.9609 16.9963C4.58829 17.6237 5.60013 17.6237 7.62376 17.6237"
                         fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -113,17 +112,17 @@
                 }
                 }
 
-                <span class="text-[18px]">{{ item.label }}</span>
+                <span class="text-[15px] font-medium">{{ item.label }}</span>
             </a>
             }
         </div>
 
-        <div class="flex flex-col gap-3 pt-5 border-t border-[#E5E5E5]">
+        <div class="flex flex-col gap-1.5 pt-4 border-t border-[#E5E7EB]">
             <a routerLink="/vendor/settings" routerLinkActive #rla="routerLinkActive"
-                [style.background-color]="rla.isActive ? '#E8E8E8' : ''"
-                [style.color]="rla.isActive ? '#00BDFB' : '#595959'" (click)="drawerOpen = false" class="flex items-center gap-3 hover:bg-[#E8E8E8] px-3.75 py-2.5
-                       rounded-lg transition-colors duration-150 ease-in">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                [style.background-color]="rla.isActive ? '#F3F4F6' : ''"
+                [style.color]="rla.isActive ? '#00BDFB' : '#6B7280'" (click)="drawerOpen = false"
+                class="flex items-center gap-3 hover:bg-[#F3F4F6] px-4 py-3 rounded-xl transition-colors duration-150 ease-in cursor-pointer">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M21.3175 7.14139L20.8239 6.28479C20.4506 5.63696 20.264 5.31305 19.9464 5.18388C19.6288 5.05472 19.2696 5.15664 18.5513 5.36048L17.3311 5.70418C16.8725 5.80994 16.3913 5.74994 15.9726 5.53479L15.6357 5.34042C15.2766 5.11043 15.0004 4.77133 14.8475 4.37274L14.5136 3.37536C14.294 2.71534 14.1842 2.38533 13.9228 2.19657C13.6615 2.00781 13.3143 2.00781 12.6199 2.00781H11.5051C10.8108 2.00781 10.4636 2.00781 10.2022 2.19657C9.94085 2.38533 9.83106 2.71534 9.61149 3.37536L9.27753 4.37274C9.12465 4.77133 8.84845 5.11043 8.48937 5.34042L8.15249 5.53479C7.73374 5.74994 7.25259 5.80994 6.79398 5.70418L5.57375 5.36048C4.85541 5.15664 4.49625 5.05472 4.17867 5.18388C3.86109 5.31305 3.67445 5.63696 3.30115 6.28479L2.80757 7.14139C2.45766 7.74864 2.2827 8.05227 2.31666 8.37549C2.35061 8.69871 2.58483 8.95918 3.05326 9.48012L4.0843 10.6328C4.3363 10.9518 4.51521 11.5078 4.51521 12.0077C4.51521 12.5078 4.33636 13.0636 4.08433 13.3827L3.05326 14.5354C2.58483 15.0564 2.35062 15.3168 2.31666 15.6401C2.2827 15.9633 2.45766 16.2669 2.80757 16.8741L3.30114 17.7307C3.67443 18.3785 3.86109 18.7025 4.17867 18.8316C4.49625 18.9608 4.85542 18.8589 5.57377 18.655L6.79394 18.3113C7.25263 18.2055 7.73387 18.2656 8.15267 18.4808L8.4895 18.6752C8.84851 18.9052 9.12464 19.2442 9.2775 19.6428L9.61149 20.6403C9.83106 21.3003 9.94085 21.6303 10.2022 21.8191C10.4636 22.0078 10.8108 22.0078 11.5051 22.0078H12.6199C13.3143 22.0078 13.6615 22.0078 13.9228 21.8191C14.1842 21.6303 14.294 21.3003 14.5136 20.6403L14.8476 19.6428C15.0004 19.2442 15.2765 18.9052 15.6356 18.6752L15.9724 18.4808C16.3912 18.2656 16.8724 18.2055 17.3311 18.3113L18.5513 18.655C19.2696 18.8589 19.6288 18.9608 19.9464 18.8316C20.264 18.7025 20.4506 18.3785 20.8239 17.7307L21.3175 16.8741C21.6674 16.2669 21.8423 15.9633 21.8084 15.6401C21.7744 15.3168 21.5402 15.0564 21.0718 14.5354L20.0407 13.3827C19.7887 13.0636 19.6098 12.5078 19.6098 12.0077C19.6098 11.5078 19.7888 10.9518 20.0407 10.6328L21.0718 9.48012C21.5402 8.95918 21.7744 8.69871 21.8084 8.37549C21.8423 8.05227 21.6674 7.74864 21.3175 7.14139Z"
                         fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -131,12 +130,12 @@
                         d="M15.5195 12C15.5195 13.933 13.9525 15.5 12.0195 15.5C10.0865 15.5 8.51953 13.933 8.51953 12C8.51953 10.067 10.0865 8.5 12.0195 8.5C13.9525 8.5 15.5195 10.067 15.5195 12Z"
                         fill="white" stroke="white" stroke-width="1.5" stroke-linecap="round" />
                 </svg>
-                <span class="text-[18px] transition-colors duration-300">Settings</span>
+                <span class="text-[15px] font-medium">Settings</span>
             </a>
 
-            <button (click)="logout(); drawerOpen = false" class="flex items-center gap-3 text-[#D92D20] hover:bg-[#FCE8E6]
-                       px-3.75 py-2.5 rounded-lg transition-colors duration-150 ease-in w-full">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button (click)="logout(); drawerOpen = false"
+                class="flex items-center gap-3 text-[#D92D20] hover:bg-[#FEF2F2] px-4 py-3 rounded-xl transition-colors duration-150 ease-in w-full cursor-pointer">
+                <svg width="19" height="19" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M3.66072 3.33389C3.3335 3.84648 3.3335 4.50955 3.3335 5.8357V14.164C3.3335 15.4901 3.3335 16.1532 3.66072 16.6658C3.71915 16.7573 3.78466 16.8442 3.85664 16.9255C4.2597 17.3808 4.89738 17.563 6.17275 17.9273C7.45133 18.2926 8.09063 18.4752 8.5535 18.2013C8.63383 18.1538 8.7085 18.0974 8.77625 18.0333C9.16683 17.6636 9.16683 16.9988 9.16683 15.6693V4.33035C9.16683 3.00085 9.16683 2.33609 8.77625 1.96635C8.7085 1.90224 8.63383 1.84589 8.5535 1.79839C8.09063 1.52447 7.45133 1.70709 6.17275 2.07233C4.89738 2.43665 4.2597 2.61882 3.85664 3.07421C3.78466 3.15554 3.71915 3.24236 3.66072 3.33389Z"
                         fill="#D92D20" stroke="#D92D20" stroke-width="1.5" stroke-linecap="round"
@@ -148,24 +147,24 @@
                         d="M17.4998 9.99989H11.6665M16.2498 7.9165C16.2498 7.9165 18.3332 9.45089 18.3332 9.99989C18.3332 10.5489 16.2498 12.0831 16.2498 12.0831"
                         stroke="#D92D20" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                <span class="text-[18px] transition-colors duration-300">Log Out</span>
+                <span class="text-[15px] font-medium">Log Out</span>
             </button>
         </div>
     </div>
 
-    <div class="flex flex-1 min-h-0">
-        <div class="hidden lg:flex flex-col h-full w-50 shrink-0">
+    <div class="flex flex-1 min-h-0 gap-6">
+        <div class="hidden lg:flex flex-col h-full w-56 shrink-0 bg-white rounded-2xl pl-3 py-10">
             <a routerLink="/">
                 <img ngSrc="assets/images/logo-black.png" title="logo" width="566" height="171" priority alt="logo"
-                    class="w-24 lg:w-32 h-auto" />
+                    class="w-28 h-auto" />
             </a>
 
-            <div class="flex flex-col mt-10 gap-5">
+            <div class="flex flex-col mt-8 gap-1">
                 @for (item of navItems; track item.route) {
                 <a [routerLink]="item.route" routerLinkActive #rla="routerLinkActive"
-                    [style.background-color]="rla.isActive ? '#E8E8E8' : ''"
-                    [style.color]="rla.isActive ? item.activeColor : '#595959'" class="flex items-center gap-2.5 hover:bg-[#E8E8E8] px-3.75 py-1.25
-                           rounded-tl-lg rounded-bl-lg transition-colors duration-150 ease-in">
+                    [style.background-color]="rla.isActive ? '#F3F4F6' : ''"
+                    [style.color]="rla.isActive ? item.activeColor : '#6B7280'"
+                    class="flex items-center gap-2.5 hover:bg-[#F3F4F6] px-3.5 py-2.5 rounded-xl transition-colors duration-150 ease-in cursor-pointer">
 
                     @switch (item.icon) {
                     @case ('overview') {
@@ -252,16 +251,17 @@
                     }
                     }
 
-                    <span class="text-[18px]">{{ item.label }}</span>
+                    <span class="text-[17px]">{{ item.label }}</span>
                 </a>
                 }
             </div>
 
-            <div class="flex flex-col gap-5 mt-auto pt-5 border-t border-[#E5E5E5]">
+            <div class="flex flex-col gap-1 mt-auto pt-4 border-t border-[#E5E7EB]">
                 <a routerLink="/vendor/settings" routerLinkActive #rla="routerLinkActive"
-                    [style.color]="rla.isActive ? '#00BDFB' : '#6B6B6B'" class="flex items-center gap-2.5 text-[#6B6B6B] hover:bg-[#E8E8E8] px-3.75 py-1.25
-                           rounded-tl-lg rounded-bl-lg transition-colors duration-150 ease-in">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    [style.background-color]="rla.isActive ? '#F3F4F6' : ''"
+                    [style.color]="rla.isActive ? '#00BDFB' : '#6B7280'"
+                    class="flex items-center gap-2.5 hover:bg-[#F3F4F6] px-3.5 py-2.5 rounded-xl transition-colors duration-150 ease-in cursor-pointer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M21.3175 7.14139L20.8239 6.28479C20.4506 5.63696 20.264 5.31305 19.9464 5.18388C19.6288 5.05472 19.2696 5.15664 18.5513 5.36048L17.3311 5.70418C16.8725 5.80994 16.3913 5.74994 15.9726 5.53479L15.6357 5.34042C15.2766 5.11043 15.0004 4.77133 14.8475 4.37274L14.5136 3.37536C14.294 2.71534 14.1842 2.38533 13.9228 2.19657C13.6615 2.00781 13.3143 2.00781 12.6199 2.00781H11.5051C10.8108 2.00781 10.4636 2.00781 10.2022 2.19657C9.94085 2.38533 9.83106 2.71534 9.61149 3.37536L9.27753 4.37274C9.12465 4.77133 8.84845 5.11043 8.48937 5.34042L8.15249 5.53479C7.73374 5.74994 7.25259 5.80994 6.79398 5.70418L5.57375 5.36048C4.85541 5.15664 4.49625 5.05472 4.17867 5.18388C3.86109 5.31305 3.67445 5.63696 3.30115 6.28479L2.80757 7.14139C2.45766 7.74864 2.2827 8.05227 2.31666 8.37549C2.35061 8.69871 2.58483 8.95918 3.05326 9.48012L4.0843 10.6328C4.3363 10.9518 4.51521 11.5078 4.51521 12.0077C4.51521 12.5078 4.33636 13.0636 4.08433 13.3827L3.05326 14.5354C2.58483 15.0564 2.35062 15.3168 2.31666 15.6401C2.2827 15.9633 2.45766 16.2669 2.80757 16.8741L3.30114 17.7307C3.67443 18.3785 3.86109 18.7025 4.17867 18.8316C4.49625 18.9608 4.85542 18.8589 5.57377 18.655L6.79394 18.3113C7.25263 18.2055 7.73387 18.2656 8.15267 18.4808L8.4895 18.6752C8.84851 18.9052 9.12464 19.2442 9.2775 19.6428L9.61149 20.6403C9.83106 21.3003 9.94085 21.6303 10.2022 21.8191C10.4636 22.0078 10.8108 22.0078 11.5051 22.0078H12.6199C13.3143 22.0078 13.6615 22.0078 13.9228 21.8191C14.1842 21.6303 14.294 21.3003 14.5136 20.6403L14.8476 19.6428C15.0004 19.2442 15.2765 18.9052 15.6356 18.6752L15.9724 18.4808C16.3912 18.2656 16.8724 18.2055 17.3311 18.3113L18.5513 18.655C19.2696 18.8589 19.6288 18.9608 19.9464 18.8316C20.264 18.7025 20.4506 18.3785 20.8239 17.7307L21.3175 16.8741C21.6674 16.2669 21.8423 15.9633 21.8084 15.6401C21.7744 15.3168 21.5402 15.0564 21.0718 14.5354L20.0407 13.3827C19.7887 13.0636 19.6098 12.5078 19.6098 12.0077C19.6098 11.5078 19.7888 10.9518 20.0407 10.6328L21.0718 9.48012C21.5402 8.95918 21.7744 8.69871 21.8084 8.37549C21.8423 8.05227 21.6674 7.74864 21.3175 7.14139Z"
                             fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -269,11 +269,11 @@
                             d="M15.5195 12C15.5195 13.933 13.9525 15.5 12.0195 15.5C10.0865 15.5 8.51953 13.933 8.51953 12C8.51953 10.067 10.0865 8.5 12.0195 8.5C13.9525 8.5 15.5195 10.067 15.5195 12Z"
                             fill="white" stroke="white" stroke-width="1.5" stroke-linecap="round" />
                     </svg>
-                    <span class="text-[18px] transition-colors duration-300">Settings</span>
+                    <span class="text-[17px]">Settings</span>
                 </a>
 
-                <button (click)="logout()" class="flex items-center gap-2.5 text-[#D92D20] hover:bg-[#FCE8E6] px-3.75 py-1.25
-                           rounded-tl-lg rounded-bl-lg transition-colors duration-150 ease-in">
+                <button (click)="logout()"
+                    class="flex items-center gap-2.5 text-[#D92D20] hover:bg-[#FEF2F2] px-3.5 py-2.5 rounded-xl transition-colors duration-150 ease-in cursor-pointer">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M3.66072 3.33389C3.3335 3.84648 3.3335 4.50955 3.3335 5.8357V14.164C3.3335 15.4901 3.3335 16.1532 3.66072 16.6658C3.71915 16.7573 3.78466 16.8442 3.85664 16.9255C4.2597 17.3808 4.89738 17.563 6.17275 17.9273C7.45133 18.2926 8.09063 18.4752 8.5535 18.2013C8.63383 18.1538 8.7085 18.0974 8.77625 18.0333C9.16683 17.6636 9.16683 16.9988 9.16683 15.6693V4.33035C9.16683 3.00085 9.16683 2.33609 8.77625 1.96635C8.7085 1.90224 8.63383 1.84589 8.5535 1.79839C8.09063 1.52447 7.45133 1.70709 6.17275 2.07233C4.89738 2.43665 4.2597 2.61882 3.85664 3.07421C3.78466 3.15554 3.71915 3.24236 3.66072 3.33389Z"
@@ -286,34 +286,32 @@
                             d="M17.4998 9.99989H11.6665M16.2498 7.9165C16.2498 7.9165 18.3332 9.45089 18.3332 9.99989C18.3332 10.5489 16.2498 12.0831 16.2498 12.0831"
                             stroke="#D92D20" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="text-[18px] transition-colors duration-300">Log Out</span>
+                    <span class="text-[17px]">Log Out</span>
                 </button>
             </div>
         </div>
 
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0 flex flex-col min-h-0">
 
-            <div class="flex items-center justify-between mb-5">
-                <div class="flex items-center gap-4">
-
+            <div class="flex items-start justify-between mb-4 shrink-0 pt-10">
+                <div class="flex items-center gap-3">
                     <button (click)="drawerOpen = true"
-                        class="lg:hidden p-1.5 -ml-1.5 rounded-lg transition-colors duration-150 text-gray-700 hover:text-gray-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-menu-icon lucide-menu">
+                        class="lg:hidden w-9 h-9 flex items-center justify-center -ml-1.5 rounded-full transition-colors duration-150 text-[#6B7280] hover:bg-white cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 5h16" />
                             <path d="M4 12h16" />
                             <path d="M4 19h16" />
                         </svg>
                     </button>
 
-                    <h1 class="products-font text-xl sm:text-2xl lg:ml-7">{{ headerTitle() }}</h1>
+                    <h1 class="products-font text-xl sm:text-2xl text-[#171717]">{{ headerTitle() }}</h1>
                 </div>
 
-                <div class="flex items-center gap-4 sm:gap-5">
-                    <div
-                        class="bg-[#D1D1D1] rounded-lg p-1.5 sm:p-2 w-8 sm:w-10 h-8 sm:h-10 flex items-center justify-center">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <button
+                        class="bg-white rounded-xl p-2 sm:p-2.5 w-9 sm:w-11 h-9 sm:h-11 flex items-center justify-center hover:bg-[#F3F4F6] transition-colors duration-150 cursor-pointer shadow-sm">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M11.9998 18.9842H4.60778C4.07079 19.0221 3.53585 18.8862 3.08203 18.5967C2.62822 18.3071 2.27963 17.8792 2.08778 17.3762C1.86225 16.8851 1.80468 16.3335 1.92397 15.8064C2.04326 15.2794 2.33277 14.8063 2.74778 14.4602C3.16943 14.087 3.49765 13.62 3.70606 13.0969C3.91447 12.5738 3.99726 12.0091 3.94778 11.4482C3.87257 10.0865 3.9612 8.72072 4.21178 7.38018C4.6442 5.60533 5.68043 4.03612 7.1429 2.94146C8.60536 1.8468 10.403 1.29485 12.2278 1.38018C14.0864 1.42626 15.8688 2.12871 17.2591 3.36308C18.6494 4.59745 19.5579 6.28408 19.8238 8.12418C19.9761 9.17691 20.0203 10.2425 19.9558 11.3042C19.9025 11.9045 20.0922 12.5089 20.2174 13.0679C20.4427 13.6269 20.7972 14.1246 21.2518 14.5202C21.5476 14.7924 21.7747 15.1308 21.9145 15.5078C22.0543 15.8847 22.1027 16.2894 22.0559 16.6887C22.0091 17.0879 21.8683 17.4704 21.6451 17.8048C21.4219 18.1391 21.1226 18.4158 20.7718 18.6122C20.3462 18.8368 19.873 18.9561 19.3918 18.9602C16.9558 18.9962 14.4718 18.9842 11.9998 18.9842Z"
                                 fill="#171717" />
@@ -321,15 +319,17 @@
                                 d="M8.11182 20.3999H15.8518C15.5058 21.0448 15.0017 21.5913 14.3867 21.988C13.7717 22.3847 13.066 22.6186 12.3358 22.6679C11.4879 22.7383 10.6378 22.5616 9.88814 22.1591C9.13854 21.7566 8.52156 21.1456 8.11182 20.3999Z"
                                 fill="#171717" />
                         </svg>
-                    </div>
+                    </button>
                     <div
-                        class="cursor-pointer initials w-8 sm:w-10 h-8 sm:h-10 rounded-lg flex items-center justify-center sm:text-[18px] transition-colors duration-300 bg-[#171717] text-white">
+                        class="cursor-pointer w-9 sm:w-11 h-9 sm:h-11 rounded-xl flex items-center justify-center text-sm sm:text-[16px] font-medium transition-colors duration-150 bg-[#171717] text-white hover:opacity-85">
                         {{ userInitials }}
                     </div>
                 </div>
             </div>
 
-            <router-outlet></router-outlet>
+            <div class="flex-1 min-h-0 overflow-hidden">
+                <router-outlet></router-outlet>
+            </div>
         </div>
     </div>
 </section>
