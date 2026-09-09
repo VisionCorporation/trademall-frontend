@@ -88,3 +88,5 @@ export const ORDER_PERIODS = [
     { label: 'Last Month', value: 'last-month' },
     { label: 'Last Year', value: 'last-year' },
 ];
+
+export const ADD_PRODUCT_STEPS = [{ label: "General", value: 'general', number: 1 }, { label: 'Images', value: 'images', number: 2 }, { label: "Advanced", value: 'advanced', number: 3 }]
