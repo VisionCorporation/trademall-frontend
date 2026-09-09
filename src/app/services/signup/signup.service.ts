@@ -15,7 +15,6 @@ import { environment } from '../../../environments/environment';
 export class SignupService {
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
-  public currentStep = 1;
   public isSubmitting$ = new BehaviorSubject<boolean>(false);
   public isResending$ = new BehaviorSubject<boolean>(false);
   public signingWithGoogle$ = new BehaviorSubject<boolean>(false);
@@ -74,10 +73,6 @@ export class SignupService {
 
   public clearVendorFormData() {
     this.vendorFormData = null;
-  }
-
-  public nextStep(): void {
-    this.currentStep++;
   }
 
   public submitCustomerEmailForOtp(email: string): Observable<string> {
