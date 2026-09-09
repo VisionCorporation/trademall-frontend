@@ -43,6 +43,7 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
   private router = inject(Router);
   public steps = steps;
   public otpControls = otpControls;
+  public currentStep = 1;
 
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef>;
 
@@ -51,13 +52,13 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (this.signupService.currentStep === 2) {
+    if (this.currentStep === 2) {
       this.otpInputs.first?.nativeElement.focus();
     }
   }
 
-  get currentStep() {
-    return this.signupService.currentStep;
+  public nextStep(): void {
+    this.currentStep++;
   }
 
   get emailForm() {
@@ -74,7 +75,7 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
         this.initTimer();
         this.signupService.isSubmitting$.next(false);
         this.toastService.success('OTP code sent successfully to your email.');
-        this.signupService.nextStep();
+        this.nextStep();
         this.otpInputs.first.nativeElement.focus();
       },
       error: (err) => {
@@ -98,7 +99,7 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
         this.toastService.success('Email verified successfully.');
         this.countdownTimerService.clear(this.TIMER_KEY);
         this.userId = res.userId;
-        this.signupService.nextStep();
+        this.nextStep();
       },
       error: (err) => {
         this.signupService.isSubmitting$.next(false);
@@ -178,10 +179,6 @@ export class CustomerSignup implements OnInit, AfterViewInit, OnDestroy {
 
   get passwordForm() {
     return this.signupService.passwordForm;
-  }
-
-  public nextStep(): void {
-    this.signupService.nextStep();
   }
 
   public onPhoneInput(event: Event) {
