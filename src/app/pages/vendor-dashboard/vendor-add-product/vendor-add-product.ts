@@ -10,6 +10,7 @@ import { Attribute, CreateProductResponse, ProductDetailsPayload, UploadImagesRe
 import { FormStep } from '../../../types/add-product.type';
 import { ToastService } from '../../../services/toast/toast.service';
 import { Router } from '@angular/router';
+import { ADD_PRODUCT_STEPS } from '../../../data/constants/vendor-dashbaord.constant';
 
 @Component({
   selector: 'app-vendor-add-product',
@@ -33,6 +34,7 @@ export class VendorAddProduct implements OnInit {
   public hasCategoryFailed = signal(false);
   public hasSubCategoryFailed = signal(false);
   public step = signal<FormStep>('general');
+  public addProductSteps = ADD_PRODUCT_STEPS
   public createdProductId = signal<string | null>(null);
   public isSubmittingDetails = signal(false);
   public isUploadingImages = signal(false);
