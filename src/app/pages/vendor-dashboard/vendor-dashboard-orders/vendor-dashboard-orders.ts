@@ -33,7 +33,6 @@ export class VendorDashboardOrders {
 
   public selectFilter(value: string): void {
     this.selectedFilter = value;
-    console.log('Selected Filter:', value);
     this.filteredOrders.set(
       value === 'all-orders'
         ? this.orders
