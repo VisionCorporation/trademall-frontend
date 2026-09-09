@@ -19,7 +19,8 @@ export const PRODUCTS_FILTERS = [
     { label: 'Approved', value: 'approved', activeColor: '#26C34D' },
     { label: 'Pending', value: 'pending', activeColor: '#FF860D' },
     { label: 'Rejected', value: 'rejected', activeColor: '#FF0000' },
-]
+    { label: 'Inactive', value: 'inactive', activeColor: '#6B7280' },
+];
 
 export const ORDERS_FILTERS = [
     { label: 'All Orders', value: 'all-orders', activeColor: '#1B5DD7' },
@@ -28,10 +29,26 @@ export const ORDERS_FILTERS = [
     { label: 'Rejected', value: 'rejected', activeColor: '#FF0000' },
 ]
 
-export const PRODUCT_STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-    approved: { label: 'Approved', color: '#26C34D' },
-    pending: { label: 'Pending', color: '#FF860D' },
-    rejected: { label: 'Rejected', color: '#FF0000' },
+export const PRODUCT_STATUS_CONFIG: Record<
+    string,
+    { label: string; color: string }
+> = {
+    approved: {
+        label: 'Approved',
+        color: '#26C34D',
+    },
+    pending: {
+        label: 'Pending',
+        color: '#FF860D',
+    },
+    rejected: {
+        label: 'Rejected',
+        color: '#FF0000',
+    },
+    inactive: {
+        label: 'Inactive',
+        color: '#6B7280',
+    },
 };
 
 export const ORDERS_STATUS_CONFIG: Record<string, { label: string; color: string, bgColor: string }> = {
