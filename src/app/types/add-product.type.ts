@@ -1,1 +1,1 @@
-export type FormStep = 'details' | 'images';
+export type FormStep = 'general' | 'images' | 'advanced'

@@ -32,7 +32,7 @@ export class VendorAddProduct implements OnInit {
   public isSubCategoryLoading = signal(false)
   public hasCategoryFailed = signal(false);
   public hasSubCategoryFailed = signal(false);
-  public step = signal<FormStep>('details');
+  public step = signal<FormStep>('general');
   public createdProductId = signal<string | null>(null);
   public isSubmittingDetails = signal(false);
   public isUploadingImages = signal(false);
@@ -143,7 +143,7 @@ export class VendorAddProduct implements OnInit {
     this.selectedCategory = null;
     this.selectedSubCategory = null;
     this.createdProductId.set(null);
-    this.step.set('details');
+    this.step.set('general');
     this.detailsError.set(null);
     this.imagesError.set(null);
   }
