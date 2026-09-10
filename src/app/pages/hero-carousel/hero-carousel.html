@@ -15,8 +15,7 @@
                     Your Trusted Multi-Vendor Marketplace
                 </span>
 
-                <h1
-                    class="text-white text-4xl md:text-6xl lg:text-8xl uppercase leading-tight text-balance">
+                <h1 class="text-white text-4xl md:text-6xl lg:text-8xl uppercase leading-tight text-balance">
                     {{ slide.title }}
                 </h1>
 
@@ -25,7 +24,7 @@
                 </p>
 
                 <a [routerLink]="slide.ctaLink"
-                    class="inline-flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3.5 bg-white hover:opacity-90 transition-opacity duration-150 ease-in text-[#171717] rounded-lg mt-8">
+                    class="inline-flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3 bg-white hover:opacity-90 transition-opacity duration-150 ease-in text-[#171717] rounded-xl mt-8">
                     {{ slide.ctaLabel }}
                     <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
@@ -56,20 +55,14 @@
     </button>
 
     <div class="absolute z-20 bottom-30 left-1/2 -translate-x-1/2 flex items-center  -space-x-2">
-  @for (slide of slides; track slide.title; let i = $index) {
-    <button
-      (click)="goTo(i)"
-      class="flex items-center justify-center w-12 h-12 cursor-pointer"
-      [attr.aria-label]="'Go to slide ' + (i + 1)"
-    >
-      <span
-        class="h-2 rounded-full transition-all duration-300"
-        [class]="currentIndex === i
+        @for (slide of slides; track slide.title; let i = $index) {
+        <button (click)="goTo(i)" class="flex items-center justify-center w-12 h-12 cursor-pointer"
+            [attr.aria-label]="'Go to slide ' + (i + 1)">
+            <span class="h-2 rounded-full transition-all duration-300" [class]="currentIndex === i
           ? 'w-8 bg-white'
-          : 'w-2 bg-white/50 hover:bg-white/75'"
-      >
-      </span>
-    </button>
-  }
-</div>
+          : 'w-2 bg-white/50 hover:bg-white/75'">
+            </span>
+        </button>
+        }
+    </div>
 </section>

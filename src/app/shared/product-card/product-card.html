@@ -154,7 +154,7 @@
       } @else {
       <button [disabled]="cartStateService.isProductAddingToCart(product.id)"
         class="group/btn w-full flex items-center justify-center gap-1.5 h-11 rounded-xl text-white font-medium
-         x] bg-[#171717] hover:opacity-85 transition-opacity duration-150 hover:-translate-y-0.5
+         x] bg-[#171717] hover:opacity-85 transition-opacity duration-200 ease-in text-[15px] sm:text-[16px] px-6 py-3 hover:-translate-y-0.5
          active:translate-y-0 active:shadow-none
          disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-[#171717] disabled:hover:translate-y-0 disabled:hover:shadow-none"
         (click)="addToCart(); $event.stopPropagation()">
