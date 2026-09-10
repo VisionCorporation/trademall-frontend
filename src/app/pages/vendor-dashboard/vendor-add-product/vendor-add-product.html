@@ -23,7 +23,7 @@
                     </label>
                     <input type="text" id="product-name" placeholder="Enter product name"
                         [(ngModel)]="productGeneralDetailsForm.name"
-                        class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                 </div>
 
                 <div class="mb-6 sm:mb-7">
@@ -32,7 +32,7 @@
                     </label>
                     <textarea id="product-description" placeholder="Create a description of your product"
                         [(ngModel)]="productGeneralDetailsForm.description"
-                        class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150 h-28 sm:h-33.5 resize-none"></textarea>
+                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150 h-28 sm:h-33.5 resize-none"></textarea>
                 </div>
 
                 <div class="mb-6 sm:mb-7 max-w-xs">
@@ -46,7 +46,7 @@
                         <input type="number" id="product-price" placeholder="0.00"
                             [(ngModel)]="productGeneralDetailsForm.price" min="1" step="1" inputmode="decimal"
                             (keydown)="preventInvalidNumberInput($event)" (ngModelChange)="onPriceChange($event)"
-                            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                            class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                     </div>
                 </div>
 
@@ -56,7 +56,7 @@
                             Product Category <span class="text-[#D92D20]">*</span>
                         </span>
                         <button type="button" (click)="isCategoryOpen = !isCategoryOpen"
-                            class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
+                            class="bg-[#FBFCFF] flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
                             [class]="isCategoryOpen ? 'border-[#00a7519b] ring-2 ring-[#00a7515d]' : ''">
                             <span [class]="selectedCategory ? 'text-[#171717]' : 'text-[#9CA3AF]'">
                                 {{ selectedCategory?.name || 'Select a category' }}
@@ -107,7 +107,7 @@
                             Product Subcategory <span class="text-[#D92D20]">*</span>
                         </span>
                         <button type="button" (click)="isSubCategoryOpen = !isSubCategoryOpen"
-                            class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
+                            class="bg-[#FBFCFF] flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
                             [class]="isSubCategoryOpen ? 'border-[#00a7519b] ring-2 ring-[#00a7515d]' : ''">
                             <span [class]="selectedSubCategory ? 'text-[#171717]' : 'text-[#9CA3AF]'">
                                 {{ selectedSubCategory?.name || 'Select a subcategory' }}
