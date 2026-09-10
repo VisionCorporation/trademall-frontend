@@ -99,17 +99,23 @@ export interface Attribute {
   value: string;
 }
 
-export interface ProductDetailsPayload {
+export interface ProductGeneralDetailsPayload {
   name: string;
+  brand?: string;
   description: string;
-  attributes: Record<string, string>;
-  hasVariants: boolean;
-  isPreOrder: boolean;
+  attributes?: Record<string, string>;
+  hasVariants?: boolean;
+  isPreOrder?: boolean;
   preOrderDays?: number;
   minPreOrderQuantity?: number;
+  preOrderShippingFee?: number;
   price: number;
-  stockQuantity: number;
+  salePrice?: number
+  stockQuantity?: number;
+  lowStockThreshold?: number;
+  weight?: number
   category: string;
+  subcategory: string
 }
 
 export interface CreateProductResponse {
