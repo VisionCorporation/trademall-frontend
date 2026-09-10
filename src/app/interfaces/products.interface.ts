@@ -109,7 +109,7 @@ export interface ProductGeneralDetailsPayload {
   preOrderDays?: number;
   minPreOrderQuantity?: number;
   preOrderShippingFee?: number;
-  price: number;
+  price: number | null;
   salePrice?: number
   stockQuantity?: number;
   lowStockThreshold?: number;
