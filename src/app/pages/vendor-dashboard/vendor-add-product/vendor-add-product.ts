@@ -48,7 +48,7 @@ export class VendorAddProduct implements OnInit {
   public productGeneralDetailsForm = {
     name: '',
     description: '',
-    price: 0,
+    price: null as number | null,
     category: '',
     subcategory: ''
   };
@@ -151,10 +151,24 @@ export class VendorAddProduct implements OnInit {
     return (
       this.productGeneralDetailsForm.name.trim() !== '' &&
       this.productGeneralDetailsForm.description.trim() !== '' &&
-      this.productGeneralDetailsForm.price > 0 &&
+      this.productGeneralDetailsForm.price !== null &&
       this.productGeneralDetailsForm.category !== '' &&
       this.productGeneralDetailsForm.subcategory !== ''
     );
+  }
+
+  public preventInvalidNumberInput(event: KeyboardEvent): void {
+    if (['e', 'E', '+', '-'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  public onPriceChange(value: number | string | null): void {
+    if (value === null || value === '') {
+      this.productGeneralDetailsForm.price = null;
+      return;
+    }
+    this.productGeneralDetailsForm.price = Number(value);
   }
 
   private resetGeneralDetailsForm(): void {
