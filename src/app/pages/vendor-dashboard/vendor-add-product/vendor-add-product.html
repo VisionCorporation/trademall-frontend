@@ -1,4 +1,4 @@
-<section class="bg-[#F4F4F4] rounded-[20px] pt-5 sm:pt-7.5 px-4 sm:px-8.75 flex flex-col h-full">
+<section class="bg-[#F4F4F4] rounded-[20px] pt-5 sm:pt-7.5 sm:px-8.75 flex flex-col h-full">
     <div class="flex items-center justify-center md:justify-start gap-2 mb-2 shrink-0">
         @for (addProductStep of addProductSteps; track addProductStep.value) {
         <div class="flex items-center gap-1.5">
@@ -16,12 +16,13 @@
     <div class="flex-1 min-h-0 overflow-y-auto scrollbar-hide pb-7">
         @if(step() === 'general') {
         <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2 overflow-y-auto scrollbar-hide flex-1 min-h-0">
-            <div class="w-full max-w-full lg:max-w-[70%] px-0 sm:px-2 py-6 sm:py-7">
+            <div class="w-full max-w-full lg:max-w-[70%] px-2 py-6 sm:py-7">
                 <div class="mb-6 sm:mb-7">
                     <label for="product-name" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
                         Product Name <span class="text-[#D92D20]">*</span>
                     </label>
-                    <input type="text" id="product-name" placeholder="Enter product name" [(ngModel)]="productForm.name"
+                    <input type="text" id="product-name" placeholder="Enter product name"
+                        [(ngModel)]="productGeneralDetailsForm.name"
                         class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                 </div>
 
@@ -30,30 +31,21 @@
                         Description <span class="text-[#D92D20]">*</span>
                     </label>
                     <textarea id="product-description" placeholder="Create a description of your product"
-                        [(ngModel)]="productForm.description"
+                        [(ngModel)]="productGeneralDetailsForm.description"
                         class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150 h-28 sm:h-33.5 resize-none"></textarea>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
-                    <div class="flex-1">
-                        <label for="product-price" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
-                            Price <span class="text-[#9CA3AF] text-[13px]">(GHS)</span> <span
-                                class="text-[#D92D20]">*</span>
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
-                            <input type="number" id="product-price" placeholder="0.00" [(ngModel)]="productForm.price"
-                                class="block w-full border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
-                        </div>
-                    </div>
-                    <div class="flex-1">
-                        <label for="in-stock" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
-                            Stock Quantity <span class="text-[#D92D20]">*</span>
-                        </label>
-                        <input type="number" id="in-stock" placeholder="Enter amount available"
-                            [(ngModel)]="productForm.stockQuantity"
-                            class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                <div class="mb-6 sm:mb-7 max-w-xs">
+                    <label for="product-price" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
+                        Price <span class="text-[#9CA3AF] text-[13px]">(GHS)</span> <span
+                            class="text-[#D92D20]">*</span>
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
+                        <input type="number" id="product-price" placeholder="0.00"
+                            [(ngModel)]="productGeneralDetailsForm.price"
+                            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                     </div>
                 </div>
 
@@ -77,24 +69,31 @@
                         </button>
                         @if(isCategoryOpen){
                         <div [@fadeInOut]
-                            class="absolute top-full left-0 mt-1.5 bg-white py-2 rounded-xl overflow-hidden z-10 w-full max-h-64 overflow-y-auto shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-[#17171708]">
+                            class="absolute top-full left-0 mt-2 bg-white py-2 rounded-2xl overflow-y-auto scrollbar-hide z-50 min-w-full max-h-64 shadow-[0_8px_30px_rgba(0,0,0,0.1)] border border-[#17171708]">
+
                             @if(isCategoryLoading()) {
                             <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading categories...</p>
                             } @else if (hasCategoryFailed()) {
-                            <div class="flex flex-col items-center gap-2 px-5 py-2">
+                            <div class="flex flex-col items-center gap-2 px-5 py-1.5">
                                 <p class="text-[14px] text-[#D92D20]">Failed to load categories</p>
-                                <button type="button" (click)="fetchCategories()"
-                                    class="text-[13px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
+                                <button (click)="fetchCategories()"
+                                    class="text-[13px] px-6 py-3 border border-[#171717] rounded-xl hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
                                     Try again
                                 </button>
                             </div>
                             } @else {
-                            @for(category of categories; track category) {
-                            <button type="button"
-                                class="w-full text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
+                            @for(category of categories(); track category) {
+                            <button
+                                class="w-full flex items-center justify-between gap-2 text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
                                 [class]="selectedCategory?.name === category.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
                                 (click)="selectCategory(category)">
                                 {{ category.name }}
+                                @if(selectedCategory?.name === category.name){
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                    <path d="M4 10L8 14L16 6" stroke="#00a751" stroke-width="2.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                }
                             </button>
                             }
                             }
@@ -122,24 +121,35 @@
                         </button>
                         @if(isSubCategoryOpen){
                         <div [@fadeInOut]
-                            class="absolute top-full left-0 mt-1.5 bg-white py-2 rounded-xl overflow-hidden z-10 w-full max-h-64 overflow-y-auto shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-[#17171708]">
+                            class="absolute top-full left-0 mt-2 bg-white py-2 rounded-2xl overflow-y-auto scrollbar-hide z-50 min-w-full max-h-64 shadow-[0_8px_30px_rgba(0,0,0,0.1)] border border-[#17171708]">
+
                             @if(isSubCategoryLoading()) {
                             <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading subcategories...</p>
-                            } @else if (hasSubCategoryFailed()) {
-                            <div class="flex flex-col items-center gap-2 px-5 py-2">
+                            } @else if(!selectedCategory){
+                            <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Please select a category first
+                            </p>
+                            }
+                            @else if (hasSubCategoryFailed()) {
+                            <div class="flex flex-col items-center gap-2 px-5 py-1.5">
                                 <p class="text-[14px] text-[#D92D20]">Failed to load subcategories</p>
-                                <button type="button"
-                                    class="text-[13px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
+                                <button (click)="fetchSubCategories()"
+                                    class="text-[13px] px-6 py-3 border border-[#171717] rounded-xl hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
                                     Try again
                                 </button>
                             </div>
                             } @else {
-                            @for(category of categories; track category) {
-                            <button type="button"
-                                class="w-full text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
-                                [class]="selectedCategory?.name === category.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
-                                (click)="selectCategory(category)">
-                                {{ category.name }}
+                            @for(subCategory of subCategories(); track subCategory) {
+                            <button
+                                class="w-full flex items-center justify-between gap-2 text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
+                                [class]="selectedSubCategory?.name === subCategory.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
+                                (click)="selectSubCategory(subCategory)">
+                                {{ subCategory.name }}
+                                @if(selectedSubCategory?.name === subCategory.name){
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                    <path d="M4 10L8 14L16 6" stroke="#00a751" stroke-width="2.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                }
                             </button>
                             }
                             }
@@ -147,45 +157,6 @@
                         }
                     </div>
                 </div>
-
-                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-2">
-                    <label for="variants"
-                        class="custom-checkbox flex items-start gap-3 p-3.5 cursor-pointer rounded-xl border border-[#17171714]">
-                        <input type="checkbox" id="variants" />
-                        <span class="checkmark shrink-0">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M5 13L10 18L19 7" />
-                            </svg>
-                        </span>
-                        <div>
-                            <p class="text-[14px] sm:text-[15px] text-[#171717] font-medium leading-tight">Product
-                                Variants</p>
-                            <span class="text-[12px] sm:text-[13px] text-[#6B7280] block leading-4">Does your product
-                                come in different
-                                types, sizes, etc.?</span>
-                        </div>
-                    </label>
-
-                    <label for="pre-order"
-                        class="custom-checkbox flex items-start gap-3 p-3.5 cursor-pointer rounded-xl border border-[#17171714]">
-                        <input type="checkbox" id="pre-order" class="sr-only peer" />
-                        <span class="checkmark shrink-0">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M5 13L10 18L19 7" />
-                            </svg>
-                        </span>
-                        <div>
-                            <p class="text-[14px] sm:text-[15px] text-[#171717] font-medium leading-tight">Pre-Order</p>
-                            <span class="text-[12px] sm:text-[13px] text-[#6B7280] block leading-4">Allow customers to
-                                order without
-                                availability?</span>
-                        </div>
-                    </label>
-                </div>
-
-                @if(detailsError()) {
-                <p class="text-[14px] sm:text-[15px] text-[#D92D20] mt-4">{{ detailsError() }}</p>
-                }
             </div>
         </div>
         }
@@ -264,9 +235,9 @@
                     </div>
                     }
 
-                    @if(imagesError()) {
+                    <!-- @if(imagesError()) {
                     <p class="text-[14px] sm:text-[15px] text-[#D92D20] text-center">{{ imagesError() }}</p>
-                    }
+                    } -->
 
                     <input #fileInput type="file" accept="image/*" multiple class="hidden"
                         (change)="onFilesSelected($event)" />

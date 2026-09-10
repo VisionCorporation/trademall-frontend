@@ -3,14 +3,14 @@ import { fadeInOutAnimation } from '../../../animations/toast.animations';
 import { ClickOutside } from '../../../directives/click-outside/click-outside';
 import { Products } from '../../../services/products/products';
 import { Category, RootCategory } from '../../../interfaces/categories.interface';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../../environments/environment';
-import { Attribute, CreateProductResponse, ProductDetailsPayload, UploadImagesResponse } from '../../../interfaces/products.interface';
+import { Attribute, ProductGeneralDetailsPayload } from '../../../interfaces/products.interface';
 import { FormStep } from '../../../types/add-product.type';
 import { ToastService } from '../../../services/toast/toast.service';
 import { Router } from '@angular/router';
 import { ADD_PRODUCT_STEPS } from '../../../data/constants/vendor-dashbaord.constant';
+import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashboard';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-vendor-add-product',
@@ -22,8 +22,8 @@ import { ADD_PRODUCT_STEPS } from '../../../data/constants/vendor-dashbaord.cons
 export class VendorAddProduct implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   attributes: Attribute[] = [{ name: '', value: '' }];
-  public categories: RootCategory[] = []
-  public subCategories: Category[] = []
+  public categories = signal<RootCategory[]>([]);
+  public subCategories = signal<Category[]>([]);
   public isCategoryOpen = false
   public isSubCategoryOpen = false
   public selectedCategory: RootCategory | null = null
@@ -38,27 +38,20 @@ export class VendorAddProduct implements OnInit {
   public createdProductId = signal<string | null>(null);
   public isSubmittingDetails = signal(false);
   public isUploadingImages = signal(false);
-  public detailsError = signal<string | null>(null);
-  public imagesError = signal<string | null>(null);
   public previewUrls: (string | null)[] = [];
   public selectedFiles: File[] = [];
   private taostService = inject(ToastService)
+  private readonly vendorDashbaordService = inject(VendorDashboard)
   private cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router)
 
-  public productForm = {
+  public productGeneralDetailsForm = {
     name: '',
     description: '',
-    hasVariants: false,
-    isPreOrder: false,
-    preOrderDays: null as number | null,
-    minPreOrderQuantity: null as number | null,
     price: 0,
-    stockQuantity: 0,
     category: '',
+    subcategory: ''
   };
-
-  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.fetchCategories()
@@ -67,45 +60,88 @@ export class VendorAddProduct implements OnInit {
   public fetchCategories() {
     this.isCategoryLoading.set(true)
     this.hasCategoryFailed.set(false);
+
     this.categoryService.getRootCategories(1).subscribe({
-      next: (response) => {
-        this.categories = response.data;
-        this.isCategoryLoading.set(false);
+      next: (firstPage) => {
+        const { totalPages } = firstPage.pagination;
+
+        if (totalPages <= 1) {
+          this.categories.set(this.sortCategories(firstPage.data));
+          this.isCategoryLoading.set(false);
+          return;
+        }
+
+        const remainingPages$ = Array.from({ length: totalPages - 1 }, (_, i) =>
+          this.categoryService.getRootCategories(i + 2)
+        );
+
+        forkJoin(remainingPages$).subscribe({
+          next: (restPages) => {
+            const allCategories = [
+              ...firstPage.data,
+              ...restPages.flatMap((res) => res.data),
+            ];
+            this.categories.set(this.sortCategories(allCategories));
+            this.isCategoryLoading.set(false);
+          },
+          error: (err) => {
+            console.error('Failed to load remaining categories', err);
+            this.categories.set(this.sortCategories(firstPage.data));
+            this.isCategoryLoading.set(false);
+          },
+        });
       },
       error: (err) => {
-        console.error('Failed to fetch categories', err);
-        this.isCategoryLoading.set(false);
+        console.error('Failed to load categories', err);
         this.hasCategoryFailed.set(true);
+        this.isCategoryLoading.set(false);
       },
     });
   }
 
-  public buildPayload(): ProductDetailsPayload {
-    const attributesObject = this.attributes.reduce<Record<string, string>>(
-      (acc, attr) => {
-        if (attr.name.trim() && attr.value.trim()) {
-          const key = attr.name.trim().toLowerCase()
-          const value = attr.value.trim().charAt(0).toUpperCase() + attr.value.trim().slice(1).toLowerCase()
-          acc[key] = value;
-        }
-        return acc;
-      },
-      {}
-    );
-    const payload: ProductDetailsPayload = {
-      name: this.productForm.name,
-      description: this.productForm.description,
-      attributes: attributesObject,
-      hasVariants: this.productForm.hasVariants,
+  public fetchSubCategories() {
+    if (this.selectedCategory) {
+      this.isSubCategoryLoading.set(true)
+      this.hasSubCategoryFailed.set(false);
+      this.categoryService.getSubCategories(this.selectedCategory.slug).subscribe({
+        next: (response) => {
+          this.subCategories.set(response.data)
+          this.isSubCategoryLoading.set(false);
+        },
+        error: (err) => {
+          console.error('Failed to fetch subcategories', err);
+          this.isSubCategoryLoading.set(false);
+          this.hasSubCategoryFailed.set(true);
+        },
+      });
+    }
+  }
 
-      isPreOrder: this.productForm.isPreOrder,
-      ...(this.productForm.isPreOrder && {
-        preOrderDays: this.productForm.preOrderDays ?? undefined,
-        minPreOrderQuantity: this.productForm.minPreOrderQuantity ?? undefined,
-      }),
-      category: this.productForm.category,
-      price: this.productForm.price,
-      stockQuantity: this.productForm.stockQuantity,
+  public selectCategory(category: RootCategory) {
+    this.selectedCategory = category;
+    this.selectedSubCategory = null;
+    this.productGeneralDetailsForm.category = category._id;
+    this.fetchSubCategories();
+    this.isCategoryOpen = false;
+  }
+
+  public selectSubCategory(subCategory: Category) {
+    this.selectedSubCategory = subCategory;
+    this.productGeneralDetailsForm.subcategory = subCategory._id;
+    this.isSubCategoryOpen = false;
+  }
+
+  private sortCategories(list: RootCategory[]): RootCategory[] {
+    return [...list].sort((a, b) => a.displayOrder - b.displayOrder);
+  }
+
+  public buildPayload() {
+    const payload = {
+      name: this.productGeneralDetailsForm.name,
+      description: this.productGeneralDetailsForm.description,
+      price: this.productGeneralDetailsForm.price,
+      category: this.productGeneralDetailsForm.category,
+      subcategory: this.productGeneralDetailsForm.subcategory
     };
 
     return payload;
@@ -113,73 +149,44 @@ export class VendorAddProduct implements OnInit {
 
   public get isFormValid(): boolean {
     return (
-      this.productForm.name.trim() !== '' &&
-      this.productForm.description.trim() !== '' &&
-      this.productForm.price > 0 &&
-      this.productForm.stockQuantity > 0 &&
-      this.productForm.category !== '' &&
-      this.attributes.every(attr => attr.name.trim() !== '' && attr.value.trim() !== '') &&
-      (!this.productForm.isPreOrder || (
-        (this.productForm.preOrderDays ?? 0) > 0 &&
-        (this.productForm.minPreOrderQuantity ?? 0) > 0
-      ))
+      this.productGeneralDetailsForm.name.trim() !== '' &&
+      this.productGeneralDetailsForm.description.trim() !== '' &&
+      this.productGeneralDetailsForm.price > 0 &&
+      this.productGeneralDetailsForm.category !== '' &&
+      this.productGeneralDetailsForm.subcategory !== ''
     );
   }
 
-  private resetForm(): void {
-    this.productForm = {
+  private resetGeneralDetailsForm(): void {
+    this.productGeneralDetailsForm = {
       name: '',
       description: '',
-      hasVariants: false,
-      isPreOrder: false,
-      preOrderDays: null,
-      minPreOrderQuantity: null,
       price: 0,
-      stockQuantity: 0,
       category: '',
+      subcategory: ''
     };
-
-    this.attributes = [{ name: '', value: '' }];
-    this.selectedFiles = [];
-    this.previewUrls = [];
     this.selectedCategory = null;
     this.selectedSubCategory = null;
-    this.createdProductId.set(null);
-    this.step.set('general');
-    this.detailsError.set(null);
-    this.imagesError.set(null);
   }
 
-  public addAttribute(): void {
-    this.attributes.push({ name: '', value: '' });
+  private resetImageUploadForm() {
+    this.selectedFiles = [];
+    this.previewUrls = [];
   }
 
-  public removeAttribute(index: number): void {
-    if (this.attributes.length > 1) {
-      this.attributes.splice(index, 1);
-    }
-  }
-
-  public selectCategory(category: RootCategory) {
-    this.selectedCategory = category;
-    this.productForm.category = category._id;
-    this.isCategoryOpen = false;
-  }
-
-  public submitDetails(payload: object) {
+  public submitDetails(payload: ProductGeneralDetailsPayload) {
     this.isSubmittingDetails.set(true);
-    this.detailsError.set(null);
 
-    this.http.post<CreateProductResponse>(`${environment.apiBaseUrl}/products`, payload).subscribe({
+    this.vendorDashbaordService.submitProductGeneralDetails(payload).subscribe({
       next: (res) => {
         this.createdProductId.set(res.data._id);
         this.step.set('images');
         this.taostService.success(res.message);
         this.isSubmittingDetails.set(false);
+        this.resetGeneralDetailsForm()
       },
       error: (err) => {
-        this.taostService.error('Failed to save product. Please try again.');
-        this.detailsError.set(err?.error?.message ?? 'Failed to save product. Please try again.');
+        this.taostService.error('Failed to save details. Please try again.');
         this.isSubmittingDetails.set(false);
       }
     });
@@ -219,25 +226,24 @@ export class VendorAddProduct implements OnInit {
   }
 
   public uploadImages() {
-    const id = this.createdProductId();
-    if (!id || this.selectedFiles.length === 0) return;
+    const productId = this.createdProductId();
+    if (!productId || this.selectedFiles.length === 0) return;
 
     this.isUploadingImages.set(true);
-    this.imagesError.set(null);
 
     const formData = new FormData();
     this.selectedFiles.forEach(file => formData.append('images', file));
 
-    this.http.post<UploadImagesResponse>(`${environment.apiBaseUrl}/products/${id}/images`, formData).subscribe({
+    this.vendorDashbaordService.submitProductImages(productId, formData).subscribe({
       next: (res) => {
         this.isUploadingImages.set(false);
+        this.step.set('advanced');
         this.taostService.success(res.message);
-        this.resetForm();
+        this.resetImageUploadForm()
         this.router.navigate(['/vendor/products']);
       },
       error: (err) => {
         this.taostService.error(err?.error?.message ?? 'Image upload failed. Please try again.');
-        this.imagesError.set(err?.error?.message ?? 'Image upload failed. Please try again.');
         this.isUploadingImages.set(false);
       }
     });
