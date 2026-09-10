@@ -13,287 +13,295 @@
         }
     </div>
 
-    @if(step() === 'general') {
-    <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2 overflow-y-auto scrollbar-hide flex-1 min-h-0">
-        <div class="w-full max-w-full lg:max-w-[70%] px-0 sm:px-2 py-6 sm:py-7">
-            <div class="mb-6 sm:mb-7">
-                <label for="product-name" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
-                    Product Name <span class="text-[#D92D20]">*</span>
-                </label>
-                <input type="text" id="product-name" placeholder="Enter product name" [(ngModel)]="productForm.name"
-                    class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
-            </div>
-
-            <div class="mb-6 sm:mb-7">
-                <label for="product-description" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
-                    Description <span class="text-[#D92D20]">*</span>
-                </label>
-                <textarea id="product-description" placeholder="Create a description of your product"
-                    [(ngModel)]="productForm.description"
-                    class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150 h-28 sm:h-33.5 resize-none"></textarea>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
-                <div class="flex-1">
-                    <label for="product-price" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
-                        Price <span class="text-[#9CA3AF] text-[13px]">(GHS)</span> <span
-                            class="text-[#D92D20]">*</span>
+    <div class="flex-1 min-h-0 overflow-y-auto scrollbar-hide pb-7">
+        @if(step() === 'general') {
+        <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2 overflow-y-auto scrollbar-hide flex-1 min-h-0">
+            <div class="w-full max-w-full lg:max-w-[70%] px-0 sm:px-2 py-6 sm:py-7">
+                <div class="mb-6 sm:mb-7">
+                    <label for="product-name" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
+                        Product Name <span class="text-[#D92D20]">*</span>
                     </label>
-                    <div class="relative">
-                        <span
-                            class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
-                        <input type="number" id="product-price" placeholder="0.00" [(ngModel)]="productForm.price"
-                            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
-                    </div>
-                </div>
-                <div class="flex-1">
-                    <label for="in-stock" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
-                        Stock Quantity <span class="text-[#D92D20]">*</span>
-                    </label>
-                    <input type="number" id="in-stock" placeholder="Enter amount available"
-                        [(ngModel)]="productForm.stockQuantity"
+                    <input type="text" id="product-name" placeholder="Enter product name" [(ngModel)]="productForm.name"
                         class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                 </div>
-            </div>
 
-            <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
-                <div class="relative flex-1" appClickOutside (clickOutside)="isCategoryOpen = false">
-                    <span class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
-                        Product Category <span class="text-[#D92D20]">*</span>
-                    </span>
-                    <button type="button" (click)="isCategoryOpen = !isCategoryOpen"
-                        class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
-                        [class]="isCategoryOpen ? 'border-[#00a7519b] ring-2 ring-[#00a7515d]' : ''">
-                        <span [class]="selectedCategory ? 'text-[#171717]' : 'text-[#9CA3AF]'">
-                            {{ selectedCategory?.name || 'Select a category' }}
-                        </span>
-                        <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isCategoryOpen"
-                            width="18" height="18" viewBox="0 0 20 20" fill="none">
-                            <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
-                                stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    @if(isCategoryOpen){
-                    <div [@fadeInOut]
-                        class="absolute top-full left-0 mt-1.5 bg-white py-2 rounded-xl overflow-hidden z-10 w-full max-h-64 overflow-y-auto shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-[#17171708]">
-                        @if(isCategoryLoading()) {
-                        <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading categories...</p>
-                        } @else if (hasCategoryFailed()) {
-                        <div class="flex flex-col items-center gap-2 px-5 py-2">
-                            <p class="text-[14px] text-[#D92D20]">Failed to load categories</p>
-                            <button type="button" (click)="fetchCategories()"
-                                class="text-[13px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
-                                Try again
-                            </button>
-                        </div>
-                        } @else {
-                        @for(category of categories; track category) {
-                        <button type="button"
-                            class="w-full text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
-                            [class]="selectedCategory?.name === category.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
-                            (click)="selectCategory(category)">
-                            {{ category.name }}
-                        </button>
-                        }
-                        }
-                    </div>
-                    }
+                <div class="mb-6 sm:mb-7">
+                    <label for="product-description" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
+                        Description <span class="text-[#D92D20]">*</span>
+                    </label>
+                    <textarea id="product-description" placeholder="Create a description of your product"
+                        [(ngModel)]="productForm.description"
+                        class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150 h-28 sm:h-33.5 resize-none"></textarea>
                 </div>
 
-                <div class="relative flex-1" appClickOutside (clickOutside)="isSubCategoryOpen = false">
-                    <span class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
-                        Product Subcategory <span class="text-[#D92D20]">*</span>
-                    </span>
-                    <button type="button" (click)="isSubCategoryOpen = !isSubCategoryOpen"
-                        class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
-                        [class]="isSubCategoryOpen ? 'border-[#00a7519b] ring-2 ring-[#00a7515d]' : ''">
-                        <span [class]="selectedSubCategory ? 'text-[#171717]' : 'text-[#9CA3AF]'">
-                            {{ selectedSubCategory?.name || 'Select a subcategory' }}
-                        </span>
-                        <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isSubCategoryOpen"
-                            width="18" height="18" viewBox="0 0 20 20" fill="none">
-                            <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
-                                stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
-                    @if(isSubCategoryOpen){
-                    <div [@fadeInOut]
-                        class="absolute top-full left-0 mt-1.5 bg-white py-2 rounded-xl overflow-hidden z-10 w-full max-h-64 overflow-y-auto shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-[#17171708]">
-                        @if(isSubCategoryLoading()) {
-                        <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading subcategories...</p>
-                        } @else if (hasSubCategoryFailed()) {
-                        <div class="flex flex-col items-center gap-2 px-5 py-2">
-                            <p class="text-[14px] text-[#D92D20]">Failed to load subcategories</p>
-                            <button type="button"
-                                class="text-[13px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
-                                Try again
-                            </button>
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
+                    <div class="flex-1">
+                        <label for="product-price" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
+                            Price <span class="text-[#9CA3AF] text-[13px]">(GHS)</span> <span
+                                class="text-[#D92D20]">*</span>
+                        </label>
+                        <div class="relative">
+                            <span
+                                class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
+                            <input type="number" id="product-price" placeholder="0.00" [(ngModel)]="productForm.price"
+                                class="block w-full border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                         </div>
-                        } @else {
-                        @for(category of categories; track category) {
-                        <button type="button"
-                            class="w-full text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
-                            [class]="selectedCategory?.name === category.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
-                            (click)="selectCategory(category)">
-                            {{ category.name }}
-                        </button>
-                        }
-                        }
                     </div>
-                    }
+                    <div class="flex-1">
+                        <label for="in-stock" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
+                            Stock Quantity <span class="text-[#D92D20]">*</span>
+                        </label>
+                        <input type="number" id="in-stock" placeholder="Enter amount available"
+                            [(ngModel)]="productForm.stockQuantity"
+                            class="block w-full border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-2">
-                <label for="variants"
-                    class="custom-checkbox flex items-start gap-3 p-3.5 cursor-pointer rounded-xl border border-[#17171714]">
-                    <input type="checkbox" id="variants" />
-                    <span class="checkmark shrink-0">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M5 13L10 18L19 7" />
-                        </svg>
-                    </span>
-                    <div>
-                        <p class="text-[14px] sm:text-[15px] text-[#171717] font-medium leading-tight">Product
-                            Variants</p>
-                        <span class="text-[12px] sm:text-[13px] text-[#6B7280] block leading-4">Does your product
-                            come in different
-                            types, sizes, etc.?</span>
-                    </div>
-                </label>
-
-                <label for="pre-order"
-                    class="custom-checkbox flex items-start gap-3 p-3.5 cursor-pointer rounded-xl border border-[#17171714]">
-                    <input type="checkbox" id="pre-order" class="sr-only peer" />
-                    <span class="checkmark shrink-0">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M5 13L10 18L19 7" />
-                        </svg>
-                    </span>
-                    <div>
-                        <p class="text-[14px] sm:text-[15px] text-[#171717] font-medium leading-tight">Pre-Order</p>
-                        <span class="text-[12px] sm:text-[13px] text-[#6B7280] block leading-4">Allow customers to
-                            order without
-                            availability?</span>
-                    </div>
-                </label>
-            </div>
-
-            @if(detailsError()) {
-            <p class="text-[14px] sm:text-[15px] text-[#D92D20] mt-4">{{ detailsError() }}</p>
-            }
-        </div>
-    </div>
-    }
-
-    @if(step()==='images'){
-    <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2 overflow-y-auto scrollbar-hide flex-1 min-h-0">
-        <div class="w-full max-w-full lg:max-w-[70%] px-0 sm:px-2 py-6 sm:py-7">
-            <div
-                [class]="'bg-white rounded-2xl border border-[#17171708] flex flex-col py-8 sm:py-10 px-6 sm:px-8 min-h-87.5 ' + (previewUrls.length === 0 ? 'items-center justify-center' : 'items-center gap-5')">
-
-                @if(previewUrls.length > 0) {
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
-                    @for(url of previewUrls; track $index;) {
-                    <div
-                        class="relative rounded-xl overflow-hidden aspect-square bg-[#F4F4F4] border border-[#17171708]">
-                        @if(url === null) {
-                        <div class="w-full h-full skeleton-shimmer rounded-xl"></div>
-                        }
-                        @if(url !== null) {
-                        <img [src]="url" class="w-full h-full object-cover rounded-xl"
-                            alt="Product image {{$index + 1}}" />
-                        <button (click)="removeImage($index)"
-                            class="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full w-6 h-6 flex items-center justify-center transition-colors duration-150 cursor-pointer">
-                            <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
-                                <path d="M1 1L9 9M9 1L1 9" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
+                    <div class="relative flex-1" appClickOutside (clickOutside)="isCategoryOpen = false">
+                        <span class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
+                            Product Category <span class="text-[#D92D20]">*</span>
+                        </span>
+                        <button type="button" (click)="isCategoryOpen = !isCategoryOpen"
+                            class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
+                            [class]="isCategoryOpen ? 'border-[#00a7519b] ring-2 ring-[#00a7515d]' : ''">
+                            <span [class]="selectedCategory ? 'text-[#171717]' : 'text-[#9CA3AF]'">
+                                {{ selectedCategory?.name || 'Select a category' }}
+                            </span>
+                            <svg class="transition-transform duration-200 shrink-0" [class.rotate-180]="isCategoryOpen"
+                                width="18" height="18" viewBox="0 0 20 20" fill="none">
+                                <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
+                                    stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
                             </svg>
                         </button>
-                        @if($index === 0) {
-                        <span
-                            class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm text-[11px] font-medium text-[#171717] px-2 py-0.5 rounded-full">
-                            Cover
+                        @if(isCategoryOpen){
+                        <div [@fadeInOut]
+                            class="absolute top-full left-0 mt-1.5 bg-white py-2 rounded-xl overflow-hidden z-10 w-full max-h-64 overflow-y-auto shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-[#17171708]">
+                            @if(isCategoryLoading()) {
+                            <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading categories...</p>
+                            } @else if (hasCategoryFailed()) {
+                            <div class="flex flex-col items-center gap-2 px-5 py-2">
+                                <p class="text-[14px] text-[#D92D20]">Failed to load categories</p>
+                                <button type="button" (click)="fetchCategories()"
+                                    class="text-[13px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
+                                    Try again
+                                </button>
+                            </div>
+                            } @else {
+                            @for(category of categories; track category) {
+                            <button type="button"
+                                class="w-full text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
+                                [class]="selectedCategory?.name === category.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
+                                (click)="selectCategory(category)">
+                                {{ category.name }}
+                            </button>
+                            }
+                            }
+                        </div>
+                        }
+                    </div>
+
+                    <div class="relative flex-1" appClickOutside (clickOutside)="isSubCategoryOpen = false">
+                        <span class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
+                            Product Subcategory <span class="text-[#D92D20]">*</span>
                         </span>
-                        }
+                        <button type="button" (click)="isSubCategoryOpen = !isSubCategoryOpen"
+                            class="flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
+                            [class]="isSubCategoryOpen ? 'border-[#00a7519b] ring-2 ring-[#00a7515d]' : ''">
+                            <span [class]="selectedSubCategory ? 'text-[#171717]' : 'text-[#9CA3AF]'">
+                                {{ selectedSubCategory?.name || 'Select a subcategory' }}
+                            </span>
+                            <svg class="transition-transform duration-200 shrink-0"
+                                [class.rotate-180]="isSubCategoryOpen" width="18" height="18" viewBox="0 0 20 20"
+                                fill="none">
+                                <path d="M15 7.50004C15 7.50004 11.3176 12.5 9.99996 12.5C8.68237 12.5 5 7.5 5 7.5"
+                                    stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        @if(isSubCategoryOpen){
+                        <div [@fadeInOut]
+                            class="absolute top-full left-0 mt-1.5 bg-white py-2 rounded-xl overflow-hidden z-10 w-full max-h-64 overflow-y-auto shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-[#17171708]">
+                            @if(isSubCategoryLoading()) {
+                            <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading subcategories...</p>
+                            } @else if (hasSubCategoryFailed()) {
+                            <div class="flex flex-col items-center gap-2 px-5 py-2">
+                                <p class="text-[14px] text-[#D92D20]">Failed to load subcategories</p>
+                                <button type="button"
+                                    class="text-[13px] px-3 py-1.5 border border-[#171717] rounded-lg hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
+                                    Try again
+                                </button>
+                            </div>
+                            } @else {
+                            @for(category of categories; track category) {
+                            <button type="button"
+                                class="w-full text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
+                                [class]="selectedCategory?.name === category.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
+                                (click)="selectCategory(category)">
+                                {{ category.name }}
+                            </button>
+                            }
+                            }
+                        </div>
                         }
                     </div>
-                    }
-
-                    @for(_ of [].constructor(4 - previewUrls.length); track $index) {
-                    <div
-                        class="rounded-xl aspect-square bg-[#FAFAFA] border-2 border-dashed border-[#17171733] flex items-center justify-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="1.5">
-                            <path d="M12 5V19M5 12H19" stroke-linecap="round" />
-                        </svg>
-                    </div>
-                    }
                 </div>
 
-                <p class="text-[13px] sm:text-[14px] text-center text-[#6B7280]">
-                    {{ selectedFiles.length }}/4 images added
-                </p>
-                }
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-2">
+                    <label for="variants"
+                        class="custom-checkbox flex items-start gap-3 p-3.5 cursor-pointer rounded-xl border border-[#17171714]">
+                        <input type="checkbox" id="variants" />
+                        <span class="checkmark shrink-0">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 13L10 18L19 7" />
+                            </svg>
+                        </span>
+                        <div>
+                            <p class="text-[14px] sm:text-[15px] text-[#171717] font-medium leading-tight">Product
+                                Variants</p>
+                            <span class="text-[12px] sm:text-[13px] text-[#6B7280] block leading-4">Does your product
+                                come in different
+                                types, sizes, etc.?</span>
+                        </div>
+                    </label>
 
-                @if(previewUrls.length === 0) {
-                <div class="flex flex-col items-center gap-3 mb-6">
-                    <div class="w-16 h-16 rounded-full bg-[#F0FDF4] flex items-center justify-center mb-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                            stroke="#00a751" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21" />
-                            <path d="m14 19.5 3-3 3 3" />
-                            <path d="M17 22v-5.5" />
-                            <circle cx="9" cy="9" r="2" />
-                        </svg>
-                    </div>
-
-                    <p class="text-[17px] font-medium text-[#171717]">
-                        Upload Product Images
-                    </p>
-
-                    <p class="text-[14px] text-[#6B7280] text-center max-w-64">
-                        Add up to 4 high-quality images of your product. The first image will be used as the cover.
-                    </p>
+                    <label for="pre-order"
+                        class="custom-checkbox flex items-start gap-3 p-3.5 cursor-pointer rounded-xl border border-[#17171714]">
+                        <input type="checkbox" id="pre-order" class="sr-only peer" />
+                        <span class="checkmark shrink-0">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M5 13L10 18L19 7" />
+                            </svg>
+                        </span>
+                        <div>
+                            <p class="text-[14px] sm:text-[15px] text-[#171717] font-medium leading-tight">Pre-Order</p>
+                            <span class="text-[12px] sm:text-[13px] text-[#6B7280] block leading-4">Allow customers to
+                                order without
+                                availability?</span>
+                        </div>
+                    </label>
                 </div>
+
+                @if(detailsError()) {
+                <p class="text-[14px] sm:text-[15px] text-[#D92D20] mt-4">{{ detailsError() }}</p>
                 }
-
-                @if(imagesError()) {
-                <p class="text-[14px] sm:text-[15px] text-[#D92D20] text-center">{{ imagesError() }}</p>
-                }
-
-                <input #fileInput type="file" accept="image/*" multiple class="hidden"
-                    (change)="onFilesSelected($event)" />
-
-                <button (click)="fileInput.click()" [disabled]="selectedFiles.length >= 4"
-                    class="flex items-center gap-2 text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
-                    @if(selectedFiles.length === 0) {
-                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-                        <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="white" stroke-width="1.5"
-                            stroke-linecap="round" />
-                    </svg>
-                    }
-                    {{ selectedFiles.length === 0 ? 'Upload Images' : 'Add More' }}
-                </button>
             </div>
         </div>
-    </div>
-    }
+        }
 
-    @if(step() === 'general') {
-    <div class="shrink-0 py-4 sm:py-5 flex justify-end">
-        <button (click)="submitDetails(buildPayload())" [disabled]="isSubmittingDetails() || !isFormValid"
-            class="text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
-            {{ isSubmittingDetails() ? 'Saving details…' : 'Save & Continue' }}
-        </button>
-    </div>
-    }
+        @if(step()==='images'){
+        <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2 overflow-y-auto scrollbar-hide flex-1 min-h-0">
+            <div class="w-full max-w-full lg:max-w-[70%] px-0 sm:px-2 py-6 sm:py-7">
+                <div
+                    [class]="'bg-white rounded-2xl border border-[#17171708] flex flex-col py-8 sm:py-10 px-6 sm:px-8 min-h-87.5 ' + (previewUrls.length === 0 ? 'items-center justify-center' : 'items-center gap-5')">
 
-    @if(step()==='images'){
-    <div class="shrink-0 py-4 sm:py-5 flex justify-end">
-        <button (click)="uploadImages()" [disabled]="isUploadingImages() || selectedFiles.length === 0"
-            class="text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
-            {{ isUploadingImages() ? 'Saving images…' : 'Save & Continue' }}
-        </button>
+                    @if(previewUrls.length > 0) {
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
+                        @for(url of previewUrls; track $index;) {
+                        <div
+                            class="relative rounded-xl overflow-hidden aspect-square bg-[#F4F4F4] border border-[#17171708]">
+                            @if(url === null) {
+                            <div class="w-full h-full skeleton-shimmer rounded-xl"></div>
+                            }
+                            @if(url !== null) {
+                            <img [src]="url" class="w-full h-full object-cover rounded-xl"
+                                alt="Product image {{$index + 1}}" />
+                            <button (click)="removeImage($index)"
+                                class="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full w-6 h-6 flex items-center justify-center transition-colors duration-150 cursor-pointer">
+                                <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
+                                    <path d="M1 1L9 9M9 1L1 9" stroke="white" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </button>
+                            @if($index === 0) {
+                            <span
+                                class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm text-[11px] font-medium text-[#171717] px-2 py-0.5 rounded-full">
+                                Cover
+                            </span>
+                            }
+                            }
+                        </div>
+                        }
+
+                        @for(_ of [].constructor(4 - previewUrls.length); track $index) {
+                        <div
+                            class="rounded-xl aspect-square bg-[#FAFAFA] border-2 border-dashed border-[#17171733] flex items-center justify-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB"
+                                stroke-width="1.5">
+                                <path d="M12 5V19M5 12H19" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        }
+                    </div>
+
+                    <p class="text-[13px] sm:text-[14px] text-center text-[#6B7280]">
+                        {{ selectedFiles.length }}/4 images added
+                    </p>
+                    }
+
+                    @if(previewUrls.length === 0) {
+                    <div class="flex flex-col items-center gap-3 mb-6">
+                        <div class="w-16 h-16 rounded-full bg-[#F0FDF4] flex items-center justify-center mb-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="#00a751" stroke-width="1.75" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21" />
+                                <path d="m14 19.5 3-3 3 3" />
+                                <path d="M17 22v-5.5" />
+                                <circle cx="9" cy="9" r="2" />
+                            </svg>
+                        </div>
+
+                        <p class="text-[17px] font-medium text-[#171717]">
+                            Upload Product Images
+                        </p>
+
+                        <p class="text-[14px] text-[#6B7280] text-center max-w-64">
+                            Add up to 4 high-quality images of your product. The first image will be used as the cover.
+                        </p>
+                    </div>
+                    }
+
+                    @if(imagesError()) {
+                    <p class="text-[14px] sm:text-[15px] text-[#D92D20] text-center">{{ imagesError() }}</p>
+                    }
+
+                    <input #fileInput type="file" accept="image/*" multiple class="hidden"
+                        (change)="onFilesSelected($event)" />
+
+                    <button (click)="fileInput.click()" [disabled]="selectedFiles.length >= 4"
+                        class="flex items-center gap-2 text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                        @if(selectedFiles.length === 0) {
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="white" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                        }
+                        {{ selectedFiles.length === 0 ? 'Upload Images' : 'Add More' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        }
+
+        @if(step() === 'general') {
+        <div class="shrink-0 py-4 sm:py-5 flex justify-end">
+            <button (click)="submitDetails(buildPayload())" [disabled]="isSubmittingDetails() || !isFormValid"
+                class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                {{ isSubmittingDetails() ? 'Saving details…' : 'Save & Continue' }}
+            </button>
+        </div>
+        }
+
+        @if(step()==='images'){
+        <div class="shrink-0 py-4 sm:py-5 flex justify-end">
+            <button (click)="uploadImages()" [disabled]="isUploadingImages() || selectedFiles.length === 0"
+                class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                {{ isUploadingImages() ? 'Saving images…' : 'Save & Continue' }}
+            </button>
+        </div>
+        }
     </div>
-    }
 </section>
