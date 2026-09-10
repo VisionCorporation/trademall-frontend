@@ -104,7 +104,7 @@
 
     <div class="flex items-center justify-between mb-6 lg:mb-8 mt-10">
         <button type="button" (click)="toggleMobileFilters()"
-            class="lg:hidden inline-flex items-center gap-2 text-sm font-medium border border-gray-300 rounded-lg px-3.5 py-2 hover:border-[#171717] transition-colors duration-150">
+            class="lg:hidden inline-flex items-center gap-2 text-sm font-medium border border-gray-300 rounded-xl px-3.5 py-2 hover:border-[#171717] transition-colors duration-150">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <line x1="4" y1="6" x2="20" y2="6" />
@@ -123,7 +123,7 @@
         <div class="lg:hidden block">
             <label for="sort-mobile" class="mr-2 text-sm text-[#374151] sr-only">Sort by:</label>
             <select id="sort-mobile" [(ngModel)]="selectedSortOption" (change)="onSortChange()"
-                class="w-auto border border-gray-300 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#171717] focus:border-[#171717]">
+                class="w-auto border border-gray-300 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#171717] focus:border-[#171717]">
                 @for (option of sortOptions; track option.value) {
                 <option [value]="option.value">{{ option.label }}</option>
                 }
@@ -158,7 +158,7 @@
                 <div [@fadeInOut] class="flex flex-col gap-1 max-h-[calc(100vh-14rem)] overflow-y-auto pr-1">
                     @for (category of categories(); track category._id) {
                     <label [for]="category.slug"
-                        class="custom-checkbox flex items-center gap-2 py-1.5 px-1.5 rounded-lg cursor-pointer text-[14.5px] leading-5 hover:bg-gray-50 transition-colors duration-150">
+                        class="custom-checkbox flex items-center gap-2 py-1.5 px-1.5 rounded-xl cursor-pointer text-[14.5px] leading-5 hover:bg-gray-50 transition-colors duration-150">
                         <input type="checkbox" [id]="category.slug"
                             [checked]="selectedCategorySlugs.includes(category.slug)"
                             (change)="onCategoryChange(category.slug, $event)" />
@@ -218,7 +218,7 @@
                     <div class="flex flex-col gap-1">
                         @for (category of categories(); track category._id) {
                         <label [for]="category.slug + '-mobile'"
-                            class="custom-checkbox flex items-center gap-2 py-2 px-1.5 rounded-lg cursor-pointer text-[15px] leading-5 hover:bg-gray-50 transition-colors duration-150">
+                            class="custom-checkbox flex items-center gap-2 py-2 px-1.5 rounded-xl cursor-pointer text-[15px] leading-5 hover:bg-gray-50 transition-colors duration-150">
                             <input type="checkbox" [id]="category.slug + '-mobile'"
                                 [checked]="selectedCategorySlugs.includes(category.slug)"
                                 (change)="onCategoryChange(category.slug, $event)" />
@@ -297,7 +297,7 @@
                 <div class="w-full sm:w-auto hidden lg:block">
                     <label for="sort-desktop" class="mr-2 text-sm text-[#374151]">Sort by:</label>
                     <select id="sort-desktop" [(ngModel)]="selectedSortOption" (change)="onSortChange()"
-                        class="w-auto border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#171717] focus:border-[#171717]">
+                        class="w-auto border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#171717] focus:border-[#171717]">
                         @for (option of sortOptions; track option.value) {
                         <option [value]="option.value">{{ option.label }}</option>
                         }
