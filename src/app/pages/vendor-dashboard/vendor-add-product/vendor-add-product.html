@@ -23,7 +23,7 @@
                     </label>
                     <input type="text" id="product-name" placeholder="Enter product name"
                         [(ngModel)]="productGeneralDetailsForm.name"
-                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                 </div>
 
                 <div class="mb-6 sm:mb-7">
@@ -32,7 +32,7 @@
                     </label>
                     <textarea id="product-description" placeholder="Create a description of your product"
                         [(ngModel)]="productGeneralDetailsForm.description"
-                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150 h-28 sm:h-33.5 resize-none"></textarea>
+                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150 h-28 sm:h-33.5 resize-none"></textarea>
                 </div>
 
                 <div class="mb-6 sm:mb-7 max-w-xs">
@@ -46,7 +46,7 @@
                         <input type="number" id="product-price" placeholder="0.00"
                             [(ngModel)]="productGeneralDetailsForm.price" min="1" step="1" inputmode="decimal"
                             (keydown)="preventInvalidNumberInput($event)" (ngModelChange)="onPriceChange($event)"
-                            class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                            class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                     </div>
                 </div>
 
@@ -263,14 +263,13 @@
         @if(step()==='advanced'){
         <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2">
             <div class="w-full max-w-full lg:max-w-[70%] px-2 py-6 sm:py-7">
-
                 <div class="mb-6 sm:mb-7">
                     <label for="product-brand" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
                         Brand <span class="text-[#9CA3AF] text-[13px]">(optional)</span>
                     </label>
                     <input type="text" id="product-brand" placeholder="e.g. Samsung, Nike"
                         [(ngModel)]="productAdvancedDetailsForm.brand"
-                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                 </div>
 
                 <div class="mb-6 sm:mb-7">
@@ -287,7 +286,7 @@
                                 <input type="number" id="sale-price" placeholder="0.00" min="0" step="1"
                                     inputmode="decimal" (keydown)="preventInvalidNumberInput($event)"
                                     [(ngModel)]="productAdvancedDetailsForm.salePrice"
-                                    class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                    class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                             </div>
                         </div>
 
@@ -297,7 +296,7 @@
                             <input type="number" id="weight" placeholder="0.0" min="0" step="0.1" inputmode="decimal"
                                 (keydown)="preventInvalidNumberInput($event)"
                                 [(ngModel)]="productAdvancedDetailsForm.weight"
-                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                         </div>
 
                         <div>
@@ -306,7 +305,7 @@
                             <input type="number" id="stock-quantity" placeholder="0" min="0" step="1"
                                 inputmode="numeric" (keydown)="preventInvalidNumberInput($event)"
                                 [(ngModel)]="productAdvancedDetailsForm.stockQuantity"
-                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                         </div>
 
                         <div>
@@ -315,7 +314,7 @@
                             <input type="number" id="low-stock-threshold" placeholder="0" min="0" step="1"
                                 inputmode="numeric" (keydown)="preventInvalidNumberInput($event)"
                                 [(ngModel)]="productAdvancedDetailsForm.lowStockThreshold"
-                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                         </div>
                     </div>
                 </div>
@@ -353,7 +352,7 @@
                             <input type="number" id="pre-order-days" placeholder="e.g. 7" min="0" step="1"
                                 inputmode="numeric" (keydown)="preventInvalidNumberInput($event)"
                                 [(ngModel)]="productAdvancedDetailsForm.preOrderDays"
-                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                         </div>
 
                         <div>
@@ -362,7 +361,7 @@
                             <input type="number" id="min-pre-order-quantity" placeholder="e.g. 1" min="1" step="1"
                                 inputmode="numeric" (keydown)="preventInvalidNumberInput($event)"
                                 [(ngModel)]="productAdvancedDetailsForm.minPreOrderQuantity"
-                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                         </div>
 
                         <div>
@@ -374,7 +373,7 @@
                                 <input type="number" id="pre-order-shipping-fee" placeholder="0.00" min="0" step="1"
                                     inputmode="decimal" (keydown)="preventInvalidNumberInput($event)"
                                     [(ngModel)]="productAdvancedDetailsForm.preOrderShippingFee"
-                                    class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                    class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                             </div>
                         </div>
                     </div>
@@ -416,14 +415,14 @@
                                         Name</label>
                                     <input type="text" placeholder="e.g. Size" [(ngModel)]="variant.name"
                                         [name]="'variant-name-' + $index"
-                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                                 </div>
                                 <div>
                                     <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Variant
                                         Value</label>
                                     <input type="text" placeholder="e.g. Large" [(ngModel)]="variant.value"
                                         [name]="'variant-value-' + $index"
-                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                                 </div>
                                 <div class="flex items-end gap-2">
                                     <div class="flex-1">
@@ -435,7 +434,7 @@
                                             <input type="number" placeholder="0.00" step="1" inputmode="decimal"
                                                 (keydown)="preventInvalidNumberInput($event)"
                                                 [(ngModel)]="variant.priceAdjustment" [name]="'variant-price-' + $index"
-                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                                         </div>
                                     </div>
                                     <button type="button" (click)="removeVariantRow($index)"

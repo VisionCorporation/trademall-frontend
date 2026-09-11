@@ -127,6 +127,7 @@ textarea,
 select {
   color: #171717;
   caret-color: #171717;
+  font-size: 16px;
 }
 
 .custom-radio {

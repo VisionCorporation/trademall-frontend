@@ -44,7 +44,7 @@
               </svg>
               <input type="email" id="email" name="email" placeholder="Enter your email" formControlName="email"
                 autocomplete="off"
-                class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 text-[15px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
             </div>
 
             @if (
@@ -74,7 +74,7 @@
               </svg>
               <input [type]="showPassword ? 'text' : 'password'" id="password" name="password"
                 placeholder="Enter your password" formControlName="password"
-                class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-11.5 text-[15px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-11.5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
               <button type="button" (click)="showPassword = !showPassword"
                 class="absolute right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#171717] transition-colors duration-150 cursor-pointer"
                 [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
