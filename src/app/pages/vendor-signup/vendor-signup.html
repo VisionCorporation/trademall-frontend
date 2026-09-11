@@ -75,7 +75,7 @@
           </svg>
           <input type="email" id="email" name="email" placeholder="Enter your business email" formControlName="email"
             autocomplete="off"
-            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 text-[15px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
         </div>
 
         <app-input-error-message [control]="emailForm.controls.email" [messages]="{
@@ -164,7 +164,7 @@
           </svg>
           <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" autocomplete="off"
             formControlName="firstName"
-            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 text-[15px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
         </div>
 
         <label for="lastName" hidden>Last Name</label>
@@ -177,7 +177,7 @@
           </svg>
           <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" autocomplete="off"
             formControlName="lastName"
-            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 text-[15px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
         </div>
 
         <label for="phoneNumber" hidden>Phone Number</label>
@@ -190,7 +190,7 @@
           </svg>
           <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" autocomplete="off"
             formControlName="phoneNumber" (input)="onPhoneInput($event)" (keydown)="onPhoneKeydown($event)"
-            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 text-[15px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-4 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
         </div>
 
         <app-input-error-message [control]="personalForm.controls.phoneNumber" [messages]="{
@@ -225,7 +225,7 @@
           </svg>
           <input [type]="showPassword ? 'text' : 'password'" id="password" name="password"
             placeholder="Create a password" formControlName="password"
-            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-11.5 text-[15px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-11.5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
           <button type="button" (click)="showPassword = !showPassword"
             class="absolute right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#171717] transition-colors duration-150 cursor-pointer"
             [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
@@ -263,7 +263,7 @@
           </svg>
           <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" name="confirmPassword"
             placeholder="Confirm your password" formControlName="confirmPassword"
-            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-11.5 text-[15px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+            class="block w-full border border-gray-300 rounded-xl py-3.5 pl-11.5 pr-11.5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
           <button type="button" (click)="showConfirmPassword = !showConfirmPassword"
             class="absolute right-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#171717] transition-colors duration-150 cursor-pointer"
             [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
