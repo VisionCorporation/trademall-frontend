@@ -1,3 +1,5 @@
+import { ConnectedPosition } from "@angular/cdk/overlay";
+
 export const NAV_ITEMS = [
     { label: 'Overview', route: '/vendor/overview', icon: 'overview', activeColor: '#136B2C' },
     { label: 'Orders', route: '/vendor/orders', icon: 'orders', activeColor: '#984B00' },
@@ -90,3 +92,8 @@ export const ORDER_PERIODS = [
 ];
 
 export const ADD_PRODUCT_STEPS = [{ label: "General", value: 'general', number: 1 }, { label: 'Images', value: 'images', number: 2 }, { label: "Advanced", value: 'advanced', number: 3 }]
+
+export const POSITIONS: ConnectedPosition[] = [
+    { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 8 },
+    { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -8 },
+];
