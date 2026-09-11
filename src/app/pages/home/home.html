@@ -7,25 +7,21 @@
   <div class="marquee-track">
     <div class="marquee-group">
       @for (item of expandedItems; track $index; let last = $last) {
-      <h2
-        class="marquee-text uppercase text-[120px] md:text-[180px] lg:text-[280px] text-white leading-[0.85] m-0">
+      <h2 class="marquee-text uppercase text-[120px] md:text-[180px] lg:text-[280px] text-white leading-[0.85] m-0">
         {{ item }}
       </h2>
       @if (!last) {
-      <span class="marquee-dot text-[120px] md:text-[180px] lg:text-[280px] text-white/50"
-        aria-hidden="true">◆</span>
+      <span class="marquee-dot text-[120px] md:text-[180px] lg:text-[280px] text-white/50" aria-hidden="true">◆</span>
       }
       }
     </div>
     <div class="marquee-group" aria-hidden="true">
       @for (item of expandedItems; track $index; let last = $last) {
-      <h2
-        class="marquee-text uppercase text-[120px] md:text-[180px] lg:text-[280px] text-white leading-[0.85] m-0">
+      <h2 class="marquee-text uppercase text-[120px] md:text-[180px] lg:text-[280px] text-white leading-[0.85] m-0">
         {{ item }}
       </h2>
       @if (!last) {
-      <span class="marquee-dot text-[120px] md:text-[180px] lg:text-[280px] text-white/50"
-        aria-hidden="true">◆</span>
+      <span class="marquee-dot text-[120px] md:text-[180px] lg:text-[280px] text-white/50" aria-hidden="true">◆</span>
       }
       }
     </div>
@@ -54,12 +50,12 @@
 
     <div class="lg:hidden w-full mt-10 flex justify-center">
       <img ngSrc="assets/images/vendor-section-image.jpg" alt="Woman shopping online" width="800" height="800"
-        class="w-full rounded-[20px] object-cover shadow-lg" />
+        class="w-full aspect-square rounded-[20px] object-cover shadow-lg" />
     </div>
 
     <div class="hidden lg:block absolute right-30 top-37.5 bottom-0">
       <img ngSrc="assets/images/vendor-section-image.jpg" alt="Woman shopping online" width="468" height="470"
-        class="w-117 h-117.5 object-cover object-center rounded-[20px] rotate-13 shadow-2xl" />
+        class="w-117 h-117.5 aspect-square object-cover object-center rounded-[20px] rotate-13 shadow-2xl" />
     </div>
   </div>
 </section>
