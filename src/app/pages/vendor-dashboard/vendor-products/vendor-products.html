@@ -109,7 +109,7 @@
         <div
             class="bg-white rounded-2xl p-4 sm:p-5 w-full border border-[#17171708] shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-shadow duration-200">
             <div class="flex items-start gap-3">
-                <img [src]="product.images[0]?.url" alt="{{product.name}}"
+                <img [src]="getMainImageUrl(product.images)" alt="{{product.name}}"
                     class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl shrink-0 object-cover border border-[#17171708]" />
                 <div class="min-w-0 flex-1">
                     <h2 class="text-[14px] sm:text-[16px] leading-5 line-clamp-2 text-[#171717] products-font mb-1">

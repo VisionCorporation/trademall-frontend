@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { PRODUCT_STATUS_CONFIG, PRODUCTS_FILTERS } from '../../../data/constants/vendor-dashbaord.constant';
 import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashboard';
-import { Product, ProductsResponse } from '../../../interfaces/vendor-dashboard.interface';
+import { Product, ProductImage } from '../../../interfaces/vendor-dashboard.interface';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { SkeletonLoader } from '../../../shared/skeleton-loader/skeleton-loader';
 import { staggerProducts } from '../../../animations/smooth-collapse.animations';
@@ -62,5 +62,10 @@ export class VendorProducts {
 
   public navigateToAddNewProduct(): void {
     this.router.navigate(['/vendor/add-product']);
+  }
+
+  public getMainImageUrl(images: ProductImage[]): string {
+    return images.find(image => image.isMain)?.url
+      ?? images[0]?.url
   }
 }

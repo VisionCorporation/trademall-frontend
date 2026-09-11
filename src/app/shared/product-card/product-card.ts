@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Wishlist } from '../../services/wishlist/wishlist';
 import { GuestCartDisplayInfo, PriceSnapshot } from '../../interfaces/cart.interface';
-import { ProductCardInterface } from '../../interfaces/product-card.interface';
+import { ProductCardInterface, Image } from '../../interfaces/product-card.interface';
 
 @Component({
   selector: 'app-product-card',
@@ -61,5 +61,10 @@ export class ProductCard {
       case 'out_of_stock': return 'bg-[#DC2626] text-white';
       case 'pre_order': return 'bg-[#F59E0B] text-white';
     }
+  }
+
+  public getMainImageUrl(images: Image[]): string {
+    return images.find(image => image.isMain)?.url
+      ?? images[0]?.url
   }
 }

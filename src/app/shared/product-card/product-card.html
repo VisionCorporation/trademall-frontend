@@ -45,8 +45,8 @@
       </svg>
     </button>
 
-    <img [src]="product.images[0]?.url" [title]="product.name" alt="{{ product.name }}" width="100" height="100"
-      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+    <img [src]="getMainImageUrl(product.images)" [title]="product.name" alt="{{ product.name }}" width="100"
+      height="100" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
   </div>
 
   <div class="p-3.5 lg:p-4 flex flex-col gap-2.5">
