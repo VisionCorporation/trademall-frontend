@@ -22,14 +22,19 @@
           class="object-cover object-center rounded-2xl transition-transform duration-500 group-hover:scale-110"
           priority />
 
-        <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"></div>
+        <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent"></div>
 
         <div class="relative z-10 flex flex-col items-start h-full">
           <h2 class="text-[26px] sm:text-4xl light-header mb-3.75">{{ category.name }}</h2>
           <p class="text-[15px] mb-6.25">{{ category.description }}</p>
           <span
-            class="text-[15px] sm:text-[16px] px-6 py-3 rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in bg-white text-[#171717]">
+            class="mt-6 w-fit flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3 rounded-xl transition-colors duration-200 bg-white text-[#171717] group-hover:bg-[#00A751] group-hover:text-white">
             Explore
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+              class="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5">
+              <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
           </span>
         </div>
       </a>

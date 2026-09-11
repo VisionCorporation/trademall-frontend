@@ -29,7 +29,7 @@
         <img [ngSrc]="category.image ?? ''" [alt]="category.name" fill
           class="absolute inset-0 w-full h-full object-cover opacity-70 transition-transform duration-500 group-hover:scale-110" />
 
-        <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent rounded-2xl"></div>
+        <div class="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent"></div>
         <div class="relative z-10 p-7 sm:p-10 flex flex-col justify-between">
           <div>
             <h3 class="light-header text-white text-[28px] sm:text-[36px] font-semibold leading-tight mb-3.75">
@@ -38,8 +38,13 @@
             <p class="text-[#FBFCFF] max-w-75">{{ category.description }}</p>
           </div>
           <span
-            class="mt-6 w-fit text-[15px] sm:text-[16px] px-6 py-3 rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in bg-white text-[#171717]">
+            class="mt-6 w-fit flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3 rounded-xl transition-colors duration-200 bg-white text-[#171717] group-hover:bg-[#00A751] group-hover:text-white">
             Explore
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+              class="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5">
+              <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
           </span>
         </div>
       </a>
@@ -59,8 +64,13 @@
           <p class="text-[#FBFCFF] max-w-75">{{ centerCategory.description }}</p>
         </div>
         <span
-          class="mt-6 w-fit text-[15px] sm:text-[16px] px-6 py-3 rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in bg-white text-[#171717]">
+          class="mt-6 w-fit flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3 rounded-xl transition-colors duration-200 bg-white text-[#171717] group-hover:bg-[#00A751] group-hover:text-white">
           Explore
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+            class="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5">
+            <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
         </span>
       </div>
     </a>
@@ -80,17 +90,23 @@
             <p class="text-[#FBFCFF] max-w-75">{{ rightCategory.description }}</p>
           </div>
           <span
-            class="mt-6 w-fit text-[15px] sm:text-[16px] px-6 py-3 rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in bg-white text-[#171717]">
+            class="mt-6 w-fit flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3 rounded-xl transition-colors duration-200 bg-white text-[#171717] group-hover:bg-[#00A751] group-hover:text-white">
             Explore
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+              class="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5">
+              <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
           </span>
         </div>
       </a>
 
       <div class="flex lg:justify-end">
         <a routerLink="/categories"
-          class="flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in">
+          class="group flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in">
           Explore More
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            class="transition-transform duration-200 group-hover:translate-x-1">
             <path d="M17 7L6 18" stroke="#FBFCFF" stroke-width="1.5" stroke-linecap="round" />
             <path d="M11 6.13151C11 6.13151 16.6335 5.65662 17.4885 6.51153C18.3434 7.36645 17.8684 13 17.8684 13"
               stroke="#FBFCFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
