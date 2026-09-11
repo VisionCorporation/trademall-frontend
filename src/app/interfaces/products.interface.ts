@@ -94,11 +94,6 @@ export interface ProductDetailsResponse {
   data: ProductDetails;
 }
 
-export interface Attribute {
-  name: string;
-  value: string;
-}
-
 export interface ProductGeneralDetailsPayload {
   name: string;
   brand?: string;

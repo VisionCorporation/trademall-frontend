@@ -10,7 +10,7 @@ interface Category {
     slug: string;
 }
 
-interface Image {
+export interface Image {
     _id: string;
     url: string;
     isMain: boolean;

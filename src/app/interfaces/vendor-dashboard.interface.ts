@@ -66,3 +66,14 @@ export interface ProductsResponse {
   pagination: ProductPagination;
   data: Product[];
 }
+
+export interface VariantRow {
+  name: string;
+  value: string;
+  priceAdjustment: number | null;
+}
+
+export interface AttributeRow {
+  key: string;
+  value: string;
+}
