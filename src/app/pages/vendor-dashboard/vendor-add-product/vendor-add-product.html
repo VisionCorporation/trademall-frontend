@@ -15,7 +15,7 @@
 
     <div class="flex-1 min-h-0 overflow-y-auto scrollbar-hide pb-7">
         @if(step() === 'general') {
-        <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2 overflow-y-auto scrollbar-hide flex-1 min-h-0">
+        <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2">
             <div class="w-full max-w-full lg:max-w-[70%] px-2 py-6 sm:py-7">
                 <div class="mb-6 sm:mb-7">
                     <label for="product-name" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
@@ -51,11 +51,13 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-3.75 mb-6 sm:mb-7">
-                    <div class="relative flex-1" appClickOutside (clickOutside)="isCategoryOpen = false">
+                    <div class="relative flex-1">
                         <span class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
                             Product Category <span class="text-[#D92D20]">*</span>
                         </span>
-                        <button type="button" (click)="isCategoryOpen = !isCategoryOpen"
+                        <button type="button" (click)="isCategoryOpen = !isCategoryOpen" appDropdownOverlay
+                            [appDropdownOverlayOpen]="isCategoryOpen" [appDropdownOverlayTemplate]="categoryPanel"
+                            (appDropdownOverlayClosed)="isCategoryOpen = false"
                             class="bg-[#FBFCFF] flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
                             [class]="isCategoryOpen ? 'border-[#00a7519b] ring-2 ring-[#00a7515d]' : ''">
                             <span [class]="selectedCategory ? 'text-[#171717]' : 'text-[#9CA3AF]'">
@@ -68,45 +70,46 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </button>
-                        @if(isCategoryOpen){
-                        <div [@fadeInOut]
-                            class="absolute top-full left-0 mt-2 bg-white py-2 rounded-2xl overflow-y-auto scrollbar-hide z-50 min-w-full max-h-64 shadow-[0_8px_30px_rgba(0,0,0,0.1)] border border-[#17171708]">
-
-                            @if(isCategoryLoading()) {
-                            <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading categories...</p>
-                            } @else if (hasCategoryFailed()) {
-                            <div class="flex flex-col items-center gap-2 px-5 py-1.5">
-                                <p class="text-[14px] text-[#D92D20]">Failed to load categories</p>
-                                <button (click)="fetchCategories()"
-                                    class="text-[13px] px-6 py-3 border border-[#171717] rounded-xl hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
-                                    Try again
+                        <ng-template #categoryPanel>
+                            <div
+                                class="bg-white py-2 rounded-2xl overflow-y-auto max-h-64 shadow-[0_8px_30px_rgba(0,0,0,0.1)] border border-[#17171708]">
+                                @if(isCategoryLoading()) {
+                                <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading categories...</p>
+                                } @else if (hasCategoryFailed()) {
+                                <div class="flex flex-col items-center gap-2 px-5 py-2">
+                                    <p class="text-[14px] text-[#D92D20]">Failed to load categories</p>
+                                    <button (click)="fetchCategories()"
+                                        class="text-[13px] px-6 py-3 border border-[#171717] rounded-xl hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
+                                        Try again
+                                    </button>
+                                </div>
+                                } @else {
+                                @for(category of categories(); track category) {
+                                <button
+                                    class="w-full flex items-center justify-between gap-2 text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
+                                    [class]="selectedCategory?.name === category.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
+                                    (click)="selectCategory(category); isCategoryOpen = false">
+                                    {{ category.name }}
+                                    @if(selectedCategory?.name === category.name){
+                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                        <path d="M4 10L8 14L16 6" stroke="#00a751" stroke-width="2.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    }
                                 </button>
-                            </div>
-                            } @else {
-                            @for(category of categories(); track category) {
-                            <button
-                                class="w-full flex items-center justify-between gap-2 text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
-                                [class]="selectedCategory?.name === category.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
-                                (click)="selectCategory(category)">
-                                {{ category.name }}
-                                @if(selectedCategory?.name === category.name){
-                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                                    <path d="M4 10L8 14L16 6" stroke="#00a751" stroke-width="2.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
                                 }
-                            </button>
-                            }
-                            }
-                        </div>
-                        }
+                                }
+                            </div>
+                        </ng-template>
                     </div>
 
-                    <div class="relative flex-1" appClickOutside (clickOutside)="isSubCategoryOpen = false">
+                    <div class="relative flex-1">
                         <span class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
                             Product Subcategory <span class="text-[#D92D20]">*</span>
                         </span>
-                        <button type="button" (click)="isSubCategoryOpen = !isSubCategoryOpen"
+                        <button type="button" (click)="isSubCategoryOpen = !isSubCategoryOpen" appDropdownOverlay
+                            [appDropdownOverlayOpen]="isSubCategoryOpen" [appDropdownOverlayTemplate]="subcategoryPanel"
+                            (appDropdownOverlayClosed)="isSubCategoryOpen = false"
                             class="bg-[#FBFCFF] flex items-center justify-between gap-2 w-full text-[15px] sm:text-[16px] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 cursor-pointer"
                             [class]="isSubCategoryOpen ? 'border-[#00a7519b] ring-2 ring-[#00a7515d]' : ''">
                             <span [class]="selectedSubCategory ? 'text-[#171717]' : 'text-[#9CA3AF]'">
@@ -120,50 +123,52 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </button>
-                        @if(isSubCategoryOpen){
-                        <div [@fadeInOut]
-                            class="absolute top-full left-0 mt-2 bg-white py-2 rounded-2xl overflow-y-auto scrollbar-hide z-50 min-w-full max-h-64 shadow-[0_8px_30px_rgba(0,0,0,0.1)] border border-[#17171708]">
 
-                            @if(isSubCategoryLoading()) {
-                            <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading subcategories...</p>
-                            } @else if(!selectedCategory){
-                            <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Please select a category first
-                            </p>
-                            }
-                            @else if (hasSubCategoryFailed()) {
-                            <div class="flex flex-col items-center gap-2 px-5 py-1.5">
-                                <p class="text-[14px] text-[#D92D20]">Failed to load subcategories</p>
-                                <button (click)="fetchSubCategories()"
-                                    class="text-[13px] px-6 py-3 border border-[#171717] rounded-xl hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
-                                    Try again
-                                </button>
-                            </div>
-                            } @else {
-                            @for(subCategory of subCategories(); track subCategory) {
-                            <button
-                                class="w-full flex items-center justify-between gap-2 text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
-                                [class]="selectedSubCategory?.name === subCategory.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
-                                (click)="selectSubCategory(subCategory)">
-                                {{ subCategory.name }}
-                                @if(selectedSubCategory?.name === subCategory.name){
-                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                                    <path d="M4 10L8 14L16 6" stroke="#00a751" stroke-width="2.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
+                        <ng-template #subcategoryPanel>
+                            <div
+                                class="bg-white py-2 rounded-2xl overflow-y-auto max-h-64 shadow-[0_8px_30px_rgba(0,0,0,0.1)] border border-[#17171708]">
+                                @if(isSubCategoryLoading()) {
+                                <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Loading subcategories...
+                                </p>
+                                } @else if(!selectedCategory){
+                                <p class="text-center text-[14px] text-[#9CA3AF] px-5 py-2.5">Please select a category
+                                    first
+                                </p>
                                 }
-                            </button>
-                            }
-                            }
-                        </div>
-                        }
+                                @else if (hasSubCategoryFailed()) {
+                                <div class="flex flex-col items-center gap-2 px-5 py-1.5">
+                                    <p class="text-[14px] text-[#D92D20]">Failed to load subcategories</p>
+                                    <button (click)="fetchSubCategories()"
+                                        class="text-[13px] px-6 py-3 border border-[#171717] rounded-xl hover:bg-[#171717] hover:text-white transition-colors duration-150 cursor-pointer">
+                                        Try again
+                                    </button>
+                                </div>
+                                } @else {
+                                @for(subCategory of subCategories(); track subCategory) {
+                                <button
+                                    class="w-full flex items-center justify-between gap-2 text-left px-5 py-2.5 text-[14px] sm:text-[15px] hover:bg-[#F4F4F4] transition-colors duration-150 cursor-pointer"
+                                    [class]="selectedSubCategory?.name === subCategory.name ? 'bg-[#F0FDF4] text-[#00a751] font-medium' : 'text-[#171717]'"
+                                    (click)="selectSubCategory(subCategory)">
+                                    {{ subCategory.name }}
+                                    @if(selectedSubCategory?.name === subCategory.name){
+                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                        <path d="M4 10L8 14L16 6" stroke="#00a751" stroke-width="2.5"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    }
+                                </button>
+                                }
+                                }
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
             </div>
         </div>
         }
 
-        @if(step()==='images'){
-        <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2 overflow-y-auto scrollbar-hide flex-1 min-h-0">
+        @if(step()=== 'images'){
+        <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2">
             <div class="w-full max-w-full lg:max-w-[70%] px-0 sm:px-2 py-6 sm:py-7">
                 <div
                     [class]="'bg-white rounded-2xl border border-[#17171708] flex flex-col py-8 sm:py-10 px-6 sm:px-8 min-h-87.5 ' + (previewUrls.length === 0 ? 'items-center justify-center' : 'items-center gap-5')">
@@ -230,15 +235,12 @@
                             Upload Product Images
                         </p>
 
-                        <p class="text-[14px] text-[#6B7280] text-center max-w-64">
-                            Add up to 4 high-quality images of your product. The first image will be used as the cover.
+                        <p class="text-[14px] text-[#6B7280] text-center max-w-72">
+                            Add up to 4 high-quality images, up to 500 KB each. The first image will be used as the
+                            cover.
                         </p>
                     </div>
                     }
-
-                    <!-- @if(imagesError()) {
-                    <p class="text-[14px] sm:text-[15px] text-[#D92D20] text-center">{{ imagesError() }}</p>
-                    } -->
 
                     <input #fileInput type="file" accept="image/*" multiple class="hidden"
                         (change)="onFilesSelected($event)" />
@@ -258,6 +260,264 @@
         </div>
         }
 
+        @if(step()==='advanced'){
+        <div class="flex flex-col items-stretch gap-6 pt-4 sm:pt-2">
+            <div class="w-full max-w-full lg:max-w-[70%] px-2 py-6 sm:py-7">
+
+                <div class="mb-6 sm:mb-7">
+                    <label for="product-brand" class="block mb-2 text-[15px] sm:text-[16px] text-[#171717]">
+                        Brand <span class="text-[#9CA3AF] text-[13px]">(optional)</span>
+                    </label>
+                    <input type="text" id="product-brand" placeholder="e.g. Samsung, Nike"
+                        [(ngModel)]="productAdvancedDetailsForm.brand"
+                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                </div>
+
+                <div class="mb-6 sm:mb-7">
+                    <span class="block mb-3 text-[15px] sm:text-[16px] text-[#171717]">
+                        Pricing & Inventory <span class="text-[#9CA3AF] text-[13px]">(optional)</span>
+                    </span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-3.75">
+                        <div>
+                            <label for="sale-price" class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Sale /
+                                Discount Price</label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
+                                <input type="number" id="sale-price" placeholder="0.00" min="0" step="1"
+                                    inputmode="decimal" (keydown)="preventInvalidNumberInput($event)"
+                                    [(ngModel)]="productAdvancedDetailsForm.salePrice"
+                                    class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="weight" class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Weight
+                                (kg)</label>
+                            <input type="number" id="weight" placeholder="0.0" min="0" step="0.1" inputmode="decimal"
+                                (keydown)="preventInvalidNumberInput($event)"
+                                [(ngModel)]="productAdvancedDetailsForm.weight"
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                        </div>
+
+                        <div>
+                            <label for="stock-quantity"
+                                class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Stock Quantity</label>
+                            <input type="number" id="stock-quantity" placeholder="0" min="0" step="1"
+                                inputmode="numeric" (keydown)="preventInvalidNumberInput($event)"
+                                [(ngModel)]="productAdvancedDetailsForm.stockQuantity"
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                        </div>
+
+                        <div>
+                            <label for="low-stock-threshold"
+                                class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Low Stock Threshold</label>
+                            <input type="number" id="low-stock-threshold" placeholder="0" min="0" step="1"
+                                inputmode="numeric" (keydown)="preventInvalidNumberInput($event)"
+                                [(ngModel)]="productAdvancedDetailsForm.lowStockThreshold"
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 sm:mb-7">
+                    <label class="flex items-start gap-3 cursor-pointer select-none">
+                        <input type="checkbox" class="sr-only" name="isPreOrder"
+                            [(ngModel)]="productAdvancedDetailsForm.isPreOrder" />
+                        <span
+                            class="mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors duration-200"
+                            [class]="productAdvancedDetailsForm.isPreOrder ? 'bg-[#00a751] border-[#00a751]' : 'border-[#17171733]'">
+                            @if(productAdvancedDetailsForm.isPreOrder){
+                            <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
+                                <path d="M4 10L8 14L16 6" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            }
+                        </span>
+                        <span>
+                            <span class="block text-[15px] sm:text-[16px] text-[#171717] font-medium">
+                                Enable pre-order <span class="text-[#9CA3AF] text-[13px] font-normal">(optional)</span>
+                            </span>
+                            <span class="block text-[13px] sm:text-[14px] text-[#6B7280] mt-0.5">
+                                Let customers order this product before it's back in stock.
+                            </span>
+                        </span>
+                    </label>
+
+                    @if(productAdvancedDetailsForm.isPreOrder){
+                    <div
+                        class="mt-4 bg-white rounded-2xl border border-[#17171708] p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-3.75">
+                        <div>
+                            <label for="pre-order-days"
+                                class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Pre-order Days</label>
+                            <input type="number" id="pre-order-days" placeholder="e.g. 7" min="0" step="1"
+                                inputmode="numeric" (keydown)="preventInvalidNumberInput($event)"
+                                [(ngModel)]="productAdvancedDetailsForm.preOrderDays"
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                        </div>
+
+                        <div>
+                            <label for="min-pre-order-quantity"
+                                class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Minimum Quantity</label>
+                            <input type="number" id="min-pre-order-quantity" placeholder="e.g. 1" min="1" step="1"
+                                inputmode="numeric" (keydown)="preventInvalidNumberInput($event)"
+                                [(ngModel)]="productAdvancedDetailsForm.minPreOrderQuantity"
+                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                        </div>
+
+                        <div>
+                            <label for="pre-order-shipping-fee"
+                                class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Shipping Fee</label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
+                                <input type="number" id="pre-order-shipping-fee" placeholder="0.00" min="0" step="1"
+                                    inputmode="decimal" (keydown)="preventInvalidNumberInput($event)"
+                                    [(ngModel)]="productAdvancedDetailsForm.preOrderShippingFee"
+                                    class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <div class="mb-6 sm:mb-7">
+                    <label class="flex items-start gap-3 cursor-pointer select-none">
+                        <input type="checkbox" class="sr-only" name="hasVariants"
+                            [(ngModel)]="productAdvancedDetailsForm.hasVariants" />
+                        <span
+                            class="mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors duration-200"
+                            [class]="productAdvancedDetailsForm.hasVariants ? 'bg-[#00a751] border-[#00a751]' : 'border-[#17171733]'">
+                            @if(productAdvancedDetailsForm.hasVariants){
+                            <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
+                                <path d="M4 10L8 14L16 6" stroke="white" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            }
+                        </span>
+                        <span>
+                            <span class="block text-[15px] sm:text-[16px] text-[#171717] font-medium">
+                                This product has variants <span
+                                    class="text-[#9CA3AF] text-[13px] font-normal">(optional)</span>
+                            </span>
+                            <span class="block text-[13px] sm:text-[14px] text-[#6B7280] mt-0.5">
+                                e.g. different sizes or colors, each with its own price adjustment.
+                            </span>
+                        </span>
+                    </label>
+
+                    @if(productAdvancedDetailsForm.hasVariants){
+                    <div class="mt-4 flex flex-col gap-3">
+                        @for(variant of variantRows; track $index) {
+                        <div class="bg-white rounded-2xl border border-[#17171708] p-4 sm:p-5">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-3.75">
+                                <div>
+                                    <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Variant
+                                        Name</label>
+                                    <input type="text" placeholder="e.g. Size" [(ngModel)]="variant.name"
+                                        [name]="'variant-name-' + $index"
+                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                </div>
+                                <div>
+                                    <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Variant
+                                        Value</label>
+                                    <input type="text" placeholder="e.g. Large" [(ngModel)]="variant.value"
+                                        [name]="'variant-value-' + $index"
+                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                </div>
+                                <div class="flex items-end gap-2">
+                                    <div class="flex-1">
+                                        <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Price
+                                            Adjustment</label>
+                                        <div class="relative">
+                                            <span
+                                                class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
+                                            <input type="number" placeholder="0.00" step="1" inputmode="decimal"
+                                                (keydown)="preventInvalidNumberInput($event)"
+                                                [(ngModel)]="variant.priceAdjustment" [name]="'variant-price-' + $index"
+                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        </div>
+                                    </div>
+                                    <button type="button" (click)="removeVariantRow($index)"
+                                        class="mb-0.5 shrink-0 w-11 h-11 flex items-center justify-center rounded-xl border border-[#17171733] text-[#D92D20] hover:bg-[#FEF2F2] transition-colors duration-150 cursor-pointer">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                            <path
+                                                d="M4 6H16M8 9V14M12 9V14M5.5 6L6 16.5C6 17.3284 6.67157 18 7.5 18H12.5C13.3284 18 14 17.3284 14 16.5L14.5 6M8 6V4C8 3.44772 8.44772 3 9 3H11C11.5523 3 12 3.44772 12 4V6"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        }
+
+                        <button type="button" (click)="addVariantRow()"
+                            class="flex items-center gap-2 text-[14px] sm:text-[15px] font-medium text-[#00a751] hover:opacity-75 transition-opacity duration-150 cursor-pointer self-start px-1 py-2">
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            Add another variant
+                        </button>
+                    </div>
+                    }
+                </div>
+
+                <div class="mb-6 sm:mb-7">
+                    <span class="block mb-1 text-[15px] sm:text-[16px] text-[#171717]">
+                        Attributes / Specifications <span class="text-[#9CA3AF] text-[13px]">(optional)</span>
+                    </span>
+                    <p class="text-[13px] sm:text-[14px] text-[#6B7280] mb-3">
+                        Add details like material, size, color or model to help buyers find your product.
+                    </p>
+
+                    <div class="flex flex-col gap-3">
+                        @for(attribute of attributeRows; track $index) {
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
+                            <div class="flex-1">
+                                <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Attribute
+                                    Name</label>
+                                <input type="text" placeholder="e.g. Material" [(ngModel)]="attribute.key"
+                                    [name]="'attribute-key-' + $index"
+                                    class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                            </div>
+                            <div class="flex-1 flex items-end gap-2">
+                                <div class="flex-1">
+                                    <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Attribute
+                                        Value</label>
+                                    <input type="text" placeholder="e.g. Cotton" [(ngModel)]="attribute.value"
+                                        [name]="'attribute-value-' + $index"
+                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 text-[15px] sm:text-[16px] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                </div>
+                                <button type="button" (click)="removeAttributeRow($index)"
+                                    class="mb-0.5 shrink-0 w-11 h-11 flex items-center justify-center rounded-xl border border-[#17171733] text-[#D92D20] hover:bg-[#FEF2F2] transition-colors duration-150 cursor-pointer">
+                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                        <path
+                                            d="M4 6H16M8 9V14M12 9V14M5.5 6L6 16.5C6 17.3284 6.67157 18 7.5 18H12.5C13.3284 18 14 17.3284 14 16.5L14.5 6M8 6V4C8 3.44772 8.44772 3 9 3H11C11.5523 3 12 3.44772 12 4V6"
+                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        }
+
+                        <button type="button" (click)="addAttributeRow()"
+                            class="flex items-center gap-2 text-[14px] sm:text-[15px] font-medium text-[#00a751] hover:opacity-75 transition-opacity duration-150 cursor-pointer self-start px-1 py-2">
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            Add attribute
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        }
+
         @if(step() === 'general') {
         <div class="shrink-0 py-4 sm:py-5 flex justify-end">
             <button (click)="submitDetails(buildPayload())" [disabled]="isSubmittingDetails() || !isFormValid"
@@ -272,6 +532,15 @@
             <button (click)="uploadImages()" [disabled]="isUploadingImages() || selectedFiles.length === 0"
                 class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
                 {{ isUploadingImages() ? 'Saving images…' : 'Save & Continue' }}
+            </button>
+        </div>
+        }
+
+        @if(step()==='advanced'){
+        <div class="shrink-0 py-4 sm:py-5 flex justify-end">
+            <button (click)="finishSetup()"
+                class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in cursor-pointer">
+                Finish Setup
             </button>
         </div>
         }

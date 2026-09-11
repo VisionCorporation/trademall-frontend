@@ -1,27 +1,29 @@
 import { ChangeDetectorRef, Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { fadeInOutAnimation } from '../../../animations/toast.animations';
-import { ClickOutside } from '../../../directives/click-outside/click-outside';
 import { Products } from '../../../services/products/products';
 import { Category, RootCategory } from '../../../interfaces/categories.interface';
 import { FormsModule } from '@angular/forms';
-import { Attribute, ProductGeneralDetailsPayload } from '../../../interfaces/products.interface';
+import { ProductGeneralDetailsPayload } from '../../../interfaces/products.interface';
 import { FormStep } from '../../../types/add-product.type';
 import { ToastService } from '../../../services/toast/toast.service';
 import { Router } from '@angular/router';
 import { ADD_PRODUCT_STEPS } from '../../../data/constants/vendor-dashbaord.constant';
 import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashboard';
 import { forkJoin } from 'rxjs';
+import { DropdownOverlay } from '../../../shared/directives/dropdown-overlay/dropdown-overlay';
+import { AttributeRow, VariantRow } from '../../../interfaces/vendor-dashboard.interface';
 
 @Component({
   selector: 'app-vendor-add-product',
-  imports: [ClickOutside, FormsModule,],
+  imports: [FormsModule, DropdownOverlay],
   templateUrl: './vendor-add-product.html',
   styleUrl: './vendor-add-product.css',
   animations: [fadeInOutAnimation]
 })
 export class VendorAddProduct implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  attributes: Attribute[] = [{ name: '', value: '' }];
+  public variantRows: VariantRow[] = [{ name: '', value: '', priceAdjustment: null }];
+  public attributeRows: AttributeRow[] = [{ key: '', value: '' }];
   public categories = signal<RootCategory[]>([]);
   public subCategories = signal<Category[]>([]);
   public isCategoryOpen = false
@@ -38,12 +40,15 @@ export class VendorAddProduct implements OnInit {
   public createdProductId = signal<string | null>(null);
   public isSubmittingDetails = signal(false);
   public isUploadingImages = signal(false);
+  public isFinishingSetup = signal(false);
   public previewUrls: (string | null)[] = [];
   public selectedFiles: File[] = [];
-  private taostService = inject(ToastService)
+  private toastService = inject(ToastService)
   private readonly vendorDashbaordService = inject(VendorDashboard)
   private cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router)
+  private readonly maxFileSize = 500 * 1024;
+  private readonly maxImages = 4;
 
   public productGeneralDetailsForm = {
     name: '',
@@ -51,6 +56,17 @@ export class VendorAddProduct implements OnInit {
     price: null as number | null,
     category: '',
     subcategory: ''
+  };
+
+  public productAdvancedDetailsForm: ProductGeneralDetailsPayload = {
+    name: '',
+    description: '',
+    price: null as number | null,
+    category: '',
+    subcategory: '',
+    brand: '',
+    isPreOrder: false,
+    hasVariants: false,
   };
 
   ngOnInit() {
@@ -195,12 +211,12 @@ export class VendorAddProduct implements OnInit {
       next: (res) => {
         this.createdProductId.set(res.data._id);
         this.step.set('images');
-        this.taostService.success(res.message);
+        this.toastService.success(res.message ?? "Product details saved successfully");
         this.isSubmittingDetails.set(false);
         this.resetGeneralDetailsForm()
       },
       error: (err) => {
-        this.taostService.error('Failed to save details. Please try again.');
+        this.toastService.error('Failed to save details. Please try again.');
         this.isSubmittingDetails.set(false);
       }
     });
@@ -211,23 +227,35 @@ export class VendorAddProduct implements OnInit {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
 
-    const incoming = Array.from(input.files);
-    const remaining = 4 - this.selectedFiles.length;
-    const toAdd = incoming.slice(0, remaining);
+    const validFiles = Array.from(input.files).filter(file => {
+      if (file.size > this.maxFileSize) {
+        this.toastService.error(
+          `${file.name} is too large. Images must be 500 KB or less.`
+        );
+        return false;
+      }
 
-    toAdd.forEach(file => {
+      return true;
+    });
+
+    const remaining = this.maxImages - this.selectedFiles.length;
+    const filesToAdd = validFiles.slice(0, remaining);
+
+    filesToAdd.forEach(file => {
       const index = this.selectedFiles.length;
 
       this.selectedFiles = [...this.selectedFiles, file];
       this.previewUrls = [...this.previewUrls, null];
 
       const reader = new FileReader();
+
       reader.onload = (e) => {
         const updated = [...this.previewUrls];
         updated[index] = e.target?.result as string;
         this.previewUrls = updated;
         this.cdr.markForCheck();
       };
+
       reader.readAsDataURL(file);
     });
 
@@ -252,14 +280,34 @@ export class VendorAddProduct implements OnInit {
       next: (res) => {
         this.isUploadingImages.set(false);
         this.step.set('advanced');
-        this.taostService.success(res.message);
+        this.toastService.success(res.message ?? "Product images uploaded successfully");
         this.resetImageUploadForm()
-        this.router.navigate(['/vendor/products']);
       },
       error: (err) => {
-        this.taostService.error(err?.error?.message ?? 'Image upload failed. Please try again.');
+        this.toastService.error(err?.error?.message ?? 'Image upload failed. Please try again.');
         this.isUploadingImages.set(false);
       }
     });
+  }
+
+  public finishSetup() {
+    this.router.navigate(['/vendor/products']);
+    this.toastService.success('Product setup completed successfully');
+  }
+
+  public addVariantRow(): void {
+    this.variantRows.push({ name: '', value: '', priceAdjustment: null });
+  }
+
+  public removeVariantRow(index: number): void {
+    this.variantRows.splice(index, 1);
+  }
+
+  public addAttributeRow(): void {
+    this.attributeRows.push({ key: '', value: '' });
+  }
+
+  public removeAttributeRow(index: number): void {
+    this.attributeRows.splice(index, 1);
   }
 }
