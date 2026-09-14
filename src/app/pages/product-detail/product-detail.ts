@@ -22,6 +22,7 @@ import { VendorDetailedInfoResponse } from '../../interfaces/vendor.interface';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Review, ReviewFormData, ReviewsPagination } from '../../interfaces/reviews.interface';
 import { finalize } from 'rxjs';
+import { VoteType } from '../../types/product-details.type';
 
 @Component({
     selector: 'app-product-detail',
@@ -78,6 +79,10 @@ export class ProductDetail implements OnInit {
     public hoveredStar = signal(0);
     public eligibleOrderId = signal<string | null>(null);
     public readonly starOptions = [1, 2, 3, 4, 5];
+    // Tracks this session's vote per review: reviewId -> 'helpful' | 'not_helpful'
+    public userVotes = signal<Map<string, VoteType>>(new Map());
+    // Reviews currently mid-request, to block double-clicks
+    public pendingVotes = signal<Set<string>>(new Set());
     public reviewForm: FormGroup = this.fb.group({
         rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
         title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
@@ -322,10 +327,79 @@ export class ProductDetail implements OnInit {
         return '';
     }
 
-    public markHelpful(reviewId: string, type: 'helpful' | 'notHelpful'): void {
+    public isVotePending(reviewId: string): boolean {
+        return this.pendingVotes().has(reviewId);
+    }
+
+    public currentVote(reviewId: string): VoteType | undefined {
+        return this.userVotes().get(reviewId);
+    }
+
+    public markHelpful(reviewId: string, uiType: 'helpful' | 'notHelpful'): void {
+        const voteType: VoteType = uiType === 'helpful' ? 'helpful' : 'not_helpful';
+        const previousVote = this.userVotes().get(reviewId);
+
+        if (previousVote === voteType) return;
+        if (this.isVotePending(reviewId)) return;
+
+        const snapshot = this.reviews().find((r) => r._id === reviewId);
+        if (!snapshot) return;
+        const previousCounts = { helpful: snapshot.helpful, notHelpful: snapshot.notHelpful };
+
+        this.pendingVotes.update((set) => new Set(set).add(reviewId));
+
         this.reviews.update((list) =>
-            list.map((r) => (r._id === reviewId ? { ...r, [type]: r[type] + 1 } : r))
+            list.map((r) => {
+                if (r._id !== reviewId) return r;
+                const next = { ...r };
+                if (previousVote) {
+                    const previousField = previousVote === 'helpful' ? 'helpful' : 'notHelpful';
+                    next[previousField] = Math.max(0, next[previousField] - 1);
+                }
+                const nextField = uiType === 'helpful' ? 'helpful' : 'notHelpful';
+                next[nextField] = next[nextField] + 1;
+                return next;
+            })
         );
+        this.userVotes.update((map) => new Map(map).set(reviewId, voteType));
+
+        this.reviewService.voteOnReview(reviewId, voteType).subscribe({
+            next: (res) => {
+                this.reviews.update((list) =>
+                    list.map((r) =>
+                        r._id === reviewId
+                            ? { ...r, helpful: res.data.helpful, notHelpful: res.data.notHelpful }
+                            : r
+                    )
+                );
+                this.pendingVotes.update((set) => {
+                    const next = new Set(set);
+                    next.delete(reviewId);
+                    return next;
+                });
+                this.toastService.success(res.message ?? 'Vote recorded successfully');
+            },
+            error: (err) => {
+                this.reviews.update((list) =>
+                    list.map((r) => (r._id === reviewId ? { ...r, ...previousCounts } : r))
+                );
+                this.userVotes.update((map) => {
+                    const next = new Map(map);
+                    if (previousVote) {
+                        next.set(reviewId, previousVote);
+                    } else {
+                        next.delete(reviewId);
+                    }
+                    return next;
+                });
+                this.pendingVotes.update((set) => {
+                    const next = new Set(set);
+                    next.delete(reviewId);
+                    return next;
+                });
+                this.toastService.error(err.error?.message ?? 'Failed to register your vote');
+            },
+        });
     }
 
     public loadMoreReviews(productId: string): void {
