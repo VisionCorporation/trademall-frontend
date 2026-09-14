@@ -23,6 +23,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Review, ReviewFormData, ReviewsPagination } from '../../interfaces/reviews.interface';
 import { finalize } from 'rxjs';
 import { VoteType } from '../../types/product-details.type';
+import { LoginService } from '../../services/login/login.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -47,6 +48,7 @@ export class ProductDetail implements OnInit {
     private readonly vendorStoreService = inject(VendorStore);
     private readonly toastService = inject(ToastService);
     private readonly reviewService = inject(Reviews);
+    private readonly loginService = inject(LoginService)
     private readonly seoService = inject(Seo);
     public readonly cartState = inject(CartState);
     public selectedImage: string | null = null;
@@ -79,10 +81,10 @@ export class ProductDetail implements OnInit {
     public hoveredStar = signal(0);
     public eligibleOrderId = signal<string | null>(null);
     public readonly starOptions = [1, 2, 3, 4, 5];
-    // Tracks this session's vote per review: reviewId -> 'helpful' | 'not_helpful'
     public userVotes = signal<Map<string, VoteType>>(new Map());
-    // Reviews currently mid-request, to block double-clicks
     public pendingVotes = signal<Set<string>>(new Set());
+    public editingReviewId = signal<string | null>(null);
+    public deletingReviewId = signal<string | null>(null);
     public reviewForm: FormGroup = this.fb.group({
         rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
         title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
@@ -275,7 +277,68 @@ export class ProductDetail implements OnInit {
         this.showReviewForm.update((v) => !v);
     }
 
+    public startEditReview(review: Review): void {
+        this.editingReviewId.set(review._id);
+        this.reviewForm.setValue({
+            rating: review.rating,
+            title: review.title,
+            comment: review.comment,
+        });
+        this.showReviewForm.set(true);
+    }
+
+    public cancelReviewForm(): void {
+        this.editingReviewId.set(null);
+        this.reviewForm.reset({ rating: 0, title: '', comment: '' });
+        this.showReviewForm.set(false);
+    }
+
+    public deleteReview(reviewId: string): void {
+        const confirmed = confirm('Delete this review? This can\'t be undone.');
+        if (!confirmed) return;
+
+        this.deletingReviewId.set(reviewId);
+        this.reviewService.deleteReview(reviewId).subscribe({
+            next: () => {
+                this.reviews.update((list) => list.filter((r) => r._id !== reviewId));
+                this.reviewsPagination.update((p) => (p ? { ...p, total: Math.max(0, p.total - 1) } : p));
+                this.deletingReviewId.set(null);
+                this.toastService.success('Review deleted');
+            },
+            error: (err) => {
+                this.deletingReviewId.set(null);
+                this.toastService.error(err.error?.message ?? 'Failed to delete review');
+            },
+        });
+    }
+
     public submitReview(productId: string): void {
+        const editingId = this.editingReviewId();
+
+        if (editingId) {
+            this.isSubmittingReview.set(true);
+            this.reviewService.updateReview(editingId, this.reviewForm.value).subscribe({
+                next: (res) => {
+                    const updated = res.data.review;
+                    this.reviews.update((list) =>
+                        list.map((r) =>
+                            r._id === editingId
+                                ? { ...r, rating: updated.rating, title: updated.title, comment: updated.comment }
+                                : r
+                        )
+                    );
+                    this.cancelReviewForm();
+                    this.isSubmittingReview.set(false);
+                    this.toastService.success(res.message ?? 'Review updated');
+                },
+                error: (err) => {
+                    this.toastService.error(err.error?.message ?? 'Failed to update review');
+                    this.isSubmittingReview.set(false);
+                },
+            });
+            return;
+        }
+
         const orderId = this.eligibleOrderId();
         if (!orderId) {
             this.toastService.error('You can only review products you have purchased');
@@ -283,18 +346,12 @@ export class ProductDetail implements OnInit {
         }
 
         this.isSubmittingReview.set(true);
-        const payload: ReviewFormData = {
-            orderId,
-            productId,
-            ...this.reviewForm.value,
-        };
+        const payload: ReviewFormData = { orderId, productId, ...this.reviewForm.value };
 
         this.reviewService.createReview(payload).subscribe({
             next: (res) => {
                 this.reviews.update((list) => [res.data, ...list]);
-                this.reviewsPagination.update((p) =>
-                    p ? { ...p, total: p.total + 1 } : p
-                );
+                this.reviewsPagination.update((p) => (p ? { ...p, total: p.total + 1 } : p));
                 this.reviewForm.reset({ rating: 0, title: '', comment: '' });
                 this.showReviewForm.set(false);
                 this.isSubmittingReview.set(false);
@@ -464,6 +521,10 @@ export class ProductDetail implements OnInit {
                     );
                 },
             });
+    }
+
+    get currentUser() {
+        return this.loginService.getCurrentUser();
     }
 
     public toggleWishlist(productId: string, productName: string = ''): void {
