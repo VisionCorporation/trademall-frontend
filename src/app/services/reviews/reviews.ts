@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
-import { Review, ReviewFormData, ReviewsResponse } from '../../interfaces/reviews.interface';
+import { Review, ReviewFormData, ReviewsResponse, VoteOnReviewResponse } from '../../interfaces/reviews.interface';
+import { VoteType } from '../../types/product-details.type';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,13 @@ export class Reviews {
     return this.http.post<{ status: string; data: Review }>(
       `${environment.apiBaseUrl}/reviews`,
       reviewData
+    );
+  }
+
+  public voteOnReview(reviewId: string, voteType: VoteType): Observable<VoteOnReviewResponse> {
+    return this.http.post<VoteOnReviewResponse>(
+      `${environment.apiBaseUrl}/reviews/${reviewId}/helpful`,
+      { voteType }
     );
   }
 }

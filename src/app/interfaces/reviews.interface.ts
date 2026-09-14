@@ -38,3 +38,14 @@ export interface ReviewsResponse {
         pagination: ReviewsPagination;
     };
 }
+
+export interface VoteOnReviewResponse {
+    status: string;
+    message: string;
+    data: VoteOnReviewData
+}
+
+interface VoteOnReviewData {
+    helpful: number;
+    notHelpful: number
+}

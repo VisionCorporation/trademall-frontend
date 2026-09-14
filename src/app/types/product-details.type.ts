@@ -1,0 +1,1 @@
+export type VoteType = 'helpful' | 'not_helpful';
