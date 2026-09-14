@@ -19,6 +19,9 @@ import { ProductCardInterface } from '../../interfaces/product-card.interface';
 import { GuestCartDisplayInfo, PriceSnapshot } from '../../interfaces/cart.interface';
 import { CartState } from '../../services/cart/cart-state';
 import { VendorDetailedInfoResponse } from '../../interfaces/vendor.interface';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Review, ReviewFormData, ReviewsPagination } from '../../interfaces/reviews.interface';
+import { finalize } from 'rxjs';
 
 @Component({
     selector: 'app-product-detail',
@@ -31,7 +34,7 @@ import { VendorDetailedInfoResponse } from '../../interfaces/vendor.interface';
         Footer,
         NgOptimizedImage,
         Newsletter,
-        ProductCard
+        ProductCard, ReactiveFormsModule
     ],
     templateUrl: './product-detail.html',
     styleUrl: './product-detail.css',
@@ -59,13 +62,27 @@ export class ProductDetail implements OnInit {
     public isVendorProductsLoading = signal(false);
     public isReviewsLoading = signal(false);
     public isTryingAgain = signal(false)
+    public isLoadingMoreReviews = signal(false)
     public totalPagesArray: number[] = [];
     public activeButton = 'vendor-info';
     public buttons = buttons;
-    public reviews: any;
     public errorMessage = ''
     public showButton = true
     public quantity = 1;
+    private readonly fb = inject(FormBuilder);
+    public reviews = signal<Review[]>([]);
+    public reviewsPagination = signal<ReviewsPagination | null>(null);
+    public currentReviewsPage = signal(1);
+    public isSubmittingReview = signal(false);
+    public showReviewForm = signal(false);
+    public hoveredStar = signal(0);
+    public eligibleOrderId = signal<string | null>(null);
+    public readonly starOptions = [1, 2, 3, 4, 5];
+    public reviewForm: FormGroup = this.fb.group({
+        rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+        title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
+        comment: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
+    });
 
     ngOnInit(): void {
         this.fetchProductDetails()
@@ -152,9 +169,14 @@ export class ProductDetail implements OnInit {
     private updateSeo(): void {
         if (!this.product) return;
 
+        const productName = this.product.name?.trim()
+        const productDescription = this.product.description?.trim()
+
         this.seoService.updatePageSeo({
-            title: this.product.metaTitle,
-            description: this.product.metaDescription,
+            title: this.product.metaTitle?.trim() || `${productName} | TradeMall`,
+            description:
+                this.product.metaDescription?.trim() ||
+                `${productDescription}`,
             url: `https://trademall-frontend.vercel.app/products/${this.product.slug}`,
             image: this.product.images?.[0]?.url ?? ''
         });
@@ -181,6 +203,7 @@ export class ProductDetail implements OnInit {
                         this.fetchVendorProducts();
                         this.isTryingAgain.set(false)
                         this.setDefaultSelectedImage()
+                        this.fetchReviews(response.data._id, 1, false)
                     },
                     error: (err) => {
                         if (err.error.message) {
@@ -204,12 +227,8 @@ export class ProductDetail implements OnInit {
         return Object.entries(this.product.attributes).map(([label, value]) => ({ label, value }));
     }
 
-    public switchButtons(activeButton: string, productId: string) {
+    public switchButtons(activeButton: string) {
         this.activeButton = activeButton;
-
-        if (activeButton === 'reviews') {
-            this.fetchReviews(productId);
-        }
     }
 
     private fetchVendorDetailedInfo(productId: string) {
@@ -228,19 +247,149 @@ export class ProductDetail implements OnInit {
         })
     }
 
-    private fetchReviews(productId: string) {
-        this.isReviewsLoading.set(true);
-        this.reviewService.getReviewsForAProduct(productId).subscribe({
-            next: (response) => {
-                this.reviews = response.data;
-                this.isReviewsLoading.set(false);
+    public averageRating(): number {
+        const list = this.reviews();
+        if (!list.length) return 0;
+        return list.reduce((sum, r) => sum + r.rating, 0) / list.length;
+    }
+
+    public ratingBreakdown(): { star: number; count: number; percent: number }[] {
+        const list = this.reviews();
+        const total = list.length || 1;
+        return [5, 4, 3, 2, 1].map((star) => {
+            const count = list.filter((r) => r.rating === star).length;
+            return { star, count, percent: Math.round((count / total) * 100) };
+        });
+    }
+
+    public setRating(value: number): void {
+        this.reviewForm.get('rating')?.setValue(value);
+    }
+
+    public toggleReviewForm(): void {
+        this.showReviewForm.update((v) => !v);
+    }
+
+    public submitReview(productId: string): void {
+        const orderId = this.eligibleOrderId();
+        if (!orderId) {
+            this.toastService.error('You can only review products you have purchased');
+            return;
+        }
+
+        this.isSubmittingReview.set(true);
+        const payload: ReviewFormData = {
+            orderId,
+            productId,
+            ...this.reviewForm.value,
+        };
+
+        this.reviewService.createReview(payload).subscribe({
+            next: (res) => {
+                this.reviews.update((list) => [res.data, ...list]);
+                this.reviewsPagination.update((p) =>
+                    p ? { ...p, total: p.total + 1 } : p
+                );
+                this.reviewForm.reset({ rating: 0, title: '', comment: '' });
+                this.showReviewForm.set(false);
+                this.isSubmittingReview.set(false);
+                this.toastService.success('Review submitted — thanks for the feedback!');
             },
             error: (err) => {
-                this.toastService.error(err.error.message);
-                console.error('Failed to fetch reviews', err);
-                this.isReviewsLoading.set(false);
+                this.toastService.error(err.error?.message ?? 'Failed to submit review');
+                this.isSubmittingReview.set(false);
             },
         });
+    }
+
+    public displayErrorMessage(name: string): string {
+        const control = this.reviewForm.get(name);
+
+        if (control?.invalid && (control.dirty || control.touched)) {
+            if (control.errors?.['required']) {
+                return `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
+            }
+
+            if (control.errors?.['minlength']) {
+                return `${name.charAt(0).toUpperCase() + name.slice(1)} must be at least ${control.errors['minlength'].requiredLength} characters`;
+            }
+
+            if (control.errors?.['maxlength']) {
+                return `${name.charAt(0).toUpperCase() + name.slice(1)} must be at most ${control.errors['maxlength'].requiredLength} characters`;
+            }
+        }
+
+        return '';
+    }
+
+    public markHelpful(reviewId: string, type: 'helpful' | 'notHelpful'): void {
+        this.reviews.update((list) =>
+            list.map((r) => (r._id === reviewId ? { ...r, [type]: r[type] + 1 } : r))
+        );
+    }
+
+    public loadMoreReviews(productId: string): void {
+        if (this.isLoadingMoreReviews()) {
+            return;
+        }
+
+        const next = this.currentReviewsPage() + 1;
+
+        this.fetchReviews(productId, next, true);
+    }
+
+    public initials(user: { firstName: string; lastName: string }): string {
+        return `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase();
+    }
+
+    public timeAgo(dateStr: string): string {
+        const diffMs = Date.now() - new Date(dateStr).getTime();
+        const days = Math.floor(diffMs / 86400000);
+        if (days < 1) return 'Today';
+        if (days === 1) return '1 day ago';
+        if (days < 30) return `${days} days ago`;
+        const months = Math.floor(days / 30);
+        if (months < 12) return `${months} month${months > 1 ? 's' : ''} ago`;
+        const years = Math.floor(months / 12);
+        return `${years} year${years > 1 ? 's' : ''} ago`;
+    }
+
+    private fetchReviews(productId: string, page = 1, append = false): void {
+        if (append) {
+            this.isLoadingMoreReviews.set(true);
+        } else {
+            this.isReviewsLoading.set(true);
+        }
+
+        this.reviewService
+            .getReviewsForAProduct(productId, page)
+            .pipe(
+                finalize(() => {
+                    if (append) {
+                        this.isLoadingMoreReviews.set(false);
+                    } else {
+                        this.isReviewsLoading.set(false);
+                    }
+                })
+            )
+            .subscribe({
+                next: (response) => {
+                    this.reviews.update((list) =>
+                        append
+                            ? [...list, ...response.data.reviews]
+                            : response.data.reviews
+                    );
+
+                    this.reviewsPagination.set(response.data.pagination);
+                    this.currentReviewsPage.set(page);
+                },
+
+                error: (err) => {
+                    this.toastService.error(
+                        err.error?.message ?? 'Failed to load reviews'
+                    );
+                },
+            });
     }
 
     public toggleWishlist(productId: string, productName: string = ''): void {

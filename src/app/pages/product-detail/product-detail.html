@@ -179,7 +179,7 @@
         <button
           class="relative text-[15px] sm:text-[16px] pb-3 shrink-0 transition-colors duration-100 ease-in-out cursor-pointer"
           [class]="button.value === activeButton ? 'text-[#00a751]' : 'text-[#4b5563] hover:text-[#171717]'"
-          (click)="switchButtons(button.value, product._id)">
+          (click)="switchButtons(button.value)">
           {{ button.label }}
           @if (button.value === activeButton) {
           <span class="absolute left-0 right-0 -bottom-2 h-0.5 bg-[#00a751]"></span>
@@ -233,7 +233,7 @@
           </div>
 
           <a [routerLink]="['/products/vendor', vendorDetailedInfo.vendor._id]"
-            class="text-[15px] shrink-0 px-5 py-3.5 rounded-lg bg-[#171717] hover:opacity-85 transition-opacity duration-150 ease-in text-white cursor-pointer text-center">
+            class="shrink-0text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white hover:opacity-85 transition-opacity duration-200 ease-in rounded-xl cursor-pointer text-center">
             Visit Store
           </a>
         </div>
@@ -329,64 +329,356 @@
         </svg>
         Loading reviews...
       </div>
-      }
-      }
-    </div>
-    } @else {
-    <div class="flex flex-col items-center justify-center py-37.5 mx-4 text-center">
-      <div class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full">
-        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="#F7F7F7"
-          stroke="#AAAAAA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
-      </div>
-      <h3 class="text-lg sm:text-[32px] text-[#171717] mt-6 mb-2 light-header">Oops, something went wrong</h3>
-      <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md mb-7">
-        {{ errorMessage ? errorMessage : 'An error occurred while fetching product details. Try again.' }}
-      </p>
-      @if (showButton) {
-      <button (click)="fetchProductDetails()" [disabled]="isTryingAgain()"
-        class="text-[15px] sm:text-[16px] px-6 py-3 mt-4 bg-[#171717] hover:opacity-85 transition-opacity duration-150 ease-in text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
-        {{ isTryingAgain() ? 'Trying...' : 'Try again' }}
-      </button>
-      }
-    </div>
-    }
-    } @else {
-    <app-skeleton-loader skeletonType="product-details" />
-    <app-skeleton-loader skeletonType="product-additional-details" />
-    <div class="mb-37.5">
-      <div class="w-50 h-12.5 rounded-2xl mb-8.5 skeleton-shimmer mx-5 md:mx-12 2xl:mx-0"></div>
-      <app-skeleton-loader skeletonType="product" />
-    </div>
-    }
+      } @else {
+      <div class="flex flex-col gap-8 py-4">
+        <div class="flex flex-col md:flex-row gap-8 bg-[#F9FAFB] rounded-2xl p-6 md:p-8 border border-[#E5E7EB]">
+          <div
+            class="flex flex-col items-center justify-center gap-2 md:w-48 shrink-0 md:border-r md:border-[#E5E7EB] md:pr-8">
+            <span class="text-5xl font-bold text-[#111827]">{{ averageRating().toFixed(1) }}</span>
+            <div class="flex gap-0.5">
+              @for (i of starIndices; track i) {
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient [attr.id]="'avg-star-fill-' + i" x1="0" y1="0" x2="1" y2="0">
+                    <stop [attr.offset]="starFillPercent(i, averageRating()) + '%'" stop-color="#D89E12" />
+                    <stop [attr.offset]="starFillPercent(i, averageRating()) + '%'" stop-color="transparent" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                  [attr.fill]="'url(#avg-star-fill-' + i + ')'" stroke="#D89E12" stroke-width="1.5"
+                  stroke-linejoin="round" />
+              </svg>
+              }
+            </div>
+            <span class="text-sm text-[#6B7280]">{{ reviewsPagination()?.total ?? reviews().length }} review{{
+              (reviewsPagination()?.total ?? reviews().length) === 1 ? '' : 's' }}</span>
+          </div>
 
-    @if (!isLoading() && product) {
-    @if (isVendorProductsLoading()) {
-    <div class="mt-25 md:mt-37.5 mb-28.75 pl-5 md:pl-12 2xl:pl-[calc((100vw-1400px)/2)]">
-      <app-skeleton-loader skeletonType="product" />
-    </div>
-    } @else if (vendorProductsDetails.length > 0) {
-    <div class="mt-25 md:mt-37.5 mb-28.75">
-      <div class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 mb-4">
-        <h2 class="text-[28px] sm:text-[36px] products-font text-left">From the same vendor</h2>
-        <p class="text-base sm:text-[17px] text-left text-[#6B7280]">
-          Explore more items from this vendor and find your next favorite.
-        </p>
-      </div>
-      <div
-        class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 scroll-pl-3 md:scroll-pl-12 2xl:scroll-pl-0"
-        [@staggerProducts]>
-        @for (vendorProduct of vendorProductsDetails; track vendorProduct.id) {
-        <app-product-card [product]="vendorProduct" layout="carousel" />
+          <div class="flex-1 flex flex-col justify-center gap-2">
+            @for (row of ratingBreakdown(); track row.star) {
+            <div class="flex items-center gap-3 text-sm">
+              <span class="w-10 text-[#6B7280]">{{ row.star }} star</span>
+              <div class="flex-1 h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
+                <div class="h-full bg-[#D89E12] rounded-full transition-all duration-500" [style.width.%]="row.percent">
+                </div>
+              </div>
+              <span class="w-8 text-right text-[#6B7280]">{{ row.count }}</span>
+            </div>
+            }
+          </div>
+
+          <div class="flex md:items-center">
+            <button (click)="toggleReviewForm()"
+              class="text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in">
+              {{ showReviewForm() ? 'Cancel' : 'Write a Review' }}
+            </button>
+          </div>
+        </div>
+
+        @if (showReviewForm()) {
+        <form [formGroup]="reviewForm" (ngSubmit)="submitReview(product!._id)"
+          class="flex flex-col gap-5 bg-white border border-[#E5E7EB] rounded-2xl p-6">
+          <h3 class="text-[17px] products-font text-[#111827]">Share your experience</h3>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-medium text-[#374151]">Your rating</label>
+            <div class="flex gap-1" (mouseleave)="hoveredStar.set(0)">
+              @for (star of starOptions; track star) {
+              <button type="button" (click)="setRating(star)" (mouseenter)="hoveredStar.set(star)"
+                (mouseleave)="hoveredStar.set(0)" class="p-0.5" [attr.aria-label]="'Rate ' + star + ' out of 5'">
+                <svg width="28" height="28" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                    [attr.fill]="
+          (hoveredStar() || reviewForm.value.rating) >= star
+            ? '#D89E12'
+            : 'transparent'
+        " stroke="#D89E12" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+              </button>
+              }
+            </div>
+            @if (reviewForm.get('rating')?.invalid &&
+            (reviewForm.get('rating')?.dirty || reviewForm.get('rating')?.touched)) {
+            <span class="text-[#EF4444] mt-2 text-[13px] sm:text-sm text-left flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="shrink-0">
+                <path
+                  d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
+                  stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              {{displayErrorMessage('rating')}}
+            </span>
+            }
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="review-title" class="text-sm font-medium text-[#374151]">
+              Review Title
+            </label>
+
+            <input id="review-title" type="text" formControlName="title" placeholder="Sum up your experience"
+              [class.border-red-500]="reviewForm.get('title')?.touched && reviewForm.get('title')?.invalid"
+              [class.focus:border-red-500]="reviewForm.get('title')?.touched && reviewForm.get('title')?.invalid"
+              [class.focus:ring-red-500/20]="reviewForm.get('title')?.touched && reviewForm.get('title')?.invalid"
+              class="border border-[#D1D5DB] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00A751]/30 focus:border-[#00A751]" />
+
+            @if (reviewForm.get('title')?.invalid &&
+            (reviewForm.get('title')?.dirty || reviewForm.get('title')?.touched)) {
+            <span class="text-[#EF4444] mt-2 text-[13px] sm:text-sm text-left flex items-center gap-1.5">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="shrink-0">
+                <path
+                  d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
+                  stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              {{displayErrorMessage('title')}}
+            </span>
+            }
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label for="review-comment" class="text-sm font-medium text-[#374151]">
+              Your Review
+            </label>
+
+            <textarea id="review-comment" rows="4" formControlName="comment"
+              placeholder="Tell others what you liked or didn't like" [class.border-red-500]="
+              reviewForm.get('comment')?.touched &&
+              reviewForm.get('comment')?.invalid
+            " [class.focus:border-red-500]="
+              reviewForm.get('comment')?.touched &&
+              reviewForm.get('comment')?.invalid
+            " [class.focus:ring-red-500/20]="
+              reviewForm.get('comment')?.touched &&
+              reviewForm.get('comment')?.invalid
+            "
+              class="border border-[#D1D5DB] rounded-lg px-4 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#00A751]/30 focus:border-[#00A751]"></textarea>
+
+            <div class="flex items-start justify-between gap-4">
+              @if (
+              reviewForm.get('comment')?.invalid &&
+              (reviewForm.get('comment')?.dirty ||
+              reviewForm.get('comment')?.touched)
+              ) {
+              <span class="text-[#EF4444] mt-2 text-[13px] sm:text-sm text-left flex items-center gap-1.5 border">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  class="shrink-0">
+                  <path
+                    d="M7.5 7.5L12 12M12 7.5L7.5 12M18.75 9.75C18.75 14.7206 14.7206 18.75 9.75 18.75C4.77944 18.75 0.75 14.7206 0.75 9.75C0.75 4.77944 4.77944 0.75 9.75 0.75C14.7206 0.75 18.75 4.77944 18.75 9.75Z"
+                    stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+
+                {{ displayErrorMessage('comment') }}
+              </span>
+              } @else {
+              <span></span>
+              }
+              <span class="text-xs mt-2 whitespace-nowrap"
+                [class.text-[#6B7280]]="(reviewForm.get('comment')?.value?.length ?? 0) < 900" [class.text-[#D89E12]]="
+    (reviewForm.get('comment')?.value?.length ?? 0) >= 900 &&
+    (reviewForm.get('comment')?.value?.length ?? 0) < 1000
+  " [class.text-[#EF4444]]="
+    (reviewForm.get('comment')?.value?.length ?? 0) >= 1000
+  ">
+                {{ reviewForm.get('comment')?.value?.length ?? 0 }}/1000
+              </span>
+            </div>
+          </div>
+
+          <div class="flex gap-3 items-center justify-center sm:justify-end">
+            <button type="button" (click)="toggleReviewForm()"
+              class="px-5 py-2.5 rounded-lg text-sm font-medium text-[#374151] hover:bg-[#F3F4F6] transition-colors">
+              Cancel
+            </button>
+            <button type="submit" [disabled]="reviewForm.invalid || isSubmittingReview() "
+              class="text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2">
+              @if (isSubmittingReview()) {
+              <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="32"
+                  stroke-dashoffset="12" />
+              </svg>
+              }
+              Submit Review
+            </button>
+          </div>
+        </form>
         }
+
+        @if (!reviews().length) {
+        <div class="flex flex-col items-center gap-2 py-12 text-center">
+          <span class="text-[#111827] font-medium">No reviews yet</span>
+          <span class="text-sm text-[#6B7280]">Be the first to share your thoughts on this product.</span>
+        </div>
+        } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
+          @for (review of reviews(); track review._id) {
+          <article class="border border-[#E5E7EB] rounded-2xl p-5 bg-white flex flex-col">
+            <div class="flex gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-[#171717] text-white font-semibold flex items-center justify-center shrink-0">
+                {{ initials(review.userId) }}
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-medium text-[#171717]">
+                    {{ review.userId.firstName }} {{ review.userId.lastName }}
+                  </span>
+
+                  @if (review.isVerified) {
+                  <span
+                    class="inline-flex items-center gap-1 text-xs text-[#00A751] bg-[#00A751]/10 px-2 py-1 rounded-full">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" />
+                    </svg>
+                    Verified Purchase
+                  </span>
+                  }
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 mt-1">
+                  <div class="flex gap-0.5">
+                    @for (i of starIndices; track i) {
+                    <svg width="12" height="12" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <linearGradient [attr.id]="'review-star-fill-' + review._id + '-' + i" x1="0" y1="0" x2="1"
+                          y2="0">
+                          <stop [attr.offset]="starFillPercent(i, review.rating) + '%'" stop-color="#D89E12" />
+                          <stop [attr.offset]="starFillPercent(i, review.rating) + '%'" stop-color="transparent" />
+                        </linearGradient>
+                      </defs>
+
+                      <path
+                        d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                        [attr.fill]="'url(#review-star-fill-' + review._id + '-' + i + ')'" stroke="#D89E12"
+                        stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                    }
+                  </div>
+
+                  <span class="text-xs text-[#9CA3AF]">
+                    {{ timeAgo(review.createdAt) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex-1">
+              <h4 class="light-header text-[#171717] mb-1.5">
+                {{ review.title }}
+              </h4>
+
+              <p class="text-sm text-[#4B5563] leading-relaxed">
+                {{ review.comment }}
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-5 pt-4 border-t border-[#F3F4F6]">
+              <span class="text-xs text-[#9CA3AF]">
+                Helpful?
+              </span>
+
+              <button type="button" (click)="markHelpful(review._id, 'helpful')"
+                class="flex items-center gap-1 text-sm text-[#6B7280] hover:text-[#00A751] transition-colors">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 22V11m0 11h10.5a2 2 0 002-1.7l1.4-9A2 2 0 0019 10h-5V5a2 2 0 00-2-2L9 10.5" />
+                </svg>
+                Helpful ({{ review.helpful }})
+              </button>
+
+              <button type="button" (click)="markHelpful(review._id, 'notHelpful')"
+                class="flex items-center gap-1 text-sm text-[#6B7280] hover:text-[#EF4444] transition-colors">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 2v11m0-11H6.5a2 2 0 00-2 1.7l-1.4 9A2 2 0 005 14h5v5a2 2 0 002 2l3.5-7.5" />
+                </svg>
+                Not Helpful ({{ review.notHelpful }})
+              </button>
+            </div>
+          </article>
+          }
+        </div>
+
+        @if (reviewsPagination() && reviewsPagination()!.page < reviewsPagination()!.pages) { <div
+          class="flex justify-center">
+          <button type="button" (click)="loadMoreReviews(product!._id)" [disabled]="isLoadingMoreReviews()"
+            class="px-5 py-2.5 rounded-xl border border-[#171717] text-sm font-medium text-[#171717] hover:bg-[#171717] hover:text-[#FFFFFF] transition-colors duration-200 ease-in disabled:opacity-60 disabled:cursor-not-allowed">
+            @if (isLoadingMoreReviews()) {
+            <span class="flex items-center gap-2">
+              <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" stroke-dasharray="32"
+                  stroke-dashoffset="12" />
+              </svg>
+
+              Loading reviews...
+            </span>
+            } @else {
+            Load more reviews
+            }
+          </button>
       </div>
+      }
+      }
     </div>
     }
     }
-  </main>
+</div>
+} @else {
+<div class="flex flex-col items-center justify-center py-37.5 mx-4 text-center">
+  <div class="bg-[#F7F7F7] w-30 h-30 sm:w-50 sm:h-50 flex items-center justify-center rounded-full">
+    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="#F7F7F7" stroke="#AAAAAA"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+  </div>
+  <h3 class="text-lg sm:text-[32px] text-[#171717] mt-6 mb-2 light-header">Oops, something went wrong</h3>
+  <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md mb-7">
+    {{ errorMessage ? errorMessage : 'An error occurred while fetching product details. Try again.' }}
+  </p>
+  @if (showButton) {
+  <button (click)="fetchProductDetails()" [disabled]="isTryingAgain()"
+    class="text-[15px] sm:text-[16px] px-6 py-3 mt-4 bg-[#171717] hover:opacity-85 transition-opacity duration-150 ease-in text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+    {{ isTryingAgain() ? 'Trying...' : 'Try again' }}
+  </button>
+  }
+</div>
+}
+} @else {
+<app-skeleton-loader skeletonType="product-details" />
+<app-skeleton-loader skeletonType="product-additional-details" />
+<div class="mb-37.5">
+  <div class="w-50 h-12.5 rounded-2xl mb-8.5 skeleton-shimmer mx-5 md:mx-12 2xl:mx-0"></div>
+  <app-skeleton-loader skeletonType="product" />
+</div>
+}
+
+@if (!isLoading() && product) {
+@if (isVendorProductsLoading()) {
+<div class="mt-25 md:mt-37.5 mb-28.75 pl-5 md:pl-12 2xl:pl-[calc((100vw-1400px)/2)]">
+  <app-skeleton-loader skeletonType="product" />
+</div>
+} @else if (vendorProductsDetails.length > 0) {
+<div class="mt-25 md:mt-37.5 mb-28.75">
+  <div class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 mb-4">
+    <h2 class="text-[28px] sm:text-[36px] products-font text-left">From the same vendor</h2>
+    <p class="text-base sm:text-[17px] text-left text-[#6B7280]">
+      Explore more items from this vendor and find your next favorite.
+    </p>
+  </div>
+  <div
+    class="max-w-310 mx-auto px-3 md:px-12 2xl:px-0 flex gap-3.75 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide py-2 scroll-pl-3 md:scroll-pl-12 2xl:scroll-pl-0"
+    [@staggerProducts]>
+    @for (vendorProduct of vendorProductsDetails; track vendorProduct.id) {
+    <app-product-card [product]="vendorProduct" layout="carousel" />
+    }
+  </div>
+</div>
+}
+}
+</main>
 </div>
 
 <div class="max-w-310 mx-auto">
