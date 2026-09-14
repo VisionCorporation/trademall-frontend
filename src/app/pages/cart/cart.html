@@ -97,7 +97,7 @@
             </button>
             }
 
-            <a [routerLink]="">
+            <a [routerLink]="['/products', item.productSlug]">
               <div
                 class="bg-[#E6E6E880] w-14 h-14 md:w-17.5 md:h-17.5 p-2 rounded-md shrink-0 flex items-center justify-center">
                 <img [ngSrc]="item.productImage" [alt]="item.productName" width="70" height="70"
