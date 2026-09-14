@@ -49,3 +49,11 @@ interface VoteOnReviewData {
     helpful: number;
     notHelpful: number
 }
+
+export interface UpdateReviewResponse {
+  status: string;
+  message: string;
+  data: {
+    review: Pick<Review, '_id' | 'rating' | 'title' | 'comment'> & { updatedAt: string };
+  };
+}
