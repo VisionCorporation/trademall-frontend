@@ -10,7 +10,7 @@ import {
   signal,
   PLATFORM_ID,
 } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { ToastService } from '../../services/toast/toast.service';
@@ -34,6 +34,7 @@ export class Header implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private toastService = inject(ToastService);
   public user: any;
   public sessionLoaded = false;
@@ -63,6 +64,11 @@ export class Header implements OnInit {
   }
 
   ngOnInit() {
+    this.route.queryParamMap.subscribe((params) => {
+      const q = params.get('q');
+      if (q) this.searchQuery = q;
+    });
+
     this.loginService.user$.subscribe((user) => {
       this.user = user;
       this.cdr.detectChanges();
@@ -164,7 +170,7 @@ export class Header implements OnInit {
       this.toastService.error("Search query must be at least 2 characters")
       return
     }
-    
+
     this.router.navigate(['/shop'], {
       queryParams: { q: searchTerm }
     });
