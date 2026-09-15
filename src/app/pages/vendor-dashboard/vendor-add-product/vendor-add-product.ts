@@ -9,9 +9,10 @@ import { ToastService } from '../../../services/toast/toast.service';
 import { Router } from '@angular/router';
 import { ADD_PRODUCT_STEPS } from '../../../data/constants/vendor-dashbaord.constant';
 import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashboard';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { DropdownOverlay } from '../../../shared/directives/dropdown-overlay/dropdown-overlay';
-import { AttributeRow, VariantRow } from '../../../interfaces/vendor-dashboard.interface';
+import { AttributeRow, ProductVariant, ProductVariation } from '../../../interfaces/vendor-dashboard.interface';
 
 @Component({
   selector: 'app-vendor-add-product',
@@ -22,7 +23,10 @@ import { AttributeRow, VariantRow } from '../../../interfaces/vendor-dashboard.i
 })
 export class VendorAddProduct implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  public variantRows: VariantRow[] = [{ name: '', value: '', priceAdjustment: null }];
+  public hasVariants = false;
+  public variationRows: ProductVariation[] = [];
+  public variantRows: ProductVariant[] = [];
+  public newOptionInputs: Record<number, string> = {};
   public attributeRows: AttributeRow[] = [{ key: '', value: '' }];
   public categories = signal<RootCategory[]>([]);
   public subCategories = signal<Category[]>([]);
@@ -35,7 +39,7 @@ export class VendorAddProduct implements OnInit {
   public isSubCategoryLoading = signal(false)
   public hasCategoryFailed = signal(false);
   public hasSubCategoryFailed = signal(false);
-  public step = signal<FormStep>('general');
+  public step = signal<FormStep>('advanced');
   public addProductSteps = ADD_PRODUCT_STEPS
   public createdProductId = signal<string | null>(null);
   public isSubmittingDetails = signal(false);
@@ -269,7 +273,10 @@ export class VendorAddProduct implements OnInit {
 
   public uploadImages() {
     const productId = this.createdProductId();
-    if (!productId || this.selectedFiles.length === 0) return;
+    if (!productId || this.selectedFiles.length === 0) {
+      this.toastService.error("Something went wrong. We couldn't find the product ID.");
+      return
+    }
 
     this.isUploadingImages.set(true);
 
@@ -290,17 +297,124 @@ export class VendorAddProduct implements OnInit {
     });
   }
 
+  private saveVariants(productId: string): Observable<any> {
+    if (this.variantRows.length === 0) return of(null);
+    return this.vendorDashbaordService.submitProductVariants(productId, this.serializeVariants());
+  }
+
+  private saveVariantsIfNeeded(productId: string): Observable<any> {
+    if (!this.hasVariants || this.variationRows.length === 0) return of(null);
+    return this.vendorDashbaordService.submitProductVariations(productId, this.serializeVariations()).pipe(
+      switchMap(() => this.saveVariants(productId))
+    );
+  }
+
   public finishSetup() {
-    this.router.navigate(['/vendor/products']);
-    this.toastService.success('Product setup completed successfully');
+    const productId = this.createdProductId();
+    if (!productId) {
+      this.toastService.error("Something went wrong. We couldn't find the product ID.");
+      return;
+    }
+
+    this.isFinishingSetup.set(true);
+
+    const advancedDetails$: Observable<any> = this.hasAdvancedDetails()
+      ? this.vendorDashbaordService.submitProductAdvancedDetails(productId, this.serializeAdvancedDetails())
+      : of(null);
+
+    advancedDetails$.pipe(
+      switchMap(() => this.saveVariantsIfNeeded(productId))
+    ).subscribe({
+      next: (res) => {
+        this.isFinishingSetup.set(false);
+        console.log(res)
+        this.router.navigate(['/vendor/products']);
+        this.toastService.success('Product setup completed successfully');
+      },
+      error: (err) => {
+        this.isFinishingSetup.set(false);
+        console.log(err)
+        this.toastService.error(err?.error?.message ?? 'Failed to save product details. Please try again.');
+      }
+    });
   }
 
-  public addVariantRow(): void {
-    this.variantRows.push({ name: '', value: '', priceAdjustment: null });
+  public addVariationRow() {
+    this.variationRows.push({
+      name: '', type: 'select', options: [], required: true, displayOrder: this.variationRows.length
+    });
   }
 
-  public removeVariantRow(index: number): void {
+  public removeVariationRow(index: number) {
+    const removedName = this.variationRows[index]?.name;
+    this.variationRows.splice(index, 1);
+    this.variationRows.forEach((v, i) => (v.displayOrder = i));
+    this.variantRows.forEach(variant => {
+      delete variant.variationValues[removedName];
+    });
+  }
+
+  public addVariationOption(variationIndex: number) {
+    const value = this.newOptionInputs[variationIndex]?.trim();
+    if (!value) return;
+    const variation = this.variationRows[variationIndex];
+    if (!variation.options.includes(value)) {
+      variation.options.push(value);
+    }
+    this.newOptionInputs[variationIndex] = '';
+  }
+
+  public removeVariationOption(variationIndex: number, option: string): void {
+    const variation = this.variationRows[variationIndex];
+    if (!variation) {
+      return;
+    }
+    variation.options = variation.options.filter(o => o !== option);
+  }
+
+  public canAddVariant(): boolean {
+    return this.variationRows.length > 0 &&
+      this.variationRows.every(v => v.name && v.options.length > 0);
+  }
+
+  public addVariantRow() {
+    if (!this.canAddVariant()) return;
+    const variationValues: Record<string, string> = {};
+    this.variationRows.forEach(v => (variationValues[v.name] = v.options[0]));
+    this.variantRows.push({
+      variationValues, sku: '', price: null, stockQuantity: null,
+      lowStockThreshold: null, isActive: true, weight: null, image: null
+    });
+  }
+
+  public setVariantValue(variantIndex: number, variationName: string, value: string) {
+    this.variantRows[variantIndex].variationValues[variationName] = value;
+  }
+
+  public removeVariantRow(index: number) {
     this.variantRows.splice(index, 1);
+  }
+
+  private serializeVariations() {
+    return this.variationRows.map(({ name, type, options, required, displayOrder }) => ({
+      name, type, options, required, displayOrder
+    }));
+  }
+
+  private serializeVariants() {
+    return this.variantRows.map(v => {
+      const payload: any = {
+        variationValues: v.variationValues,
+        sku: v.sku,
+        price: v.price ?? 0,
+        stockQuantity: v.stockQuantity ?? 0,
+        lowStockThreshold: v.lowStockThreshold ?? 0,
+        isActive: v.isActive,
+        weight: v.weight ?? 0
+      };
+      if (v.image?.url) payload.image = v.image;
+      return payload;
+    });
   }
 
   public addAttributeRow(): void {
@@ -309,5 +423,43 @@ export class VendorAddProduct implements OnInit {
 
   public removeAttributeRow(index: number): void {
     this.attributeRows.splice(index, 1);
+  }
+
+  private hasAdvancedDetails(): boolean {
+    const f = this.productAdvancedDetailsForm;
+    const hasFilledAttribute = this.attributeRows.some(a => a.key.trim() && a.value.trim());
+    return !!(
+      f.brand?.trim() ||
+      f.salePrice != null ||
+      f.weight != null ||
+      f.stockQuantity != null ||
+      f.lowStockThreshold != null ||
+      f.isPreOrder ||
+      hasFilledAttribute
+    );
+  }
+
+  private serializeAdvancedDetails() {
+    const f = this.productAdvancedDetailsForm;
+    const payload: any = {};
+
+    if (f.brand?.trim()) payload.brand = f.brand.trim();
+    if (f.salePrice != null) payload.salePrice = f.salePrice;
+    if (f.weight != null) payload.weight = f.weight;
+    if (f.stockQuantity != null) payload.stockQuantity = f.stockQuantity;
+    if (f.lowStockThreshold != null) payload.lowStockThreshold = f.lowStockThreshold;
+    if (f.isPreOrder) {
+      payload.isPreOrder = true;
+      payload.preOrderDays = f.preOrderDays;
+      payload.minPreOrderQuantity = f.minPreOrderQuantity;
+      payload.preOrderShippingFee = f.preOrderShippingFee;
+    }
+
+    const attributes = this.attributeRows
+      .filter(a => a.key.trim() && a.value.trim())
+      .reduce((acc, a) => ({ ...acc, [a.key.trim()]: a.value.trim() }), {});
+    if (Object.keys(attributes).length > 0) payload.attributes = attributes;
+
+    return payload;
   }
 }

@@ -382,12 +382,11 @@
 
                 <div class="mb-6 sm:mb-7">
                     <label class="flex items-start gap-3 cursor-pointer select-none">
-                        <input type="checkbox" class="sr-only" name="hasVariants"
-                            [(ngModel)]="productAdvancedDetailsForm.hasVariants" />
+                        <input type="checkbox" class="sr-only" name="hasVariants" [(ngModel)]="hasVariants" />
                         <span
                             class="mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors duration-200"
-                            [class]="productAdvancedDetailsForm.hasVariants ? 'bg-[#00a751] border-[#00a751]' : 'border-[#17171733]'">
-                            @if(productAdvancedDetailsForm.hasVariants){
+                            [class]="hasVariants ? 'bg-[#00a751] border-[#00a751]' : 'border-[#17171733]'">
+                            @if(hasVariants){
                             <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
                                 <path d="M4 10L8 14L16 6" stroke="white" stroke-width="2.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
@@ -400,65 +399,205 @@
                                     class="text-[#9CA3AF] text-[13px] font-normal">(optional)</span>
                             </span>
                             <span class="block text-[13px] sm:text-[14px] text-[#6B7280] mt-0.5">
-                                e.g. different sizes or colors, each with its own price adjustment.
+                                e.g. different sizes or colors, each with its own price and stock.
                             </span>
                         </span>
                     </label>
 
-                    @if(productAdvancedDetailsForm.hasVariants){
-                    <div class="mt-4 flex flex-col gap-3">
-                        @for(variant of variantRows; track $index) {
-                        <div class="bg-white rounded-2xl border border-[#17171708] p-4 sm:p-5">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-3.75">
-                                <div>
-                                    <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Variant
-                                        Name</label>
-                                    <input type="text" placeholder="e.g. Size" [(ngModel)]="variant.name"
-                                        [name]="'variant-name-' + $index"
-                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                    @if(hasVariants){
+                    <div class="mt-4 flex flex-col gap-6">
+                        <div>
+                            <span class="block mb-1 text-[14px] sm:text-[15px] text-[#171717] font-medium">Variation
+                                Types</span>
+                            <p class="text-[13px] sm:text-[14px] text-[#6B7280] mb-3">
+                                Define the attributes this product varies by, e.g. Size, Color.
+                            </p>
+
+                            <div class="flex flex-col gap-3">
+                                @for(variation of variationRows; track $index; let variationIndex = $index) {
+                                <div class="bg-white rounded-2xl border border-[#17171708] p-4 sm:p-5">
+                                    <div class="flex items-start gap-3 mb-3">
+                                        <div class="flex-1">
+                                            <label
+                                                class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Variation
+                                                Name</label>
+                                            <input type="text" placeholder="e.g. Size" [(ngModel)]="variation.name"
+                                                [name]="'variation-name-' + $index"
+                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        </div>
+                                        <button type="button" (click)="removeVariationRow($index)"
+                                            class="mt-6.5 shrink-0 w-11 h-11 flex items-center justify-center rounded-xl border border-[#17171733] text-[#D92D20] hover:bg-[#FEF2F2] transition-colors duration-150 cursor-pointer">
+                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                                <path
+                                                    d="M4 6H16M8 9V14M12 9V14M5.5 6L6 16.5C6 17.3284 6.67157 18 7.5 18H12.5C13.3284 18 14 17.3284 14 16.5L14.5 6M8 6V4C8 3.44772 8.44772 3 9 3H11C11.5523 3 12 3.44772 12 4V6"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Options</label>
+                                    <div class="flex flex-wrap gap-2 mb-3">
+                                        @for(option of variation.options; track option) {
+                                        <span
+                                            class="inline-flex items-center gap-1.5 bg-[#F3F4F6] text-[#171717] text-[13px] sm:text-[14px] rounded-lg pl-3 pr-2 py-1.5">
+                                            {{ option }}
+                                            <button type="button"
+                                                (click)="removeVariationOption(variationIndex, option)"
+                                                class="text-[#9CA3AF] hover:text-[#D92D20] transition-colors duration-150 cursor-pointer leading-none">
+                                                &times;
+                                            </button>
+                                        </span>
+                                        }
+                                    </div>
+
+                                    <div class="flex gap-2">
+                                        <input type="text" placeholder="e.g. Large"
+                                            [(ngModel)]="newOptionInputs[$index]"
+                                            [name]="'variation-option-input-' + $index"
+                                            (keydown.enter)="$event.preventDefault(); addVariationOption($index)"
+                                            class="block flex-1 bg-[#FBFCFF] border border-gray-300 rounded-xl py-3 px-4 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        <button type="button" (click)="addVariationOption($index)"
+                                            class="shrink-0 px-4 rounded-xl border border-[#17171733] text-[14px] font-medium text-[#171717] hover:bg-[#F9FAFB] transition-colors duration-150 cursor-pointer">
+                                            Add
+                                        </button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Variant
-                                        Value</label>
-                                    <input type="text" placeholder="e.g. Large" [(ngModel)]="variant.value"
-                                        [name]="'variant-value-' + $index"
-                                        class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
-                                </div>
-                                <div class="flex items-end gap-2">
-                                    <div class="flex-1">
-                                        <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Price
-                                            Adjustment</label>
-                                        <div class="relative">
-                                            <span
-                                                class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
-                                            <input type="number" placeholder="0.00" step="1" inputmode="decimal"
+                                }
+
+                                <button type="button" (click)="addVariationRow()"
+                                    class="flex items-center gap-2 text-[14px] sm:text-[15px] font-medium text-[#00a751] hover:opacity-75 transition-opacity duration-150 cursor-pointer self-start px-1 py-2">
+                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                        <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="currentColor"
+                                            stroke-width="1.5" stroke-linecap="round" />
+                                    </svg>
+                                    Add variation type
+                                </button>
+                            </div>
+                        </div>
+
+                        @if(variationRows.length > 0) {
+                        <div>
+                            <span
+                                class="block mb-1 text-[14px] sm:text-[15px] text-[#171717] font-medium">Variants</span>
+                            <p class="text-[13px] sm:text-[14px] text-[#6B7280] mb-3">
+                                Add the specific combinations you actually stock, each with its own price and inventory.
+                            </p>
+
+                            <div class="flex flex-col gap-3">
+                                @for(variant of variantRows; track $index; let variantIndex = $index) {
+                                <div class="bg-white rounded-2xl border border-[#17171708] p-4 sm:p-5">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-3.75 mb-4">
+                                        @for(variation of variationRows; track variation.name) {
+                                        <div>
+                                            <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">{{
+                                                variation.name }}</label>
+                                            <select [ngModel]="variant.variationValues[variation.name]"
+                                                (ngModelChange)="setVariantValue(variantIndex,variation.name,$event)"
+                                                [name]="'variant-' + variantIndex + '-' + variation.name"
+                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150">
+                                                @for(option of variation.options; track option) {
+                                                <option [value]="option">{{ option }}</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        }
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-3.75 mb-4">
+                                        <div>
+                                            <label
+                                                class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">SKU</label>
+                                            <input type="text" placeholder="e.g. TSHIRT-M-RED" [(ngModel)]="variant.sku"
+                                                [name]="'variant-sku-' + $index"
+                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        </div>
+
+                                        <div>
+                                            <label
+                                                class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Price</label>
+                                            <div class="relative">
+                                                <span
+                                                    class="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-[15px] sm:text-[16px] pointer-events-none">₵</span>
+                                                <input type="number" placeholder="0.00" min="0" step="1"
+                                                    inputmode="decimal" (keydown)="preventInvalidNumberInput($event)"
+                                                    [(ngModel)]="variant.price" [name]="'variant-price-' + $index"
+                                                    class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Stock
+                                                Quantity</label>
+                                            <input type="number" placeholder="0" min="0" step="1" inputmode="numeric"
                                                 (keydown)="preventInvalidNumberInput($event)"
-                                                [(ngModel)]="variant.priceAdjustment" [name]="'variant-price-' + $index"
-                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 pl-9 sm:pl-10 pr-4 sm:pr-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                                [(ngModel)]="variant.stockQuantity" [name]="'variant-stock-' + $index"
+                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        </div>
+
+                                        <div>
+                                            <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Low
+                                                Stock Threshold</label>
+                                            <input type="number" placeholder="0" min="0" step="1" inputmode="numeric"
+                                                (keydown)="preventInvalidNumberInput($event)"
+                                                [(ngModel)]="variant.lowStockThreshold"
+                                                [name]="'variant-low-stock-' + $index"
+                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        </div>
+
+                                        <div>
+                                            <label class="block mb-2 text-[13px] sm:text-[14px] text-[#6B7280]">Weight
+                                                (kg)</label>
+                                            <input type="number" placeholder="0.0" min="0" step="0.1"
+                                                inputmode="decimal" (keydown)="preventInvalidNumberInput($event)"
+                                                [(ngModel)]="variant.weight" [name]="'variant-weight-' + $index"
+                                                class="block w-full bg-[#FBFCFF] border border-gray-300 rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
+                                        </div>
+
+                                        <div class="flex items-end">
+                                            <label class="flex items-center gap-2.5 cursor-pointer select-none py-3.5">
+                                                <input type="checkbox" class="sr-only"
+                                                    [name]="'variant-active-' + $index"
+                                                    [(ngModel)]="variant.isActive" />
+                                                <span
+                                                    class="w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors duration-200"
+                                                    [class]="variant.isActive ? 'bg-[#00a751] border-[#00a751]' : 'border-[#17171733]'">
+                                                    @if(variant.isActive){
+                                                    <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
+                                                        <path d="M4 10L8 14L16 6" stroke="white" stroke-width="2.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    }
+                                                </span>
+                                                <span class="text-[14px] sm:text-[15px] text-[#171717]">Active</span>
+                                            </label>
                                         </div>
                                     </div>
+
                                     <button type="button" (click)="removeVariantRow($index)"
-                                        class="mb-0.5 shrink-0 w-11 h-11 flex items-center justify-center rounded-xl border border-[#17171733] text-[#D92D20] hover:bg-[#FEF2F2] transition-colors duration-150 cursor-pointer">
-                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                        class="flex items-center gap-2 text-[13px] sm:text-[14px] font-medium text-[#D92D20] hover:opacity-75 transition-opacity duration-150 cursor-pointer">
+                                        <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
                                             <path
                                                 d="M4 6H16M8 9V14M12 9V14M5.5 6L6 16.5C6 17.3284 6.67157 18 7.5 18H12.5C13.3284 18 14 17.3284 14 16.5L14.5 6M8 6V4C8 3.44772 8.44772 3 9 3H11C11.5523 3 12 3.44772 12 4V6"
                                                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                                                 stroke-linejoin="round" />
                                         </svg>
+                                        Remove variant
                                     </button>
                                 </div>
+                                }
+
+                                <button type="button" (click)="addVariantRow()" [disabled]="!canAddVariant()"
+                                    class="flex items-center gap-2 text-[14px] sm:text-[15px] font-medium text-[#00a751] hover:opacity-75 transition-opacity duration-150 cursor-pointer self-start px-1 py-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                        <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="currentColor"
+                                            stroke-width="1.5" stroke-linecap="round" />
+                                    </svg>
+                                    Add variant
+                                </button>
                             </div>
                         </div>
                         }
-
-                        <button type="button" (click)="addVariantRow()"
-                            class="flex items-center gap-2 text-[14px] sm:text-[15px] font-medium text-[#00a751] hover:opacity-75 transition-opacity duration-150 cursor-pointer self-start px-1 py-2">
-                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                                <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="currentColor" stroke-width="1.5"
-                                    stroke-linecap="round" />
-                            </svg>
-                            Add another variant
-                        </button>
                     </div>
                     }
                 </div>
@@ -537,9 +676,11 @@
 
         @if(step()==='advanced'){
         <div class="shrink-0 py-4 sm:py-5 flex justify-end">
-            <button (click)="finishSetup()"
-                class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in cursor-pointer">
-                Finish Setup
+            <button (click)="finishSetup()" [disabled]="isFinishingSetup()"
+                class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                @if(isFinishingSetup())
+                { Finishing... }
+                @else { Finish Setup }
             </button>
         </div>
         }
