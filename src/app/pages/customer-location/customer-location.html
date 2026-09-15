@@ -3,25 +3,24 @@
     <div class="px-3 md:px-12 2xl:px-0 pt-12 md:pt-24">
 
         <div
-            class="my-10 sm:my-16.75 flex items-center gap-1.5 sm:gap-3 text-[#17171780] text-sm sm:text-[17px] flex-wrap">
+            class="my-10 sm:my-16.75 flex items-center gap-1.5 sm:gap-2.5 text-[#17171766] text-sm sm:text-[16px] flex-wrap">
             @if(view() === 'manage' || view() === 'form') {
-            <a (click)="goToSummary()"
-                class="cursor-pointer hover:text-black transition-colors duration-300 ease-in-out"
-                [class.text-black]="view() === 'summary'">
+            <a (click)="goToSummary()" class="cursor-pointer hover:text-[#171717] transition-colors duration-200"
+                [class.text-[#171717]]="view() === 'summary'">
                 Default Address
             </a>
             }
             @if (view() === 'manage' || view() === 'form') {
-            <span class="shrink-0">›</span>
+            <span class="shrink-0 text-[#17171740]">›</span>
             <a (click)="goToManage()"
-                [class]="'hover:text-black transition-colors duration-300 ease-in-out' + (view() === 'form' ? ' cursor-pointer' : '')"
-                [class.text-black]="view() === 'manage'">
+                [class]="'hover:text-[#171717] transition-colors duration-200' + (view() === 'form' ? ' cursor-pointer' : '')"
+                [class.text-[#171717]]="view() === 'manage'">
                 Manage Addresses
             </a>
             }
             @if (view() === 'form') {
-            <span class="shrink-0">›</span>
-            <a class="text-black">
+            <span class="shrink-0 text-[#17171740]">›</span>
+            <a class="text-[#171717]">
                 {{ editingId() ? 'Edit Address' : 'Add Address' }}
             </a>
             }
@@ -34,10 +33,10 @@
         }
         @else if (!defaultAddress() && view() === 'summary') {
         <div class="flex flex-col items-center justify-center text-center pb-16 md:pb-24 rounded-2xl">
-            <div class="w-44 h-44 rounded-full flex items-center justify-center">
+            <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-[#17171708] flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-map-pin-off-icon lucide-map-pin-off w-24 h-24 text-[#17171780]">
+                    class="w-14 h-14 sm:w-16 sm:h-16 text-[#17171766]">
                     <path d="M12.75 7.09a3 3 0 0 1 2.16 2.16" />
                     <path
                         d="M17.072 17.072c-1.634 2.17-3.527 3.912-4.471 4.727a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 1.432-4.568" />
@@ -47,13 +46,13 @@
                 </svg>
             </div>
 
-            <h2 class="text-[36px] sm:text-[52px]">No delivery address set</h2>
-            <p class="text-[#17171780] sm:text-lg mt-1.5">
+            <h2 class="text-[32px] sm:text-[46px] leading-tight mt-6 text-[#171717]">No delivery address set</h2>
+            <p class="text-[#17171780] text-[15px] sm:text-lg mt-2 max-w-90">
                 Add a delivery address so we know where to send your orders.
             </p>
 
             <button (click)="startAddAddress()"
-                class="mt-6 inline-flex items-center gap-2 text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
+                class="mt-7 inline-flex items-center gap-2 text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-xl cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -64,35 +63,44 @@
 
         } @else if (view() === 'summary') {
         <div class="pb-16 md:pb-24">
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="text-3xl sm:text-[45px] leading-tight">Current Address</h1>
+            <div class="flex items-center justify-between mb-6 gap-4">
+                <h1 class="text-3xl sm:text-[44px] leading-tight text-[#171717]">Current Address</h1>
                 <button (click)="goToManage()"
-                    class="text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
+                    class="shrink-0 text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in">
                     Manage Addresses
                 </button>
             </div>
 
-            <div class="border border-[#17171733] rounded-2xl p-5 sm:p-8 flex items-start justify-between gap-4">
-                <div>
-                    <div class="flex items-center gap-2 mb-2">
-                        <span
-                            class="text-[13px] sm:text-sm font-medium bg-[#17171710] text-[#171717] px-2.5 py-1 rounded-full">
-                            Default
-                        </span>
-                    </div>
+            <div class="bg-white border border-gray-300 rounded-2xl p-5 sm:p-8 flex items-start gap-4 sm:gap-5">
+                <div class="hidden sm:flex shrink-0 w-12 h-12 rounded-xl bg-[#00a75112] items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="#00a751" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                </div>
 
-                    <h4 class="text-lg sm:text-2xl">{{ defaultAddress()?.addressLine }}</h4>
+                <div class="flex-1">
+                    <span
+                        class="text-[12px] sm:text-[13px] font-medium bg-[#00a75114] text-[#00a751] px-2.5 py-1 rounded-full inline-block mb-2.5">
+                        Default
+                    </span>
+
+                    <h4 class="text-lg sm:text-2xl text-[#171717] products-font">{{ defaultAddress()?.addressLine }}
+                    </h4>
                     <p class="text-[#17171780] sm:text-lg mt-1">
                         {{ defaultAddress()?.city }}, {{ defaultAddress()?.region }}
                     </p>
-                    <p class="text-[#17171780] sm:text-sm italic mt-1">
-                        {{defaultAddress()?.landmark}}
+                    @if (defaultAddress()?.landmark) {
+                    <p class="text-[#17171766] text-sm italic mt-1.5">
+                        {{ defaultAddress()?.landmark }}
                     </p>
+                    }
                 </div>
             </div>
 
             <button (click)="startAddAddress()"
-                class="mt-4 inline-flex items-center gap-2 text-[15px] sm:text-[16px] text-[#17171780] hover:text-black transition-colors">
+                class="mt-5 inline-flex items-center gap-2 text-[14px] sm:text-[15px] font-medium text-[#00a751] hover:opacity-75 transition-opacity duration-150 cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -103,25 +111,22 @@
 
         } @else if (view() === 'manage') {
         @if(areAddressesLoading()){
-        @for(address of [1,2]; track address) {
-        <div class="border border-[#17171733] rounded-2xl p-5 sm:p-8 mb-6 flex items-start justify-between gap-4">
-            <div class="w-full">
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="h-5 sm:h-6 w-16 sm:w-18 rounded-full skeleton-shimmer"></div>
-                </div>
-
+        <div class="flex flex-col gap-3">
+            @for(address of [1,2]; track address) {
+            <div class="border border-gray-300 rounded-2xl p-5 sm:p-6">
+                <div class="h-5 sm:h-6 w-16 sm:w-18 rounded-full skeleton-shimmer mb-3"></div>
                 <div class="h-6 sm:h-8 w-3/4 sm:w-1/2 rounded-md skeleton-shimmer mb-2.5"></div>
                 <div class="h-5 sm:h-6 w-2/3 sm:w-1/3 rounded-md skeleton-shimmer mb-2.5"></div>
                 <div class="h-4 w-1/2 sm:w-1/4 rounded-md skeleton-shimmer"></div>
             </div>
+            }
         </div>
-        }
         }@else {
         <div class="pb-16 md:pb-24">
-            <div class="flex items-center justify-between mb-6">
-                <h1 class="text-3xl sm:text-[45px] leading-tight">Manage Addresses</h1>
+            <div class="flex items-center justify-between mb-6 gap-4">
+                <h1 class="text-3xl sm:text-[44px] leading-tight text-[#171717]">Manage Addresses</h1>
                 <button (click)="startAddAddress()"
-                    class="inline-flex items-center gap-2 text-[15px] sm:text-[16px] px-5 py-3 bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in text-white rounded-lg">
+                    class="shrink-0 inline-flex items-center gap-2 text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -131,60 +136,87 @@
             </div>
 
             @if (addresses().length === 0) {
-            <p class="text-[#17171780] sm:text-lg py-10 text-center">
-                You don't have any saved addresses yet.
-            </p>
+            <div class="text-center py-16">
+                <p class="text-[#17171780] text-[15px] sm:text-lg">
+                    You don't have any saved addresses yet.
+                </p>
+            </div>
             } @else {
             <div class="flex flex-col gap-3">
                 @for (address of addresses(); track address._id) {
-                <div class="border rounded-2xl p-5 sm:p-6 flex items-start justify-between gap-4 transition-colors"
-                    [class.border-[#171717]]="address.isDefault" [class.border-[#17171733]]="!address.isDefault">
-                    <div>
-                        @if (address.isDefault) {
-                        <span
-                            class="text-[13px] sm:text-[15px] font-medium bg-[#17171710] text-[#171717] px-2.5 py-1 rounded-full inline-block mb-2">
-                            Default
-                        </span>
-                        }
-                        <h4 class="text-2xl">{{ address.addressLine }}</h4>
-                        <p class="text-[#17171780] text-lg mt-1">{{ address.city }}, {{ address.region }}</p>
-                        <p class="text-[#17171780] sm:text-sm italic mt-1">
-                            {{address.landmark}}
-                        </p>
+                <div class="bg-white rounded-2xl p-5 sm:p-6 border transition-colors duration-150"
+                    [class]="address.isDefault ? 'border-[#00a751]' : 'border-gray-300'">
+
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div>
+                            @if (address.isDefault) {
+                            <span
+                                class="text-[12px] sm:text-[13px] font-medium bg-[#00a75114] text-[#00a751] px-2.5 py-1 rounded-full inline-block mb-2.5">
+                                Default
+                            </span>
+                            }
+                            <h4 class="text-xl sm:text-2xl text-[#171717] products-font">{{ address.addressLine }}</h4>
+                            <p class="text-[#17171780] text-[15px] sm:text-lg mt-1">{{ address.city }}, {{
+                                address.region }}</p>
+                            @if (address.landmark) {
+                            <p class="text-[#17171766] text-sm italic mt-1.5">
+                                {{ address.landmark }}
+                            </p>
+                            }
+                        </div>
                     </div>
 
-                    <div class="flex flex-col items-end gap-2 shrink-0">
+                    <div class="flex items-center gap-2 pt-4 border-t border-[#17171708]">
                         @if (!address.isDefault) {
                         @if(settingDefaultAddressId() === address._id){
-                        <svg class="shrink-0 animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"
-                                stroke-dasharray="32" stroke-dashoffset="12" />
-                        </svg>
+                        <span class="inline-flex items-center gap-2 text-sm px-3 py-1.5 text-[#17171766]">
+                            <svg class="shrink-0 animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"
+                                    stroke-dasharray="32" stroke-dashoffset="12" />
+                            </svg>
+                            Setting...
+                        </span>
                         }@else {
                         <button (click)="setAsDefault(address._id)"
-                            class="text-sm sm:text-[16px] text-[#17171780] hover:text-black transition-colors underline underline-offset-4">
+                            class="text-[13px] sm:text-sm font-medium text-[#171717] border border-[#17171733] hover:bg-[#17171708] transition-colors duration-150 px-3 py-1.5 rounded-xl cursor-pointer">
                             Set as default
                         </button>
                         }
                         }
+
                         <button (click)="startEditAddress(address)"
-                            class="text-sm sm:text-[16px] text-blue-500 hover:text-blue-700 transition-colors underline underline-offset-4">
+                            class="inline-flex items-center gap-1.5 text-[13px] sm:text-sm font-medium text-[#17171799] hover:text-[#171717] transition-colors duration-150 px-3 py-1.5 rounded-xl hover:bg-[#17171708] cursor-pointer">
+                            <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                                <path
+                                    d="M11.5 3.5L16.5 8.5M2.5 17.5L3.35 14.15C3.44 13.8 3.49 13.62 3.57 13.46C3.64 13.31 3.73 13.18 3.84 13.06C3.96 12.92 4.11 12.81 4.4 12.58L13.5 3.5C14.33 2.67 15.67 2.67 16.5 3.5C17.33 4.33 17.33 5.67 16.5 6.5L7.42 15.58C7.19 15.87 7.08 16.02 6.94 16.14C6.82 16.25 6.69 16.34 6.54 16.41C6.38 16.49 6.2 16.54 5.85 16.63L2.5 17.5Z"
+                                    stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
                             Edit
                         </button>
+
                         @if (deletingAddressId() === address._id) {
-                        <svg class="shrink-0 animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"
-                                stroke-dasharray="32" stroke-dashoffset="12" />
-                        </svg>
+                        <span class="inline-flex items-center gap-2 text-sm px-3 py-1.5 text-[#D92D20]">
+                            <svg class="shrink-0 animate-spin" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"
+                                    stroke-dasharray="32" stroke-dashoffset="12" />
+                            </svg>
+                            Removing...
+                        </span>
                         }@else {
                         <button (click)="deleteAddress(address._id)"
-                            class="text-sm sm:text-[16px] text-red-500 hover:text-red-700 transition-colors">
+                            class="inline-flex items-center gap-1.5 text-[13px] sm:text-sm font-medium text-[#D92D20] hover:bg-[#FEF2F2] transition-colors duration-150 px-3 py-1.5 rounded-xl cursor-pointer">
+                            <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                                <path
+                                    d="M4 6H16M8 9V14M12 9V14M5.5 6L6 16.5C6 17.3284 6.67157 18 7.5 18H12.5C13.3284 18 14 17.3284 14 16.5L14.5 6M8 6V4C8 3.44772 8.44772 3 9 3H11C11.5523 3 12 3.44772 12 4V6"
+                                    stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
                             Remove
                         </button>
                         }
-
                     </div>
                 </div>
                 }
@@ -195,17 +227,17 @@
 
         } @else if (view() === 'form') {
         <div class="pb-16 md:pb-24 max-w-160">
-            <h1 class="text-3xl sm:text-[45px] mb-6 leading-tight">
+            <h1 class="text-3xl sm:text-[44px] mb-7 leading-tight text-[#171717]">
                 {{ editingId() ? 'Edit Address' : 'Add a new Delivery Address' }}
             </h1>
 
-            <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="flex flex-col gap-4">
+            <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="flex flex-col gap-5">
                 <div class="flex flex-col">
-                    <label for="name" class="mb-1.25 text-[15px] sm:text-[16px]">Full Name <span
-                            class="text-red-500">*</span></label>
+                    <label for="name" class="mb-2 text-[15px] sm:text-[16px] text-[#171717]">Full Name <span
+                            class="text-[#D92D20]">*</span></label>
                     <input id="name" formControlName="name" placeholder="E.g. Kwesi Amissah"
-                        [class]="hasError('name') ? 'border-red-500' : 'border-[#17171733]'"
-                        class="border rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
+                        [class]="hasError('name') ? 'border-[#D92D20]' : 'border-gray-300'"
+                        class="bg-[#FBFCFF] border rounded-xl px-4 sm:px-5 py-3.5 text-[16px] placeholder:text-[#9CA3AF] outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                     <app-input-error-message [control]="addressForm.controls.name" [messages]="{
                 required: 'Name is required',
                 minlength: 'Name must be at least 5 characters long'
@@ -213,12 +245,12 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label for="phone" class="mb-1.25 text-[15px] sm:text-[16px]">Phone Number <span
-                            class="text-red-500">*</span></label>
+                    <label for="phone" class="mb-2 text-[15px] sm:text-[16px] text-[#171717]">Phone Number <span
+                            class="text-[#D92D20]">*</span></label>
                     <input id="phone" formControlName="phone" type="tel" placeholder="E.g. 024 123 4567"
-                        [class]="hasError('phone') ? 'border-red-500' : 'border-[#17171733]'" autocomplete="off"
+                        [class]="hasError('phone') ? 'border-[#D92D20]' : 'border-gray-300'" autocomplete="off"
                         (input)="onPhoneInput($event)" (keydown)="onPhoneKeydown($event)"
-                        class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
+                        class="bg-[#FBFCFF] border rounded-xl px-4 sm:px-5 py-3.5 text-[16px] placeholder:text-[#9CA3AF] outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                     <app-input-error-message [control]="addressForm.controls.phone" [messages]="{
                 required: 'Phone number is required',
                 pattern: 'Invalid phone number (e.g., +233 552 123 456)'
@@ -226,38 +258,38 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label for="addressLine" class="mb-1.25 text-[15px] sm:text-[16px]">Address Line <span
-                            class="text-red-500">*</span></label>
+                    <label for="addressLine" class="mb-2 text-[15px] sm:text-[16px] text-[#171717]">Address Line <span
+                            class="text-[#D92D20]">*</span></label>
                     <input id="addressLine" formControlName="addressLine" placeholder="Street address"
-                        [class]="hasError('addressLine') ? 'border-red-500' : 'border-[#17171733]'"
-                        class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
+                        [class]="hasError('addressLine') ? 'border-[#D92D20]' : 'border-gray-300'"
+                        class="bg-[#FBFCFF] border rounded-xl px-4 sm:px-5 py-3.5 text-[16px] placeholder:text-[#9CA3AF] outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                     <app-input-error-message [control]="addressForm.controls.addressLine" [messages]="{
                 required: 'Address line is required',
                 minlength: 'Address line must be at least 5 characters long'
               }" />
                 </div>
 
-                <div class="grid sm:grid-cols-2 gap-4">
+                <div class="grid sm:grid-cols-2 gap-4 sm:gap-3.75">
                     <div class="flex flex-col">
-                        <label for="city" class="mb-1.25 text-[15px] sm:text-[16px] ">City <span
-                                class="text-red-500">*</span></label>
+                        <label for="city" class="mb-2 text-[15px] sm:text-[16px] text-[#171717]">City <span
+                                class="text-[#D92D20]">*</span></label>
                         <input id="city" formControlName="city" placeholder="E.g. Accra, Kumasi"
-                            [class]="hasError('city') ? 'border-red-500' : 'border-[#17171733]'"
-                            class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
+                            [class]="hasError('city') ? 'border-[#D92D20]' : 'border-gray-300'"
+                            class="bg-[#FBFCFF] border rounded-xl px-4 sm:px-5 py-3.5 text-[16px] placeholder:text-[#9CA3AF] outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                         <app-input-error-message [control]="addressForm.controls.city" [messages]="{
                 required: 'City is required',
                 minlength: 'City must be at least 3 characters long'
               }" />
                     </div>
                     <div class="flex flex-col">
-                        <label for="region" class="mb-1.25 text-[15px] sm:text-[16px]">Region <span
-                                class="text-red-500">*</span></label>
+                        <label for="region" class="mb-2 text-[15px] sm:text-[16px] text-[#171717]">Region <span
+                                class="text-[#D92D20]">*</span></label>
                         <select id="region" formControlName="region" [class]="{
-      'border-red-500': hasError('region'),
-      'border-[#17171733]': !hasError('region'),
-      'text-gray-400': !addressForm.get('region')?.value,
+      'border-[#D92D20]': hasError('region'),
+      'border-gray-300': !hasError('region'),
+      'text-[#9CA3AF]': !addressForm.get('region')?.value,
       'text-[#171717]': addressForm.get('region')?.value
-    }" class="border rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors bg-white">
+    }" class="bg-[#FBFCFF] border rounded-xl px-4 sm:px-5 py-3.5 text-[16px] outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150">
                             <option value="" disabled>Select region</option>
                             @for (region of regions; track region) {
                             <option value="{{region}}">{{region}}</option>
@@ -270,39 +302,39 @@
                 </div>
 
                 <div class="flex flex-col">
-                    <label for="landmark" class="mb-1.25 text-[15px] sm:text-[16px] ">Landmark <span
-                            class="text-red-500">*</span></label>
+                    <label for="landmark" class="mb-2 text-[15px] sm:text-[16px] text-[#171717]">Landmark <span
+                            class="text-[#D92D20]">*</span></label>
                     <input id="landmark" formControlName="landmark" placeholder="E.g. Near the park, Opposite the mall"
-                        [class]="hasError('landmark') ? 'border-red-500' : 'border-[#17171733]'"
-                        class="border border-[#17171733] rounded-lg px-4 py-2.5 text-[17px] outline-none focus:border-[#171717] transition-colors" />
+                        [class]="hasError('landmark') ? 'border-[#D92D20]' : 'border-gray-300'"
+                        class="bg-[#FBFCFF] border rounded-xl px-4 sm:px-5 py-3.5 text-[16px] placeholder:text-[#9CA3AF] outline-none focus:border-[#171717] focus:ring-1 focus:ring-[#171717] transition-colors duration-150" />
                     <app-input-error-message [control]="addressForm.controls.landmark" [messages]="{
                 required: 'Landmark is required',
                 minlength: 'Landmark must be at least 5 characters long'
               }" />
                 </div>
 
-                <label class="flex items-center gap-2 mt-1 text-[16px] w-fit custom-checkbox cursor-pointer">
+                <label class="w-fit flex items-start gap-3 mt-1 cursor-pointer select-none custom-checkbox">
                     <input type="checkbox" formControlName="isDefault" class="w-5 h-5" />
                     <span class="checkmark shrink-0">
                         <svg viewBox="0 0 24 24">
                             <path d="M5 13L10 18L19 7" />
                         </svg>
                     </span>
-                    <span>Set as default address</span>
+                    <span class="text-[15px] sm:text-[16px] text-[#171717]">Set as default address</span>
                 </label>
 
-                <div class="flex items-center gap-4 mt-4">
-                    <button type="button" (click)="cancelForm()"
-                        class="bg-[#D92D20] text-[17px] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg disabled:opacity-40">
-                        Discard
-                    </button>
-
+                <div class="flex items-center gap-3 mt-3">
                     <button type="submit" [disabled]="addressForm.invalid || isSaving()"
-                        class="text-[17px] bg-[#171717] hover:opacity-80 transition-opacity duration-150 ease-in px-3.75 py-2 text-white rounded-lg disabled:opacity-40">
+                        class="text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 cursor-pointer">
                         {{ isSaving()
                         ? (editingId() ? 'Updating...' : 'Saving...')
                         : (editingId() ? 'Update Address' : 'Save Address')
                         }}
+                    </button>
+
+                    <button type="button" (click)="cancelForm()"
+                        class="text-[15px] sm:text-[16px] font-medium text-[#17171799] hover:text-[#171717] hover:bg-[#17171708] transition-colors duration-150 px-6 py-3 rounded-xl disabled:opacity-40 cursor-pointer">
+                        Discard
                     </button>
                 </div>
             </form>

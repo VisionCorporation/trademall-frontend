@@ -150,7 +150,19 @@ export class CustomerLocation {
     this.settingDefaultAddressId.set(addressId);
     this.addressService.setAsDefaultAddress(addressId).pipe(finalize(() => this.settingDefaultAddressId.set(null))).subscribe({
       next: () => {
-        this.loadAddresses();
+        this.addresses.update(addresses =>
+          addresses.map(address => ({
+            ...address,
+            isDefault: address._id === addressId,
+          }))
+        );
+
+        const updatedDefault = this.addresses().find(
+          address => address._id === addressId
+        );
+
+        this.defaultAddress.set(updatedDefault ?? null);
+
         this.toastService.success('Default address updated successfully!');
         this.view.set('summary');
         this.scrollToTop();
@@ -171,8 +183,15 @@ export class CustomerLocation {
       )
       .subscribe({
         next: () => {
+          this.addresses.update(addresses =>
+            addresses.filter(address => address._id !== addressId)
+          );
+
+          if (this.defaultAddress()?._id === addressId) {
+            this.defaultAddress.set(null);
+          }
+
           this.toastService.success('Address deleted successfully!');
-          this.loadAddresses();
           this.scrollToTop();
         },
         error: (error) => {
