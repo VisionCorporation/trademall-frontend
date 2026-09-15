@@ -52,7 +52,8 @@
               class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200 cursor-pointer"
               [class]="selectedImageIndex === $index ? 'border-[#26C34D] shadow-sm' : 'border-[#17171733] opacity-70 hover:opacity-100'"
               (click)="selectImage($index)">
-              <img [ngSrc]="image.url" width="82" height="80" [alt]="product.name" priority class="w-full h-full object-cover" />
+              <img [ngSrc]="image.url" width="82" height="80" [alt]="product.name" priority
+                class="w-full h-full object-cover" />
             </button>
             }
           </div>

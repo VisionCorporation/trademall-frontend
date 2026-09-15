@@ -231,7 +231,13 @@ export class ProductDetail implements OnInit {
 
     get specifications() {
         if (!this.product) return [];
-        return Object.entries(this.product.attributes).map(([label, value]) => ({ label, value }));
+
+        return Object.entries(this.product.attributes ?? {}).map(
+            ([label, value]) => ({
+                label,
+                value,
+            })
+        );
     }
 
     public switchButtons(activeButton: string) {
