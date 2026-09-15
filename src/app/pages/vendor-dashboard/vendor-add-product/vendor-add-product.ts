@@ -39,7 +39,7 @@ export class VendorAddProduct implements OnInit {
   public isSubCategoryLoading = signal(false)
   public hasCategoryFailed = signal(false);
   public hasSubCategoryFailed = signal(false);
-  public step = signal<FormStep>('advanced');
+  public step = signal<FormStep>('general');
   public addProductSteps = ADD_PRODUCT_STEPS
   public createdProductId = signal<string | null>(null);
   public isSubmittingDetails = signal(false);
