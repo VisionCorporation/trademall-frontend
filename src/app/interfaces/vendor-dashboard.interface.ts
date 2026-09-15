@@ -67,10 +67,42 @@ export interface ProductsResponse {
   data: Product[];
 }
 
-export interface VariantRow {
+export interface VariationPayload {
   name: string;
-  value: string;
-  priceAdjustment: number | null;
+  type: 'select';
+  options: string[];
+  required: boolean;
+  displayOrder: number;
+}
+
+export interface VariantPayload {
+  variationValues: Record<string, string>;
+  sku: string;
+  price: number;
+  stockQuantity: number;
+  lowStockThreshold: number;
+  isActive: boolean;
+  weight: number;
+  image?: { url: string; publicId: string };
+}
+
+export interface ProductVariation {
+  name: string;
+  type: 'select';
+  options: string[];
+  required: boolean;
+  displayOrder: number;
+}
+
+export interface ProductVariant {
+  variationValues: Record<string, string>;
+  sku: string;
+  price: number | null;
+  stockQuantity: number | null;
+  lowStockThreshold: number | null;
+  isActive: boolean;
+  weight: number | null;
+  image?: { url: string; publicId: string } | null;
 }
 
 export interface AttributeRow {
