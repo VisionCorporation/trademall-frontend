@@ -65,7 +65,6 @@ export class Header implements OnInit {
   ngOnInit() {
     this.loginService.user$.subscribe((user) => {
       this.user = user;
-      // cart count is owned by CartState/Cart service; don't touch it here
       this.cdr.detectChanges();
     });
 
@@ -165,11 +164,10 @@ export class Header implements OnInit {
       this.toastService.error("Search query must be at least 2 characters")
       return
     }
+    
     this.router.navigate(['/shop'], {
       queryParams: { q: searchTerm }
     });
-
-    this.searchQuery = ''
 
     this.closeModal();
   }
