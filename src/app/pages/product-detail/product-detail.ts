@@ -173,8 +173,32 @@ export class ProductDetail implements OnInit {
         return this.product ? this.cartState.isAdding(this.product._id) : false;
     }
 
+    private buildOgImageUrl(product: ProductDetails): string {
+        const cloudName = 'di0h9wulg';
+
+        const image = product.images?.[0];
+
+        const priceValue = product.salePrice || product.price;
+        const price = encodeURIComponent(`GHS ${priceValue}`);
+
+        const ratingValue = (product.rating ?? 0).toFixed(1);
+        const reviewCount = product.reviewCount ?? 0;
+        const rating = encodeURIComponent(
+            `★ ${ratingValue} (${reviewCount})`
+        );
+
+        return `https://res.cloudinary.com/${cloudName}/image/upload
+/c_fill
+/l_text:Atkinson%20Hyperlegible@google_60_700:${price},co_white,b_rgb:171717,g_south_west,x_30,y_100
+/l_text:Arial_40:${rating},co_white,b_rgb:171717,g_south_west,x_30,y_50
+/${image.publicId}.jpg`
+            .replace(/\s+/g, '');
+    }
+
     private updateSeo(): void {
         if (!this.product) return;
+
+        const ogImage = this.buildOgImageUrl(this.product);
 
         const productName = this.product.name?.trim()
         const productDescription = this.product.description?.trim()
@@ -185,7 +209,7 @@ export class ProductDetail implements OnInit {
                 this.product.metaDescription?.trim() ||
                 `${productDescription}`,
             url: `https://trademall-frontend.vercel.app/products/${this.product.slug}`,
-            image: this.product.images?.[0]?.url ?? ''
+            image: ogImage
         });
     }
 
