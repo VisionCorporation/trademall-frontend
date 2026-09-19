@@ -174,25 +174,24 @@ export class ProductDetail implements OnInit {
     }
 
     private buildOgImageUrl(product: ProductDetails): string {
-        const cloudName = 'di0h9wulg';
-
         const image = product.images?.[0];
+        if (!image) {
+            return 'https://trademall-frontend.vercel.app/assets/og-default.jpg';
+        }
 
-        const priceValue = product.salePrice || product.price;
-        const price = encodeURIComponent(`GHS ${priceValue}`);
+        const hasSale = !!product.salePrice && product.salePrice < product.price;
 
-        const ratingValue = (product.rating ?? 0).toFixed(1);
-        const reviewCount = product.reviewCount ?? 0;
-        const rating = encodeURIComponent(
-            `★ ${ratingValue} (${reviewCount})`
-        );
+        const params = new URLSearchParams({
+            image: image.url,
+            salePrice: String(hasSale ? product.salePrice : product.price),
+            rating: (product.rating ?? 0).toFixed(1),
+            reviewCount: String(product.reviewCount ?? 0),
+        });
 
-        return `https://res.cloudinary.com/${cloudName}/image/upload
-/c_fill
-/l_text:Atkinson%20Hyperlegible@google_60_700:${price},co_white,b_rgb:171717,g_south_west,x_30,y_100
-/l_text:Arial_40:${rating},co_white,b_rgb:171717,g_south_west,x_30,y_50
-/${image.publicId}.jpg`
-            .replace(/\s+/g, '');
+        if (hasSale) params.set('originalPrice', String(product.price));
+        if (product.discount) params.set('discount', String(product.discount));
+
+        return `https://trademall-frontend.vercel.app/api/og?${params.toString()}`;
     }
 
     private updateSeo(): void {
