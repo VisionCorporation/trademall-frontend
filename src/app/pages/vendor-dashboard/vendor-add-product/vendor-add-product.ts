@@ -9,7 +9,7 @@ import { ToastService } from '../../../services/toast/toast.service';
 import { Router } from '@angular/router';
 import { ADD_PRODUCT_STEPS } from '../../../data/constants/vendor-dashbaord.constant';
 import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashboard';
-import { forkJoin, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { DropdownOverlay } from '../../../shared/directives/dropdown-overlay/dropdown-overlay';
 import { AttributeRow, ProductVariant, ProductVariation } from '../../../interfaces/vendor-dashboard.interface';
@@ -28,6 +28,7 @@ export class VendorAddProduct implements OnInit {
   public variantRows: ProductVariant[] = [];
   public newOptionInputs: Record<number, string> = {};
   public attributeRows: AttributeRow[] = [{ key: '', value: '' }];
+  private rawCategoryTree: RootCategory[] = [];
   public categories = signal<RootCategory[]>([]);
   public subCategories = signal<Category[]>([]);
   public isCategoryOpen = false
@@ -59,7 +60,6 @@ export class VendorAddProduct implements OnInit {
     description: '',
     price: null as number | null,
     category: '',
-    subcategory: ''
   };
 
   public productAdvancedDetailsForm: ProductGeneralDetailsPayload = {
@@ -67,7 +67,6 @@ export class VendorAddProduct implements OnInit {
     description: '',
     price: null as number | null,
     category: '',
-    subcategory: '',
     brand: '',
     isPreOrder: false,
     hasVariants: false,
@@ -78,38 +77,14 @@ export class VendorAddProduct implements OnInit {
   }
 
   public fetchCategories() {
-    this.isCategoryLoading.set(true)
+    this.isCategoryLoading.set(true);
     this.hasCategoryFailed.set(false);
 
-    this.categoryService.getRootCategories(1).subscribe({
-      next: (firstPage) => {
-        const { totalPages } = firstPage.pagination;
-
-        if (totalPages <= 1) {
-          this.categories.set(this.sortCategories(firstPage.data));
-          this.isCategoryLoading.set(false);
-          return;
-        }
-
-        const remainingPages$ = Array.from({ length: totalPages - 1 }, (_, i) =>
-          this.categoryService.getRootCategories(i + 2)
-        );
-
-        forkJoin(remainingPages$).subscribe({
-          next: (restPages) => {
-            const allCategories = [
-              ...firstPage.data,
-              ...restPages.flatMap((res) => res.data),
-            ];
-            this.categories.set(this.sortCategories(allCategories));
-            this.isCategoryLoading.set(false);
-          },
-          error: (err) => {
-            console.error('Failed to load remaining categories', err);
-            this.categories.set(this.sortCategories(firstPage.data));
-            this.isCategoryLoading.set(false);
-          },
-        });
+    this.categoryService.getCategoryHierarchy().subscribe({
+      next: (response) => {
+        this.rawCategoryTree = response.data;
+        this.categories.set(this.sortCategories(response.data));
+        this.isCategoryLoading.set(false);
       },
       error: (err) => {
         console.error('Failed to load categories', err);
@@ -119,39 +94,57 @@ export class VendorAddProduct implements OnInit {
     });
   }
 
-  public fetchSubCategories() {
-    if (this.selectedCategory) {
-      this.isSubCategoryLoading.set(true)
-      this.hasSubCategoryFailed.set(false);
-      this.categoryService.getSubCategories(this.selectedCategory.slug).subscribe({
-        next: (response) => {
-          this.subCategories.set(response.data)
-          this.isSubCategoryLoading.set(false);
-        },
-        error: (err) => {
-          console.error('Failed to fetch subcategories', err);
-          this.isSubCategoryLoading.set(false);
-          this.hasSubCategoryFailed.set(true);
-        },
-      });
-    }
-  }
-
   public selectCategory(category: RootCategory) {
     this.selectedCategory = category;
     this.selectedSubCategory = null;
-    this.productGeneralDetailsForm.category = category._id;
-    this.fetchSubCategories();
     this.isCategoryOpen = false;
+    this.deriveSubCategories();
   }
 
   public selectSubCategory(subCategory: Category) {
     this.selectedSubCategory = subCategory;
-    this.productGeneralDetailsForm.subcategory = subCategory._id;
+    this.productGeneralDetailsForm.category = subCategory._id;
     this.isSubCategoryOpen = false;
   }
 
-  private sortCategories(list: RootCategory[]): RootCategory[] {
+  public fetchSubCategories() {
+    this.deriveSubCategories();
+  }
+
+  private deriveSubCategories(): void {
+    if (!this.selectedCategory) return;
+
+    this.isSubCategoryLoading.set(true);
+    this.hasSubCategoryFailed.set(false);
+
+    const matchedCategory = this.rawCategoryTree.find(
+      (c) => c._id === this.selectedCategory!._id
+    );
+
+    if (!matchedCategory) {
+      this.hasSubCategoryFailed.set(true);
+      this.isSubCategoryLoading.set(false);
+      return;
+    }
+
+    const leaves = this.getLeafCategories(matchedCategory.children ?? []);
+    this.subCategories.set(this.sortCategories(leaves));
+    this.isSubCategoryLoading.set(false);
+  }
+
+  private getLeafCategories(categories: Category[]): Category[] {
+    const leaves: Category[] = [];
+    for (const category of categories) {
+      if (!category.children || category.children.length === 0) {
+        leaves.push(category);
+      } else {
+        leaves.push(...this.getLeafCategories(category.children));
+      }
+    }
+    return leaves;
+  }
+
+  private sortCategories<T extends { displayOrder: number }>(list: T[]): T[] {
     return [...list].sort((a, b) => a.displayOrder - b.displayOrder);
   }
 
@@ -161,7 +154,6 @@ export class VendorAddProduct implements OnInit {
       description: this.productGeneralDetailsForm.description,
       price: this.productGeneralDetailsForm.price,
       category: this.productGeneralDetailsForm.category,
-      subcategory: this.productGeneralDetailsForm.subcategory
     };
 
     return payload;
@@ -172,8 +164,7 @@ export class VendorAddProduct implements OnInit {
       this.productGeneralDetailsForm.name.trim() !== '' &&
       this.productGeneralDetailsForm.description.trim() !== '' &&
       this.productGeneralDetailsForm.price !== null &&
-      this.productGeneralDetailsForm.category !== '' &&
-      this.productGeneralDetailsForm.subcategory !== ''
+      this.productGeneralDetailsForm.category !== ''
     );
   }
 
@@ -197,7 +188,6 @@ export class VendorAddProduct implements OnInit {
       description: '',
       price: 0,
       category: '',
-      subcategory: ''
     };
     this.selectedCategory = null;
     this.selectedSubCategory = null;
