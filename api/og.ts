@@ -55,7 +55,7 @@ export default async function handler(req: Request) {
             h('img', {
                 src: image,
                 width: 1200,
-                height: 630,
+                height: 1200,
                 style: { objectFit: 'cover', position: 'absolute', inset: 0 },
             }),
 
@@ -85,7 +85,7 @@ export default async function handler(req: Request) {
         ) as any,
         {
             width: 1200,
-            height: 630,
+            height: 1200,
             fonts: priceFont
                 ? [{ name: 'Atkinson Hyperlegible', data: priceFont, weight: 700, style: 'normal' }]
                 : [],
