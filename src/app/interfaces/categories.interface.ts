@@ -45,3 +45,20 @@ export interface CategoryListResponse {
   totalResults: number;
   data: Category[];
 }
+
+export interface CategoryHierarchyResponse {
+    success: boolean;
+    data: RootCategory[];
+}
+
+export interface RootCategory {
+    _id: string;
+    name: string;
+    children: Category[];
+}
+
+export interface Category {
+    _id: string;
+    name: string;
+    children: Category[];
+}

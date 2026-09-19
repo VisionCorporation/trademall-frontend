@@ -110,7 +110,6 @@ export interface ProductGeneralDetailsPayload {
   lowStockThreshold?: number;
   weight?: number
   category: string;
-  subcategory: string
 }
 
 export interface CreateProductResponse {
