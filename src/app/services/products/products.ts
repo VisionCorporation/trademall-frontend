@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import {
   RootCategoryResponse,
   CategoryListResponse,
+  CategoryHierarchyResponse,
 } from '../../interfaces/categories.interface';
 import { AllProductsResponse, CategoryProductsResponse, FeaturedProductsResponse } from '../../interfaces/product-card.interface';
 
@@ -13,6 +14,10 @@ import { AllProductsResponse, CategoryProductsResponse, FeaturedProductsResponse
 })
 export class Products {
   private http = inject(HttpClient);
+
+  public getCategoryHierarchy(): Observable<CategoryHierarchyResponse> {
+    return this.http.get<CategoryHierarchyResponse>(`${environment.apiBaseUrl}/products/categories/hierarchy/tree`)
+  }
 
   public getRootCategories(currentPage = 1): Observable<RootCategoryResponse> {
     return this.http.get<RootCategoryResponse>(
