@@ -176,7 +176,7 @@ export class ProductDetail implements OnInit {
     private buildOgImageUrl(product: ProductDetails): string {
         const image = product.images?.[0];
         if (!image) {
-            return 'https://trademall-frontend.vercel.app/assets/og-default.jpg';
+            return 'https://trademall-frontend.vercel.app/assets/images/og-default.jpeg';
         }
 
         const hasSale = !!product.salePrice && product.salePrice < product.price;
