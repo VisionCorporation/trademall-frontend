@@ -4,6 +4,7 @@ export const config = { runtime: 'edge' };
 
 const WIDTH = 1200;
 const HEIGHT = 1200;
+const FONT_FAMILY = 'Atkinson Hyperlegible';
 
 function h(type: string, props: Record<string, any> = {}, ...children: any[]) {
     const flat = children.flat().filter((c) => c !== null && c !== undefined && c !== false);
@@ -40,6 +41,7 @@ const chip = (children: any, extraStyle: Record<string, any> = {}) =>
             color: '#171717',
             padding: '10px 20px',
             borderRadius: 12,
+            fontFamily: FONT_FAMILY, 
             ...extraStyle,
         },
     }, children);
@@ -55,19 +57,33 @@ export default async function handler(req: Request) {
     const discount = searchParams.get('discount');
 
     const priceText = `GHS ${salePrice}`;
+    const discountText = discount ? `-${discount}%` : '';
+    const ratingText = `${rating} (${reviewCount})`;
+    const originalPriceText = originalPrice ? `GHS ${originalPrice}` : '';
 
-    const fontText = priceText + (originalPrice ? `GHS ${originalPrice}` : '');
-    const priceFont = await loadGoogleFont('Atkinson Hyperlegible', 700, fontText);
+    const boldText = discountText + ratingText + priceText;
+    const regularText = originalPriceText;
+
+    const [boldFont, regularFont] = await Promise.all([
+        loadGoogleFont(FONT_FAMILY, 700, boldText),
+        regularText ? loadGoogleFont(FONT_FAMILY, 400, regularText) : Promise.resolve(null),
+    ]);
+
+    const fonts = [
+        ...(boldFont ? [{ name: FONT_FAMILY, data: boldFont, weight: 700 as const, style: 'normal' as const }] : []),
+        ...(regularFont ? [{ name: FONT_FAMILY, data: regularFont, weight: 400 as const, style: 'normal' as const }] : []),
+    ];
 
     const ratingChip = h('div', {
         style: {
             display: 'flex', alignItems: 'center', gap: '10px',
             background: '#f4f4f4', color: '#171717',
             padding: '10px 20px', borderRadius: 12,
+            fontFamily: FONT_FAMILY,
         },
     },
         h('img', { src: starDataUri(34), width: 34, height: 34 }),
-        h('span', { style: { fontSize: 34, display: 'flex' } }, `${rating} (${reviewCount})`)
+        h('span', { style: { fontSize: 34, fontWeight: 700, display: 'flex' } }, ratingText)
     );
 
     return new ImageResponse(
@@ -81,7 +97,7 @@ export default async function handler(req: Request) {
 
             discount
                 ? h('div', { style: { position: 'absolute', top: 40, left: 40, display: 'flex' } },
-                    chip(`-${discount}%`, { fontSize: 44, fontWeight: 700 }))
+                    chip(discountText, { fontSize: 44, fontWeight: 700 }))
                 : null,
 
             h('div', { style: { position: 'absolute', top: 40, right: 40, display: 'flex' } }, ratingChip),
@@ -92,22 +108,12 @@ export default async function handler(req: Request) {
                     display: 'flex', alignItems: 'center', gap: '16px',
                 },
             },
-                chip(priceText, {
-                    fontSize: 60,
-                    fontWeight: 700,
-                    fontFamily: priceFont ? 'Atkinson Hyperlegible' : undefined,
-                }),
+                chip(priceText, { fontSize: 60, fontWeight: 700 }),
                 originalPrice
-                    ? chip(`GHS ${originalPrice}`, { fontSize: 40, color: '#999999', textDecoration: 'line-through' })
+                    ? chip(originalPriceText, { fontSize: 40, fontWeight: 400, color: '#999999', textDecoration: 'line-through' })
                     : null
             )
         ) as any,
-        {
-            width: WIDTH,
-            height: HEIGHT,
-            fonts: priceFont
-                ? [{ name: 'Atkinson Hyperlegible', data: priceFont, weight: 700, style: 'normal' }]
-                : [],
-        },
+        { width: WIDTH, height: HEIGHT, fonts },
     );
 }
