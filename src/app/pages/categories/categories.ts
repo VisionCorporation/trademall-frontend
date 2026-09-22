@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { Products } from '../../services/products/products';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
-import { RootCategory } from '../../interfaces/categories.interface';
+import { Pagination, RootCategory } from '../../interfaces/categories.interface';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { RouterLink } from '@angular/router';
 import { Newsletter } from '../../shared/newsletter/newsletter';
@@ -24,11 +24,32 @@ export class Categories implements OnInit {
   private readonly seoService = inject(Seo);
   private categoryService = inject(Products);
   public categories: RootCategory[] = [];
-  public totalPages = 0;
   public isLoading = signal(true);
   public currentPage = 1;
-  public totalPagesArray: number[] = [];
+  public pagination = signal<Pagination | null>(null);
   private platformId = inject(PLATFORM_ID);
+
+  public pageNumbers = computed<(number | '...')[]>(() => {
+    const p = this.pagination();
+    if (!p) return [];
+
+    const total = p.totalPages;
+    const current = p.currentPage;
+
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+    const pages: (number | '...')[] = [1];
+    if (current > 3) pages.push('...');
+
+    const start = Math.max(2, current - 1);
+    const end = Math.min(total - 1, current + 1);
+    for (let i = start; i <= end; i++) pages.push(i);
+
+    if (current < total - 2) pages.push('...');
+    pages.push(total);
+
+    return pages;
+  });
 
   constructor() {
     this.seoService.updatePageSeo({
@@ -47,8 +68,7 @@ export class Categories implements OnInit {
     this.categoryService.getRootCategories(currentPage).subscribe({
       next: (response) => {
         this.categories = response.data;
-        this.totalPages = response.pagination.totalPages;
-        this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+        this.pagination.set(response.pagination);
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -60,36 +80,25 @@ export class Categories implements OnInit {
 
   public goToPreviousCategories(): void {
     if (this.currentPage <= 1) return;
-
-    if (isPlatformBrowser(this.platformId)) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    this.isLoading.set(true);
-    this.currentPage--;
-    this.fetchCategories(this.currentPage);
+    this.goToPage(this.currentPage - 1);
   }
 
   public goToNextCategories(): void {
-    if (this.currentPage >= this.totalPages) return;
-
-    if (isPlatformBrowser(this.platformId)) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    this.isLoading.set(true);
-    this.currentPage++;
-    this.fetchCategories(this.currentPage);
+    const totalPages = this.pagination()?.totalPages ?? 1;
+    if (this.currentPage >= totalPages) return;
+    this.goToPage(this.currentPage + 1);
   }
 
-  public goToPage(pageNumber: number) {
+  public goToPage(pageNumber: number): void {
+    if (pageNumber === this.currentPage) return;
+
     if (isPlatformBrowser(this.platformId)) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     this.isLoading.set(true);
-    this.fetchCategories(pageNumber);
     this.currentPage = pageNumber;
+    this.fetchCategories(pageNumber);
   }
 
   public getSearchValue(value: Event) {
