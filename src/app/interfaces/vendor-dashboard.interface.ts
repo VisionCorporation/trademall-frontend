@@ -24,7 +24,7 @@ export interface Product {
   price: number;
   salePrice?: number | null;
   images: ProductImage[];
-  status: 'approved' | 'pending' | 'rejected';
+  status: 'approved' | 'pending' | 'rejected' | 'inactive';
   stockQuantity: number;
   lowStockThreshold: number;
   isPreOrder: boolean;
@@ -54,9 +54,9 @@ export interface ProductSummary {
 }
 
 export interface ProductPagination {
-  currentPage: number | null;
-  limit: number | null;
-  totalPages: number | null;
+  currentPage: number
+  limit: number
+  totalPages: number
   totalResults: number;
 }
 
@@ -108,4 +108,9 @@ export interface ProductVariant {
 export interface AttributeRow {
   key: string;
   value: string;
+}
+
+export interface DeleteProductResponse {
+  success: boolean
+  message: string
 }
