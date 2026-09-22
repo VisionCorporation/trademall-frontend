@@ -221,7 +221,7 @@
     @if (!isFetchingProducts() && pagination() && pagination()!.totalPages > 1) {
     <div class="flex items-center justify-center gap-3 py-4 shrink-0">
         <div
-            class="inline-flex items-center gap-0.5 bg-white rounded-full p-1.5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-black/5">
+            class="inline-flex items-center gap-0.5 bg-white rounded-full p-1.5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-black/15">
             <button type="button" (click)="goToPage(pagination()!.currentPage - 1)"
                 [disabled]="pagination()!.currentPage === 1" aria-label="Go to previous page"
                 class="w-8 h-8 flex items-center justify-center rounded-full text-[#6B6B6B] hover:bg-[#F4F4F4] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
