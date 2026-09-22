@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { ProductsResponse, VariantPayload, VariationPayload } from '../../interfaces/vendor-dashboard.interface';
+import { DeleteProductResponse, ProductsResponse, VariantPayload, VariationPayload } from '../../interfaces/vendor-dashboard.interface';
 import { CreateProductResponse, ProductGeneralDetailsPayload, UploadImagesResponse } from '../../interfaces/products.interface';
 
 @Injectable({
@@ -11,8 +11,20 @@ import { CreateProductResponse, ProductGeneralDetailsPayload, UploadImagesRespon
 export class VendorDashboard {
   private http = inject(HttpClient);
 
-  public getVendorProductListings(): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(`${environment.apiBaseUrl}/products/my/listings`);
+  public getVendorProductListings(page: number = 1, limit: number = 20, status: string = 'all'): Observable<ProductsResponse> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('limit', limit);
+
+    if (status !== 'all') {
+      params = params.set('status', status);
+    }
+
+    return this.http.get<ProductsResponse>(`${environment.apiBaseUrl}/products/my/listings`, { params });
+  }
+
+  public deleteProduct(productId: string): Observable<DeleteProductResponse> {
+    return this.http.delete<DeleteProductResponse>(`${environment.apiBaseUrl}/products/${productId}`);
   }
 
   public submitProductGeneralDetails(payload: ProductGeneralDetailsPayload): Observable<CreateProductResponse> {
