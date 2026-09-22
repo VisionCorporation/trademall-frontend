@@ -24,6 +24,7 @@ import { Review, ReviewFormData, ReviewsPagination } from '../../interfaces/revi
 import { finalize } from 'rxjs';
 import { VoteType } from '../../types/product-details.type';
 import { LoginService } from '../../services/login/login.service';
+import { ConfirmDialogService } from '../../services/confirm-dialog/confirm-dialog';
 
 @Component({
     selector: 'app-product-detail',
@@ -90,6 +91,7 @@ export class ProductDetail implements OnInit {
         title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]],
         comment: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
     });
+    private confirmDialog = inject(ConfirmDialogService);
 
     ngOnInit(): void {
         this.fetchProductDetails()
@@ -322,8 +324,14 @@ export class ProductDetail implements OnInit {
         this.showReviewForm.set(false);
     }
 
-    public deleteReview(reviewId: string): void {
-        const confirmed = confirm('Delete this review? This can\'t be undone.');
+    public async deleteReview(reviewId: string): Promise<void> {
+        const confirmed = await this.confirmDialog.confirm({
+            title: 'Delete review?',
+            message: 'This will permanently remove your review. This can’t be undone.',
+            confirmLabel: 'Delete',
+            variant: 'danger'
+        });
+
         if (!confirmed) return;
 
         this.deletingReviewId.set(reviewId);
