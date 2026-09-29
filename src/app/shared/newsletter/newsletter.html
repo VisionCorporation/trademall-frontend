@@ -1,25 +1,31 @@
-<section class="flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-49.75 py-12 lg:py-18.75 px-5 md:px-12 lg:px-0">
-  <div class="flex flex-col items-center lg:items-start">
-    <span class="products-font text-[24px] lg:text-[32px] mb-2.5">trademall</span>
-    <h2 class="text-[56px] md:text-[72px] lg:text-[96px] leading-tight lg:leading-24 text-center lg:text-left">
-      Stay <br /> Updated
-    </h2>
-  </div>
+<section class="px-5 md:px-12 py-12 lg:py-18.75">
+  <div
+    class="relative isolate overflow-hidden mx-auto max-w-6xl rounded-3xl bg-[#242424] text-white px-6 py-12 md:px-12 md:py-16 lg:px-16 lg:py-20">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div class="flex flex-col items-center lg:items-start text-center lg:text-left">
+        <h2 class="text-[56px] md:text-[72px] lg:text-[96px] leading-[0.95] tracking-tight">
+          Stay <br />
+          <span class="text-white/50">Updated</span>
+        </h2>
+      </div>
 
-  <div class="flex flex-col items-center lg:items-start w-full max-w-sm lg:max-w-auto">
-    <p class="text-xl lg:text-2xl mb-5 text-center lg:text-left">Sign up to our newsletter</p>
-    <label for="newsletter-email" class="sr-only">Email</label>
-    <input
-      type="email"
-      id="newsletter-email"
-      placeholder="Enter your email"
-      autocomplete="off"
-      class="block border border-[#17171799] py-3 px-5 rounded-lg placeholder:text-[#17171733] w-full lg:w-85 mb-5"
-    />
-    <button
-      class="text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in w-full lg:w-auto"
-    >
-      Sign Up
-    </button>
+      <div class="flex flex-col items-center lg:items-start w-full max-w-md mx-auto lg:mx-0">
+        <p class="text-xl lg:text-2xl mb-2 text-center lg:text-left">Sign up to our newsletter</p>
+        <p class="text-sm text-white/60 mb-6 text-center lg:text-left">
+          Get trademall updates and important information in your inbox.
+        </p>
+
+        <form
+          class="flex w-full flex-col gap-1.5 rounded-2xl border border-white/15 bg-white/5 p-1.5 transition-colors duration-200 focus-within:border-white/40 sm:flex-row">
+          <label for="newsletter-email" class="sr-only">Email</label>
+          <input type="email" id="newsletter-email" placeholder="Enter your email" autocomplete="off"
+            class="min-w-0 flex-1 bg-transparent px-4 py-3 caret-[#FFFFFF] text-white white-placeholder focus:outline-none" />
+          <button type="submit"
+            class="cursor-pointer rounded-xl bg-white px-6 py-3 text-[15px] sm:text-[16px] font-medium text-[#171717] transition duration-200 ease-in hover:bg-white/90 active:scale-[0.98]">
+            Sign Up
+          </button>
+        </form>
+      </div>
+    </div>
   </div>
 </section>
