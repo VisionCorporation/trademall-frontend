@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, take } from 'rxjs/operators';
 import { Router, RouterLink } from '@angular/router';
 import { Header } from '../../shared/header/header';
-import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { Cart as cart } from '../../services/cart/cart';
 import { LoginService } from '../../services/login/login.service';
 import { CartResponse, CartItem } from '../../interfaces/cart.interface';
@@ -17,7 +16,6 @@ import { GuestCart } from '../../services/guest-cart/guest-cart';
   imports: [RouterLink, Header, CurrencyPipe, NgOptimizedImage, SkeletonLoader],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
-  animations: [fadeInOutAnimation],
 })
 export class Cart implements OnInit {
   private readonly cartService = inject(cart);
