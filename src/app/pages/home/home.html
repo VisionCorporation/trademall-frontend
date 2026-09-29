@@ -104,49 +104,57 @@
 </section>
 
 <section class="mt-20 md:mt-37.5 mb-28.75 max-w-310 mx-auto px-3 md:px-12 2xl:px-0">
-  <h2 class="text-[30px] sm:text-[40px] lg:text-[60px] text-left">
-    Common Questions
-  </h2>
-  <p class="text-base sm:text-[18px] text-left text-[#374151] mb-10">
-    Find answers to common questions about shopping, orders, payments, delivery, and more.
-  </p>
+  <div>
+    <div class="mb-10">
+      <h2 class="text-[30px] sm:text-[40px] lg:text-[60px] leading-[1.05] tracking-tight text-left">
+        Common Questions
+      </h2>
+      <p class="mt-4 text-base sm:text-[18px] text-left text-[#374151]">
+        Find answers to common questions about shopping, orders, payments, delivery, and more.
+      </p>
+    </div>
 
-  <div class="flex flex-col gap-7">
-    @for (question of commonQuestions; track question.question) {
-    <div class="bg-[#F2F2F2] rounded-xl cursor-pointer py-4.5 sm:py-5.25 px-6 sm:px-7.5"
-      (click)="toggleQuestion(question.question)">
-      <div class="flex items-center justify-between" [class]="openQuestion === question.question ? 'mb-2.5' : 'mb-0'">
-        <h3 [class]="openQuestion === question.question ? 'text-base' : 'text-xl sm:text-2xl'"
-          class="transition-all duration-300 light-header text-[#1E1E1E] leading-tight">
-          {{ question.question }}
-        </h3>
-        <button class="shrink-0 ml-4" [attr.aria-expanded]="openQuestion === question.question"
-          [attr.aria-label]="(openQuestion === question.question ? 'Collapse' : 'Expand') + ' ' + question.question">
-          @if (openQuestion === question.question) {
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M15.8337 4.16656L4.16705 15.8332M4.16705 4.16656L15.8337 15.8332" stroke="#1E1E1E"
-              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          } @else {
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M9.99998 3.33333V16.6667M16.6666 10H3.33331" stroke="#1E1E1E" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          }
+    <div class="flex flex-col gap-3 sm:gap-4">
+      @for (question of commonQuestions; track question.question; let i = $index) {
+      @let isOpen = openQuestion === question.question;
+
+      <div
+        class="rounded-2xl border transition-[background-color,border-color,box-shadow] duration-300 ease-out motion-reduce:transition-none"
+        [class]="isOpen
+          ? 'bg-white border-[#17171726] shadow-[0_8px_30px_rgba(23,23,23,0.06)]'
+          : 'bg-[#F2F2F2] border-transparent hover:bg-[#ebebeb]'">
+        <button type="button"
+          class="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4.5 text-left sm:px-7 sm:py-5.25 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]"
+          [attr.id]="'faq-trigger-' + i" [attr.aria-expanded]="isOpen" [attr.aria-controls]="'faq-panel-' + i"
+          (click)="toggleQuestion(question.question)">
+          <h3 class="light-header text-lg sm:text-xl leading-tight text-[#1E1E1E]">
+            {{ question.question }}
+          </h3>
+
+          <span
+            class="grid size-9 shrink-0 place-items-center rounded-full transition-[transform,background-color,color] duration-300 ease-out motion-reduce:transition-none"
+            [class]="isOpen ? 'rotate-45 bg-[#171717] text-white' : 'rotate-0 bg-white text-[#1E1E1E]'"
+            aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M9.99998 3.33333V16.6667M16.6666 10H3.33331" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
         </button>
-      </div>
 
-      @if (openQuestion === question.question) {
-      <div [@slideDown] style="display: grid">
-        <div class="overflow-hidden">
-          <p class="text-xl sm:text-[22px] leading-tight">
-            {{ question.answer }}
-          </p>
+        <div class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none"
+          [class]="isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'" [attr.id]="'faq-panel-' + i" role="region"
+          [attr.aria-labelledby]="'faq-trigger-' + i" [attr.inert]="isOpen ? null : ''">
+          <div class="min-h-0 overflow-hidden">
+            <p class="px-5 pb-5 text-base leading-relaxed text-[#374151] sm:px-7 sm:pb-6 sm:text-lg transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none"
+              [class]="isOpen ? 'opacity-100 translate-y-0 delay-75' : 'opacity-0 -translate-y-1'">
+              {{ question.answer }}
+            </p>
+          </div>
         </div>
       </div>
       }
     </div>
-    }
   </div>
 </section>
 
