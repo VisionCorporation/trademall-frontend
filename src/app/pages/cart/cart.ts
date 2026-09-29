@@ -10,10 +10,12 @@ import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { ToastService } from '../../services/toast/toast.service';
 import { SkeletonLoader } from '../../shared/skeleton-loader/skeleton-loader';
 import { GuestCart } from '../../services/guest-cart/guest-cart';
+import { Newsletter } from '../../shared/newsletter/newsletter';
+import { Footer } from '../../shared/footer/footer';
 
 @Component({
   selector: 'app-cart',
-  imports: [RouterLink, Header, CurrencyPipe, NgOptimizedImage, SkeletonLoader],
+  imports: [RouterLink, Header, CurrencyPipe, NgOptimizedImage, SkeletonLoader, Newsletter, Footer],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
