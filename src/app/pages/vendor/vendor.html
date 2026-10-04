@@ -169,34 +169,40 @@
           </div>
         </div>
 
-        <div class="flex flex-col gap-5 max-w-184.75 mx-auto">
-          @for (policy of policies; track policy.title) {
-          <div class="bg-[#F2F2F2] rounded-xl cursor-pointer py-4.5 sm:py-5.25 px-6 sm:px-7.5"
-            (click)="togglePolicy(policy.title)">
-            <div class="flex items-center justify-between" [class]="openPolicy === policy.title ? 'mb-2.5' : 'mb-0'">
-              <h3 [class]="openPolicy === policy.title ? 'text-base' : 'text-xl sm:text-2xl'"
-                class="transition-all duration-300 light-header text-[#1E1E1E] leading-tight">
+        <div class="flex flex-col gap-3 sm:gap-4 max-w-184.75 mx-auto">
+          @for (policy of policies; track policy.title; let i = $index) {
+          @let isOpen = openPolicy === policy.title;
+
+          <div
+            class="rounded-2xl border transition-[background-color,border-color,box-shadow] duration-300 ease-out motion-reduce:transition-none"
+            [class]="isOpen
+      ? 'bg-white border-[#17171726] shadow-[0_8px_30px_rgba(23,23,23,0.06)]'
+      : 'bg-[#F2F2F2] border-transparent hover:bg-[#ebebeb]'">
+            <button type="button"
+              class="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4.5 text-left sm:px-7 sm:py-5.25 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]"
+              [attr.id]="'policy-trigger-' + i" [attr.aria-expanded]="isOpen" [attr.aria-controls]="'policy-panel-' + i"
+              (click)="togglePolicy(policy.title)">
+              <h3 class="light-header text-lg sm:text-xl leading-tight text-[#1E1E1E]">
                 {{ policy.title }}
               </h3>
-              <button class="shrink-0 ml-4">
-                @if (openPolicy === policy.title) {
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15.8337 4.16656L4.16705 15.8332M4.16705 4.16656L15.8337 15.8332" stroke="#1E1E1E"
-                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                } @else {
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.99998 3.33333V16.6667M16.6666 10H3.33331" stroke="#1E1E1E" stroke-width="1.5"
+
+              <span
+                class="grid size-9 shrink-0 place-items-center rounded-full transition-[transform,background-color,color] duration-300 ease-out motion-reduce:transition-none"
+                [class]="isOpen ? 'rotate-45 bg-[#171717] text-white' : 'rotate-0 bg-white text-[#1E1E1E]'"
+                aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M9.99998 3.33333V16.6667M16.6666 10H3.33331" stroke="currentColor" stroke-width="1.5"
                     stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                }
-              </button>
-            </div>
+              </span>
+            </button>
 
-            <div class="grid transition-[grid-template-rows] duration-300 ease-in-out"
-              [class]="openPolicy === policy.title ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
-              <div class="overflow-hidden">
-                <p class="text-base sm:text-[20px] leading-tight">
+            <div class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none"
+              [class]="isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'" [attr.id]="'policy-panel-' + i" role="region"
+              [attr.aria-labelledby]="'policy-trigger-' + i" [attr.inert]="isOpen ? null : ''">
+              <div class="min-h-0 overflow-hidden">
+                <p class="px-5 pb-5 text-base leading-relaxed text-[#374151] sm:px-7 sm:pb-6 sm:text-lg transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none"
+                  [class]="isOpen ? 'opacity-100 translate-y-0 delay-75' : 'opacity-0 -translate-y-1'">
                   {{ policy.content }}
                 </p>
               </div>
