@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { StoreResponse, VendorDetailedInfoResponse } from '../../interfaces/vendor.interface';
+import { createOrUpdateStoreLocationPayload, createOrUpdateStoreDetailsPayload, StoreResponse, VendorDetailedInfoResponse, CreateOrUpdateStoreDetailsResponse, createOrUpdateStoreLocationResponse } from '../../interfaces/vendor.interface';
 import { environment } from '../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,11 +8,11 @@ import { VendorProductsResponse } from '../../interfaces/product-card.interface'
 @Injectable({
   providedIn: 'root',
 })
-export class VendorStore {
+export class VendorStoreService {
   private http = inject(HttpClient);
 
-  public getPublicStorePage(subdoamin: string): Observable<StoreResponse> {
-    return this.http.get<StoreResponse>(`${environment.apiBaseUrl}/stores/${subdoamin}`)
+  public getPublicStorePage(subdomain: string): Observable<StoreResponse> {
+    return this.http.get<StoreResponse>(`${environment.apiBaseUrl}/stores/${subdomain}`)
   }
 
   public getVendorProductsById(
@@ -28,5 +28,13 @@ export class VendorStore {
     return this.http.get<VendorDetailedInfoResponse>(
       `${environment.apiBaseUrl}/products/${productId}/vendor`,
     );
+  }
+
+  public submitOrUpdateStoreDetails(storeDetails: createOrUpdateStoreDetailsPayload): Observable<CreateOrUpdateStoreDetailsResponse> {
+    return this.http.post<CreateOrUpdateStoreDetailsResponse>(`${environment.apiBaseUrl}/stores`, storeDetails);
+  }
+
+  public submitStoreLocation(storeLocation: createOrUpdateStoreLocationPayload): Observable<createOrUpdateStoreLocationResponse> {
+    return this.http.put<createOrUpdateStoreLocationResponse>(`${environment.apiBaseUrl}/stores/location`, storeLocation);
   }
 }
