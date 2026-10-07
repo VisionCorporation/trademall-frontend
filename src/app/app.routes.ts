@@ -12,6 +12,7 @@ import { VendorStoreForm } from './pages/vendor-store-layout/vendor-store-form/v
 import { VendorStoreLayout } from './pages/vendor-store-layout/vendor-store-layout';
 import { storeEditGuard } from './guards/authorization/store-edit/store-edit-guard';
 import { storeCreateGuard } from './guards/authorization/store-create/store-create-guard';
+import { vendorStoreGuard } from './guards/authorization/vendor-store/vendor-store-guard';
 
 export const routes: Routes = [
   {
@@ -106,7 +107,7 @@ export const routes: Routes = [
         ],
       },
 
-      { path: 'add-product', component: VendorAddProduct },
+      { path: 'add-product', component: VendorAddProduct, canActivate: [vendorStoreGuard] },
     ],
 
     canActivate: [authGuard, vendorGuard, vendorApprovalGuard],
