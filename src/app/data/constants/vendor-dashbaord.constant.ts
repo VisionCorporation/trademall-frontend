@@ -9,12 +9,16 @@ export const NAV_ITEMS = [
 ];
 
 export const ROUTE_TITLE_MAP: Record<string, string> = {
-    'overview': 'Overview',
-    'orders': 'Orders',
-    'products': 'Products',
-    'reports': 'Reports',
-    'add-product': 'New Product',
+    overview: 'Overview',
+    orders: 'Orders',
+    products: 'Products',
+    reports: 'Reports',
+    'add-product': 'Add Product',
+    store: 'Store',
+    'store/create': 'Create Store',
+    'store/edit': 'Edit Store',
 };
+
 
 export const PRODUCTS_FILTERS = [
     { label: 'All', value: 'all', activeColor: '#1B5DD7' },
@@ -92,6 +96,7 @@ export const ORDER_PERIODS = [
 ];
 
 export const ADD_PRODUCT_STEPS = [{ label: "General", value: 'general', number: 1 }, { label: 'Images', value: 'images', number: 2 }, { label: "Advanced", value: 'advanced', number: 3 }]
+export const STORE_SETUP_STEPS = [{ label: "Store Details", value: 'store-details', number: 1 }, { label: 'Store Location', value: 'store-location', number: 2 }]
 
 export const POSITIONS: ConnectedPosition[] = [
     { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 8 },
