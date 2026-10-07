@@ -1,0 +1,244 @@
+<section class="bg-[#F4F4F4] rounded-[20px] pt-5 sm:pt-7.5 sm:px-8.75 flex flex-col h-full">
+    <div class="flex items-center justify-center md:justify-start gap-2 mb-2 shrink-0">
+        @for (storeSetupStep of storeSetupSteps; track storeSetupStep.value) {
+        <div class="flex items-center gap-1.5">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-medium transition-colors duration-200"
+                [class]="step() === storeSetupStep.value ? 'bg-[#00a751] text-white' : 'bg-white text-[#9CA3AF] border border-[#17171733]'">
+                {{storeSetupStep.number}}
+            </div>
+            <span class="hidden sm:inline text-[15px] transition-colors duration-200"
+                [class]="step() === storeSetupStep.value ? 'text-[#171717] font-medium' : 'text-[#9CA3AF]'">{{storeSetupStep.label}}</span>
+        </div>
+        <div [class]="'h-px w-8 sm:w-12 bg-[#17171733] ' + (storeSetupStep.number === 2 ? 'hidden': 'block')"></div>
+        }
+    </div>
+
+    <div class="flex-1 overflow-y-auto py-5">
+        @if (isLoadingStoreDetails()) {
+        <div class="flex flex-col gap-5 px-2 animate-pulse">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-2">
+                    <div class="h-5 w-24 bg-[#E6E6E8] rounded skeleton-shimmer"></div>
+                    <div class="h-12 bg-[#E6E6E8] rounded-xl skeleton-shimmer"></div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <div class="h-5 w-24 bg-[#E6E6E8] rounded skeleton-shimmer"></div>
+                    <div class="h-12 bg-[#E6E6E8] rounded-xl skeleton-shimmer"></div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <div class="h-5 w-28 bg-[#E6E6E8] rounded skeleton-shimmer"></div>
+                <div class="h-32 bg-[#E6E6E8] rounded-xl skeleton-shimmer"></div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <div class="h-5 w-28 bg-[#E6E6E8] rounded skeleton-shimmer"></div>
+                <div class="h-32 bg-[#E6E6E8] rounded-xl skeleton-shimmer"></div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <div class="h-5 w-28 bg-[#E6E6E8] rounded skeleton-shimmer"></div>
+                <div class="h-32 bg-[#E6E6E8] rounded-xl skeleton-shimmer"></div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <div class="h-5 w-40 bg-[#E6E6E8] rounded skeleton-shimmer"></div>
+                <div class="h-32 bg-[#E6E6E8] rounded-xl skeleton-shimmer"></div>
+            </div>
+        </div>
+        }
+        @else {
+        @if (step() === 'store-details') {
+        <form [formGroup]="detailsForm" class="flex flex-col gap-5 px-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-1.5">
+                    <label for="name" class="block text-[15px] sm:text-[16px] text-[#171717]">Store name <span
+                            class="text-[#EF4444]">*</span></label>
+                    <input id="name" type="text" formControlName="name" placeholder="e.g. Nastrade" [class]="showError(detailsForm, 'name')
+        ? 'border-[#EF4444]'
+        : 'border-gray-300'" class="bg-[#FBFCFF] border rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF]" />
+                    <app-input-error-message [control]="detailsForm.controls.name" [messages]="{
+                    required: 'Store name is required'
+                }" />
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="subdomain" class="block text-[15px] sm:text-[16px] text-[#171717]">Subdomain <span
+                            class="text-[#EF4444]">*</span> <span class="text-[13px] text-[#9CA3AF]">
+                            (Store’s unique address. e.g. nastrade.trademall.shop)
+                        </span>
+                    </label>
+                    <div [class]="showError(detailsForm, 'subdomain')
+        ? 'border-[#EF4444]'
+        : 'border-gray-300'" class="flex items-center bg-[#FBFCFF] border rounded-xl py-3.5 px-4 sm:px-5 overflow-hidden
+           transition-all duration-200
+           focus-within:border-[#00a7519b]
+           focus-within:ring-2
+           focus-within:ring-[#00a7515d]">
+                        <input id="subdomain" type="text" formControlName="subdomain" placeholder="nastrade"
+                            class="flex-1 min-w-0 h-full outline-none border-none lowercase tranparent-header-search-input" />
+
+                        <span
+                            class="px-3 text-[13px] text-[#9CA3AF] bg-[#F9FAFB] h-full flex items-center border-l border-gray-300">
+                            .trademall.shop
+                        </span>
+                    </div>
+                    <app-input-error-message [control]="detailsForm.controls.subdomain" [messages]="{
+                    required: 'Subdomain is required',
+                    pattern: 'Invalid subdomain format'
+                }" />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="description" class="block text-[15px] sm:text-[16px] text-[#171717]">Description <span
+                        class="text-[#EF4444]">*</span></label>
+                <textarea id="description" rows="3" formControlName="description"
+                    placeholder="Tell customers what your store sells" [class]="showError(detailsForm, 'description')
+            ? 'border-[#EF4444]'
+            : 'border-gray-300'"
+                    class="px-4 py-3 rounded-[10px] bg-white border outline-none h-32 sm:h-auto resize-none"></textarea>
+                <app-input-error-message [control]="detailsForm.controls.description" [messages]="{
+                    required: 'Description is required'
+                }" />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="shippingPolicy" class="block text-[15px] sm:text-[16px] text-[#171717]">Shipping
+                    policy <span class="text-[#EF4444]">*</span></label>
+                <textarea id="shippingPolicy" rows="3" formControlName="shippingPolicy" [class]="showError(detailsForm, 'shippingPolicy')
+            ? 'border-[#EF4444]'
+            : 'border-gray-300'" placeholder="e.g. Delivery takes 2–5 business days."
+                    class="px-4 py-3 rounded-[10px] bg-white border outline-none h-32 sm:h-auto resize-none"></textarea>
+                <app-input-error-message [control]="detailsForm.controls.shippingPolicy" [messages]="{
+                    required: 'Shipping policy is required'
+                }" />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="returnPolicy" class="block text-[15px] sm:text-[16px] text-[#171717]">Return
+                    policy <span class="text-[#EF4444]">*</span></label>
+                <textarea id="returnPolicy" rows="3" formControlName="returnPolicy" [class]="showError(detailsForm, 'returnPolicy')
+            ? 'border-[#EF4444]'
+            : 'border-gray-300'" placeholder="e.g. Returns accepted within 30 days of purchase."
+                    class="px-4 py-3 rounded-[10px] bg-white border outline-none h-32 sm:h-auto resize-none"></textarea>
+                <app-input-error-message [control]="detailsForm.controls.returnPolicy" [messages]="{
+                    required: 'Return policy is required'
+                }" />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="termsAndConditions" class="block text-[15px] sm:text-[16px] text-[#171717]">Terms and
+                    conditions <span class="text-[#EF4444]">*</span></label>
+                <textarea id="termsAndConditions" rows="4" formControlName="termsAndConditions" [class]="showError(detailsForm, 'termsAndConditions')
+            ? 'border-[#EF4444]'
+            : 'border-gray-300'" placeholder="e.g. By purchasing from this store, you agree to these terms."
+                    class="px-4 py-3 rounded-[10px] bg-white border outline-none h-32 sm:h-auto resize-none"></textarea>
+                <app-input-error-message [control]="detailsForm.controls.termsAndConditions" [messages]="{
+                    required: 'Terms and conditions are required'
+                }" />
+            </div>
+        </form>
+        }
+
+        @if (step() === 'store-location') {
+        <form [formGroup]="locationForm" class="flex flex-col gap-5 px-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-1.5">
+                    <label for="region" class="block text-[15px] sm:text-[16px] text-[#171717]">
+                        Region <span class="text-[#EF4444]">*</span>
+                    </label>
+
+                    <select id="region" formControlName="region" [class]="showError(locationForm, 'region')
+        ? 'border-[#EF4444]'
+        : 'border-gray-300'"
+                        class="outline-none bg-[#FBFCFF] border rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF]">
+                        <option value="" disabled [selected]="locationForm.controls.region.value === ''">
+                            Select region
+                        </option>
+
+                        @for (region of regions; track region) {
+                        <option [value]="region">{{ region }}</option>
+                        }
+                    </select>
+
+                    <app-input-error-message [control]="locationForm.controls.region" [messages]="{
+                    required: 'Region is required'
+                }" />
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="city" class="block text-[15px] sm:text-[16px] text-[#171717]">
+                        City <span class="text-[#EF4444]">*</span>
+                    </label>
+
+                    <input id="city" type="text" formControlName="city" placeholder="e.g. Takoradi" [class]="showError(locationForm, 'city')
+                    ? 'border-[#EF4444]'
+                    : 'border-gray-300'"
+                        class="outline-none bg-[#FBFCFF] border rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF]" />
+
+                    <app-input-error-message [control]="locationForm.controls.city" [messages]="{
+                    required: 'City is required'
+                }" />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="digitalAddress" class="block text-[15px] sm:text-[16px] text-[#171717]">
+                    Digital address <span class="text-[#EF4444]">*</span>
+                </label>
+
+                <input id="digitalAddress" type="text" formControlName="digitalAddress" placeholder="GA-123-4567"
+                    [class]="showError(locationForm, 'digitalAddress')
+                ? 'border-[#EF4444]'
+                : 'border-gray-300'"
+                    class="uppercase outline-none bg-[#FBFCFF] border rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF]]" />
+
+                <app-input-error-message [control]="locationForm.controls.digitalAddress" [messages]="{
+                required: 'Digital address is required',
+                pattern: 'Enter a valid GhanaPost code, e.g. GA-123-4567'
+            }" />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="physicalAddress" class="block text-[15px] sm:text-[16px] text-[#171717]">
+                    Physical address <span class="text-[#EF4444]">*</span>
+                </label>
+
+                <textarea id="physicalAddress" rows="2" formControlName="physicalAddress"
+                    placeholder="e.g. No. 12 Ring Road, Effiakuma" [class]="showError(locationForm, 'physicalAddress')
+                ? 'border-[#EF4444]'
+                : 'border-gray-300'"
+                    class="outline-none bg-[#FBFCFF] border rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF] resize-none"></textarea>
+
+                <app-input-error-message [control]="locationForm.controls.physicalAddress" [messages]="{
+                required: 'Physical address is required'
+            }" />
+            </div>
+        </form>
+        }
+        }
+    </div>
+
+    @if (!isLoadingStoreDetails()) {
+    <div class="shrink-0 items-center gap-3 py-4 flex justify-end">
+        @if (step() === 'store-details') {
+        <button type="button" (click)="submitStoreDetails()" [disabled]="isSubmittingDetails() || detailsForm.invalid"
+            class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+            {{ isSubmittingDetails() ? 'Saving details…' : 'Save & Continue' }}
+        </button>
+        }
+
+        @if (step() === 'store-location') {
+        <button type="button" (click)="submitStoreLocation()"
+            [disabled]="isSubmittingLocation() || locationForm.invalid"
+            class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+            {{ isSubmittingLocation() ? 'Saving location…' : 'Finish Setup' }}
+        </button>
+        }
+    </div>
+    }
+
+</section>
