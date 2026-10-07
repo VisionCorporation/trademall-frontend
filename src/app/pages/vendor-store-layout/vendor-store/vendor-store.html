@@ -1,4 +1,4 @@
-<div class="mx-auto w-full space-y-6 p-4 sm:p-6">
+<div class="mx-auto w-full space-y-6 pb-4 sm:pb-6">
     @if (status() === 'loading') {
     <div class="animate-pulse space-y-6">
         <div class="h-56 rounded-2xl skeleton-shimmer"></div>
@@ -16,54 +16,42 @@
     } @else if (status() === 'ready') {
     @let s = store()!;
 
-    <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-        <div class="h-28 w-full bg-linear-to-r from-[#00A751] to-[#007a3b] sm:h-40">
+    <section class="mb-12 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div class="h-44 relative w-full bg-linear-to-r from-[#00A751] to-[#007a3b] sm:h-56">
             @if (s.banner) {
             <img [src]="s.banner" [alt]="s.name + ' banner'" class="h-full w-full object-cover" />
             }
+
+            <div class="absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent"></div>
         </div>
 
         <div class="p-5 sm:p-6">
             <div class="-mt-14 flex flex-col gap-4 sm:-mt-10 sm:flex-row sm:items-end sm:justify-between">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
                     <div
-                        class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#00A751] text-3xl font-bold text-white ring-4 ring-white sm:h-24 sm:w-24">
-                        @if (s.logo) {
-                        <img [src]="s.logo" [alt]="s.name + ' logo'" class="h-full w-full object-cover" />
-                        } @else {
-                        {{ initial() }}
-                        }
-                    </div>
+                        class="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[#00A751] text-3xl font-bold text-white ring-4 ring-white shadow-md sm:h-28 sm:w-28">
+                        @if (s.logo) { <img [src]="s.logo" [alt]="s.name + ' logo'"
+                            class="h-full w-full object-cover" /> } @else { {{ initial() }} } </div>
 
                     <div class="min-w-0">
                         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl products-font">{{
                             s.name }}</h1>
-                        <div class="mt-1.5 flex flex-wrap items-center gap-2">
-                            <span
-                                class="inline-flex items-center gap-1.5 rounded-full bg-[#00A751]/10 px-2.5 py-0.5 text-xs font-medium text-[#00A751]">
-                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
+                        <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+                            <span class="inline-flex items-center gap-1.5 text-sm text-gray-500"> <svg class="h-4 w-4"
+                                    fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1" />
-                                </svg>
-                                {{ s.subdomain }}
-                            </span>
-                            <span class="inline-flex items-center gap-1 text-xs text-gray-600">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                </svg> {{ s.subdomain }}.trademall.shop </span>
+                            <span class="inline-flex items-center gap-1.5 text-sm text-gray-500"> <svg class="h-4 w-4"
+                                    viewBox="0 0 20 20" fill="none">
                                     <path
-                                        d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                                        d="M11.44 2.87l1.47 2.96c.2.41.73.81 1.18.88l2.66.45c1.7.29 2.1 1.53.88 2.76l-2.07 2.08c-.35.35-.54 1.03-.43 1.52l.59 2.58c.47 2.04-.61 2.83-2.4 1.76l-2.49-1.49c-.45-.27-1.19-.27-1.65 0l-2.49 1.49c-1.78 1.07-2.86.27-2.4-1.76l.59-2.58c.11-.49-.08-1.17-.43-1.52L2.37 9.91C1.16 8.68 1.55 7.44 3.25 7.15l2.66-.45c.44-.08.98-.47 1.18-.88l1.47-2.96c.8-1.6 2.1-1.6 2.88.01Z"
                                         [attr.fill]="s.reviewCount === 0 ? 'none' : '#F0B718'"
-                                        [attr.stroke]="s.reviewCount === 0 ? '#F0B718' : 'none'" stroke-width="1.8"
+                                        [attr.stroke]="s.reviewCount === 0 ? '#F0B718' : 'none'" stroke-width="1.5"
                                         stroke-linejoin="round" />
-                                </svg>
-                                @if (s.reviewCount > 0) {
-                                <span class="font-medium text-gray-900">{{ s.rating.toFixed(1) }}</span>
-                                <span>({{ s.reviewCount }} {{ s.reviewCount === 1 ? 'review' : 'reviews' }})</span>
-                                } @else {
-                                <span>No reviews yet</span>
-                                }
-                            </span>
+                                </svg> @if (s.reviewCount > 0) { <span class="font-medium text-gray-900"> {{
+                                    s.rating.toFixed(1) }} </span> <span> {{ s.reviewCount }} {{ s.reviewCount === 1 ?
+                                    'review' : 'reviews' }} </span> } @else { <span>No reviews yet</span> } </span>
                         </div>
                     </div>
                 </div>
@@ -84,48 +72,59 @@
         </div>
     </section>
 
-    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
-        <h2 class="mb-4 text-base sm:text-lg font-semibold text-gray-900 products-font">Location &amp; Contact</h2>
-        <dl class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+    <section class="mb-12">
+        <div class="mb-4">
+            <h2 class="text-lg font-semibold tracking-tight text-gray-950 products-font"> Location </h2>
+            <p class="mt-1 text-sm text-gray-500"> Your store's location and contact information. </p>
+        </div>
+        <div
+            class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
             <div>
-                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">Region</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ s.region || '—' }}</dd>
-            </div>
-            <div>
-                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">City</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ s.city || '—' }}</dd>
-            </div>
-            <div>
-                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">Digital address</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ s.digitalAddress || '—' }}</dd>
+                <p class="text-xs font-medium uppercase tracking-wide text-gray-700">Region</p>
+                <p class="mt-1 text-sm font-medium text-gray-900"> {{ s.region || '—' }} </p>
             </div>
             <div>
-                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">Phone number</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ s.phoneNumber || '—' }}</dd>
+                <p class="text-xs font-medium uppercase tracking-wide text-gray-700">City</p>
+                <p class="mt-1 text-sm font-medium text-gray-900">{{ s.city || '—' }}</p>
             </div>
-            <div class="sm:col-span-2">
-                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">Physical address</dt>
-                <dd class="mt-1 text-sm text-gray-900">{{ s.physicalAddress || '—' }}</dd>
+            <div>
+                <p class="text-xs font-medium uppercase tracking-wide text-gray-700">Digital address</p>
+                <p class="mt-1 text-sm font-medium text-gray-900">{{ s.digitalAddress || '—' }}</p>
             </div>
-        </dl>
+            <div>
+                <p class="text-xs font-medium uppercase tracking-wide text-gray-700">Physical address</p>
+                <p class="mt-1 text-sm font-medium text-gray-900">{{ s.physicalAddress || '—' }}</p>
+            </div>
+            <div>
+                <p class="text-xs font-medium uppercase tracking-wide text-gray-700">Phone number</p>
+                <p class="mt-1 text-sm font-medium text-gray-900">{{ s.phoneNumber || '—' }}</p>
+            </div>
+
+        </div>
     </section>
 
-    <section class="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        @for (p of policies(); track p.title) {
-        <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-            <div class="mb-3 flex items-center gap-2.5">
-                <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#00A751]/10 text-[#00A751]">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="p.icon" />
-                    </svg>
-                </span>
-                <h3 class="text-sm sm:text-base font-semibold text-gray-900 products-font">{{ p.title }}</h3>
-            </div>
-            <p class="max-h-56 overflow-y-auto whitespace-pre-line text-sm leading-relaxed text-gray-600">
-                {{ p.text || 'Not provided.' }}
-            </p>
-        </article>
-        }
+    <section>
+        <div class="mb-4">
+            <h2 class="text-lg font-semibold tracking-tight text-gray-950 products-font"> Store policies </h2>
+            <p class="mt-1 text-sm text-gray-500"> Information customers can refer to before placing an order. </p>
+        </div>
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            @for (p of policies(); track p.title) {
+            <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                <div class="mb-3 flex items-center gap-2.5">
+                    <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#00A751]/10 text-[#00A751]">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="p.icon" />
+                        </svg>
+                    </span>
+                    <h3 class="text-sm sm:text-base font-semibold text-gray-900 products-font">{{ p.title }}</h3>
+                </div>
+                <p class="max-h-56 overflow-y-auto whitespace-pre-line text-sm leading-relaxed text-gray-600">
+                    {{ p.text || 'Not provided.' }}
+                </p>
+            </article>
+            }
+        </div>
     </section>
     } @else {
     <section
