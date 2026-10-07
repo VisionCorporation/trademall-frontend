@@ -12,7 +12,7 @@ import { Newsletter } from '../../shared/newsletter/newsletter';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { buttons } from '../../data/constants/product-details.constant';
 import { Reviews } from '../../services/reviews/reviews';
-import { VendorStore } from '../../services/vendor-store/vendor-store';
+import { VendorStoreService } from '../../services/vendor-store/vendor-store';
 import { Seo } from '../../services/seo/seo';
 import { ProductCard } from '../../shared/product-card/product-card';
 import { ProductCardInterface } from '../../interfaces/product-card.interface';
@@ -46,7 +46,7 @@ import { ConfirmDialogService } from '../../services/confirm-dialog/confirm-dial
 export class ProductDetail implements OnInit {
     private readonly route = inject(ActivatedRoute);
     private readonly productService = inject(Products);
-    private readonly vendorStoreService = inject(VendorStore);
+    private readonly vendorStoreService = inject(VendorStoreService);
     private readonly toastService = inject(ToastService);
     private readonly reviewService = inject(Reviews);
     private readonly loginService = inject(LoginService)
