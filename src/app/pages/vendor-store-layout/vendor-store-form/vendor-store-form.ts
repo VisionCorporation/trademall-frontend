@@ -10,7 +10,7 @@ import { REGIONS } from '../../../data/constants/address.constant';
 import { InputErrorMessage } from '../../../shared/input-error-message/input-error-message';
 import { VendorStoreService } from '../../../services/vendor-store/vendor-store';
 import { ToastService } from '../../../services/toast/toast.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-store-form',
@@ -24,6 +24,7 @@ export class VendorStoreForm implements OnInit {
   private readonly vendorStoreService = inject(VendorStoreService);
   private readonly toastService = inject(ToastService);
   private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   public step = signal<'store-details' | 'store-location'>('store-details');
   public isSubmittingDetails = signal(false);
@@ -120,20 +121,30 @@ export class VendorStoreForm implements OnInit {
 
   }
 
-  public submitStoreLocation() {
+  public submitStoreLocation(): void {
     this.isSubmittingLocation.set(true);
 
-    this.vendorStoreService.submitStoreLocation(this.locationForm.getRawValue()).subscribe({
-      next: (res) => {
-        this.isSubmittingLocation.set(false);
-        this.toastService.success(res.message ?? 'Store location submitted successfully');
-        this.locationForm.reset();
-      },
-      error: (err) => {
-        this.isSubmittingLocation.set(false);
-        console.error('Failed to submit store location', err);
-        this.toastService.error(err.error.message ?? 'Failed to submit store location');
-      }
-    });
+    this.vendorStoreService
+      .submitStoreLocation(this.locationForm.getRawValue())
+      .subscribe({
+        next: (res) => {
+          this.isSubmittingLocation.set(false);
+
+          this.toastService.success(
+            res.message ?? 'Store setup completed successfully'
+          );
+
+          this.router.navigate(['/vendor/store']);
+        },
+        error: (err) => {
+          this.isSubmittingLocation.set(false);
+
+          console.error('Failed to submit store location', err);
+
+          this.toastService.error(
+            err.error?.message ?? 'Failed to submit store location'
+          );
+        }
+      });
   }
 }
