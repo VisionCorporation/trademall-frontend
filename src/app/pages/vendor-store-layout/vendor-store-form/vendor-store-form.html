@@ -1,15 +1,15 @@
 <section class="bg-[#F4F4F4] rounded-[20px] pt-5 sm:pt-7.5 sm:px-8.75 flex flex-col h-full">
     <div class="flex items-center justify-center md:justify-start gap-2 mb-2 shrink-0">
-        @for (storeSetupStep of storeSetupSteps; track storeSetupStep.value) {
+        @for (storeSetupStep of storeSetupSteps; track storeSetupStep.value; let last = $last) {
         <div class="flex items-center gap-1.5">
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-medium transition-colors duration-200"
                 [class]="step() === storeSetupStep.value ? 'bg-[#00a751] text-white' : 'bg-white text-[#9CA3AF] border border-[#17171733]'">
                 {{storeSetupStep.number}}
             </div>
-            <span class="hidden sm:inline text-[15px] transition-colors duration-200"
+            <span class="hidden md:inline text-[15px] transition-colors duration-200"
                 [class]="step() === storeSetupStep.value ? 'text-[#171717] font-medium' : 'text-[#9CA3AF]'">{{storeSetupStep.label}}</span>
         </div>
-        <div [class]="'h-px w-8 sm:w-12 bg-[#17171733] ' + (storeSetupStep.number === 2 ? 'hidden': 'block')"></div>
+        <div [class]="'h-px w-6 sm:w-10 bg-[#17171733] ' + (last ? 'hidden' : 'block')"></div>
         }
     </div>
 
@@ -219,6 +219,104 @@
             </div>
         </form>
         }
+
+        @if (step() === 'store-logo') {
+        <div class="flex flex-col gap-5 px-2">
+            <div>
+                <h2 class="text-[18px] font-medium text-[#171717] products-font">
+                    Store logo <span class="text-[13px] font-normal text-[#9CA3AF]">(Optional)</span>
+                </h2>
+                <p class="mt-1 text-[14px] text-[#6B7280]">
+                    Shown on your store page and product listings. Square images work best.
+                    PNG, JPG or WebP, up to 5MB.
+                </p>
+            </div>
+
+            @let logoSrc = logoPreview() ?? existingLogo();
+            <div class="flex flex-col sm:flex-row items-center gap-5">
+                <div
+                    class="w-32 h-32 sm:w-40 sm:h-40 shrink-0 flex items-center justify-center relative rounded-xl overflow-hidden aspect-square bg-[#FAFAFA] border-2 border-dashed border-[#17171733]">
+                    @if (logoSrc) {
+                    <img [src]="logoSrc" alt="Store logo preview" class="w-full h-full object-cover" />
+
+                    <button (click)="clearLogo()" title="Remove logo"
+                        class="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full w-6 h-6 flex items-center justify-center transition-colors duration-150 cursor-pointer">
+                        <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
+                            <path d="M1 1L9 9M9 1L1 9" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    } @else {
+                    <svg class="w-10 h-10 text-[#9CA3AF]" fill="none" stroke="currentColor" stroke-width="1.5"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 16l5-5 4 4 3-3 6 6M3 5h18v14H3zM9 9.5a1 1 0 100-2 1 1 0 000 2z" />
+                    </svg>
+                    }
+                </div>
+
+                <div class="flex flex-col items-center sm:items-start gap-2">
+                    <input id="logo" type="file" accept="image/png,image/jpeg,image/webp" class="peer sr-only"
+                        (change)="onLogoSelected($event)" />
+                    <label for="logo"
+                        class="text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in cursor-pointer">
+                        {{ logoSrc ? 'Change logo' : 'Choose logo' }}
+                    </label>
+
+                    @if (logoFile()) {
+                    <span class="text-[14px] text-[#9CA3AF] truncate max-w-55">{{ logoFile()!.name }}</span>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+
+        @if (step() === 'store-banner') {
+        <div class="flex flex-col gap-5 px-2">
+            <div>
+                <h2 class="text-[18px] font-medium text-[#171717] products-font">
+                    Store banner <span class="text-[13px] font-normal text-[#9CA3AF]">(Optional)</span>
+                </h2>
+                <p class="mt-1 text-[14px] text-[#6B7280]">
+                    The wide image at the top of your store page. Landscape images (around 3:1) work best.
+                    PNG, JPG or WebP, up to 5MB.
+                </p>
+            </div>
+
+            @let bannerSrc = bannerPreview() ?? existingBanner();
+            <div
+                class="w-full h-36 sm:h-52 relative rounded-2xl overflow-hidden bg-[#FAFAFA] border-2 border-dashed border-[#17171733] flex items-center justify-center">
+                @if (bannerSrc) {
+                <img [src]="bannerSrc" alt="Store banner preview" class="w-full h-full object-cover" />
+
+                <button (click)="clearBanner()" title="Remove banner"
+                    class="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full w-6 h-6 flex items-center justify-center transition-colors duration-150 cursor-pointer">
+                    <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
+                        <path d="M1 1L9 9M9 1L1 9" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+                } @else {
+                <svg class="w-10 h-10 text-[#9CA3AF]" fill="none" stroke="currentColor" stroke-width="1.5"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 16l5-5 4 4 3-3 6 6M3 5h18v14H3zM9 9.5a1 1 0 100-2 1 1 0 000 2z" />
+                </svg>
+                }
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <input id="banner" type="file" accept="image/png,image/jpeg,image/webp" class="peer sr-only"
+                    (change)="onBannerSelected($event)" />
+                <label for="banner"
+                    class="text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in cursor-pointer">
+                    {{ bannerSrc ? 'Change banner' : 'Choose banner' }}
+                </label>
+
+                @if (bannerFile()) {
+                <span class="text-[14px] text-[#9CA3AF] truncate max-w-55">{{ bannerFile()!.name }}</span>
+                }
+            </div>
+        </div>
+        }
         }
     </div>
 
@@ -235,8 +333,39 @@
         <button type="button" (click)="submitStoreLocation()"
             [disabled]="isSubmittingLocation() || locationForm.invalid"
             class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
-            {{ isSubmittingLocation() ? 'Saving location…' : 'Finish Setup' }}
+            {{ isSubmittingLocation() ? 'Saving location…' : 'Save & Continue' }}
         </button>
+        }
+
+        @if (step() === 'store-logo') {
+        <div class="w-full flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end mt-5">
+            <button type="button" (click)="skipLogo()" [disabled]="isSubmittingLogo()"
+                class="w-full sm:w-auto px-6 py-3 text-[15px] sm:text-[16px] font-medium
+               bg-white border border-[#171717] text-[#171717] rounded-xl transition-colors duration-200 hover:bg-gray-50 hover:border-gray-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                Skip for now
+            </button>
+
+            <button type="button" (click)="submitStoreLogo()" [disabled]="isSubmittingLogo() || !logoFile()" class="w-full sm:w-auto px-6 py-3 text-[15px] sm:text-[16px] font-medium
+               bg-[#171717] text-white rounded-xl
+               hover:opacity-85 transition-opacity duration-200 ease-in
+               disabled:opacity-40 disabled:cursor-not-allowed
+               cursor-pointer">
+                {{ isSubmittingLogo() ? 'Uploading logo…' : 'Upload & Continue' }}
+            </button>
+        </div>
+        }
+
+        @if (step() === 'store-banner') {
+        <div class="w-full flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end mt-5">
+            <button type="button" (click)="finishSetup()" [disabled]="isSubmittingBanner()"
+                class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-white border border-[#171717] text-[#171717] rounded-xl transition-colors duration-200 hover:bg-gray-50 hover:border-gray-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                Skip & Finish
+            </button>
+            <button type="button" (click)="submitStoreBanner()" [disabled]="isSubmittingBanner() || !bannerFile()"
+                class="w-full md:w-auto text-[15px] sm:text-[16px] font-medium px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                {{ isSubmittingBanner() ? 'Uploading banner…' : 'Upload & Finish' }}
+            </button>
+        </div>
         }
     </div>
     }
