@@ -109,7 +109,13 @@
               stroke-linejoin="round" />
           </svg>
 
-          <span class="text-sm sm:text-base">{{vendorStoreData.store.rating}}</span>
+          @if (vendorStoreData.store.rating > 0) {
+          <span class="font-medium text-gray-900">{{ vendorStoreData.store.rating.toFixed(1) }}</span>
+          <span>({{ vendorStoreData.store.rating }} {{ vendorStoreData.store.rating === 1 ? 'review' : 'reviews'
+            }})</span>
+          } @else {
+          <span class="text-sm sm:text-base">No reviews yet</span>
+          }
         </div>
       </div>
       }

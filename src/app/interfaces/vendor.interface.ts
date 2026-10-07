@@ -12,6 +12,8 @@ export interface Store {
   phoneNumber: string;
   region: string;
   city: string;
+  digitalAddress?: string;
+  physicalAddress?: string;
   description: string;
   shippingPolicy: string;
   returnPolicy: string;
@@ -49,4 +51,58 @@ export interface VendorLocation {
   digitalAddress: string;
   physicalAddress: string;
   region: string;
+}
+
+
+export interface CreatedStoreLocation {
+  city: string;
+  digitalAddress: string;
+  physicalAddress: string;
+  region: string;
+}
+
+export interface CreatedStore {
+  _id: string;
+  vendor: string;
+  name: string;
+  subdomain: string;
+  description: string;
+  shippingPolicy: string;
+  returnPolicy: string;
+  termsAndConditions: string;
+  location: CreatedStoreLocation;
+  isActive: boolean;
+  isPaused: boolean;
+  rating: number;
+  reviewCount: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface CreateOrUpdateStoreDetailsResponse {
+  success: boolean;
+  message: string;
+  store: CreatedStore;
+}
+
+export interface createOrUpdateStoreLocationResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface createOrUpdateStoreDetailsPayload {
+  name: string;
+  subdomain: string;
+  description: string;
+  shippingPolicy: string;
+  returnPolicy: string;
+  termsAndConditions: string;
+}
+
+export interface createOrUpdateStoreLocationPayload {
+  region: string;
+  city: string;
+  digitalAddress: string;
+  physicalAddress: string;
 }

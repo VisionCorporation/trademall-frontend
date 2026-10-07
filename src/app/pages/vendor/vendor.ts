@@ -9,7 +9,7 @@ import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { SkeletonLoader } from "../../shared/skeleton-loader/skeleton-loader";
 import { BUTTONS, DEFAULT_HERO_IMAGE } from '../../data/constants/vendor-page.constant';
-import { VendorStore } from '../../services/vendor-store/vendor-store';
+import { VendorStoreService } from '../../services/vendor-store/vendor-store';
 import { Seo } from '../../services/seo/seo';
 import { VendorProductsResponse } from '../../interfaces/product-card.interface';
 import { ProductCard } from '../../shared/product-card/product-card';
@@ -22,7 +22,7 @@ import { ProductCard } from '../../shared/product-card/product-card';
   animations: [staggerProducts],
 })
 export class Vendor {
-  private vendorStoreService = inject(VendorStore);
+  private vendorStoreService = inject(VendorStoreService);
   private readonly route = inject(ActivatedRoute);
   private readonly seoService = inject(Seo);
   public vendorStoreData: StoreResponse | null = null
