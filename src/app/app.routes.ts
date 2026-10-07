@@ -7,7 +7,11 @@ import { VendorDashboardOverview } from './pages/vendor-dashboard/vendor-dashboa
 import { VendorDashboardOrders } from './pages/vendor-dashboard/vendor-dashboard-orders/vendor-dashboard-orders';
 import { VendorAddProduct } from './pages/vendor-dashboard/vendor-add-product/vendor-add-product';
 import { vendorApprovalGuard } from './guards/authorization/vendor-approval/vendor-approval-guard';
-import { VendorStore } from './pages/vendor-dashboard/vendor-store/vendor-store/vendor-store';
+import { VendorStore } from './pages/vendor-store-layout/vendor-store/vendor-store';
+import { VendorStoreForm } from './pages/vendor-store-layout/vendor-store-form/vendor-store-form';
+import { VendorStoreLayout } from './pages/vendor-store-layout/vendor-store-layout';
+import { storeEditGuard } from './guards/authorization/store-edit/store-edit-guard';
+import { storeCreateGuard } from './guards/authorization/store-create/store-create-guard';
 
 export const routes: Routes = [
   {
@@ -70,15 +74,41 @@ export const routes: Routes = [
   },
   {
     path: 'vendor',
-    loadComponent: () => import('./pages/vendor-dashboard/vendor-dashboard').then((m) => m.VendorDashboard),
+    loadComponent: () =>
+      import('./pages/vendor-dashboard/vendor-dashboard')
+        .then((m) => m.VendorDashboard),
+
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
+
       { path: 'overview', component: VendorDashboardOverview },
       { path: 'orders', component: VendorDashboardOrders },
       { path: 'products', component: VendorProducts },
-      { path: 'store', component: VendorStore },
+
+      {
+        path: 'store',
+        component: VendorStoreLayout,
+        children: [
+          {
+            path: '',
+            component: VendorStore,
+          },
+          {
+            path: 'create',
+            component: VendorStoreForm,
+            canActivate: [storeCreateGuard],
+          },
+          {
+            path: 'edit',
+            component: VendorStoreForm,
+            canActivate: [storeEditGuard],
+          },
+        ],
+      },
+
       { path: 'add-product', component: VendorAddProduct },
     ],
+
     canActivate: [authGuard, vendorGuard, vendorApprovalGuard],
   },
   {
