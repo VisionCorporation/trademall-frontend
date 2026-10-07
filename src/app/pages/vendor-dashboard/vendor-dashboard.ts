@@ -27,10 +27,10 @@ export class VendorDashboard implements OnInit {
       .pipe(
         filter((event) => event instanceof NavigationEnd),
         map((event: NavigationEnd) => {
-          const url = event.urlAfterRedirects;
+          const url = event.urlAfterRedirects.split('?')[0];
           const route = url.replace('/vendor/', '');
 
-          return this.routeTitleMap[route] || '';
+          return this.routeTitleMap[route] || 'Overview';
         })
       )
       .subscribe((title) => {
