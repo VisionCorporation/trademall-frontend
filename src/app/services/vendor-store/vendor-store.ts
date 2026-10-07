@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { createOrUpdateStoreLocationPayload, createOrUpdateStoreDetailsPayload, StoreResponse, VendorDetailedInfoResponse, CreateOrUpdateStoreDetailsResponse, createOrUpdateStoreLocationResponse } from '../../interfaces/vendor.interface';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { VendorProductsResponse } from '../../interfaces/product-card.interface';
@@ -36,5 +36,13 @@ export class VendorStoreService {
 
   public submitStoreLocation(storeLocation: createOrUpdateStoreLocationPayload): Observable<createOrUpdateStoreLocationResponse> {
     return this.http.put<createOrUpdateStoreLocationResponse>(`${environment.apiBaseUrl}/stores/location`, storeLocation);
+  }
+
+  public submitStoreLogo(formData: FormData): Observable<Object> {
+    return this.http.post<Object>(`${environment.apiBaseUrl}/vendor/store/logo`, formData)
+  }
+
+  public submitStoreBanner(formData: FormData): Observable<Object> {
+    return this.http.post<Object>(`${environment.apiBaseUrl}/vendor/store/banner`, formData)
   }
 }
