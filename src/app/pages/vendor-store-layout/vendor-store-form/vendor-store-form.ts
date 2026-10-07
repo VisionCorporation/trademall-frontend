@@ -51,7 +51,7 @@ export class VendorStoreForm implements OnInit {
       '',
       [
         Validators.required,
-        Validators.pattern(/^[a-z0-9]+(-[a-z0-9]+)*$/)
+        Validators.pattern(/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/i)
       ]
     ],
     description: ['', Validators.required],
@@ -66,8 +66,7 @@ export class VendorStoreForm implements OnInit {
     digitalAddress: [
       '',
       [
-        Validators.required,
-        Validators.pattern(/^[A-Z]{2}-\d{3}-\d{4}$/i)
+        Validators.required
       ]
     ],
     physicalAddress: ['', Validators.required],

@@ -87,7 +87,7 @@
                     </div>
                     <app-input-error-message [control]="detailsForm.controls.subdomain" [messages]="{
                     required: 'Subdomain is required',
-                    pattern: 'Invalid subdomain format'
+                    pattern: 'Invalid format. Start with a letter and end with a letter or number.'
                 }" />
                 </div>
             </div>
@@ -197,8 +197,7 @@
                     class="uppercase outline-none bg-[#FBFCFF] border rounded-xl py-3.5 px-4 sm:px-5 placeholder:text-[#9CA3AF]]" />
 
                 <app-input-error-message [control]="locationForm.controls.digitalAddress" [messages]="{
-                required: 'Digital address is required',
-                pattern: 'Enter a valid GhanaPost code, e.g. GA-123-4567'
+                required: 'Digital address is required'
             }" />
             </div>
 
