@@ -55,6 +55,16 @@ export class Login {
     }
   }
 
+  private getSafeReturnUrl(returnUrl: string | null): string | null {
+    if (!returnUrl) {
+      return null;
+    }
+
+    return returnUrl.startsWith('/') && !returnUrl.startsWith('//')
+      ? returnUrl
+      : null;
+  }
+
   public onSubmit(): void {
     this.signupService.isSubmitting$.next(true);
 
@@ -70,20 +80,42 @@ export class Login {
         this.loginForm.reset();
 
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        const safeReturnUrl = this.getSafeReturnUrl(returnUrl);
 
-        if (res.user.userType === 'vendor' && res.user.vendorStatus === 'approved' && this.hasVisitedVendorApplicationStatus()) {
-          this.router.navigateByUrl(returnUrl || '/vendor/overview');
-        } else if (res.user.userType === 'vendor' && res.user.vendorStatus === 'approved' && !this.hasVisitedVendorApplicationStatus()) {
+        if (
+          res.user.userType === 'vendor' &&
+          res.user.vendorStatus === 'approved' &&
+          this.hasVisitedVendorApplicationStatus()
+        ) {
+          if (!res.user.store) {
+            this.router.navigateByUrl(safeReturnUrl || '/vendor/store');
+          } else {
+            this.router.navigateByUrl(safeReturnUrl || '/vendor/overview');
+          }
+
+        } else if (
+          res.user.userType === 'vendor' &&
+          res.user.vendorStatus === 'approved' &&
+          !this.hasVisitedVendorApplicationStatus()
+        ) {
           this.router.navigate(['/vendor-application-status']);
           this.markVendorApplicationStatusVisited();
-        } else if (res.user.userType === 'vendor' && (res.user.vendorStatus === 'pending' || res.user.vendorStatus === 'rejected')) {
+
+        } else if (
+          res.user.userType === 'vendor' &&
+          (res.user.vendorStatus === 'pending' ||
+            res.user.vendorStatus === 'rejected')
+        ) {
           this.router.navigate(['/vendor-application-status']);
+
         } else if (res.user.userType === 'customer') {
-          this.router.navigateByUrl(returnUrl || '/');
+          this.router.navigateByUrl(safeReturnUrl || '/');
         }
       },
       error: (err) => {
-        this.toastService.error(err.error.message || 'Login failed. Please try again.');
+        this.toastService.error(
+          err.error?.message ?? 'Login failed. Please try again.'
+        );
         this.signupService.isSubmitting$.next(false);
       },
     });

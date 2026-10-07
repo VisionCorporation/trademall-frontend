@@ -134,7 +134,14 @@ export class VendorStoreForm implements OnInit {
             res.message ?? 'Store setup completed successfully'
           );
 
-          this.router.navigate(['/vendor/store']);
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+
+          const destination =
+            returnUrl?.startsWith('/') && !returnUrl.startsWith('//')
+              ? returnUrl
+              : '/vendor/store';
+
+          this.router.navigateByUrl(destination);
         },
         error: (err) => {
           this.isSubmittingLocation.set(false);
