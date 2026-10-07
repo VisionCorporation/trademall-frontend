@@ -96,7 +96,7 @@ export const ORDER_PERIODS = [
 ];
 
 export const ADD_PRODUCT_STEPS = [{ label: "General", value: 'general', number: 1 }, { label: 'Images', value: 'images', number: 2 }, { label: "Advanced", value: 'advanced', number: 3 }]
-export const STORE_SETUP_STEPS = [{ label: "Store Details", value: 'store-details', number: 1 }, { label: 'Store Location', value: 'store-location', number: 2 }]
+export const STORE_SETUP_STEPS = [{ label: "Store Details", value: 'store-details', number: 1 }, { label: 'Store Location', value: 'store-location', number: 2 }, { number: 3, value: 'store-logo', label: 'Logo' }, { number: 4, value: 'store-banner', label: 'Banner' },]
 
 export const POSITIONS: ConnectedPosition[] = [
     { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 8 },
