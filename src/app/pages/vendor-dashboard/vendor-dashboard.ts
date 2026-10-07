@@ -23,15 +23,19 @@ export class VendorDashboard implements OnInit {
   private readonly routeTitleMap = ROUTE_TITLE_MAP
 
   constructor() {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map((event: NavigationEnd) => {
-        const segments = event.urlAfterRedirects.split('/');
-        return segments[segments.length - 1];
-      })
-    ).subscribe(segment => {
-      this.headerTitle.set(this.routeTitleMap[segment] || '');
-    });
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map((event: NavigationEnd) => {
+          const url = event.urlAfterRedirects;
+          const route = url.replace('/vendor/', '');
+
+          return this.routeTitleMap[route] || '';
+        })
+      )
+      .subscribe((title) => {
+        this.headerTitle.set(title);
+      });
   }
 
   ngOnInit() {
