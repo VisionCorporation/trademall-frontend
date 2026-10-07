@@ -1,0 +1,161 @@
+<div class="mx-auto w-full space-y-6 p-4 sm:p-6">
+    @if (status() === 'loading') {
+    <div class="animate-pulse space-y-6">
+        <div class="h-56 rounded-2xl skeleton-shimmer"></div>
+        <div class="h-40 rounded-2xl skeleton-shimmer"></div>
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <div class="h-40 rounded-2xl skeleton-shimmer"></div>
+            <div class="h-40 rounded-2xl skeleton-shimmer"></div>
+            <div class="h-40 rounded-2xl skeleton-shimmer"></div>
+        </div>
+    </div>
+    } @else if (status() === 'error') {
+    <section class="rounded-2xl border border-red-100 bg-red-50 p-6 text-center">
+        <p class="text-sm text-red-500">We couldn't load your store details. Please refresh and try again.</p>
+    </section>
+    } @else if (status() === 'ready') {
+    @let s = store()!;
+
+    <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div class="h-28 w-full bg-linear-to-r from-[#00A751] to-[#007a3b] sm:h-40">
+            @if (s.banner) {
+            <img [src]="s.banner" [alt]="s.name + ' banner'" class="h-full w-full object-cover" />
+            }
+        </div>
+
+        <div class="p-5 sm:p-6">
+            <div class="-mt-14 flex flex-col gap-4 sm:-mt-10 sm:flex-row sm:items-end sm:justify-between">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
+                    <div
+                        class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#00A751] text-3xl font-bold text-white ring-4 ring-white sm:h-24 sm:w-24">
+                        @if (s.logo) {
+                        <img [src]="s.logo" [alt]="s.name + ' logo'" class="h-full w-full object-cover" />
+                        } @else {
+                        {{ initial() }}
+                        }
+                    </div>
+
+                    <div class="min-w-0">
+                        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl products-font">{{
+                            s.name }}</h1>
+                        <div class="mt-1.5 flex flex-wrap items-center gap-2">
+                            <span
+                                class="inline-flex items-center gap-1.5 rounded-full bg-[#00A751]/10 px-2.5 py-0.5 text-xs font-medium text-[#00A751]">
+                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1" />
+                                </svg>
+                                {{ s.subdomain }}
+                            </span>
+                            <span class="inline-flex items-center gap-1 text-xs text-gray-600">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                                        [attr.fill]="s.reviewCount === 0 ? 'none' : '#F0B718'"
+                                        [attr.stroke]="s.reviewCount === 0 ? '#F0B718' : 'none'" stroke-width="1.8"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                @if (s.reviewCount > 0) {
+                                <span class="font-medium text-gray-900">{{ s.rating.toFixed(1) }}</span>
+                                <span>({{ s.reviewCount }} {{ s.reviewCount === 1 ? 'review' : 'reviews' }})</span>
+                                } @else {
+                                <span>No reviews yet</span>
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <a routerLink="/vendor/store/edit"
+                    class="inline-flex items-center justify-center gap-2 shrink-0 text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white hover:opacity-85 transition-opacity duration-200 ease-in rounded-xl cursor-pointer text-center">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4" />
+                    </svg>
+                    Edit Store
+                </a>
+            </div>
+
+            <p
+                class="mt-5 whitespace-pre-line border-t border-gray-100 pt-5 text-sm sm:text-base leading-relaxed text-gray-600">
+                {{ s.description || 'No description added yet.' }}
+            </p>
+        </div>
+    </section>
+
+    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+        <h2 class="mb-4 text-base sm:text-lg font-semibold text-gray-900 products-font">Location &amp; Contact</h2>
+        <dl class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+            <div>
+                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">Region</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ s.region || '—' }}</dd>
+            </div>
+            <div>
+                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">City</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ s.city || '—' }}</dd>
+            </div>
+            <div>
+                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">Digital address</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ s.digitalAddress || '—' }}</dd>
+            </div>
+            <div>
+                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">Phone number</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ s.phoneNumber || '—' }}</dd>
+            </div>
+            <div class="sm:col-span-2">
+                <dt class="text-xs font-medium uppercase tracking-wide text-gray-500">Physical address</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ s.physicalAddress || '—' }}</dd>
+            </div>
+        </dl>
+    </section>
+
+    <section class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        @for (p of policies(); track p.title) {
+        <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div class="mb-3 flex items-center gap-2.5">
+                <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-[#00A751]/10 text-[#00A751]">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="p.icon" />
+                    </svg>
+                </span>
+                <h3 class="text-sm sm:text-base font-semibold text-gray-900 products-font">{{ p.title }}</h3>
+            </div>
+            <p class="max-h-56 overflow-y-auto whitespace-pre-line text-sm leading-relaxed text-gray-600">
+                {{ p.text || 'Not provided.' }}
+            </p>
+        </article>
+        }
+    </section>
+    } @else {
+    <section
+        class="flex flex-col items-center rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-14 text-center sm:py-20">
+        <div class="flex h-20 w-20 items-center justify-center rounded-full bg-[#00A751]/10 text-[#00A751]">
+            <svg class="h-10 w-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <path d="M4 10.5V19C4 19.5523 4.44772 20 5 20H19C19.5523 20 20 19.5523 20 19V10.5" stroke="currentColor"
+                    stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M3 10L4.8 4.6C4.96 4.12 5.41 3.8 5.92 3.8H18.08C18.59 3.8 19.04 4.12 19.2 4.6L21 10"
+                    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                <path
+                    d="M3 10C3 11.66 4.34 13 6 13C7.66 13 9 11.66 9 10C9 11.66 10.34 13 12 13C13.66 13 15 11.66 15 10C15 11.66 16.34 13 18 13C19.66 13 21 11.66 21 10"
+                    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M9 20V16C9 15.4477 9.44772 15 10 15H14C14.5523 15 15 15.4477 15 16V20" stroke="currentColor"
+                    stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </div>
+
+        <h1 class="mt-6 text-xl font-semibold text-gray-900 sm:text-2xl products-font"> No store has been set up yet
+        </h1>
+        <p class="mt-2 max-w-md text-sm leading-relaxed text-gray-600"> Create your store to start listing products and
+            selling on TradeMall. It only takes a few minutes to get everything ready. </p>
+        <a routerLink="/vendor/store/create"
+            class="mt-8 inline-flex items-center justify-center gap-2 shrink-0 text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white hover:opacity-85 transition-opacity duration-200 ease-in rounded-xl cursor-pointer text-center">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" d="M12 5v14M5 12h14" />
+            </svg>
+            Create Store
+        </a>
+    </section>
+    }
+</div>
