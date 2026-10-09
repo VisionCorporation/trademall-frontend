@@ -1,25 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { StoreResponse } from '../../interfaces/vendor.interface';
-import { CurrencyPipe, DatePipe, NgOptimizedImage } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { staggerProducts } from '../../animations/smooth-collapse.animations';
 import { ToastService } from '../../services/toast/toast.service';
 import { Newsletter } from '../../shared/newsletter/newsletter';
 import { SkeletonLoader } from "../../shared/skeleton-loader/skeleton-loader";
-import { BUTTONS, DEFAULT_HERO_IMAGE } from '../../data/constants/vendor-page.constant';
 import { VendorStoreService } from '../../services/vendor-store/vendor-store';
 import { Seo } from '../../services/seo/seo';
 import { VendorProductsResponse } from '../../interfaces/product-card.interface';
 import { ProductCard } from '../../shared/product-card/product-card';
+import { fadeInOutAnimation } from '../../animations/toast.animations';
 
 @Component({
   selector: 'app-vendor',
-  imports: [Header, Footer, DatePipe, Newsletter, SkeletonLoader, NgOptimizedImage, ProductCard],
+  imports: [Header, Footer, DatePipe, Newsletter, SkeletonLoader, ProductCard],
   templateUrl: './vendor.html',
   styleUrl: './vendor.css',
-  animations: [staggerProducts],
+  animations: [staggerProducts, fadeInOutAnimation],
+  host: { '(document:keydown.escape)': 'closeAbout()' },
 })
 export class Vendor {
   private vendorStoreService = inject(VendorStoreService);
@@ -29,15 +30,12 @@ export class Vendor {
   public vendorProducts: VendorProductsResponse | null = null
   public wishlistedIds = new Set<string>();
   private readonly toastService = inject(ToastService);
-  public buttons = BUTTONS
   public openPolicy: string | null = null;
-  public activeTab = 'products';
   public isStoreLoading = signal(true);
   public isVendorProductLoading = signal(true);
   public storeError = signal(false);
   public productsError = signal(false);
-  public heroImageLoaded = false;
-  public heroImage: string = DEFAULT_HERO_IMAGE;
+  public isAboutOpen = signal(false);
 
   ngOnInit(): void {
     this.loadStore();
@@ -53,8 +51,6 @@ export class Vendor {
     this.vendorStoreService.getPublicStorePage('nastrade').subscribe({
       next: (res) => {
         this.vendorStoreData = res;
-        this.heroImageLoaded = true;
-        this.heroImage = res.store.banner ?? DEFAULT_HERO_IMAGE;
         this.isStoreLoading.set(false);
 
         this.seoService.updatePageSeo({
@@ -97,16 +93,21 @@ export class Vendor {
     });
   }
 
-  public switchButtons(tab: string) {
-    this.activeTab = tab;
-  }
-
   public get policies() {
     return [
       { title: 'Shipping Policy', content: this.vendorStoreData?.store.shippingPolicy },
       { title: 'Return Policy', content: this.vendorStoreData?.store.returnPolicy },
       { title: 'Terms and Conditions', content: this.vendorStoreData?.store.termsAndConditions },
     ];
+  }
+
+  public openAbout() {
+    this.isAboutOpen.set(true);
+  }
+
+  public closeAbout() {
+    this.isAboutOpen.set(false);
+    this.openPolicy = null;
   }
 
   public togglePolicy(title: string) {
