@@ -34,6 +34,7 @@ export class Shop implements OnInit, OnDestroy {
   public isMobileFiltersOpen = signal(false);
   public categories = signal<RootCategory[]>([]);
   public isCategoriesLoading = signal(false);
+  private isProductsRequestInProgress = false;
   public selectedCategorySlugs: string[] = [];
   public searchValidationError = signal(false);
   public searchQuery: string | null = null;
@@ -180,12 +181,19 @@ export class Shop implements OnInit, OnDestroy {
 
     this.observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && this.hasMore && !this.isLoadingMore() && !this.isLoading()) {
-          setTimeout(() => this.loadProducts(this.currentPage() + 1));
+        if (
+          entries[0].isIntersecting &&
+          this.hasMore &&
+          !this.isLoadingMore() &&
+          !this.isLoading() &&
+          !this.isProductsRequestInProgress
+        ) {
+          this.loadProducts(this.currentPage() + 1);
         }
       },
-      { rootMargin: '200px' }
+      { rootMargin: '200px' },
     );
+
     this.observer.observe(this.scrollSentinel.nativeElement);
   }
 
@@ -198,17 +206,40 @@ export class Shop implements OnInit, OnDestroy {
       : this.productsService.getAllProducts(page, categories);
 
     const isFirstPage = page === 1;
-    isFirstPage ? this.isLoading.set(true) : this.isLoadingMore.set(true);
+
+    this.isProductsRequestInProgress = true;
+
+    if (isFirstPage) {
+      this.isLoading.set(true);
+    } else {
+      this.isLoadingMore.set(true);
+    }
+
     this.hasErrorProducts.set(false);
 
     request$.subscribe({
       next: (res) => {
-        this.products.set(isFirstPage ? res.data : [...this.products(), ...res.data]);
+        this.products.update((products) => {
+          if (isFirstPage) {
+            return res.data;
+          }
+
+          const existingIds = new Set(products.map((product) => product.id));
+          const uniqueNewProducts = res.data.filter(
+            (product) => !existingIds.has(product.id),
+          );
+
+          return [...products, ...uniqueNewProducts];
+        });
+
+
         this.applySort();
         this.currentPage.set(res.pagination.currentPage);
         this.totalPages.set(res.pagination.totalPages);
         this.totalResults.set(res.pagination.totalResults);
-        isFirstPage ? this.isLoading.set(false) : this.isLoadingMore.set(false);
+        this.isProductsRequestInProgress = false;
+        this.isLoading.set(false);
+        this.isLoadingMore.set(false);
 
         if (isFirstPage) {
           setTimeout(() => this.setupObserver());
@@ -216,17 +247,26 @@ export class Shop implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Failed to load products', err);
+
         this.hasErrorProducts.set(true);
-        isFirstPage ? this.isLoading.set(false) : this.isLoadingMore.set(false);
-        if (!isFirstPage) {
-          this.toastService.error('Failed to load more products');
-        }
+        this.isProductsRequestInProgress = false;
+        this.isLoading.set(false);
+        this.isLoadingMore.set(false);
+
+        this.toastService.error(
+          isFirstPage
+            ? "Failed to load products. Try again"
+            : 'Failed to load more products',
+        );
       },
     });
   }
 
   public retryLoad(): void {
-    this.loadProducts(this.currentPage() === 1 ? 1 : this.currentPage());
+    const loadPage =
+      this.products().length === 0 ? 1 : this.currentPage() + 1;
+
+    this.loadProducts(loadPage);
   }
 
   public retryLoadCategories(): void {
