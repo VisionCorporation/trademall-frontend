@@ -19,8 +19,12 @@
         <app-skeleton-loader skeletonType="vendor-details" />
       </div>
       } @else if (storeError()) {
-      <div class="text-center py-10 mt-8">
-        <p class="text-lg text-red-600">Unable to load store details. Please try again later.</p>
+      <div class="flex flex-col items-center gap-3 py-16">
+        <p class="text-lg text-red-500">Failed to load store. Try again</p>
+        <button (click)="loadStore()"
+          class="text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in">
+          Try Again
+        </button>
       </div>
       } @else if (vendorStoreData) {
       @let store = vendorStoreData.store;
@@ -205,7 +209,7 @@
         <app-skeleton-loader skeletonType="product" />
         } @else if (productsError() && vendorProducts().length === 0) {
         <div class="flex flex-col items-center gap-3 py-16">
-          <p class="text-lg text-red-500">Failed to load products.</p>
+          <p class="text-lg text-red-500">Failed to load products. Try again</p>
           <button (click)="retryLoad()"
             class="text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in">
             Try Again

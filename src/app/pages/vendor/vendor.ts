@@ -54,7 +54,7 @@ export class Vendor {
     this.loadVendorProducts(1);
   }
 
-  private loadStore(): void {
+  public loadStore(): void {
     this.isStoreLoading.set(true);
     this.storeError.set(false);
 
