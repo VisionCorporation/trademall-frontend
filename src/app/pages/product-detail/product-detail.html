@@ -178,7 +178,7 @@
         class="relative flex items-center gap-6 sm:gap-8 overflow-x-auto scrollbar-hide whitespace-nowrap pb-2 border-b border-gray-300 mb-8">
         @for (button of buttons; track button.value) {
         <button
-          class="relative text-[15px] sm:text-[16px] pb-3 shrink-0 transition-colors duration-100 ease-in-out cursor-pointer"
+          class="relative text-[15px] sm:text-[16px] pb-2 shrink-0 transition-colors duration-100 ease-in-out cursor-pointer"
           [class]="button.value === activeButton ? 'text-[#00a751]' : 'text-[#4b5563] hover:text-[#171717]'"
           (click)="switchButtons(button.value)">
           {{ button.label }}
@@ -234,7 +234,7 @@
           </div>
 
           <a [routerLink]="['/products/vendor', vendorDetailedInfo.vendor._id]"
-            class="shrink-0text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white hover:opacity-85 transition-opacity duration-200 ease-in rounded-xl cursor-pointer text-center">
+            class="shrink-0 text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white hover:opacity-85 transition-opacity duration-200 ease-in rounded-xl cursor-pointer text-center">
             Visit Store
           </a>
         </div>
