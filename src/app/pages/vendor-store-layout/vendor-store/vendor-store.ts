@@ -1,15 +1,10 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { catchError, filter, of, switchMap, tap } from 'rxjs';
 import { LoginService } from '../../../services/login/login.service';
 import { VendorStoreService } from '../../../services/vendor-store/vendor-store';
 import { Store } from '../../../interfaces/vendor.interface';
-
-const MOCK_ADDRESS = {
-  digitalAddress: 'GA-123-4567',
-  physicalAddress: '12 Independence Avenue, Osu, Accra',
-};
 
 @Component({
   selector: 'app-vendor-store',
@@ -48,7 +43,7 @@ export class VendorStore implements OnInit {
 
           return this.vendorStoreService.getPublicStorePage('nastrade').pipe(
             tap((res) => {
-              this.store.set({ ...MOCK_ADDRESS, ...res.store });
+              this.store.set(res.store);
               this.status.set('ready');
             }),
             catchError(() => {
