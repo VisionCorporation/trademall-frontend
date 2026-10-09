@@ -12,8 +12,8 @@ export interface Store {
   phoneNumber: string;
   region: string;
   city: string;
-  digitalAddress?: string;
-  physicalAddress?: string;
+  digitalAddress: string;
+  physicalAddress: string;
   description: string;
   shippingPolicy: string;
   returnPolicy: string;

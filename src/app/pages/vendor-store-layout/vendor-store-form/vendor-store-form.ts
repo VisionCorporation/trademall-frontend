@@ -104,6 +104,8 @@ export class VendorStoreForm implements OnInit {
         this.locationForm.patchValue({
           region: store.region,
           city: store.city,
+          digitalAddress: store.digitalAddress,
+          physicalAddress: store.physicalAddress
         });
 
         this.existingLogo.set(store.logo);
