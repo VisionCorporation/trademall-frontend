@@ -30,18 +30,18 @@ export class VendorStore implements OnInit {
     ];
   });
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loginService.user$
       .pipe(
         filter((user) => !!user),
         tap(() => this.status.set('loading')),
         switchMap((user) => {
-          if (!user?.store) {
+          if (!user.store) {
             this.status.set('empty');
             return of(null);
           }
 
-          return this.vendorStoreService.getPublicStorePage('nastrade').pipe(
+          return this.vendorStoreService.getStoreWithVendorId(user._id).pipe(
             tap((res) => {
               this.store.set(res.store);
               this.status.set('ready');

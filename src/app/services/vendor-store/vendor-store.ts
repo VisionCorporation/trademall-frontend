@@ -11,8 +11,14 @@ import { VendorProductsResponse } from '../../interfaces/product-card.interface'
 export class VendorStoreService {
   private http = inject(HttpClient);
 
-  public getPublicStorePage(subdomain: string): Observable<StoreResponse> {
-    return this.http.get<StoreResponse>(`${environment.apiBaseUrl}/stores/${subdomain}`)
+  public getStoreWithVendorId(vendorId: string): Observable<StoreResponse> {
+    return this.http.get<StoreResponse>(`${environment.apiBaseUrl}/stores/vendor/${vendorId}`)
+  }
+
+  public getStoreWithSubdomain(subdomain: string): Observable<StoreResponse> {
+    return this.http.get<StoreResponse>(
+      `${environment.apiBaseUrl}/stores/${encodeURIComponent(subdomain)}`
+    );
   }
 
   public getVendorProductsById(

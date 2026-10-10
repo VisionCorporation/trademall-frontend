@@ -11,6 +11,8 @@ import { InputErrorMessage } from '../../../shared/input-error-message/input-err
 import { VendorStoreService } from '../../../services/vendor-store/vendor-store';
 import { ToastService } from '../../../services/toast/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../../../services/login/login.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-vendor-store-form',
@@ -23,6 +25,7 @@ export class VendorStoreForm implements OnInit {
   public storeSetupSteps = STORE_SETUP_STEPS;
   private readonly vendorStoreService = inject(VendorStoreService);
   private readonly toastService = inject(ToastService);
+  public readonly loginService = inject(LoginService)
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -88,33 +91,47 @@ export class VendorStoreForm implements OnInit {
 
   public getStoreDetails(): void {
     this.isLoadingStoreDetails.set(true);
-    this.vendorStoreService.getPublicStorePage('nastrade').subscribe({
-      next: (res) => {
-        const store = res.store;
-        this.detailsForm.patchValue({
-          name: store.name,
-          subdomain: store.subdomain,
-          description: store.description,
-          shippingPolicy: store.shippingPolicy,
-          returnPolicy: store.returnPolicy,
-          termsAndConditions: store.termsAndConditions,
-        });
-        this.isLoadingStoreDetails.set(false);
 
-        this.locationForm.patchValue({
-          region: store.region,
-          city: store.city,
-          digitalAddress: store.digitalAddress,
-          physicalAddress: store.physicalAddress
-        });
+    this.loginService.user$
+      .pipe(
+        switchMap((user) => {
+          if (!user?._id) {
+            throw new Error('Vendor ID not found');
+          }
 
-        this.existingLogo.set(store.logo);
-        this.existingBanner.set(store.banner);
-      },
-      error: (err) => {
-        console.error('Failed to fetch store details', err);
-      }
-    });
+          return this.vendorStoreService.getStoreWithVendorId(user._id);
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          const store = res.store;
+
+          this.detailsForm.patchValue({
+            name: store.name,
+            subdomain: store.subdomain,
+            description: store.description,
+            shippingPolicy: store.shippingPolicy,
+            returnPolicy: store.returnPolicy,
+            termsAndConditions: store.termsAndConditions,
+          });
+
+          this.locationForm.patchValue({
+            region: store.region,
+            city: store.city,
+            digitalAddress: store.digitalAddress,
+            physicalAddress: store.physicalAddress
+          });
+
+          this.existingLogo.set(store.logo);
+          this.existingBanner.set(store.banner);
+
+          this.isLoadingStoreDetails.set(false);
+        },
+        error: (err) => {
+          this.isLoadingStoreDetails.set(false);
+          console.error('Failed to fetch store details', err);
+        }
+      });
   }
 
   public submitStoreDetails() {
