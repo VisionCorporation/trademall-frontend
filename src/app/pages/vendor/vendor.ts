@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Header } from '../../shared/header/header';
 import { Footer } from '../../shared/footer/footer';
 import { StoreResponse } from '../../interfaces/vendor.interface';
@@ -15,10 +15,11 @@ import { ProductCardInterface } from '../../interfaces/product-card.interface';
 import { ProductCard } from '../../shared/product-card/product-card';
 import { fadeInOutAnimation } from '../../animations/toast.animations';
 import { Pagination } from '../../interfaces/product-card.interface'
+import { StoreDomainService } from '../../services/store-domain/store-domain';
 
 @Component({
   selector: 'app-vendor',
-  imports: [Header, Footer, DatePipe, Newsletter, SkeletonLoader, ProductCard],
+  imports: [Header, Footer, DatePipe, Newsletter, SkeletonLoader, ProductCard, RouterLink],
   templateUrl: './vendor.html',
   styleUrl: './vendor.css',
   animations: [staggerProducts, fadeInOutAnimation],
@@ -27,7 +28,8 @@ import { Pagination } from '../../interfaces/product-card.interface'
 export class Vendor {
   private readonly platformId = inject(PLATFORM_ID);
   private vendorStoreService = inject(VendorStoreService);
-  private readonly route = inject(ActivatedRoute);
+  private readonly storeDomainService = inject(StoreDomainService);
+  private vendorId: string | null = null;
   private readonly seoService = inject(Seo);
   public currentPage = signal(1);
   public totalPages = signal(1);
@@ -45,45 +47,61 @@ export class Vendor {
   public productsError = signal(false);
   public isAboutOpen = signal(false);
   private isProductsRequestInProgress = false;
+  public notFound = signal(false)
 
   @ViewChild('scrollSentinel') scrollSentinel!: ElementRef<HTMLDivElement>;
   private observer?: IntersectionObserver;
 
   ngOnInit(): void {
     this.loadStore();
-    this.loadVendorProducts(1);
   }
 
   public loadStore(): void {
+    const subdomain = this.storeDomainService.getStoreSubdomain();
+
+    if (!subdomain) {
+      this.storeError.set(true);
+      return;
+    }
+
     this.isStoreLoading.set(true);
     this.storeError.set(false);
 
-    const id = this.route.snapshot.paramMap.get('id');
-
-    this.vendorStoreService.getPublicStorePage('nastrade').subscribe({
+    this.vendorStoreService.getStoreWithSubdomain(subdomain).subscribe({
       next: (res) => {
         this.vendorStoreData = res;
-        this.storeName = res.store.name
+        this.storeName = res.store.name;
+        this.vendorId = res.vendor._id;
         this.isStoreLoading.set(false);
+
+        this.loadVendorProducts(1);
 
         this.seoService.updatePageSeo({
           title: `${res.store.name} | TradeMall`,
           description: `Shop ${res.store.name} on TradeMall — ${res.store.description}.`,
-          url: `https://trademall-frontend.vercel.app/products/vendor/${id}`,
-          image: res.store.banner ?? res.store.logo ?? 'https://trademall-frontend.vercel.app/assets/og-default.jpg'
+          url: `https://${subdomain}.trademall.shop`,
+          image:
+            res.store.banner ??
+            res.store.logo ??
+            'https://trademall.shop/assets/og-default.jpg',
         });
       },
       error: (err) => {
-        this.toastService.error('Failed to fetch store data')
-        console.error('Failed to fetch store data. Try again', err);
+        if (err.status === 404) {
+          this.notFound.set(true)
+        }
+
+        console.error(err.error.message ?? 'Failed to fetch store data', err);
         this.storeError.set(true);
         this.isStoreLoading.set(false);
+        this.isVendorProductLoading.set(false);
+        this.toastService.error(err.error.message ?? 'Failed to fetch store data');
       },
     });
   }
 
   private loadVendorProducts(page: number): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.vendorId;
 
     if (!id || this.isProductsRequestInProgress) {
       return;

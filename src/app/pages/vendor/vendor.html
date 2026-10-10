@@ -1,5 +1,43 @@
-<app-header [transparent]="true" />
+<app-header [transparent]="!notFound()" />
 
+@if (notFound()) {
+<main class="flex items-center justify-center px-4 min-h-screen ">
+  <section class="mx-auto flex w-full max-w-lg flex-col items-center text-center"
+    aria-labelledby="store-not-found-title">
+    <div class="mb-7 grid w-30 h-30 sm:w-50 sm:h-50 place-items-center rounded-full bg-[#F7F7F7]" aria-hidden="true">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#AAAAAA" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 10h18l-1.5-6h-15L3 10Z" />
+        <path d="M4 10v10h16V10" />
+        <path d="M9 20v-6h6v6" />
+        <path d="M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0" />
+        <path d="m10 6 4 4m0-4-4 4" />
+      </svg>
+    </div>
+
+    <h1 id="store-not-found-title" class="text-lg sm:text-[32px] text-[#171717] mt-6 mb-2 light-header">
+      We couldn't find this store
+    </h1>
+
+    <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md mb-7">
+      The store you're looking for may have moved, the address might be incorrect,
+      or the store may no longer be available.
+    </p>
+
+    <a routerLink="/"
+      class="flex items-center justify-center gap-2 w-full sm:w-auto text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white rounded-xl hover:opacity-85 transition-opacity duration-200 ease-in">
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m3 10 9-7 9 7" />
+        <path d="M5 9v12h14V9" />
+        <path d="M9 21v-7h6v7" />
+      </svg>
+      Explore TradeMall
+    </a>
+  </section>
+
+</main>
+}@else{
 <main>
   <div>
     <div class="relative h-40 sm:h-56 md:h-72 w-full overflow-hidden bg-linear-to-br from-[#00A751] to-[#00A9AC]">
@@ -18,7 +56,7 @@
       <div class="mt-8">
         <app-skeleton-loader skeletonType="vendor-details" />
       </div>
-      } @else if (storeError()) {
+      } @else if (storeError() && !notFound()) {
       <div class="flex flex-col items-center gap-3 py-16">
         <p class="text-lg text-red-500">Failed to load store. Try again</p>
         <button (click)="loadStore()"
@@ -253,9 +291,8 @@
         }
       </div>
     </section>
-
-    <app-newsletter />
   </div>
 </main>
-
+}
+<app-newsletter />
 <app-footer />
