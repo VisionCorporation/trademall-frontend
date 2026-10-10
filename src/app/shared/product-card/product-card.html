@@ -76,7 +76,7 @@
           Sold by
         </span>
 
-        <a [routerLink]="['/products/vendor', product.vendor]" (click)="$event.stopPropagation()"
+        <a [href]="storeUrl(product.store.subdomain)" (click)="$event.stopPropagation()"
           [attr.aria-label]="'Visit ' + product.store.name + ' store'" [title]="product.store.name"
           class="block max-w-full truncate text-[12px] lg:text-[13px] font-medium text-[#15803D] hover:underline">
           {{ product.store.name }}

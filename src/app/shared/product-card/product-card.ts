@@ -5,6 +5,7 @@ import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Wishlist } from '../../services/wishlist/wishlist';
 import { GuestCartDisplayInfo, PriceSnapshot } from '../../interfaces/cart.interface';
 import { ProductCardInterface, Image } from '../../interfaces/product-card.interface';
+import { StoreDomainService } from '../../services/store-domain/store-domain';
 
 @Component({
   selector: 'app-product-card',
@@ -19,6 +20,7 @@ export class ProductCard {
   public wishlistService = inject(Wishlist)
   public readonly starIndices = [0, 1, 2, 3, 4];
   public readonly starGradientUid = Math.random().toString(36).slice(2, 9);
+  private readonly storeDomainService = inject(StoreDomainService)
 
   public get priceSnapshot(): PriceSnapshot {
     const salePrice = (this.product as any).salePrice ?? null;
@@ -36,6 +38,10 @@ export class ProductCard {
       vendorId: (this.product as any).vendor ?? '',
       businessName: this.product.store?.name ?? '',
     };
+  }
+
+  public storeUrl(subdomain: string): string {
+    return this.storeDomainService.getStoreUrl(subdomain);
   }
 
   public addToCart(): void {
