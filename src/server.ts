@@ -11,7 +11,13 @@ const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine({
-  allowedHosts: ['trademall-frontend.vercel.app'],
+  allowedHosts: [
+    'localhost',
+    '*.localhost',
+    'trademall.shop',
+    '*.trademall.shop',
+    'trademall-frontend.vercel.app'
+  ],
   trustProxyHeaders: ['x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-for'],
 });
 

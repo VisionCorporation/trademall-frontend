@@ -60,10 +60,6 @@ export const routes: Routes = [
       import('./pages/product-detail/product-detail').then((m) => m.ProductDetail),
   },
   {
-    path: 'products/vendor/:id',
-    loadComponent: () => import('./pages/vendor/vendor').then((m) => m.Vendor),
-  },
-  {
     path: 'cart',
     loadComponent: () => import('./pages/cart/cart').then((m) => m.Cart),
     canActivate: [],
