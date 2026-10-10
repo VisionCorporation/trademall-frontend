@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, PLATFORM_ID, signal, ViewChild, viewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Header } from '../../shared/header/header';
@@ -23,7 +23,10 @@ import { StoreDomainService } from '../../services/store-domain/store-domain';
   templateUrl: './vendor.html',
   styleUrl: './vendor.css',
   animations: [staggerProducts, fadeInOutAnimation],
-  host: { '(document:keydown.escape)': 'closeAbout()' },
+  host: {
+    '(document:keydown.escape)': 'closeAbout(); closeShare()',
+    '(window:resize)': 'updateShareArrows()',
+  },
 })
 export class Vendor {
   private readonly platformId = inject(PLATFORM_ID);
@@ -45,9 +48,20 @@ export class Vendor {
   public isVendorProductLoading = signal(true);
   public storeError = signal(false);
   public productsError = signal(false);
+  public isShareOpen = signal(false);
+  public isLinkCopied = signal(false);
   public isAboutOpen = signal(false);
   private isProductsRequestInProgress = false;
   public notFound = signal(false)
+  public canScrollPrev = signal(false);
+  public canScrollNext = signal(false);
+  private readonly shareRow = viewChild<ElementRef<HTMLDivElement>>('shareRow');
+
+  constructor() {
+    effect(() => {
+      if (this.shareRow()) this.updateShareArrows();
+    });
+  }
 
   @ViewChild('scrollSentinel') scrollSentinel!: ElementRef<HTMLDivElement>;
   private observer?: IntersectionObserver;
@@ -202,6 +216,63 @@ export class Vendor {
       { title: 'Return Policy', content: this.vendorStoreData?.store.returnPolicy },
       { title: 'Terms and Conditions', content: this.vendorStoreData?.store.termsAndConditions },
     ];
+  }
+
+  public get storeUrl(): string {
+    return this.storeDomainService.getStoreUrl(this.vendorStoreData!.store.subdomain);
+  }
+
+  public updateShareArrows(): void {
+    const el = this.shareRow()?.nativeElement;
+    if (!el) return;
+
+    this.canScrollPrev.set(el.scrollLeft > 0);
+    this.canScrollNext.set(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  }
+
+  public scrollShare(direction: 1 | -1): void {
+    const el = this.shareRow()?.nativeElement;
+    if (!el) return;
+
+    el.scrollBy({ left: direction * el.clientWidth * 0.75, behavior: 'smooth' });
+  }
+
+  public get shareTargets() {
+    const store = this.vendorStoreData?.store;
+    if (!store) return [];
+
+    const url = encodeURIComponent(this.storeUrl);
+    const text = encodeURIComponent(`Check out ${store.name} on TradeMall`);
+
+    return [
+      { name: 'WhatsApp', icon: 'whatsapp', href: `https://wa.me/?text=${text}%20${url}` },
+      { name: 'Facebook', icon: 'facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${url}` },
+      { name: 'Instagram', icon: 'instagram', href: 'https://www.instagram.com/', copyFirst: true },
+      { name: 'TikTok', icon: 'tiktok', href: 'https://www.tiktok.com/', copyFirst: true },
+      { name: 'X', icon: 'x', href: `https://twitter.com/intent/tweet?text=${text}&url=${url}` },
+      { name: 'Telegram', icon: 'telegram', href: `https://t.me/share/url?url=${url}&text=${text}` },
+      { name: 'LinkedIn', icon: 'linkedin', href: `https://www.linkedin.com/sharing/share-offsite/?url=${url}` },
+    ];
+  }
+
+  public openShare() {
+    this.isShareOpen.set(true);
+  }
+
+  public closeShare() {
+    this.isShareOpen.set(false);
+    this.isLinkCopied.set(false);
+  }
+
+  public async copyLink(): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(this.storeUrl);
+      this.isLinkCopied.set(true);
+      setTimeout(() => this.isLinkCopied.set(false), 3000);
+      this.toastService.success('Store link copied. Paste it in your post, story or message.')
+    } catch {
+      this.toastService.error('Could not copy link');
+    }
   }
 
   public openAbout() {

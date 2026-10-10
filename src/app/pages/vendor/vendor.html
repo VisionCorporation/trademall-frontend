@@ -82,7 +82,7 @@
         </div>
 
         <div class="min-w-0">
-          <div class="">
+          <div class="flex items-start justify-between gap-3">
             <h1 class="text-2xl sm:text-3xl md:text-4xl text-[#171717] products-font">
               <span class="inline products-font">
                 {{ store.name }}<img [src]="vendor.isVerified
@@ -92,6 +92,16 @@
                   [title]="vendor.isVerified ? 'Verified store' : 'Unverified store'" />
               </span>
             </h1>
+
+            <button type="button" (click)="openShare()" aria-label="Share this store"
+              class="flex shrink-0 items-center gap-2 rounded-xl bg-[#F2F2F2] border border-[#E5E7EB] px-3.5 py-2 text-sm font-medium text-[#171717] cursor-pointer hover:bg-[#ebebeb] transition-colors">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" />
+                <path d="m16 6-4-4-4 4M12 2v13" />
+              </svg>
+              <span class="hidden sm:inline">Share</span>
+            </button>
           </div>
 
           <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm sm:text-base text-[#4b5563]">
@@ -117,10 +127,6 @@
               No reviews yet
               }
             </span>
-            @if (vendorProductsPagination; as p) {
-            <span aria-hidden="true">•</span>
-            <span>{{ p.totalResults }} {{ p.totalResults === 1 ? 'product' : 'products' }}</span>
-            }
             <span aria-hidden="true">•</span>
             <span>{{ store.city }}, {{ store.region }}</span>
           </div>
@@ -229,6 +235,68 @@
         </div>
       </div>
       }
+
+      @if (isShareOpen()) {
+      <div class="fixed inset-0 z-100 flex items-center justify-center bg-black/50 p-4" (click)="closeShare()"
+        [@fadeInOut]>
+        <div role="dialog" aria-modal="true" aria-labelledby="share-title" (click)="$event.stopPropagation()"
+          class="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
+
+          <div class="mb-5 flex items-center justify-between">
+            <h2 id="share-title" class="text-base text-[#171717] products-font">Share this store with others</h2>
+            <button type="button" (click)="closeShare()" aria-label="Close"
+              class="grid size-9 place-items-center rounded-full cursor-pointer hover:bg-[#F2F2F2]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" aria-hidden="true">
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="relative mb-6">
+            @if (canScrollPrev()) {
+            <button type="button" (click)="scrollShare(-1)" aria-label="Previous"
+              class="absolute left-0 top-7 z-10 grid size-9 -translate-y-1/2 place-items-center rounded-full border border-gray-300 bg-white shadow-lg cursor-pointer hover:bg-[#F2F2F2]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </button>
+            }
+
+            <div #shareRow (scroll)="updateShareArrows()" class="flex gap-4 overflow-x-auto scrollbar-hide pb-1">
+              @for (target of shareTargets; track target.name) {
+              <a [href]="target.href" target="_blank" rel="noopener noreferrer" (click)="target.copyFirst && copyLink()"
+                class="flex w-16 shrink-0 flex-col items-center gap-2 text-xs text-[#374151]">
+                <img [src]="'assets/icons/' + target.icon + '.svg'" [alt]="''" width="56" height="56"
+                  class="size-14 rounded-full" />
+                {{ target.name }}
+              </a>
+              }
+            </div>
+
+            @if (canScrollNext()) {
+            <button type="button" (click)="scrollShare(1)" aria-label="Next"
+              class="absolute right-0 top-7 z-10 grid size-9 -translate-y-1/2 place-items-center rounded-full border border-gray-300 bg-white shadow-lg cursor-pointer hover:bg-[#F2F2F2]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </button>
+            }
+          </div>
+
+          <div class="flex items-center gap-2 rounded-xl border border-gray-300 p-2 pl-4">
+            <span class="min-w-0 flex-1 truncate text-sm text-[#374151]">{{ storeUrl }}</span>
+            <button type="button" (click)="copyLink()"
+              class="shrink-0 rounded-full bg-[#171717] px-4 py-2 text-sm text-white cursor-pointer hover:opacity-85 transition-opacity">
+              {{ isLinkCopied() ? 'Copied' : 'Copy' }}
+            </button>
+          </div>
+        </div>
+      </div>
+      }
+
       }
 
       <div class="mt-10">
@@ -236,7 +304,7 @@
           class="sticky top-17 md:top-17 lg:top-19.25 z-30 -mx-4 md:-mx-12 2xl:mx-0 flex items-center gap-6 sm:gap-8 overflow-x-auto scrollbar-hide whitespace-nowrap bg-white px-4 md:px-12 2xl:px-0 pb-2 border-b border-gray-300 mb-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
           <button
             class="pt-4 relative text-[15px] sm:text-[16px] pb-2 shrink-0 transition-colors duration-100 ease-in-out cursor-pointer text-[#00a751]">
-            Products
+            Products (<span>{{vendorProductsPagination?.totalResults}}</span>)
             <span class="absolute left-0 right-0 -bottom-2 h-0.5 bg-[#00a751]">
             </span>
           </button>
