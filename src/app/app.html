@@ -1,3 +1,8 @@
+@if (storeSubdomain && isStoreRootRoute()) {
+<app-vendor />
+} @else {
 <router-outlet />
+}
+
 <app-toast />
 <app-confirm-dialog />
