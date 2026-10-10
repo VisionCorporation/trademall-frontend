@@ -109,7 +109,7 @@
           <div class="flex flex-col">
             <span class="text-[#9CA3AF] text-xs">sold by</span>
             <a class="text-sm sm:text-base font-medium text-[#00a751] hover:underline"
-              [routerLink]="['/products/vendor', product.vendor._id]">{{ product.vendor.businessName }}</a>
+              [href]="storeUrl(product.vendor.subdomain)">{{ product.vendor.businessName }}</a>
           </div>
         </div>
 
@@ -233,7 +233,7 @@
             </div>
           </div>
 
-          <a [routerLink]="['/products/vendor', vendorDetailedInfo.vendor._id]"
+          <a [href]="storeUrl(product.vendor.subdomain)"
             class="shrink-0 text-[15px] sm:text-[16px] px-6 py-3 bg-[#171717] text-white hover:opacity-85 transition-opacity duration-200 ease-in rounded-xl cursor-pointer text-center">
             Visit Store
           </a>

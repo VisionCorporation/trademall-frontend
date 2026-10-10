@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Products } from '../../services/products/products';
 import { ProductDetails } from '../../interfaces/products.interface';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
@@ -25,13 +25,13 @@ import { finalize } from 'rxjs';
 import { VoteType } from '../../types/product-details.type';
 import { LoginService } from '../../services/login/login.service';
 import { ConfirmDialogService } from '../../services/confirm-dialog/confirm-dialog';
+import { StoreDomainService } from '../../services/store-domain/store-domain';
 
 @Component({
     selector: 'app-product-detail',
     imports: [
         CurrencyPipe,
         SkeletonLoader,
-        RouterLink,
         Breadcrumb,
         Header,
         Footer,
@@ -47,6 +47,7 @@ export class ProductDetail implements OnInit {
     private readonly route = inject(ActivatedRoute);
     private readonly productService = inject(Products);
     private readonly vendorStoreService = inject(VendorStoreService);
+    private readonly storeDomainService = inject(StoreDomainService)
     private readonly toastService = inject(ToastService);
     private readonly reviewService = inject(Reviews);
     private readonly loginService = inject(LoginService)
@@ -95,6 +96,10 @@ export class ProductDetail implements OnInit {
 
     ngOnInit(): void {
         this.fetchProductDetails()
+    }
+
+    public storeUrl(subdomain: string): string {
+        return this.storeDomainService.getStoreUrl(subdomain);
     }
 
     private setDefaultSelectedImage(): void {
