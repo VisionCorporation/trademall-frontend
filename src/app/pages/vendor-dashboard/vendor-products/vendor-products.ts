@@ -4,7 +4,7 @@ import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashb
 import { Product, ProductImage, ProductPagination, ProductSummary } from '../../../interfaces/vendor-dashboard.interface';
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { SkeletonLoader } from '../../../shared/skeleton-loader/skeleton-loader';
-import { staggerProducts } from '../../../animations/smooth-collapse.animations';
+import { cardLeave, staggerProducts } from '../../../animations/smooth-collapse.animations';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../services/toast/toast.service';
 import { ConfirmDialogService } from '../../../services/confirm-dialog/confirm-dialog';
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
   imports: [CurrencyPipe, DatePipe, SkeletonLoader, DecimalPipe],
   templateUrl: './vendor-products.html',
   styleUrl: './vendor-products.css',
-  animations: [staggerProducts]
+  animations: [staggerProducts, cardLeave]
 })
 export class VendorProducts implements OnInit, OnDestroy {
   @ViewChild('filterTabsRef') filterTabsRef!: ElementRef<HTMLElement>;
@@ -88,6 +88,23 @@ export class VendorProducts implements OnInit, OnDestroy {
     this.router.navigate(['/vendor/edit-product', productId]);
   }
 
+  private adjustSummaryOnDelete(product: Product): void {
+    this.summary.update(s => {
+      if (!s) return s;
+      const key = product.isVisible ? 'visible' : 'hidden';
+      const st = s.byStatus[product.status];
+      return {
+        ...s,
+        total: s.total - 1,
+        visibility: { ...s.visibility, [key]: s.visibility[key] - 1 },
+        byStatus: {
+          ...s.byStatus,
+          [product.status]: { ...st, total: st.total - 1, [key]: st[key] - 1 },
+        },
+      };
+    });
+  }
+
   public async deleteProduct(productId: string): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
       title: 'Delete this product?',
@@ -98,19 +115,30 @@ export class VendorProducts implements OnInit, OnDestroy {
 
     if (!confirmed) return;
 
+    const product = this.products().find(p => p._id === productId);
     this.deletingProductId.set(productId);
 
     this.vendorDashboardService.deleteProduct(productId).subscribe({
       next: (res) => {
         const current = this.pagination()?.currentPage ?? 1;
-        const nextPage = this.products().length === 1 && current > 1 ? current - 1 : current;
-        this.fetchVendorProductsListings(nextPage);
+        const wasLastOnPage = this.products().length === 1;
+        const targetPage = wasLastOnPage && current > 1 ? current - 1 : current;
+
+        this.products.update(list => list.filter(p => p._id !== productId));
+
+        this.pagination.update(p =>
+          p ? { ...p, totalResults: Math.max(0, p.totalResults - 1) } : p
+        );
+        if (product) this.adjustSummaryOnDelete(product);
+
         this.deletingProductId.set(null);
-        this.toastService.success(res.message ?? "Product has been removed successfully.")
+        this.toastService.success(res.message ?? "Product has been removed successfully.");
+
+        this.fetchVendorProductsListings(targetPage, true);
       },
       error: (err) => {
         console.error('Error deleting product:', err);
-        this.toastService.error(err.error?.message ?? "We couldn't remove this product at the moment. Please try again.")
+        this.toastService.error(err.error?.message ?? "We couldn't remove this product at the moment. Please try again.");
         this.deletingProductId.set(null);
       }
     });
@@ -154,6 +182,22 @@ export class VendorProducts implements OnInit, OnDestroy {
     return Math.round(((p.price - (p.salePrice ?? p.price)) / p.price) * 100);
   }
 
+  private adjustSummary(status: Product['status'], toVisible: boolean): void {
+    this.summary.update(s => {
+      if (!s) return s;
+      const d = toVisible ? 1 : -1;
+      const st = s.byStatus[status];
+      return {
+        ...s,
+        visibility: { visible: s.visibility.visible + d, hidden: s.visibility.hidden - d },
+        byStatus: {
+          ...s.byStatus,
+          [status]: { ...st, visible: st.visible + d, hidden: st.hidden - d },
+        },
+      };
+    });
+  }
+
   public toggleVisibility(product: Product): void {
     if (this.togglingVisibilityId()) return;
 
@@ -161,15 +205,36 @@ export class VendorProducts implements OnInit, OnDestroy {
 
     this.vendorDashboardService.toggleProductVisibility(product._id).subscribe({
       next: (res) => {
+        const nowVisible = !product.isVisible;
+
+        const leavesFilter =
+          this.selectedVisibility !== '' &&
+          (this.selectedVisibility === 'true') !== nowVisible;
+
+        const current = this.pagination()?.currentPage ?? 1;
+        const wasLastOnPage = this.products().length === 1;
+
         this.products.update(list =>
-          list.map(p => p._id === product._id ? { ...p, isVisible: !p.isVisible } : p)
+          leavesFilter
+            ? list.filter(p => p._id !== product._id)
+            : list.map(p => p._id === product._id ? { ...p, isVisible: nowVisible } : p)
         );
+
+        const targetPage = leavesFilter && wasLastOnPage && current > 1 ? current - 1 : current;
+
+        if (leavesFilter) {
+          this.pagination.update(p =>
+            p ? { ...p, totalResults: Math.max(0, p.totalResults - 1), currentPage: targetPage } : p
+          );
+        }
+
+        this.adjustSummary(product.status, nowVisible);
+
         this.togglingVisibilityId.set(null);
         this.toastService.success(res.message ?? 'Product toggled successfully');
 
-        const current = this.pagination()?.currentPage ?? 1;
-        const leavesList = this.selectedVisibility !== '' && this.products().length === 1 && current > 1;
-        this.fetchVendorProductsListings(leavesList ? current - 1 : current, true);
+
+        this.fetchVendorProductsListings(targetPage, true);
       },
       error: (err) => {
         console.error('Error toggling visibility:', err);

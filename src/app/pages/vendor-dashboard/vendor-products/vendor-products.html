@@ -1,8 +1,9 @@
-<section class="bg-[#F4F4F4] h-full rounded-[20px] pt-5 px-4 sm:pt-7.5 sm:px-8.75 flex flex-col">
-    <div #filterTabsRef class="flex items-center gap-2 mb-5 sm:mb-6 shrink-0 overflow-x-auto scrollbar-hide">
+<section class="flex h-full min-h-0 flex-col overflow-hidden rounded-[20px] bg-[#F4F4F4] px-4 pt-5 sm:px-8 sm:pt-7.5">
+    <div #filterTabsRef
+        class="mb-5 flex shrink-0 items-center gap-2 overflow-x-auto overscroll-x-contain scrollbar-hide sm:mb-6">
         @for(filter of productsFilters; track filter){
         <button [attr.data-filter]="filter.value" (click)="selectFilter(filter.value)"
-            class="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-150 ease-in shrink-0 cursor-pointer"
+            class="flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-2 transition-colors duration-150 sm:px-4 sm:py-2.5"
             [class]="selectedFilter === filter.value ? 'bg-white shadow-sm' : 'hover:bg-white/60'"
             [style.color]="selectedFilter === filter.value ? filter.activeColor : '#6B6B6B'">
             @switch (filter.value) {
@@ -85,204 +86,233 @@
         }
     </div>
 
-    <div class="flex items-center justify-between gap-3 mb-5 sm:mb-6 shrink-0 flex-wrap">
-        @if(isFetchingProducts()){
-        <div class="w-40 h-6 rounded-lg skeleton-shimmer"></div>
-        }@else if (showingRange()) {
-        <span class="text-sm sm:text-[15px] font-medium text-[#6B6B6B]">
-            Showing <span class="text-[#171717] font-semibold">{{ showingRange()!.start }}–{{ showingRange()!.end
-                }}</span>
-            of <span class="text-[#171717] font-semibold">{{ showingRange()!.total }}</span> products
-        </span>
-        }@else {
-        <span class="text-sm sm:text-[15px] font-medium text-[#6B6B6B]">0 products</span>
-        }
 
-        <div class="flex items-center gap-2 ml-auto">
-            <div class="inline-flex bg-white rounded-xl p-1 border border-black/10">
-                @for (v of visibilityFilters; track v.value) {
-                <button type="button" (click)="selectVisibility(v.value)"
-                    class="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer"
-                    [class]="selectedVisibility === v.value ? 'bg-[#171717] text-white' : 'text-[#6B6B6B] hover:bg-[#F4F4F4]'">
-                    {{ v.label }}
-                    @if (summary()) {
-                    <span class="opacity-70">({{ getVisibilityCount(v.value) }})</span>
+    <div class="mb-5 flex shrink-0 flex-col gap-4 sm:mb-6 sm:gap-5">
+        <div class="min-w-0">
+            @if (isFetchingProducts()) {
+            <div class="h-6 w-40 rounded-lg skeleton-shimmer"></div>
+            } @else if (showingRange()) {
+            <span class="text-sm font-medium text-[#6B6B6B] sm:text-[15px]">
+                Showing
+                <span class="font-semibold text-[#171717]">
+                    {{ showingRange()!.start }}–{{ showingRange()!.end }}
+                </span>
+                of
+                <span class="font-semibold text-[#171717]">
+                    {{ showingRange()!.total }}
+                </span>
+                products
+            </span>
+            } @else {
+            <span class="text-sm font-medium text-[#6B6B6B] sm:text-[15px]">
+                0 products
+            </span>
+            }
+        </div>
+
+        <div class="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="max-w-full overflow-x-auto scrollbar-hide">
+                <div class="inline-flex w-max rounded-xl border border-black/10 bg-white p-2">
+                    @for (v of visibilityFilters; track v.value) {
+                    <button type="button" (click)="selectVisibility(v.value)"
+                        class="shrink-0 whitespace-nowrap rounded-xl px-3 py-2 text-[12px] font-medium transition-colors sm:text-[13px]"
+                        [class]="selectedVisibility === v.value
+              ? 'bg-[#171717] text-white'
+              : 'text-[#6B6B6B] hover:bg-[#F4F4F4]'">
+                        {{ v.label }}
+                        @if (summary()) {
+                        <span class="opacity-70">
+                            ({{ getVisibilityCount(v.value) }})
+                        </span>
+                        }
+                    </button>
                     }
-                </button>
-                }
+                </div>
             </div>
 
-            <select [value]="selectedSort" (change)="selectSort($any($event.target).value)" aria-label="Sort products"
-                class="bg-white border border-black/10 rounded-xl px-3 py-2 text-[13px] sm:text-[14px] font-medium text-[#171717] cursor-pointer">
-                @for (s of sortOptions; track s.value) {
-                <option [value]="s.value">{{ s.label }}</option>
-                }
-            </select>
+            <div class="flex min-w-0 items-center gap-2 sm:shrink-0">
+                <select [value]="selectedSort" (change)="selectSort($any($event.target).value)"
+                    aria-label="Sort products"
+                    class="h-10 min-w-0 flex-1 cursor-pointer rounded-xl border border-black/10 bg-white px-2.5 text-[13px] font-medium text-[#171717] sm:flex-none sm:px-3 sm:text-[14px]">
+                    @for (s of sortOptions; track s.value) {
+                    <option [value]="s.value">{{ s.label }}</option>
+                    }
+                </select>
 
-
-            <button (click)="navigateToAddNewProduct()"
-                class="flex items-center gap-1.5 text-[14px] sm:text-[15px] font-medium px-4 sm:px-5 py-2.5 sm:py-3 transition-all duration-150 ease-in rounded-xl bg-[#171717] text-white hover:opacity-85 hover:shadow-md cursor-pointer shrink-0">
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="white" stroke-width="1.5"
-                        stroke-linecap="round" />
-                </svg>
-                <span class="hidden sm:inline">Add Product</span>
-            </button>
+                <button type="button" (click)="navigateToAddNewProduct()"
+                    class="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-[#171717] px-3.5 text-[13px] font-medium text-white transition-colors hover:bg-black/80 sm:px-4 sm:text-[14px]">
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" />
+                    </svg>
+                    <span>Add Product</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    @if(!isFetchingProducts()){
-    <div [class]="products().length === 0
-    ? 'grid overflow-y-auto flex-1 min-h-0 pt-2 pb-4 scrollbar-hide items-center'
-    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-5 flex-1 min-h-0 overflow-y-auto pt-2 pb-7 scrollbar-hide items-start'"
-        [@staggerProducts]>
-        @for(product of products(); track product._id){
-        <div
-            class="bg-white rounded-2xl p-4 sm:p-5 w-full border border-black/5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-200">
-            <div class="flex items-start justify-between gap-2">
-                <div class="flex items-start gap-3 min-w-0 flex-1">
-                    @if (product.images.length) {
-                    <img [src]="getMainImageUrl(product.images)" [alt]="product.name"
-                        [class.opacity-50]="!product.isVisible"
-                        class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl shrink-0 object-cover border border-black/15" />
-                    } @else {
-                    <div
-                        class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl shrink-0 border border-black/15 bg-[#F4F4F6] flex items-center justify-center">
-                        <svg aria-hidden="true" class="w-5 h-5 sm:w-7 sm:h-7 text-[#9CA3AF]" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                            <path d="M21 15l-5-5L5 21"></path>
-                        </svg>
-                    </div>
-                    }
-                    <div [class.opacity-50]="!product.isVisible" class="min-w-0 flex-1">
-                        <h2 class="text-[14px] sm:text-[16px] leading-5 line-clamp-2 text-[#171717] products-font mb-1">
-                            {{product.name}}</h2>
-                        <p class="text-[11px] sm:text-xs text-[#6B6B6B] truncate">
-                            {{ product.category.name }}@if (product.brand) { · {{ product.brand }} }
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-0.5 shrink-0 -mr-1 -mt-1">
-                    <button type="button" (click)="navigateToEditProduct(product._id)" title="Edit product"
-                        class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#9CA3AF] hover:text-[#00A751] hover:bg-[#00A751]/10 transition-colors">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                        </svg>
-                    </button>
-
-                    <button type="button" (click)="deleteProduct(product._id)"
-                        [disabled]="deletingProductId() === product._id" title="Delete product"
-                        class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#9CA3AF] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                        @if (deletingProductId() === product._id) {
-                        <svg class="animate-spin" width="13" height="13" viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"
-                                stroke-dasharray="32" stroke-dashoffset="12" />
-                        </svg>
+    @if (!isFetchingProducts()) {
+    <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain scrollbar-hide" [@staggerProducts]>
+        @if (products().length > 0) {
+        <div [@cardLeave]
+            class="grid grid-cols-1 items-stretch gap-4 pb-5 sm:grid-cols-2 sm:gap-5 sm:pb-7 lg:grid-cols-3 2xl:grid-cols-4">
+            @for(product of products(); track product._id){
+            <div
+                class="flex h-full min-w-0 flex-col rounded-2xl border border-black/5 bg-white p-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] sm:p-5">
+                <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-start gap-3 min-w-0 flex-1">
+                        @if (product.images.length) {
+                        <img [src]="getMainImageUrl(product.images)" [alt]="product.name"
+                            [class.opacity-50]="!product.isVisible"
+                            class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl shrink-0 object-cover border border-black/15" />
                         } @else {
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 6h18" />
-                            <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" />
-                            <path d="M10 11v6M14 11v6" />
-                        </svg>
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl shrink-0 border border-black/15 bg-[#F4F4F6] flex items-center justify-center">
+                            <svg aria-hidden="true" class="w-5 h-5 sm:w-7 sm:h-7 text-[#9CA3AF]" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <path d="M21 15l-5-5L5 21"></path>
+                            </svg>
+                        </div>
                         }
-                    </button>
-                </div>
-            </div>
+                        <div [class.opacity-50]="!product.isVisible" class="min-w-0 flex-1">
+                            <h2
+                                class="mb-1 line-clamp-2 wrap-break-word text-[14px] leading-5 text-[#171717] products-font sm:text-[16px]">
+                                {{ product.name }}
+                            </h2>
 
-            <div [class.opacity-50]="!product.isVisible" class="flex flex-wrap items-center gap-1.5 mt-3">
-                <span
-                    class="inline-flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full"
-                    [style.color]="statusConfig[product.status]?.color || '#6B7280'"
-                    [style.background-color]="(statusConfig[product.status]?.color || '#6B7280') + '1A'">
-                    <span class="w-1.5 h-1.5 rounded-full"
-                        [style.background-color]="statusConfig[product.status]?.color || '#6B7280'"></span>
-                    {{ statusConfig[product.status]?.label || product.status }}
-                </span>
-                @if (product.isPreOrder) {
-                <span
-                    class="inline-flex items-center text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full bg-[#3B82F6]/10 text-[#3B82F6]">Pre-order</span>
-                }
-                @if (product.hasVariants) {
-                <span
-                    class="inline-flex items-center text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full bg-[#8B5CF6]/10 text-[#8B5CF6]">Variants</span>
-                }
-            </div>
-
-            <div [class.opacity-50]="!product.isVisible"
-                class="border-t border-black/5 mt-3.5 pt-3.5 flex items-end justify-between gap-3">
-                <div class="min-w-0">
-                    @if (hasDiscount(product)) {
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <span class="text-[15px] sm:text-base font-semibold text-[#171717]">
-                            {{ product.salePrice | currency: 'GHS ' : 'symbol' : '1.2-2' }}
-                        </span>
-                        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-[#EF4444]/10 text-[#EF4444]">
-                            -{{ discountPercent(product) }}%
-                        </span>
+                            <p class="truncate text-[11px] text-[#6B6B6B] sm:text-xs">
+                                {{ product.category.name }}@if (product.brand) { · {{ product.brand }} }
+                            </p>
+                        </div>
                     </div>
-                    <p class="text-xs text-[#9CA3AF] line-through mt-0.5">
-                        {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
-                    </p>
-                    } @else {
-                    <span class="text-[15px] sm:text-base font-semibold text-[#171717]">
-                        {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+
+                    <div class="flex shrink-0 items-center gap-0.5">
+                        <button type="button" (click)="navigateToEditProduct(product._id)" title="Edit product"
+                            class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#9CA3AF] hover:text-[#00A751] hover:bg-[#00A751]/10 transition-colors">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                        </button>
+
+                        <button type="button" (click)="deleteProduct(product._id)"
+                            [disabled]="deletingProductId() === product._id" title="Delete product"
+                            class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#9CA3AF] hover:text-[#EF4444] hover:bg-[#EF4444]/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            @if (deletingProductId() === product._id) {
+                            <svg class="animate-spin" width="13" height="13" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"
+                                    stroke-dasharray="32" stroke-dashoffset="12" />
+                            </svg>
+                            } @else {
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 6h18" />
+                                <path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" />
+                                <path d="M10 11v6M14 11v6" />
+                            </svg>
+                            }
+                        </button>
+                    </div>
+                </div>
+
+                <div [class.opacity-50]="!product.isVisible" class="flex flex-wrap items-center gap-1.5 mt-3">
+                    <span
+                        class="inline-flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full"
+                        [style.color]="statusConfig[product.status]?.color || '#6B7280'"
+                        [style.background-color]="(statusConfig[product.status]?.color || '#6B7280') + '1A'">
+                        <span class="w-1.5 h-1.5 rounded-full"
+                            [style.background-color]="statusConfig[product.status]?.color || '#6B7280'"></span>
+                        {{ statusConfig[product.status]?.label || product.status }}
                     </span>
+                    @if (product.isPreOrder) {
+                    <span
+                        class="inline-flex items-center text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full bg-[#3B82F6]/10 text-[#3B82F6]">Pre-order</span>
+                    }
+                    @if (product.hasVariants) {
+                    <span
+                        class="inline-flex items-center text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full bg-[#8B5CF6]/10 text-[#8B5CF6]">Variants</span>
                     }
                 </div>
 
-                <p class="text-xs sm:text-sm shrink-0 whitespace-nowrap"
-                    [class]="product.stockQuantity === 0 ? 'text-[#EF4444] font-medium' : product.stockQuantity <= 5 ? 'text-[#F59E0B] font-medium' : 'text-[#6B7280]'">
-                    {{ product.stockQuantity === 0 ? 'Out of stock' : product.stockQuantity + ' in stock' }}
-                </p>
-            </div>
-
-            <div class="flex items-center justify-between gap-3 mt-3.5 pt-3 border-t border-black/5">
                 <div [class.opacity-50]="!product.isVisible"
-                    class="min-w-0 text-[11px] sm:text-xs text-[#6B6B6B] leading-4">
-                    <p>Added on {{ product.createdAt | date:'MMM d, y' }}</p>
-                    @if (product.reviewCount > 0) {
-                    <p class="mt-0.5 inline-flex items-center gap-1">
-                        <svg width="13" height="13" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true">
-                            <path
-                                d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
-                                fill="#D89E12" stroke="#D89E12" stroke-width="1.5" stroke-linejoin="round" />
-                        </svg>
+                    class="mt-3.5 flex items-end justify-between gap-3 border-t border-black/5 pt-3.5">
+                    <div class="min-w-0">
+                        @if (hasDiscount(product)) {
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-[15px] sm:text-base font-semibold text-[#171717]">
+                                {{ product.salePrice | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                            </span>
+                            <span
+                                class="text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-[#EF4444]/10 text-[#EF4444]">
+                                -{{ discountPercent(product) }}%
+                            </span>
+                        </div>
+                        <p class="text-xs text-[#9CA3AF] line-through mt-0.5">
+                            {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                        </p>
+                        } @else {
+                        <span class="text-[15px] sm:text-base font-semibold text-[#171717]">
+                            {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                        </span>
+                        }
+                    </div>
 
-                        <span>{{ product.rating | number:'1.1-1' }}</span>
-                        <span>({{ product.reviewCount }})</span>
+                    <p class="shrink-0 whitespace-nowrap text-right text-xs sm:text-sm" [class]="product.stockQuantity === 0
+      ? 'font-medium text-[#EF4444]'
+      : product.stockQuantity <= 5
+        ? 'font-medium text-[#F59E0B]'
+        : 'text-[#6B7280]'">
+                        {{ product.stockQuantity === 0
+                        ? 'Out of stock'
+                        : product.stockQuantity + ' in stock' }}
                     </p>
-                    }
                 </div>
 
-                <div class="flex items-center gap-2 shrink-0">
-                    <span class="text-[11px] sm:text-xs font-medium"
-                        [class]="product.isVisible ? 'text-[#00A751]' : 'text-[#6B7280]'">
-                        {{ product.isVisible ? 'Visible' : 'Hidden' }}
-                    </span>
-                    <button type="button" role="switch" [attr.aria-checked]="product.isVisible"
-                        [attr.aria-label]="product.isVisible ? 'Hide product' : 'Show product'"
-                        [title]="product.isVisible ? 'Hide from store' : 'Show in store'"
-                        (click)="toggleVisibility(product)" [disabled]="togglingVisibilityId() === product._id"
-                        class="relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                        [class]="product.isVisible ? 'bg-[#00A751]' : 'bg-[#D1D5DB]'">
-                        <span
-                            class="inline-block h-4 w-4 rounded-full bg-white shadow transition-transform duration-200"
-                            [class]="product.isVisible ? 'translate-x-4.5' : 'translate-x-0.5'"></span>
-                    </button>
+                <div class="mt-3.5 flex items-center justify-between gap-3 border-t border-black/5 pt-3.5">
+                    <div [class.opacity-50]="!product.isVisible"
+                        class="min-w-0 text-[11px] sm:text-xs text-[#6B6B6B] leading-4">
+                        <p>Added on {{ product.createdAt | date:'MMM d, y' }}</p>
+                        @if (product.reviewCount > 0) {
+                        <p class="mt-0.5 inline-flex items-center gap-1">
+                            <svg width="13" height="13" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path
+                                    d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                                    fill="#D89E12" stroke="#D89E12" stroke-width="1.5" stroke-linejoin="round" />
+                            </svg>
+
+                            <span>{{ product.rating | number:'1.1-1' }}</span>
+                            <span>({{ product.reviewCount }})</span>
+                        </p>
+                        }
+                    </div>
+
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="text-[11px] sm:text-xs font-medium"
+                            [class]="product.isVisible ? 'text-[#00A751]' : 'text-[#6B7280]'">
+                            {{ product.isVisible ? 'Visible' : 'Hidden' }}
+                        </span>
+                        <button type="button" role="switch" [attr.aria-checked]="product.isVisible"
+                            [attr.aria-label]="product.isVisible ? 'Hide product' : 'Show product'"
+                            [title]="product.isVisible ? 'Hide from store' : 'Show in store'"
+                            (click)="toggleVisibility(product)" [disabled]="togglingVisibilityId() === product._id"
+                            class="relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                            [class]="product.isVisible ? 'bg-[#00A751]' : 'bg-[#D1D5DB]'">
+                            <span
+                                class="inline-block h-4 w-4 rounded-full bg-white shadow transition-transform duration-200"
+                                [class]="product.isVisible ? 'translate-x-4.5' : 'translate-x-0.5'"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
+            }
         </div>
-        }
-
-        @if(products().length === 0){
-        <div class="flex flex-col items-center justify-center gap-4 flex-1 text-center">
+        } @else {
+        <div class="flex min-h-full flex-col items-center justify-center px-4 py-10 text-center">
             <div class="bg-[#F7F7F7] p-8 sm:p-12.5 rounded-full">
                 <svg width="70" height="70" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
                     class="sm:w-25 sm:h-25">
@@ -303,56 +333,63 @@
                 </svg>
             </div>
 
-            <h3 class="text-lg sm:text-[32px] text-[#171717] mt-6 light-header">No products found</h3>
-            <p class="text-sm sm:text-[16px] text-[#6B7280] max-w-md">No products match the selected filter.
+            <h3 class="mt-6 text-xl text-[#171717] sm:text-[28px] light-header">
+                No products found
+            </h3>
+
+            <p class="mt-2 max-w-md text-sm leading-6 text-[#6B7280] sm:text-[16px]">
+                No products match the selected filter.
+                Try another filter or add a new product.
             </p>
         </div>
         }
-    </div>
 
-    @if (!isFetchingProducts() && pagination() && pagination()!.totalPages > 1) {
-    <div class="flex items-center justify-center gap-3 py-4 shrink-0">
-        <div
-            class="inline-flex items-center gap-0.5 bg-white rounded-full p-1.5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-black/15">
-            <button type="button" (click)="goToPage(pagination()!.currentPage - 1)"
-                [disabled]="pagination()!.currentPage === 1" aria-label="Go to previous page"
-                class="w-8 h-8 flex items-center justify-center rounded-full text-[#6B6B6B] hover:bg-[#F4F4F4] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M15 18l-6-6 6-6" />
-                </svg>
-            </button>
+        @if (!isFetchingProducts() && pagination() && pagination()!.totalPages > 1) {
+        <div class="flex items-center flex-col sm:flex-row justify-center gap-3 py-4 shrink-0">
+            <div
+                class="inline-flex items-center gap-0.5 bg-white rounded-full p-1.5 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-black/15">
+                <button type="button" (click)="goToPage(pagination()!.currentPage - 1)"
+                    [disabled]="pagination()!.currentPage === 1" aria-label="Go to previous page"
+                    class="w-8 h-8 flex items-center justify-center rounded-full text-[#6B6B6B] hover:bg-[#F4F4F4] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                    <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                </button>
 
-            @for (page of pageNumbers(); track $index) {
-            @if (page === '...') {
-            <span class="w-8 h-8 flex items-center justify-center text-[#9CA3AF] text-sm select-none">···</span>
-            } @else {
-            <button type="button" (click)="goToPage(page)"
-                class="w-8 h-8 flex items-center justify-center rounded-full text-[13px] font-medium transition-colors"
-                [class]="pagination()!.currentPage === page ? 'bg-[#171717] text-white' : 'text-[#6B6B6B] hover:bg-[#F4F4F4]'">
-                {{ page }}
-            </button>
-            }
-            }
+                @for (page of pageNumbers(); track $index) {
+                @if (page === '...') {
+                <span class="w-8 h-8 flex items-center justify-center text-[#9CA3AF] text-sm select-none">···</span>
+                } @else {
+                <button type="button" (click)="goToPage(page)"
+                    class="w-8 h-8 flex items-center justify-center rounded-full text-[13px] font-medium transition-colors"
+                    [class]="pagination()!.currentPage === page ? 'bg-[#171717] text-white' : 'text-[#6B6B6B] hover:bg-[#F4F4F4]'">
+                    {{ page }}
+                </button>
+                }
+                }
 
-            <button type="button" (click)="goToPage(pagination()!.currentPage + 1)"
-                [disabled]="pagination()!.currentPage === pagination()!.totalPages" aria-label="Go to next page"
-                class="w-8 h-8 flex items-center justify-center rounded-full text-[#6B6B6B] hover:bg-[#F4F4F4] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 18l6-6-6-6" />
-                </svg>
-            </button>
+                <button type="button" (click)="goToPage(pagination()!.currentPage + 1)"
+                    [disabled]="pagination()!.currentPage === pagination()!.totalPages" aria-label="Go to next page"
+                    class="w-8 h-8 flex items-center justify-center rounded-full text-[#6B6B6B] hover:bg-[#F4F4F4] disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                    <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
+                </button>
+            </div>
+
+            <span class="inline text-xs text-[#6B6B6B]">
+                Page {{ pagination()!.currentPage }} of {{ pagination()!.totalPages }}
+            </span>
         </div>
-
-        <span class="hidden sm:inline text-xs text-[#6B6B6B]">
-            Page {{ pagination()!.currentPage }} of {{ pagination()!.totalPages }}
-        </span>
+        }
+    </div>
+    } @else {
+    <div class="min-h-0 flex-1 overflow-hidden">
+        <app-skeleton-loader [skeletonType]="'vendor-dashboard-products'" />
     </div>
     }
 
-    }@else if(isFetchingProducts()){
-    <app-skeleton-loader [skeletonType]="'vendor-dashboard-products'" />
-    }
 
 </section>
