@@ -1,16 +1,18 @@
 import { AsyncPipe, NgOptimizedImage } from '@angular/common';
-import { Component, inject, PLATFORM_ID } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, DestroyRef, inject, PLATFORM_ID } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SignupService } from '../../services/signup/signup.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { LoginData } from '../../interfaces/login.interface';
 import { ToastService } from '../../services/toast/toast.service';
 import { isPlatformBrowser } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { InputErrorMessage } from '../../shared/input-error-message/input-error-message';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, AsyncPipe, RouterLink, NgOptimizedImage],
+  imports: [ReactiveFormsModule, AsyncPipe, RouterLink, NgOptimizedImage, InputErrorMessage],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -23,6 +25,7 @@ export class Login {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   public showPassword = false;
+  private readonly destroyRef = inject(DestroyRef);
   private readonly vendorApplicationStatusVisitedKey = 'vendorApplicationStatusVisited';
 
   public loginForm = this.fb.group({
@@ -32,16 +35,23 @@ export class Login {
     ],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
-  public errorMessage(name: string): string {
-    const control = this.loginForm.get(name);
-    if (control?.invalid && (control.dirty || control.touched)) {
-      if (control.errors?.['required'])
-        return `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
-      if (control.errors?.['minlength'])
-        return `${name.charAt(0).toUpperCase() + name.slice(1)} must be 6+ characters`;
-      if (control.errors?.['pattern']) return 'Invalid email (e.g., user@domain.com)';
-    }
-    return '';
+
+  constructor() {
+    this.signupService.isSubmitting$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((isSubmitting) => {
+        if (isSubmitting) {
+          this.loginForm.disable();
+        } else {
+          this.loginForm.enable();
+        }
+      });
+  }
+
+  public showError(form: FormGroup, control: string) {
+    const c = form.get(control);
+
+    return !!c && c.invalid && (c.touched || c.dirty);
   }
 
   private hasVisitedVendorApplicationStatus(): boolean {
