@@ -25,7 +25,19 @@ export const PRODUCTS_FILTERS = [
     { label: 'Approved', value: 'approved', activeColor: '#26C34D' },
     { label: 'Pending', value: 'pending', activeColor: '#FF860D' },
     { label: 'Rejected', value: 'rejected', activeColor: '#FF0000' },
-    { label: 'Inactive', value: 'inactive', activeColor: '#6B7280' },
+    { label: 'Draft', value: 'draft', activeColor: '#6B7280' },
+];
+
+export const VISIBILITY_FILTERS = [
+    { label: 'All', value: '' },
+    { label: 'Visible', value: 'true' },
+    { label: 'Hidden', value: 'false' },
+];
+
+export const SORT_OPTIONS = [
+    { label: 'Newest', value: 'newest' },
+    { label: 'Oldest', value: 'oldest' },
+    { label: 'Name (A–Z)', value: 'name' },
 ];
 
 export const ORDERS_FILTERS = [

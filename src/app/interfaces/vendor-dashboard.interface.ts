@@ -1,15 +1,21 @@
 export interface ProductImage {
+  _id: string;
   url: string;
   publicId?: string;
   isMain: boolean;
-  uploadedAt: string;
-  _id: string;
+  uploadedAt?: string;
 }
 
 export interface ProductCategory {
   _id: string;
   name: string;
   slug: string;
+}
+
+export interface ProductStore {
+  _id: string;
+  name: string;
+  subdomain: string;
 }
 
 export interface Product {
@@ -19,44 +25,46 @@ export interface Product {
   brand?: string;
   category: ProductCategory;
   vendor: string;
-  description: string;
-  attributes: Record<string, string>;
+  store: ProductStore;
   price: number;
   salePrice?: number | null;
   images: ProductImage[];
-  status: 'approved' | 'pending' | 'rejected' | 'inactive';
+  status: 'approved' | 'pending' | 'rejected' | 'draft';
   stockQuantity: number;
-  lowStockThreshold: number;
   isPreOrder: boolean;
-  preOrderDays: number;
-  minPreOrderQuantity: number;
-  preOrderShippingFee: number;
   rating: number;
   reviewCount: number;
-  isSearchable: boolean;
-  metaTitle?: string;
-  metaDescription?: string;
-  metaKeywords: string[];
   hasVariants: boolean;
   isVisible: boolean;
-  viewCount: number;
-  createdBy?: string;
-  approvedBy?: string;
   approvedAt?: string;
   createdAt: string;
   updatedAt: string;
-  __v: number;
+}
+
+export interface ProductStatusSummary {
+  total: number;
+  visible: number;
+  hidden: number;
 }
 
 export interface ProductSummary {
-  pending: number;
-  approved: number;
+  total: number;
+  byStatus: {
+    draft: ProductStatusSummary;
+    pending: ProductStatusSummary;
+    approved: ProductStatusSummary;
+    rejected: ProductStatusSummary;
+  };
+  visibility: {
+    visible: number;
+    hidden: number;
+  };
 }
 
 export interface ProductPagination {
-  currentPage: number
-  limit: number
-  totalPages: number
+  currentPage: number;
+  limit: number;
+  totalPages: number;
   totalResults: number;
 }
 
@@ -113,4 +121,13 @@ export interface AttributeRow {
 export interface DeleteProductResponse {
   success: boolean
   message: string
+}
+
+export interface PrductToggleVisibilityResponse {
+  success: boolean;
+  message: string
+  data: {
+    _id: string
+    isVisible: boolean
+  }
 }
