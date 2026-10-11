@@ -1,26 +1,27 @@
-import { Component, computed, ElementRef, inject, signal, ViewChild } from '@angular/core';
-import { PRODUCT_STATUS_CONFIG, PRODUCTS_FILTERS } from '../../../data/constants/vendor-dashbaord.constant';
+import { Component, computed, ElementRef, inject, signal, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { PRODUCT_STATUS_CONFIG, PRODUCTS_FILTERS, SORT_OPTIONS, VISIBILITY_FILTERS } from '../../../data/constants/vendor-dashbaord.constant';
 import { VendorDashboard } from '../../../services/vendor-dashboard/vendor-dashboard';
-import { Product, ProductImage, ProductPagination } from '../../../interfaces/vendor-dashboard.interface';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Product, ProductImage, ProductPagination, ProductSummary } from '../../../interfaces/vendor-dashboard.interface';
+import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { SkeletonLoader } from '../../../shared/skeleton-loader/skeleton-loader';
 import { staggerProducts } from '../../../animations/smooth-collapse.animations';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../services/toast/toast.service';
 import { ConfirmDialogService } from '../../../services/confirm-dialog/confirm-dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-vendor-products',
-  imports: [CurrencyPipe, DatePipe, SkeletonLoader],
+  imports: [CurrencyPipe, DatePipe, SkeletonLoader, DecimalPipe],
   templateUrl: './vendor-products.html',
   styleUrl: './vendor-products.css',
   animations: [staggerProducts]
 })
-export class VendorProducts {
+export class VendorProducts implements OnInit, OnDestroy {
   @ViewChild('filterTabsRef') filterTabsRef!: ElementRef<HTMLElement>;
+  private listingsSub?: Subscription;
   public productsFilters = PRODUCTS_FILTERS
   public selectedFilter = 'all'
-  public hoveredFilter: string | null = null;
   public isFetchingProducts = signal(false);
   private vendorDashboardService = inject(VendorDashboard);
   public products = signal<Product[]>([]);
@@ -30,18 +31,32 @@ export class VendorProducts {
   public deletingProductId = signal<string | null>(null);
   public toastService = inject(ToastService)
   private confirmDialog = inject(ConfirmDialogService);
+  public summary = signal<ProductSummary | null>(null);
+  public selectedVisibility: '' | 'true' | 'false' = '';
+  public togglingVisibilityId = signal<string | null>(null);
+  public selectedSort: 'newest' | 'oldest' | 'name' = 'newest';
+  public visibilityFilters = VISIBILITY_FILTERS
+  public sortOptions = SORT_OPTIONS
 
   ngOnInit(): void {
     this.fetchVendorProductsListings();
   }
 
-  private fetchVendorProductsListings(page: number = 1): void {
-    this.isFetchingProducts.set(true);
+  private fetchVendorProductsListings(page: number = 1, silent = false): void {
+    this.listingsSub?.unsubscribe();
+    if (!silent) this.isFetchingProducts.set(true);
 
-    this.vendorDashboardService.getVendorProductListings(page, 20, this.selectedFilter).subscribe({
+    this.listingsSub = this.vendorDashboardService.getVendorProductListings(
+      page,
+      20,
+      this.selectedFilter,
+      this.selectedVisibility,
+      this.selectedSort
+    ).subscribe({
       next: (response) => {
         this.products.set(response.data);
         this.pagination.set(response.pagination);
+        this.summary.set(response.summary);
         this.isFetchingProducts.set(false);
       },
       error: (error) => {
@@ -52,6 +67,7 @@ export class VendorProducts {
   }
 
   public selectFilter(value: string): void {
+    if (value === this.selectedFilter) return;
     this.selectedFilter = value;
     this.fetchVendorProductsListings(1);
 
@@ -74,9 +90,9 @@ export class VendorProducts {
 
   public async deleteProduct(productId: string): Promise<void> {
     const confirmed = await this.confirmDialog.confirm({
-      title: 'Delete product?',
-      message: 'This will permanently remove the product from your store. This can’t be undone.',
-      confirmLabel: 'Delete',
+      title: 'Delete this product?',
+      message: 'This product will be permanently removed from your store. This action cannot be undone.',
+      confirmLabel: 'Delete Product',
       variant: 'danger'
     });
 
@@ -94,8 +110,71 @@ export class VendorProducts {
       },
       error: (err) => {
         console.error('Error deleting product:', err);
-        this.toastService.error(err.error.message ?? "We couldn't remove this product at the moment. Please try again.")
+        this.toastService.error(err.error?.message ?? "We couldn't remove this product at the moment. Please try again.")
         this.deletingProductId.set(null);
+      }
+    });
+  }
+
+  public selectVisibility(value: string) {
+    this.selectedVisibility = value as typeof this.selectedVisibility;
+    this.fetchVendorProductsListings(1);
+  }
+
+  public selectSort(value: string) {
+    this.selectedSort = value as typeof this.selectedSort;
+    this.fetchVendorProductsListings(1);
+  }
+
+  public getTabCount(filter: string): number {
+    const s = this.summary();
+    if (!s) return 0;
+    const key = this.selectedVisibility === 'true' ? 'visible'
+      : this.selectedVisibility === 'false' ? 'hidden' : 'total';
+    if (filter === 'all') {
+      return key === 'total' ? s.total : s.visibility[key];
+    }
+    return s.byStatus[filter as keyof ProductSummary['byStatus']][key];
+  }
+
+  public getVisibilityCount(value: string): number {
+    const s = this.summary();
+    if (!s) return 0;
+    const scope = this.selectedFilter === 'all'
+      ? { total: s.total, ...s.visibility }
+      : s.byStatus[this.selectedFilter as keyof ProductSummary['byStatus']];
+    return value === 'true' ? scope.visible : value === 'false' ? scope.hidden : scope.total;
+  }
+
+  public hasDiscount(p: Product): boolean {
+    return p.salePrice != null && p.salePrice > 0 && p.salePrice < p.price;
+  }
+
+  public discountPercent(p: Product): number {
+    return Math.round(((p.price - (p.salePrice ?? p.price)) / p.price) * 100);
+  }
+
+  public toggleVisibility(product: Product): void {
+    if (this.togglingVisibilityId()) return;
+
+    this.togglingVisibilityId.set(product._id);
+
+    this.vendorDashboardService.toggleProductVisibility(product._id).subscribe({
+      next: (res) => {
+        this.products.update(list =>
+          list.map(p => p._id === product._id ? { ...p, isVisible: !p.isVisible } : p)
+        );
+        this.togglingVisibilityId.set(null);
+        this.toastService.success(res.message ?? 'Product toggled successfully');
+
+        const current = this.pagination()?.currentPage ?? 1;
+        const leavesList = this.selectedVisibility !== '' && this.products().length === 1 && current > 1;
+        this.fetchVendorProductsListings(leavesList ? current - 1 : current, true);
+      },
+      error: (err) => {
+        console.error('Error toggling visibility:', err);
+        this.toastService.error(err.error?.message ?? "We couldn't update visibility. Please try again.");
+        this.togglingVisibilityId.set(null);
       }
     });
   }
@@ -140,4 +219,9 @@ export class VendorProducts {
 
     return pages;
   });
+
+  ngOnDestroy(): void {
+    this.listingsSub?.unsubscribe();
+  }
 }
+

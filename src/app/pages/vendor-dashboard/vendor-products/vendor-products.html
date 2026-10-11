@@ -62,28 +62,30 @@
                     stroke-linejoin="round" />
             </svg>
             }
-            @case ('inactive') {
-            <svg width="17" height="17" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            @case ('draft') {
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
-                    d="M6.24678 1.26313C4.68524 1.19702 3.47883 1.37691 3.47883 1.37691C2.71704 1.43138 1.25716 1.85845 1.25718 4.35263C1.25719 6.82561 1.24103 9.87436 1.25718 11.0897C1.25718 11.8323 1.71694 13.5644 3.30829 13.6572C5.24256 13.77 8.72671 13.794 10.3253 13.6572C10.7532 13.633 12.1779 13.2971 12.3582 11.747C12.545 10.1412 12.5078 9.02523 12.5078 8.75961"
-                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M4.36279 8.13477H6.86277" stroke="currentColor" stroke-linecap="round"
+                    d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M14 2V8H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                     stroke-linejoin="round" />
-                <path d="M4.36279 10.6348H9.36277" stroke="currentColor" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                <path
-                    d="M14 4C14 5.65685 12.6569 7 11 7C9.34315 7 8 5.65685 8 4C8 2.34315 9.34315 1 11 1C12.6569 1 14 2.34315 14 4Z"
-                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M9.5 4H12.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8 15.5L14.5 9L17 11.5L10.5 18H8V15.5Z" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             }
             }
             <span class="text-[14px] sm:text-[15px] font-medium">{{ filter.label }}</span>
+            @if (summary()) {
+            <span class="text-[12px] font-semibold px-1.5 py-0.5 rounded-full bg-black/5">
+                {{ getTabCount(filter.value) }}
+            </span>
+            }
+
         </button>
         }
     </div>
 
-    <div class="flex items-center justify-between mb-5 sm:mb-6 shrink-0">
+    <div class="flex items-center justify-between gap-3 mb-5 sm:mb-6 shrink-0 flex-wrap">
         @if(isFetchingProducts()){
         <div class="w-40 h-6 rounded-lg skeleton-shimmer"></div>
         }@else if (showingRange()) {
@@ -95,14 +97,38 @@
         }@else {
         <span class="text-sm sm:text-[15px] font-medium text-[#6B6B6B]">0 products</span>
         }
-        <button (click)="navigateToAddNewProduct()"
-            class="flex items-center gap-1.5 text-[14px] sm:text-[15px] font-medium px-4 sm:px-5 py-2.5 sm:py-3 transition-all duration-150 ease-in rounded-xl bg-[#171717] text-white hover:opacity-85 hover:shadow-md cursor-pointer shrink-0">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="white" stroke-width="1.5"
-                    stroke-linecap="round" />
-            </svg>
-            <span class="hidden sm:inline">Add Product</span>
-        </button>
+
+        <div class="flex items-center gap-2 ml-auto">
+            <div class="inline-flex bg-white rounded-xl p-1 border border-black/10">
+                @for (v of visibilityFilters; track v.value) {
+                <button type="button" (click)="selectVisibility(v.value)"
+                    class="px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors cursor-pointer"
+                    [class]="selectedVisibility === v.value ? 'bg-[#171717] text-white' : 'text-[#6B6B6B] hover:bg-[#F4F4F4]'">
+                    {{ v.label }}
+                    @if (summary()) {
+                    <span class="opacity-70">({{ getVisibilityCount(v.value) }})</span>
+                    }
+                </button>
+                }
+            </div>
+
+            <select [value]="selectedSort" (change)="selectSort($any($event.target).value)" aria-label="Sort products"
+                class="bg-white border border-black/10 rounded-xl px-3 py-2 text-[13px] sm:text-[14px] font-medium text-[#171717] cursor-pointer">
+                @for (s of sortOptions; track s.value) {
+                <option [value]="s.value">{{ s.label }}</option>
+                }
+            </select>
+
+
+            <button (click)="navigateToAddNewProduct()"
+                class="flex items-center gap-1.5 text-[14px] sm:text-[15px] font-medium px-4 sm:px-5 py-2.5 sm:py-3 transition-all duration-150 ease-in rounded-xl bg-[#171717] text-white hover:opacity-85 hover:shadow-md cursor-pointer shrink-0">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 4.1665V15.8332M4.1665 10H15.8332" stroke="white" stroke-width="1.5"
+                        stroke-linecap="round" />
+                </svg>
+                <span class="hidden sm:inline">Add Product</span>
+            </button>
+        </div>
     </div>
 
     @if(!isFetchingProducts()){
@@ -117,6 +143,7 @@
                 <div class="flex items-start gap-3 min-w-0 flex-1">
                     @if (product.images.length) {
                     <img [src]="getMainImageUrl(product.images)" [alt]="product.name"
+                        [class.opacity-50]="!product.isVisible"
                         class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl shrink-0 object-cover border border-black/15" />
                     } @else {
                     <div
@@ -129,22 +156,15 @@
                         </svg>
                     </div>
                     }
-                    <div class="min-w-0 flex-1">
-                        <h2
-                            class="text-[14px] sm:text-[16px] leading-5 line-clamp-2 text-[#171717] products-font mb-1.5">
+                    <div [class.opacity-50]="!product.isVisible" class="min-w-0 flex-1">
+                        <h2 class="text-[14px] sm:text-[16px] leading-5 line-clamp-2 text-[#171717] products-font mb-1">
                             {{product.name}}</h2>
-                        <span
-                            class="inline-flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full"
-                            [style.color]="statusConfig[product.status]?.color || '#6B7280'"
-                            [style.background-color]="(statusConfig[product.status]?.color || '#6B7280') + '1A'">
-                            <span class="w-1.5 h-1.5 rounded-full   "
-                                [style.background-color]="statusConfig[product.status]?.color || '#6B7280'"></span>
-                            {{ statusConfig[product.status]?.label || product.status }}
-                        </span>
+                        <p class="text-[11px] sm:text-xs text-[#6B6B6B] truncate">
+                            {{ product.category.name }}@if (product.brand) { · {{ product.brand }} }
+                        </p>
                     </div>
                 </div>
 
-                @if(product.status !== 'inactive'){
                 <div class="flex items-center gap-0.5 shrink-0 -mr-1 -mt-1">
                     <button type="button" (click)="navigateToEditProduct(product._id)" title="Edit product"
                         class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-[#9CA3AF] hover:text-[#00A751] hover:bg-[#00A751]/10 transition-colors">
@@ -173,19 +193,91 @@
                         }
                     </button>
                 </div>
+            </div>
+
+            <div [class.opacity-50]="!product.isVisible" class="flex flex-wrap items-center gap-1.5 mt-3">
+                <span
+                    class="inline-flex items-center gap-1 text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full"
+                    [style.color]="statusConfig[product.status]?.color || '#6B7280'"
+                    [style.background-color]="(statusConfig[product.status]?.color || '#6B7280') + '1A'">
+                    <span class="w-1.5 h-1.5 rounded-full"
+                        [style.background-color]="statusConfig[product.status]?.color || '#6B7280'"></span>
+                    {{ statusConfig[product.status]?.label || product.status }}
+                </span>
+                @if (product.isPreOrder) {
+                <span
+                    class="inline-flex items-center text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full bg-[#3B82F6]/10 text-[#3B82F6]">Pre-order</span>
+                }
+                @if (product.hasVariants) {
+                <span
+                    class="inline-flex items-center text-[11px] sm:text-[12px] font-medium px-2 py-0.5 rounded-full bg-[#8B5CF6]/10 text-[#8B5CF6]">Variants</span>
                 }
             </div>
 
-            <div class="border-t border-black/5 mt-4 pt-3.5 flex items-center justify-between gap-2">
-                <p class="text-sm sm:text-[15px] font-semibold text-[#171717] truncate">{{product.price | currency: 'GHS
-                    '
-                    : 'symbol' : '1.2-2'}}</p>
-                <p class="text-xs sm:text-sm text-[#6B7280] shrink-0">{{product.stockQuantity}} in stock</p>
+            <div [class.opacity-50]="!product.isVisible"
+                class="border-t border-black/5 mt-3.5 pt-3.5 flex items-end justify-between gap-3">
+                <div class="min-w-0">
+                    @if (hasDiscount(product)) {
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-[15px] sm:text-base font-semibold text-[#171717]">
+                            {{ product.salePrice | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                        </span>
+                        <span class="text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-[#EF4444]/10 text-[#EF4444]">
+                            -{{ discountPercent(product) }}%
+                        </span>
+                    </div>
+                    <p class="text-xs text-[#9CA3AF] line-through mt-0.5">
+                        {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                    </p>
+                    } @else {
+                    <span class="text-[15px] sm:text-base font-semibold text-[#171717]">
+                        {{ product.price | currency: 'GHS ' : 'symbol' : '1.2-2' }}
+                    </span>
+                    }
+                </div>
+
+                <p class="text-xs sm:text-sm shrink-0 whitespace-nowrap"
+                    [class]="product.stockQuantity === 0 ? 'text-[#EF4444] font-medium' : product.stockQuantity <= 5 ? 'text-[#F59E0B] font-medium' : 'text-[#6B7280]'">
+                    {{ product.stockQuantity === 0 ? 'Out of stock' : product.stockQuantity + ' in stock' }}
+                </p>
             </div>
 
-            <p class="text-[11px] sm:text-xs text-[#6B6B6B] mt-2">
-                Added {{product.createdAt | date:'MMM d, y'}}
-            </p>
+            <div class="flex items-center justify-between gap-3 mt-3.5 pt-3 border-t border-black/5">
+                <div [class.opacity-50]="!product.isVisible"
+                    class="min-w-0 text-[11px] sm:text-xs text-[#6B6B6B] leading-4">
+                    <p>Added on {{ product.createdAt | date:'MMM d, y' }}</p>
+                    @if (product.reviewCount > 0) {
+                    <p class="mt-0.5 inline-flex items-center gap-1">
+                        <svg width="13" height="13" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true">
+                            <path
+                                d="M11.44 2.87011L12.9065 5.82735C13.1065 6.23902 13.6398 6.63388 14.0897 6.70949L16.7478 7.15476C18.4476 7.4404 18.8475 8.68379 17.6227 9.91037L15.5562 11.9939C15.2063 12.3467 15.0146 13.0272 15.1229 13.5145L15.7145 16.0937C16.1812 18.1352 15.1063 18.9249 13.3148 17.858L10.8234 16.3709C10.3735 16.1021 9.63189 16.1021 9.17361 16.3709L6.68222 17.858C4.89908 18.9249 3.81587 18.1268 4.28248 16.0937L4.87408 13.5145C4.9824 13.0272 4.79076 12.3467 4.4408 11.9939L2.37436 9.91037C1.15783 8.68379 1.54945 7.4404 3.24926 7.15476L5.9073 6.70949C6.34892 6.63388 6.88219 6.23902 7.08217 5.82735L8.54868 2.87011C9.34859 1.26547 10.6484 1.26547 11.44 2.87011Z"
+                                fill="#D89E12" stroke="#D89E12" stroke-width="1.5" stroke-linejoin="round" />
+                        </svg>
+
+                        <span>{{ product.rating | number:'1.1-1' }}</span>
+                        <span>({{ product.reviewCount }})</span>
+                    </p>
+                    }
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0">
+                    <span class="text-[11px] sm:text-xs font-medium"
+                        [class]="product.isVisible ? 'text-[#00A751]' : 'text-[#6B7280]'">
+                        {{ product.isVisible ? 'Visible' : 'Hidden' }}
+                    </span>
+                    <button type="button" role="switch" [attr.aria-checked]="product.isVisible"
+                        [attr.aria-label]="product.isVisible ? 'Hide product' : 'Show product'"
+                        [title]="product.isVisible ? 'Hide from store' : 'Show in store'"
+                        (click)="toggleVisibility(product)" [disabled]="togglingVisibilityId() === product._id"
+                        class="relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        [class]="product.isVisible ? 'bg-[#00A751]' : 'bg-[#D1D5DB]'">
+                        <span
+                            class="inline-block h-4 w-4 rounded-full bg-white shadow transition-transform duration-200"
+                            [class]="product.isVisible ? 'translate-x-4.5' : 'translate-x-0.5'"></span>
+                    </button>
+                </div>
+            </div>
         </div>
         }
 
